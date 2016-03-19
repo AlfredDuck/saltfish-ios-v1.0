@@ -118,6 +118,7 @@
     _praiseButton.backgroundColor = [UIColor whiteColor];
     _praiseButton.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:13];
     [_praiseButton addTarget:self action:@selector(clickPraiseButton) forControlEvents:UIControlEventTouchUpInside];
+    _praiseButton.tag = 10;  // no praise
     [basedBottomBarBackground addSubview: _praiseButton];
     
     // 分享-按钮
@@ -173,6 +174,7 @@
                 NSLog(@"I have praise this artilce");
                 // change the color
                 [_praiseButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+                _praiseButton.tag = 11;  // already praised
                 break;
             }
         }
@@ -346,6 +348,9 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+
+
+
 - (void)clickCommentButton {
     NSLog(@"进入评论页面");
     commentVC *commentPage = [[commentVC alloc] init];
@@ -358,9 +363,17 @@
     }
 }
 
+
+
+// 点赞
 -(void)clickPraiseButton {
+    
+    if (_praiseButton.tag == 11) {
+        [self cancelPraiseButton];
+        return;
+    }
+    
     NSLog(@"点赞");
-    [_praiseButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
     
     // 本地储存点赞的数据
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -397,11 +410,45 @@
     // client praise num + 1
     int i = [_praiseNumLabel.text intValue] + 1;
     _praiseNumLabel.text = (NSString *)[NSString stringWithFormat:@"%ld", (long)i];
+    
+    // change praise button status
+    [_praiseButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+    _praiseButton.tag = 11;
 }
+
+// 取消点赞
+- (void)cancelPraiseButton
+{
+    NSLog(@"取消赞");
+    
+    // client praise num - 1
+    int i = [_praiseNumLabel.text intValue];
+    if (i > 0) {
+        i = i - 1;
+    } else {
+        i = 0;
+    }
+    _praiseNumLabel.text = (NSString *)[NSString stringWithFormat:@"%ld", (long)i];
+    
+    // delete the local data
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSMutableArray *list = [[userDefaults arrayForKey:@"praiseList"] mutableCopy];
+    [list removeObject:_articleID];
+    [userDefaults setObject:[list copy] forKey:@"praiseList"];
+    
+    // set the praise button status
+    [_praiseButton setTitleColor:[colorManager lightTextColor] forState:UIControlStateNormal];
+    _praiseButton.tag = 10;  // no praise
+}
+
+
+
 
 - (void)clickShareButton {
     NSLog(@"点分享");
 }
+
+
 
 // share to weibo
 - (void)shareToWeibo
