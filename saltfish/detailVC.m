@@ -52,6 +52,8 @@
         [self connectForCommentNumWith:_articleID];
     }
     _firstLoad = NO;
+    [self praiseButtonStatus];
+
 }
 
 - (void)didReceiveMemoryWarning {
@@ -98,7 +100,7 @@
     [backView addGestureRecognizer:singleTap]; // 给图片添加手势
     [basedBottomBarBackground addSubview:backView];
     
-    // 评论按钮
+    // 评论-按钮
     _commentButton = [[UIButton alloc] initWithFrame:CGRectMake(_screenWidth - 60, 1, 48, 43)];
     [_commentButton setTitle:@"评论" forState:UIControlStateNormal];
     _commentButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
@@ -107,11 +109,31 @@
     _commentButton.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:13];
     [_commentButton addTarget:self action:@selector(clickCommentButton) forControlEvents:UIControlEventTouchUpInside];
     [basedBottomBarBackground addSubview: _commentButton];
-    //
+    
+    // 赞-按钮
+    _praiseButton = [[UIButton alloc] initWithFrame:CGRectMake(_screenWidth - 60*2, 1, 48, 43)];
+    [_praiseButton setTitle:@"点赞" forState:UIControlStateNormal];
+    _praiseButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
+    [_praiseButton setTitleColor:[colorManager lightTextColor] forState:UIControlStateNormal];
+    _praiseButton.backgroundColor = [UIColor whiteColor];
+    _praiseButton.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:13];
+    [_praiseButton addTarget:self action:@selector(clickPraiseButton) forControlEvents:UIControlEventTouchUpInside];
+    [basedBottomBarBackground addSubview: _praiseButton];
+    
+    // 分享-按钮
+    _shareButton = [[UIButton alloc] initWithFrame:CGRectMake(_screenWidth - 60*3, 1, 48, 43)];
+    [_shareButton setTitle:@"分享" forState:UIControlStateNormal];
+    _shareButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
+    [_shareButton setTitleColor:[colorManager lightTextColor] forState:UIControlStateNormal];
+    _shareButton.backgroundColor = [UIColor whiteColor];
+    _shareButton.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:13];
+    [_shareButton addTarget:self action:@selector(clickShareButton) forControlEvents:UIControlEventTouchUpInside];
+    [basedBottomBarBackground addSubview: _shareButton];
+    
 }
 
 
-// 初始化评论数
+// 显示评论数
 - (void)basedCommentNumLabelWith:(NSString *)num
 {
     _commentNumLabel = [[UILabel alloc] init];
@@ -122,15 +144,51 @@
     _commentNumLabel.textAlignment = UITextAlignmentCenter;
     _commentNumLabel.backgroundColor = [colorManager red];
     [_commentButton addSubview:_commentNumLabel];
-    
 }
 
+// 显示赞的数量
+- (void)basedPraiseNumLabelWith:(NSString *)num
+{
+    _praiseNumLabel = [[UILabel alloc] init];
+    _praiseNumLabel.text = num;
+    _praiseNumLabel.font = [UIFont fontWithName:@"Helvetica" size: 10];
+    _praiseNumLabel.textColor = [UIColor whiteColor];
+    _praiseNumLabel.frame = CGRectMake(30, 4, 5*(unsigned long)num.length+7, 13);
+    _praiseNumLabel.textAlignment = UITextAlignmentCenter;
+    _praiseNumLabel.backgroundColor = [colorManager red];
+    [_praiseButton addSubview:_praiseNumLabel];
+}
+
+// 显示点赞按钮的状态
+- (void)praiseButtonStatus
+{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    if ([userDefaults arrayForKey:@"praiseList"]) {
+        // have praiseList
+        NSMutableArray *praiseList = [[userDefaults arrayForKey:@"praiseList"] mutableCopy];
+        // check if the article already stored?
+        NSString *thing;
+        for (thing in praiseList) {
+            if ([thing isEqualToString:_articleID]) {
+                NSLog(@"I have praise this artilce");
+                // change the color
+                [_praiseButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+                break;
+            }
+        }
+    }
+}
+
+// 显示分享数
 
 
 
 
 
-#pragma mark - 网络连接（请求评论数）
+
+
+#pragma mark - 网络连接
+/*（请求评论、赞、分享的数量）*/
 - (void)connectForCommentNumWith:(NSString *)articleID
 {
     // 准备请求参数
@@ -150,8 +208,37 @@
             NSLog(@"查询出错");
             return;
         }
-        NSString *num = (NSString *)[responseObject objectForKey:@"commentNum"];
-        [self basedCommentNumLabelWith:[NSString stringWithFormat:@"%@", num]];
+        NSString *commentNum = (NSString *)[responseObject objectForKey:@"commentNum"];
+        NSString *praiseNum = (NSString *)[responseObject objectForKey:@"praiseNum"];
+        [self basedCommentNumLabelWith:[NSString stringWithFormat:@"%@", commentNum]];
+        [self basedPraiseNumLabelWith:[NSString stringWithFormat:@"%@", praiseNum]];
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+}
+
+
+
+/* 服务器点赞数量+1 */
+- (void)connectForAddOnePraiseWith:(NSString *)articleID
+{
+    // 准备请求参数
+    NSString *host = [urlManager urlHost];
+    NSString *urlString = [host stringByAppendingString:@"/article/praise"];
+    NSDictionary *parameters = @{@"article_id": articleID};
+    
+    // 创建 GET 请求
+    AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];
+    [connectManager GET:urlString parameters: parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        // GET callback
+        NSString *errcode = [responseObject objectForKey:@"errcode"];
+        if ([errcode isEqualToString:@"err"]) {
+            NSLog(@"查询或写入出错");
+            return;
+        }
+        NSLog(@"praise + 1 , success");
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
@@ -258,6 +345,7 @@
     NSLog(@"返回");
     [self.navigationController popViewControllerAnimated:YES];
 }
+
 - (void)clickCommentButton {
     NSLog(@"进入评论页面");
     commentVC *commentPage = [[commentVC alloc] init];
@@ -268,6 +356,51 @@
     if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
         self.navigationController.interactivePopGestureRecognizer.delegate = nil;
     }
+}
+
+-(void)clickPraiseButton {
+    NSLog(@"点赞");
+    [_praiseButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+    
+    // 本地储存点赞的数据
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    if ([userDefaults arrayForKey:@"praiseList"]) {
+        // already have praiseList
+        NSMutableArray *praiseList = [[userDefaults arrayForKey:@"praiseList"] mutableCopy];
+        NSLog(@"%@", praiseList);
+        // check if the article already stored?
+        // if artilceid stored, don't store again
+        NSString *thing;
+        for (thing in praiseList) {
+            if ([thing isEqualToString:_articleID]) {
+                return;
+            }
+        }
+        // if artilceid no stored, store it
+        [praiseList addObject:_articleID];
+        [userDefaults setObject:[praiseList copy] forKey:@"praiseList"];
+        
+    } else {
+        // no praiseList
+        NSLog(@"no local praiseList");
+        // create praiseList
+        NSMutableArray *praiseList = [[NSMutableArray alloc] init];
+        [praiseList addObject:_articleID];
+        NSLog(@"%@", praiseList);
+        [userDefaults setObject:[praiseList copy] forKey:@"praiseList"];
+        NSLog(@"%@", [userDefaults arrayForKey:@"praiseList"]);
+    }
+    
+    // 服务器点赞数+1
+    [self connectForAddOnePraiseWith:_articleID];
+    
+    // client praise num + 1
+    int i = [_praiseNumLabel.text intValue] + 1;
+    _praiseNumLabel.text = (NSString *)[NSString stringWithFormat:@"%ld", (long)i];
+}
+
+- (void)clickShareButton {
+    NSLog(@"点分享");
 }
 
 // share to weibo

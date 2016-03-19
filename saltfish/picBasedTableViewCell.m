@@ -36,13 +36,16 @@
         _screenHeight = [UIScreen mainScreen].bounds.size.height;
         _screenWidth = [UIScreen mainScreen].bounds.size.width;
         
+        // cell height
+        float imgHeight = 180.0f;
+        
         // 一些初始化的值
         _title = @"曾经沧海难为水，除却巫山不是云霓裳佳人顾盼倾城山外山";
         _picURL = @"http://letsfilm.org/wp-content/uploads/2015/09/0000228.jpg";
         self.tag = 999999;
         
         /* 图片(尺寸固定) */
-        _picImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, _screenWidth, 240)];
+        _picImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, _screenWidth, imgHeight)];
         _picImageView.backgroundColor = [UIColor brownColor];
         // uiimageview居中裁剪
         _picImageView.contentMode = UIViewContentModeScaleAspectFill;
@@ -52,26 +55,25 @@
         [self.contentView addSubview:_picImageView];
         
         /* 黑色透明层 */
-        UIView *blackView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, _screenWidth, 240)];
+        UIView *blackView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, _screenWidth, imgHeight)];
         blackView.backgroundColor = [UIColor blackColor];
-        blackView.alpha = 0.7;
+        blackView.alpha = 0.63;
         [self.contentView addSubview:blackView];
         
         /* 标题 */
-        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 240-60, _screenWidth-20, 60)];
+        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, (imgHeight-60)/2, _screenWidth-30, 60)];
         _titleLabel.text = _title;
-        _titleLabel.font = [UIFont fontWithName:@"Helvetica Bold" size: 20];
+        _titleLabel.font = [UIFont fontWithName:@"Helvetica Bold" size: 18];
         _titleLabel.textAlignment = UITextAlignmentCenter;
         _titleLabel.numberOfLines = 2;
         // 文字阴影
         _titleLabel.shadowColor = [UIColor blackColor];
         _titleLabel.shadowOffset = CGSizeMake(0.5, 0.5);
         _titleLabel.textColor = [UIColor whiteColor];
-        
         [self.contentView addSubview:_titleLabel];
         
         /* cell背景色 */
-        self.contentView.backgroundColor = [UIColor whiteColor];
+        self.contentView.backgroundColor = [UIColor colorWithRed:48/255.0 green:48/255.0 blue:48/255.0 alpha:1];
         
         // not usefull
         self.frame = CGRectMake(0, 0, 500, 300);
@@ -79,6 +81,23 @@
     }
     return self;
 }
+
+
+
+#pragma mark - 重写 cell 中各个元素的数据
+
+- (void)rewriteTitle:(NSString *)newTitle
+{
+    _title = newTitle;
+    _titleLabel.text = _title;
+}
+
+- (void)rewritePicURL:(NSString *)newPicURL
+{
+    _picURL = newPicURL;
+    [_picImageView sd_setImageWithURL:[NSURL URLWithString:_picURL] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+}
+
 
 
 @end

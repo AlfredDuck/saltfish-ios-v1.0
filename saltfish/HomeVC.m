@@ -764,7 +764,7 @@
     [contentTableView setDataSource:self];
     
     [contentTableView registerClass:[smallPicTableViewCell class] forCellReuseIdentifier:CellWithIdentifier];
-    contentTableView.backgroundColor = [colorManager lightGrayBackground];
+    contentTableView.backgroundColor = [UIColor colorWithRed:48/255.0 green:48/255.0 blue:48/255.0 alpha:1];
     contentTableView.separatorStyle = UITableViewCellSeparatorStyleNone; // 去掉分割线
     // contentTableView.contentInset = UIEdgeInsetsMake(14, 0, 0, 0); // 设置距离顶部的一段偏移，继承自scrollview
     contentTableView.tag = index + 1;
@@ -872,6 +872,10 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSString *cellIdentity = [_channels objectAtIndex:(tableView.tag-1)];
+    NSString *channelKey = [cellIdentity copy];
+    NSLog(@"当前频道：%@", channelKey);
+    
     static NSString *CellWithIdentifier = @"aaa";
     picBasedTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellWithIdentifier];
     
@@ -879,15 +883,13 @@
     if (cell == nil) {
         cell = [[picBasedTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellWithIdentifier];
     }
+    // 修改 cell 内容
+    [cell rewriteTitle:[[[_contentListDataSource objectForKey:channelKey] objectAtIndex:row] objectForKey:@"title"]];
+    [cell rewritePicURL:[[[_contentListDataSource objectForKey:channelKey] objectAtIndex:row] objectForKey:@"picBig"]];
     // 取消选中的背景色
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
 }
-
-
-
-
-
 
 
 
@@ -902,8 +904,13 @@
 //   else {
 //      return 84+4; //smallcell
 //   }
-    return 240;
+    
+    // picBased height
+    float imgHeight = 180.0f;
+    return imgHeight + 3;
 }
+
+
 
 // tableView 点击事件
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
