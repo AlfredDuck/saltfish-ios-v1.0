@@ -38,4 +38,9 @@
     return [UIColor colorWithRed:(104/255.0) green:(104/255.0) blue:(104/255.0) alpha:1];
 
 }
++ (UIColor *)greenGrayBackground
+{
+    return [UIColor colorWithRed:(228/255.0) green:(233/255.0) blue:(234/255.0) alpha:1];
+    
+}
 @end

@@ -17,4 +17,5 @@
 + (UIColor *)purple;
 + (UIColor *)red;
 + (UIColor *)commentTextColor;
++ (UIColor *)greenGrayBackground;  // 青灰色背景
 @end

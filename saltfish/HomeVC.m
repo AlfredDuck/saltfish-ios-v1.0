@@ -764,7 +764,7 @@
     [contentTableView setDataSource:self];
     
     [contentTableView registerClass:[smallPicTableViewCell class] forCellReuseIdentifier:CellWithIdentifier];
-    contentTableView.backgroundColor = [UIColor colorWithRed:48/255.0 green:48/255.0 blue:48/255.0 alpha:1];
+    contentTableView.backgroundColor = [colorManager greenGrayBackground];
     contentTableView.separatorStyle = UITableViewCellSeparatorStyleNone; // 去掉分割线
     // contentTableView.contentInset = UIEdgeInsetsMake(14, 0, 0, 0); // 设置距离顶部的一段偏移，继承自scrollview
     contentTableView.tag = index + 1;
@@ -886,6 +886,9 @@
     // 修改 cell 内容
     [cell rewriteTitle:[[[_contentListDataSource objectForKey:channelKey] objectAtIndex:row] objectForKey:@"title"]];
     [cell rewritePicURL:[[[_contentListDataSource objectForKey:channelKey] objectAtIndex:row] objectForKey:@"picBig"]];
+    [cell rewriteDate:[[[_contentListDataSource objectForKey:channelKey] objectAtIndex:row] objectForKey:@"postTime"]];
+    [cell rewritePortraitURL:[[[_contentListDataSource objectForKey:channelKey] objectAtIndex:row] objectForKey:@"picBig"]];
+    
     // 取消选中的背景色
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
@@ -907,7 +910,7 @@
     
     // picBased height
     float imgHeight = 180.0f;
-    return imgHeight + 3;
+    return imgHeight + 40 + 15;
 }
 
 

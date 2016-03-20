@@ -69,6 +69,7 @@
     // 状态栏底色
     UIView *statusBarBackground = [[UIView alloc] initWithFrame:CGRectMake(0, 0, _screenWidth, 20)];
     statusBarBackground.backgroundColor = [UIColor whiteColor];
+    statusBarBackground.alpha = 0.9;
     [self.view addSubview:statusBarBackground];
     
     // 状态栏分割线
