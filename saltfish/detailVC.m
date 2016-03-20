@@ -102,14 +102,28 @@
     [basedBottomBarBackground addSubview:backView];
     
     // 评论-按钮
-    _commentButton = [[UIButton alloc] initWithFrame:CGRectMake(_screenWidth - 60, 1, 48, 43)];
-    [_commentButton setTitle:@"评论" forState:UIControlStateNormal];
-    _commentButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
-    [_commentButton setTitleColor:[colorManager lightTextColor] forState:UIControlStateNormal];
-    _commentButton.backgroundColor = [UIColor whiteColor];
-    _commentButton.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:13];
-    [_commentButton addTarget:self action:@selector(clickCommentButton) forControlEvents:UIControlEventTouchUpInside];
-    [basedBottomBarBackground addSubview: _commentButton];
+//    _commentButton = [[UIButton alloc] initWithFrame:CGRectMake(_screenWidth - 60, 1, 48, 43)];
+//    [_commentButton setTitle:@"评论" forState:UIControlStateNormal];
+//    _commentButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
+//    [_commentButton setTitleColor:[colorManager lightTextColor] forState:UIControlStateNormal];
+//    _commentButton.backgroundColor = [UIColor whiteColor];
+//    _commentButton.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:13];
+//    [_commentButton addTarget:self action:@selector(clickCommentButton) forControlEvents:UIControlEventTouchUpInside];
+//    [basedBottomBarBackground addSubview: _commentButton];
+    
+    // comment-button (pic)
+    UIImage *commentImage = [UIImage imageNamed:@"comment_button.png"]; // 使用ImageView通过name找到图片
+    UIImageView *commentImageView = [[UIImageView alloc] initWithImage:commentImage]; // 把oneImage添加到oneImageView上
+    commentImageView.frame = CGRectMake(10.5, 11.5, 23, 21); // 设置图片位置和大小
+    // [oneImageView setContentMode:UIViewContentModeCenter];
+    _commentButtonView = [[UIView alloc] initWithFrame:CGRectMake(_screenWidth-60, 0, 44, 44)];
+    [_commentButtonView addSubview:commentImageView];
+    // 为UIView添加点击事件
+    // 一定要先将userInteractionEnabled置为YES，这样才能响应单击事件
+    _commentButtonView.userInteractionEnabled = YES; // 设置图片可以交互
+    UITapGestureRecognizer *singleTapOnCommentButton = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickCommentButton)]; // 设置手势
+    [_commentButtonView addGestureRecognizer:singleTapOnCommentButton]; // 给图片添加手势
+    [basedBottomBarBackground addSubview:_commentButtonView];
     
     // 赞-按钮
     _praiseButton = [[UIButton alloc] initWithFrame:CGRectMake(_screenWidth - 60*2, 1, 48, 43)];
@@ -145,7 +159,7 @@
     _commentNumLabel.frame = CGRectMake(30, 4, 5*(unsigned long)num.length+7, 13);
     _commentNumLabel.textAlignment = UITextAlignmentCenter;
     _commentNumLabel.backgroundColor = [colorManager red];
-    [_commentButton addSubview:_commentNumLabel];
+    [_commentButtonView addSubview:_commentNumLabel];
 }
 
 // 显示赞的数量

@@ -16,6 +16,7 @@
 @property (nonatomic) int loadCount;
 // comment button
 @property (nonatomic, strong) UIButton *commentButton;
+@property (nonatomic, strong) UIView *commentButtonView;
 @property (nonatomic, strong) UILabel *commentNumLabel;
 // praise button
 @property (nonatomic, strong) UIButton *praiseButton;

@@ -22,6 +22,10 @@
 		BB2E971B1C1D1599001B7CAA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BB2E971A1C1D1599001B7CAA /* Images.xcassets */; };
 		BB2E972A1C1D1599001B7CAA /* saltfishTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BB2E97291C1D1599001B7CAA /* saltfishTests.m */; };
 		BB88EBB21C32D5E400F39B26 /* close.png in Resources */ = {isa = PBXBuildFile; fileRef = BB88EBB11C32D5E400F39B26 /* close.png */; };
+		BB99E7D01C9EC9D500CDBBDD /* comment_button.png in Resources */ = {isa = PBXBuildFile; fileRef = BB99E7CF1C9EC9D500CDBBDD /* comment_button.png */; };
+		BB99E7D21C9ECA1300CDBBDD /* praise_button.png in Resources */ = {isa = PBXBuildFile; fileRef = BB99E7D11C9ECA1300CDBBDD /* praise_button.png */; };
+		BB99E7D41C9ECA1A00CDBBDD /* praise_button_red.png in Resources */ = {isa = PBXBuildFile; fileRef = BB99E7D31C9ECA1A00CDBBDD /* praise_button_red.png */; };
+		BB99E7D61C9ECA2900CDBBDD /* share_button.png in Resources */ = {isa = PBXBuildFile; fileRef = BB99E7D51C9ECA2900CDBBDD /* share_button.png */; };
 		BB9B90AB1C9C4E1200A89A13 /* picBasedTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BB9B90AA1C9C4E1200A89A13 /* picBasedTableViewCell.m */; };
 		BB9B90AD1C9C551E00A89A13 /* black_bottom2.png in Resources */ = {isa = PBXBuildFile; fileRef = BB9B90AC1C9C551E00A89A13 /* black_bottom2.png */; };
 		BBAD45481C1D44FF007A54F3 /* HomeVC.m in Sources */ = {isa = PBXBuildFile; fileRef = BBAD45471C1D44FF007A54F3 /* HomeVC.m */; };
@@ -81,6 +85,10 @@
 		BB2E97281C1D1599001B7CAA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BB2E97291C1D1599001B7CAA /* saltfishTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = saltfishTests.m; sourceTree = "<group>"; };
 		BB88EBB11C32D5E400F39B26 /* close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = close.png; sourceTree = "<group>"; };
+		BB99E7CF1C9EC9D500CDBBDD /* comment_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = comment_button.png; path = "../../coding/salt-App效果图/comment_button.png"; sourceTree = "<group>"; };
+		BB99E7D11C9ECA1300CDBBDD /* praise_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = praise_button.png; path = "../../coding/salt-App效果图/praise_button.png"; sourceTree = "<group>"; };
+		BB99E7D31C9ECA1A00CDBBDD /* praise_button_red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = praise_button_red.png; path = "../../coding/salt-App效果图/praise_button_red.png"; sourceTree = "<group>"; };
+		BB99E7D51C9ECA2900CDBBDD /* share_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = share_button.png; path = "../../coding/salt-App效果图/share_button.png"; sourceTree = "<group>"; };
 		BB9B90A91C9C4E1200A89A13 /* picBasedTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = picBasedTableViewCell.h; sourceTree = "<group>"; };
 		BB9B90AA1C9C4E1200A89A13 /* picBasedTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = picBasedTableViewCell.m; sourceTree = "<group>"; };
 		BB9B90AC1C9C551E00A89A13 /* black_bottom2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = black_bottom2.png; path = "../../coding/salt-App效果图/black_bottom2.png"; sourceTree = "<group>"; };
@@ -292,6 +300,10 @@
 		BBE6CCD41C206AE500AA9525 /* pics */ = {
 			isa = PBXGroup;
 			children = (
+				BB99E7D51C9ECA2900CDBBDD /* share_button.png */,
+				BB99E7D31C9ECA1A00CDBBDD /* praise_button_red.png */,
+				BB99E7D11C9ECA1300CDBBDD /* praise_button.png */,
+				BB99E7CF1C9EC9D500CDBBDD /* comment_button.png */,
 				BB9B90AC1C9C551E00A89A13 /* black_bottom2.png */,
 				BBF97D601C65752C00A5D403 /* placeholder.png */,
 				BB0F14B31C26E60100FDB77C /* portrait.png */,
@@ -415,9 +427,13 @@
 				BB0F14B41C26E60100FDB77C /* portrait.png in Resources */,
 				BB88EBB21C32D5E400F39B26 /* close.png in Resources */,
 				BB0F14B01C26C08900FDB77C /* black_top.png in Resources */,
+				BB99E7D41C9ECA1A00CDBBDD /* praise_button_red.png in Resources */,
+				BB99E7D01C9EC9D500CDBBDD /* comment_button.png in Resources */,
 				BB9B90AD1C9C551E00A89A13 /* black_bottom2.png in Resources */,
 				BBF97D611C65752C00A5D403 /* placeholder.png in Resources */,
 				BB0F14B21C26D8FC00FDB77C /* back.png in Resources */,
+				BB99E7D21C9ECA1300CDBBDD /* praise_button.png in Resources */,
+				BB99E7D61C9ECA2900CDBBDD /* share_button.png in Resources */,
 				BB2E971B1C1D1599001B7CAA /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
