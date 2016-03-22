@@ -20,9 +20,12 @@
 @property (nonatomic, strong) UILabel *commentNumLabel;
 // praise button
 @property (nonatomic, strong) UIButton *praiseButton;
+@property (nonatomic, strong) UIImageView *praiseImageView;
+@property (nonatomic, strong) UIView *praiseButtonView;
 @property (nonatomic, strong) UILabel *praiseNumLabel;
 // share button
 @property (nonatomic, strong) UIButton *shareButton;
+@property (nonatomic, strong) UIView *shareButtonView;
 @property (nonatomic, strong) UILabel *shareNumLabel;
 
 //

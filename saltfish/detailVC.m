@@ -100,16 +100,7 @@
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickBackButton)]; // 设置手势
     [backView addGestureRecognizer:singleTap]; // 给图片添加手势
     [basedBottomBarBackground addSubview:backView];
-    
-    // 评论-按钮
-//    _commentButton = [[UIButton alloc] initWithFrame:CGRectMake(_screenWidth - 60, 1, 48, 43)];
-//    [_commentButton setTitle:@"评论" forState:UIControlStateNormal];
-//    _commentButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
-//    [_commentButton setTitleColor:[colorManager lightTextColor] forState:UIControlStateNormal];
-//    _commentButton.backgroundColor = [UIColor whiteColor];
-//    _commentButton.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:13];
-//    [_commentButton addTarget:self action:@selector(clickCommentButton) forControlEvents:UIControlEventTouchUpInside];
-//    [basedBottomBarBackground addSubview: _commentButton];
+
     
     // comment-button (pic)
     UIImage *commentImage = [UIImage imageNamed:@"comment_button.png"]; // 使用ImageView通过name找到图片
@@ -125,26 +116,36 @@
     [_commentButtonView addGestureRecognizer:singleTapOnCommentButton]; // 给图片添加手势
     [basedBottomBarBackground addSubview:_commentButtonView];
     
-    // 赞-按钮
-    _praiseButton = [[UIButton alloc] initWithFrame:CGRectMake(_screenWidth - 60*2, 1, 48, 43)];
-    [_praiseButton setTitle:@"点赞" forState:UIControlStateNormal];
-    _praiseButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
-    [_praiseButton setTitleColor:[colorManager lightTextColor] forState:UIControlStateNormal];
-    _praiseButton.backgroundColor = [UIColor whiteColor];
-    _praiseButton.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:13];
-    [_praiseButton addTarget:self action:@selector(clickPraiseButton) forControlEvents:UIControlEventTouchUpInside];
-    _praiseButton.tag = 10;  // no praise
-    [basedBottomBarBackground addSubview: _praiseButton];
     
-    // 分享-按钮
-    _shareButton = [[UIButton alloc] initWithFrame:CGRectMake(_screenWidth - 60*3, 1, 48, 43)];
-    [_shareButton setTitle:@"分享" forState:UIControlStateNormal];
-    _shareButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
-    [_shareButton setTitleColor:[colorManager lightTextColor] forState:UIControlStateNormal];
-    _shareButton.backgroundColor = [UIColor whiteColor];
-    _shareButton.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:13];
-    [_shareButton addTarget:self action:@selector(clickShareButton) forControlEvents:UIControlEventTouchUpInside];
-    [basedBottomBarBackground addSubview: _shareButton];
+    // praise-button (pic)
+    UIImage *praiseImage = [UIImage imageNamed:@"praise_button.png"]; // 使用ImageView通过name找到图片
+    _praiseImageView = [[UIImageView alloc] initWithImage:praiseImage]; // 把oneImage添加到oneImageView上
+    _praiseImageView.frame = CGRectMake(11.5, 11, 21, 22); // 设置图片位置和大小
+    // [oneImageView setContentMode:UIViewContentModeCenter];
+    _praiseButtonView = [[UIView alloc] initWithFrame:CGRectMake(_screenWidth-60*2, 0, 44, 44)];
+    [_praiseButtonView addSubview:_praiseImageView];
+    // 为UIView添加点击事件
+    // 一定要先将userInteractionEnabled置为YES，这样才能响应单击事件
+    _praiseButtonView.userInteractionEnabled = YES; // 设置图片可以交互
+    UITapGestureRecognizer *singleTapOnPraiseButton = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickPraiseButton)]; // 设置手势
+    [_praiseButtonView addGestureRecognizer:singleTapOnPraiseButton]; // 给图片添加手势
+    [basedBottomBarBackground addSubview:_praiseButtonView];
+    _praiseButtonView.tag = 10;  // no praise
+
+    
+    // share-button (pic)
+    UIImage *shareImage = [UIImage imageNamed:@"share_button.png"]; // 使用ImageView通过name找到图片
+    UIImageView *shareImageView = [[UIImageView alloc] initWithImage:shareImage]; // 把oneImage添加到oneImageView上
+    shareImageView.frame = CGRectMake(12, 13, 20, 18); // 设置图片位置和大小
+    // [oneImageView setContentMode:UIViewContentModeCenter];
+    _shareButtonView = [[UIView alloc] initWithFrame:CGRectMake(_screenWidth-60*3, 0, 44, 44)];
+    [_shareButtonView addSubview:shareImageView];
+    // 为UIView添加点击事件
+    // 一定要先将userInteractionEnabled置为YES，这样才能响应单击事件
+    _shareButtonView.userInteractionEnabled = YES; // 设置图片可以交互
+    UITapGestureRecognizer *singleTapOnshareButton = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickShareButton)]; // 设置手势
+    [_shareButtonView addGestureRecognizer:singleTapOnshareButton]; // 给图片添加手势
+    [basedBottomBarBackground addSubview:_shareButtonView];
     
 }
 
@@ -172,7 +173,7 @@
     _praiseNumLabel.frame = CGRectMake(30, 4, 5*(unsigned long)num.length+7, 13);
     _praiseNumLabel.textAlignment = UITextAlignmentCenter;
     _praiseNumLabel.backgroundColor = [colorManager red];
-    [_praiseButton addSubview:_praiseNumLabel];
+    [_praiseButtonView addSubview:_praiseNumLabel];
 }
 
 // 显示点赞按钮的状态
@@ -188,8 +189,9 @@
             if ([thing isEqualToString:_articleID]) {
                 NSLog(@"I have praise this artilce");
                 // change the color
-                [_praiseButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-                _praiseButton.tag = 11;  // already praised
+                //[_praiseButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+                _praiseImageView.image = [UIImage imageNamed:@"praise_button_red.png"];
+                _praiseButtonView.tag = 11;  // already praised
                 break;
             }
         }
@@ -383,7 +385,7 @@
 // 点赞
 -(void)clickPraiseButton {
     
-    if (_praiseButton.tag == 11) {
+    if (_praiseButtonView.tag == 11) {
         [self cancelPraiseButton];
         return;
     }
@@ -427,8 +429,9 @@
     _praiseNumLabel.text = (NSString *)[NSString stringWithFormat:@"%ld", (long)i];
     
     // change praise button status
-    [_praiseButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-    _praiseButton.tag = 11;
+//    [_praiseButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+    _praiseImageView.image = [UIImage imageNamed:@"praise_button_red.png"];
+    _praiseButtonView.tag = 11;
 }
 
 // 取消点赞
@@ -452,8 +455,9 @@
     [userDefaults setObject:[list copy] forKey:@"praiseList"];
     
     // set the praise button status
-    [_praiseButton setTitleColor:[colorManager lightTextColor] forState:UIControlStateNormal];
-    _praiseButton.tag = 10;  // no praise
+//    [_praiseButton setTitleColor:[colorManager lightTextColor] forState:UIControlStateNormal];
+    _praiseImageView.image = [UIImage imageNamed:@"praise_button.png"];
+    _praiseButtonView.tag = 10;  // no praise
 }
 
 
