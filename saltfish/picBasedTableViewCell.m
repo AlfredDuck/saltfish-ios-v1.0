@@ -96,16 +96,16 @@
         [whiteView addSubview:lineView];
         
         /* 作者 & 热度得分 */
-        UIView *containView = [[UIView alloc] init];
-        containView.frame = CGRectMake(100, 10, _screenWidth, 20);
-        [whiteView addSubview:containView];
+        _containView = [[UIView alloc] init];
+        _containView.frame = CGRectMake(100, 10, _screenWidth, 20);
+        [whiteView addSubview:_containView];
         
         _authorAndHotScoreLabel = [[UILabel alloc] init];
         _authorAndHotScoreLabel.text = _authorAndHotScore;
         _authorAndHotScoreLabel.font = [UIFont fontWithName:@"Helvetica" size: 11];
         _authorAndHotScoreLabel.textColor = [UIColor colorWithRed:154/255.0 green:154/255.0 blue:154/255.0 alpha:1];
         _authorAndHotScoreLabel.frame = CGRectMake(25, 0, 200, 20);
-        [containView addSubview:_authorAndHotScoreLabel];
+        [_containView addSubview:_authorAndHotScoreLabel];
         
         /* 作者头像 */
         _portraitImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
@@ -117,13 +117,13 @@
         _portraitImageView.layer.cornerRadius = 10.0; //设置图片圆角的尺度
         // 需要AFNetwork
         [_portraitImageView sd_setImageWithURL:[NSURL URLWithString:_portraitURL] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
-        [containView addSubview: _portraitImageView];
+        [_containView addSubview: _portraitImageView];
         
         // 计算 author 一行的 frame
         unsigned long authorWidth = (unsigned long)_authorAndHotScore.length * 11 - 5*4;
         _authorAndHotScoreLabel.frame = CGRectMake(25, 0, authorWidth, 20);
         unsigned long containWidth = authorWidth + 25;
-        containView.frame = CGRectMake((_screenWidth - containWidth)/2.0, 10, containWidth, 20);
+        _containView.frame = CGRectMake((_screenWidth - containWidth)/2.0, 10, containWidth, 20);
         
         /* cell背景色 */
         self.contentView.backgroundColor = [UIColor colorWithRed:228/255.0 green:233/255.0 blue:234/255.0 alpha:1];
@@ -161,6 +161,17 @@
 {
     _portraitURL = newPortraitURL;
     [_portraitImageView sd_setImageWithURL:[NSURL URLWithString:_portraitURL] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+}
+
+- (void)rewriteAuthorAndHotScore:(NSString *)newAuthorAndHotScore
+{
+    _authorAndHotScore = newAuthorAndHotScore;
+    _authorAndHotScoreLabel.text = _authorAndHotScore;
+    // 计算 author 一行的 frame
+    unsigned long authorWidth = (unsigned long)_authorAndHotScore.length * 11 - 5*4;
+    _authorAndHotScoreLabel.frame = CGRectMake(25, 0, authorWidth, 20);
+    unsigned long containWidth = authorWidth + 25;
+    _containView.frame = CGRectMake((_screenWidth - containWidth)/2.0, 10, containWidth, 20);
 }
 
 

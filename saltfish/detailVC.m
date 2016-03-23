@@ -40,6 +40,8 @@
     
     // 创建UI
     [self basedBottomBar];
+    // 记录已读未读
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -231,6 +233,9 @@
         NSString *praiseNum = (NSString *)[responseObject objectForKey:@"praiseNum"];
         [self basedCommentNumLabelWith:[NSString stringWithFormat:@"%@", commentNum]];
         [self basedPraiseNumLabelWith:[NSString stringWithFormat:@"%@", praiseNum]];
+        
+        // 记录此文章已读
+        [self readOrUnread];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
@@ -465,6 +470,28 @@
 
 - (void)clickShareButton {
     NSLog(@"点分享");
+}
+
+
+
+// 记录已读未读
+- (void)readOrUnread
+{
+    NSLog(@"the article was read");
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    if ([userDefaults arrayForKey:@"readList"]) {
+        // already have a read list
+        NSMutableArray *marray = [[userDefaults arrayForKey:@"readList"] mutableCopy];
+        [marray addObject:_articleID];
+        [userDefaults setObject:[marray copy] forKey:@"readList"];
+        
+    } else {
+        // didn't have a read list, then create one
+        NSLog(@"didn't have a read list");
+        NSMutableArray *marray = [[NSMutableArray alloc] init];
+        [marray addObject:_articleID];
+        [userDefaults setObject:[marray copy] forKey:@"readList"];
+    }
 }
 
 

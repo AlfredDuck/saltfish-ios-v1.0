@@ -21,6 +21,7 @@
 // 作者 & 热度得分
 @property (nonatomic, copy) NSString *authorAndHotScore;
 @property (nonatomic, copy) UILabel *authorAndHotScoreLabel;
+@property (nonatomic, copy) UIView *containView;
 // 作者头像
 @property (nonatomic, copy) NSString *portraitURL;
 @property (nonatomic, copy) UIImageView *portraitImageView;

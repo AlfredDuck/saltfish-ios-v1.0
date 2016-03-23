@@ -825,92 +825,98 @@
 }
 
 // 填充cell
-//- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    NSString *cellIdentity = [_channels objectAtIndex:(tableView.tag-1)];
-//    NSString *channelKey = [cellIdentity copy];
-//    NSLog(@"当前频道：%@", channelKey);
-//    
-//    NSString *CellWithIdentifierBig = [@"bigCell+" stringByAppendingString:cellIdentity];
-//    // NSString *CellWithIdentifierBig = @"big";
-//    bigPicTableViewCell *cellBig = [tableView dequeueReusableCellWithIdentifier:CellWithIdentifierBig];
-//    
-//    NSString *CellWithIdentifierSmall = [@"smallCell+" stringByAppendingString:cellIdentity];
-//    // NSString *CellWithIdentifierSmall = @"small";
-//    smallPicTableViewCell *cellSmall = [tableView dequeueReusableCellWithIdentifier:CellWithIdentifierSmall];
-//    
-//    NSUInteger row = [indexPath row];
-//    // 第一个cell
-//    if (row == 0) {
-//        if (cellBig == nil) {
-//            cellBig = [[bigPicTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellWithIdentifierBig];
-//        }
-//        // 修改 cell 内容
-//        [cellBig rewriteTitle:[[[_contentListDataSource objectForKey:channelKey] objectAtIndex:row] objectForKey:@"title"]];
-//        [cellBig rewritePicURL:[[[_contentListDataSource objectForKey:channelKey] objectAtIndex:row] objectForKey:@"picBig"]];
-//        
-//        // 取消选中的背景色
-//        cellBig.selectionStyle = UITableViewCellSelectionStyleNone;
-//        return cellBig;
-//    }
-//    // 第二个开始的其他cell
-//    else {
-//        if (cellSmall == nil) {
-//            cellSmall = [[smallPicTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellWithIdentifierSmall];
-//        }
-//        // 修改cell内容
-//        [cellSmall rewriteTitle:[[[_contentListDataSource objectForKey:channelKey] objectAtIndex:row] objectForKey:@"title"]];
-//        [cellSmall rewritePicURL:[[[_contentListDataSource objectForKey:channelKey] objectAtIndex:row] objectForKey:@"picSmall"]];
-//        [cellSmall rewriteHotDegree:(NSString *)[[[_contentListDataSource objectForKey:channelKey] objectAtIndex:row] objectForKey:@"pageView"]];
-//        
-//        // 取消选中的背景色
-//        cellSmall.selectionStyle = UITableViewCellSelectionStyleNone;
-//        
-//        return cellSmall;
-//    }
-//}
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString *cellIdentity = [_channels objectAtIndex:(tableView.tag-1)];
     NSString *channelKey = [cellIdentity copy];
     NSLog(@"当前频道：%@", channelKey);
     
-    static NSString *CellWithIdentifier = @"aaa";
-    picBasedTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellWithIdentifier];
+    NSString *CellWithIdentifierBig = [@"bigCell+" stringByAppendingString:cellIdentity];
+    // NSString *CellWithIdentifierBig = @"big";
+    bigPicTableViewCell *cellBig = [tableView dequeueReusableCellWithIdentifier:CellWithIdentifierBig];
+    
+    NSString *CellWithIdentifierSmall = [@"smallCell+" stringByAppendingString:cellIdentity];
+    // NSString *CellWithIdentifierSmall = @"small";
+    smallPicTableViewCell *cellSmall = [tableView dequeueReusableCellWithIdentifier:CellWithIdentifierSmall];
     
     NSUInteger row = [indexPath row];
-    if (cell == nil) {
-        cell = [[picBasedTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellWithIdentifier];
+    // 第一个cell
+    if (row == 0) {
+        if (cellBig == nil) {
+            cellBig = [[bigPicTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellWithIdentifierBig];
+        }
+        // 修改 cell 内容
+        [cellBig rewriteTitle:[[[_contentListDataSource objectForKey:channelKey] objectAtIndex:row] objectForKey:@"title"]];
+        [cellBig rewritePicURL:[[[_contentListDataSource objectForKey:channelKey] objectAtIndex:row] objectForKey:@"picBig"]];
+        
+        // 取消选中的背景色
+        cellBig.selectionStyle = UITableViewCellSelectionStyleNone;
+        return cellBig;
     }
-    // 修改 cell 内容
-    [cell rewriteTitle:[[[_contentListDataSource objectForKey:channelKey] objectAtIndex:row] objectForKey:@"title"]];
-    [cell rewritePicURL:[[[_contentListDataSource objectForKey:channelKey] objectAtIndex:row] objectForKey:@"picBig"]];
-    [cell rewriteDate:[[[_contentListDataSource objectForKey:channelKey] objectAtIndex:row] objectForKey:@"postTime"]];
-    [cell rewritePortraitURL:[[[_contentListDataSource objectForKey:channelKey] objectAtIndex:row] objectForKey:@"picBig"]];
-    
-    // 取消选中的背景色
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    return cell;
+    // 第二个开始的其他cell
+    else {
+        if (cellSmall == nil) {
+            cellSmall = [[smallPicTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellWithIdentifierSmall];
+        }
+        // 修改cell内容
+        [cellSmall rewriteTitle:[[[_contentListDataSource objectForKey:channelKey] objectAtIndex:row] objectForKey:@"title"]];
+        [cellSmall rewritePicURL:[[[_contentListDataSource objectForKey:channelKey] objectAtIndex:row] objectForKey:@"picSmall"]];
+        [cellSmall rewriteHotDegree:(NSString *)[[[_contentListDataSource objectForKey:channelKey] objectAtIndex:row] objectForKey:@"pageView"]];
+        
+        // 取消选中的背景色
+        cellSmall.selectionStyle = UITableViewCellSelectionStyleNone;
+        return cellSmall;
+    }
 }
+
+
+//- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    NSString *cellIdentity = [_channels objectAtIndex:(tableView.tag-1)];
+//    NSString *channelKey = [cellIdentity copy];
+//    NSLog(@"当前频道：%@", channelKey);
+//    
+//    static NSString *CellWithIdentifier = @"aaa";
+//    picBasedTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellWithIdentifier];
+//    
+//    NSUInteger row = [indexPath row];
+//    if (cell == nil) {
+//        cell = [[picBasedTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellWithIdentifier];
+//    }
+//    // 修改 cell 内容
+//    [cell rewriteTitle:[[[_contentListDataSource objectForKey:channelKey] objectAtIndex:row] objectForKey:@"title"]];
+//    [cell rewritePicURL:[[[_contentListDataSource objectForKey:channelKey] objectAtIndex:row] objectForKey:@"picBig"]];
+////    [cell rewriteDate:[[[_contentListDataSource objectForKey:channelKey] objectAtIndex:row] objectForKey:@"postTime"]];
+//    [cell rewritePortraitURL:[[[[_contentListDataSource objectForKey:channelKey] objectAtIndex:row] objectForKey:@"author"] objectForKey:@"pic"]];
+//    //
+//    NSString *authorName = [[[[_contentListDataSource objectForKey:channelKey] objectAtIndex:row] objectForKey:@"author"] objectForKey:@"name"];
+//    NSString *articleHotScore = @"324人气";
+//    NSString *str = [authorName stringByAppendingString:@" · "];
+//    str = [str stringByAppendingString:articleHotScore];
+//    [cell rewriteAuthorAndHotScore:str];
+//    
+//    // 取消选中的背景色
+//    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+//    return cell;
+//}
 
 
 
 // 改变 cell 高度
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//   // 这里的cell高度是 2 种固定高度
-//   NSInteger row = [indexPath row];
-//   if (row == 0) {
-//      return 244; //bigcell
-//   }
-//   else {
-//      return 84+4; //smallcell
-//   }
+   // 这里的cell高度是 2 种固定高度
+   NSInteger row = [indexPath row];
+   if (row == 0) {
+      return 244; //bigcell
+   }
+   else {
+      return 84+4; //smallcell
+   }
     
-    // picBased height
-    float imgHeight = 180.0f;
-    return imgHeight + 40 + 15;
+//    // picBased height
+//    float imgHeight = 180.0f;
+//    return imgHeight + 40 + 15;
 }
 
 
