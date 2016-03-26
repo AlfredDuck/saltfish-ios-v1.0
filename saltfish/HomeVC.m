@@ -53,6 +53,7 @@
 // 在你自己的UIViewController里重写此方法，返回你需要的值(UIStatusBarStyleDefault 或者 UIStatusBarStyleLightContent)；
 - (UIStatusBarStyle)preferredStatusBarStyle {
     return UIStatusBarStyleLightContent;
+    //return  UIStatusBarStyleDefault;
 }
 
 - (void)viewDidLoad {
@@ -167,17 +168,20 @@
 
 - (void)basedChannels {
     // 频道背景
-    _basedChannelsView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, _screenWidth, 60)];
+    _basedChannelsView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, _screenWidth, 64)];
+    
     // 频道背景的渐变遮黑
-    UIImage *blackImage = [UIImage imageNamed:@"black_top.png"]; // 使用ImageView通过name找到图片
+    UIImage *blackImage = [UIImage imageNamed:@"black_top3.png"]; // 使用ImageView通过name找到图片
     UIImageView *oneImageView = [[UIImageView alloc] initWithImage:blackImage]; // 把oneImage添加到oneImageView上
     oneImageView.frame = CGRectMake(0, 0, _screenWidth, 90); // 设置图片位置和大小
     UIImageView *twoImageView = [[UIImageView alloc] initWithImage:blackImage]; // 把oneImage添加到oneImageView上
-    twoImageView.frame = CGRectMake(0, 0, _screenWidth, 65); // 设置图片位置和大小
-    twoImageView.alpha = 0.7;
+    twoImageView.frame = CGRectMake(0, 0, _screenWidth, 85); // 设置图片位置和大小
+    twoImageView.alpha = 0.6;
     [_basedChannelsView addSubview:oneImageView];
     [_basedChannelsView addSubview:twoImageView];
+    
     [self.view addSubview:_basedChannelsView];
+    
     
     // 频道在scrollview基础上
     _channelScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 20, _screenWidth, 30)];
@@ -186,19 +190,28 @@
     unsigned long allLengthOfChannels = 0;  // 初始化
     
     // 设置各个频道的frame
+    _channelsLabelArray = [[NSMutableArray alloc] init];
     for (int i=0; i<[_channels count]; i++) {
         NSString *channelText = [_channels objectAtIndex:i];
         UILabel *channelLabel = [[UILabel alloc] init];
-        channelLabel.font = [UIFont fontWithName:@"Helvetica Bold" size: 15];
-        channelLabel.textColor = [UIColor whiteColor];
         channelLabel.textAlignment = UITextAlignmentCenter;
         channelLabel.text = channelText;
         channelLabel.tag = i+1;
-        // 文字阴影
-        channelLabel.shadowColor = [UIColor blackColor];
-        channelLabel.shadowOffset = CGSizeMake(0.5, 0.5);
         
-
+        if (i == 0) {
+            channelLabel.textColor = [UIColor whiteColor];
+            channelLabel.font = [UIFont fontWithName:@"Helvetica Bold" size: 15];
+            // 文字阴影
+            channelLabel.shadowColor = [UIColor blackColor];
+            channelLabel.shadowOffset = CGSizeMake(0.5, 0.5);
+        } else {
+            channelLabel.font = [UIFont fontWithName:@"Helvetica" size: 15];
+            channelLabel.textColor = [colorManager lightTextColor];
+        }
+        
+        // 添加到 label 数组
+        [_channelsLabelArray addObject:channelLabel];
+        
         // channelLabel 的 frame
         unsigned long x = 0;
         for (int j=0; j<=i-1; j++) {
@@ -230,7 +243,7 @@
     //这个属性很重要，它可以决定是横向还是纵向滚动，一般来说也是其中的 View 的总宽度，和总的高度
     //这里同时考虑到每个 View 间的空隙，所以宽度是 200x3＋5＋10＋10＋5＝630
     //高度上与 ScrollView 相同，只在横向扩展，所以只要在横向上滚动
-    _channelScrollView.contentSize = CGSizeMake(allLengthOfChannels, 30);
+    _channelScrollView.contentSize = CGSizeMake(allLengthOfChannels, 44);
     
     //用它指定 ScrollView 中内容的当前位置，即相对于 ScrollView 的左上顶点的偏移
     _channelScrollView.contentOffset = CGPointMake(0, 0);
@@ -327,6 +340,22 @@
         
         // uiview 动画（无需实例化）
         [UIView animateWithDuration:0.15 animations:^{
+            // 修改处于焦点的 channelLabel 的样式
+            UILabel *cl;
+            for (cl in _channelsLabelArray) {
+                cl.textColor = [colorManager lightTextColor];
+                cl.font = [UIFont fontWithName:@"Helvetica" size: 15];
+                // 文字阴影
+                cl.shadowColor = nil;
+                cl.shadowOffset = CGSizeMake(0.5, 0.5);
+            }
+            UILabel *currentLabel = [_channelsLabelArray objectAtIndex:focus];
+            currentLabel.textColor = [UIColor whiteColor];
+            currentLabel.font = [UIFont fontWithName:@"Helvetica Bold" size: 15];
+            // 文字阴影
+            currentLabel.shadowColor = [colorManager mainTextColor];
+            currentLabel.shadowOffset = CGSizeMake(0.5, 0.5);
+            
             // 修改紫色焦点位置 (动画)
             _focusView.frame = CGRectMake(v.frame.origin.x, 27, v.frame.size.width, 3);
             
@@ -350,7 +379,6 @@
                 _channelScrollView.contentOffset = CGPointMake(offset, 0);
             }
         }];
-        
         
         // 响应状态栏事件
         for (NSString *key in _scrollsToTopManager) {
@@ -455,6 +483,22 @@
     
     // 修改频道标签
     [UIView animateWithDuration:0.15 animations:^{  // uiview 动画（无需实例化）
+        // 修改处于焦点的 channelLabel 的样式
+        UILabel *cl;
+        for (cl in _channelsLabelArray) {
+            cl.textColor = [colorManager lightTextColor];
+            cl.font = [UIFont fontWithName:@"Helvetica" size: 15];
+            // 文字阴影
+            cl.shadowColor = nil;
+            cl.shadowOffset = CGSizeMake(0.5, 0.5);
+        }
+        UILabel *currentLabel = [_channelsLabelArray objectAtIndex:(v.tag - 1)];
+        currentLabel.textColor = [UIColor whiteColor];
+        currentLabel.font = [UIFont fontWithName:@"Helvetica Bold" size: 15];
+        // 文字阴影
+        currentLabel.shadowColor = [colorManager mainTextColor];
+        currentLabel.shadowOffset = CGSizeMake(0.5, 0.5);
+
         // 修改紫色焦点位置 (动画)
         _focusView.frame = CGRectMake(v.frame.origin.x, 27, v.frame.size.width, 3);
         
@@ -784,7 +828,7 @@
     [contentTableView setDataSource:self];
     
     [contentTableView registerClass:[smallPicTableViewCell class] forCellReuseIdentifier:CellWithIdentifier];
-    contentTableView.backgroundColor = [colorManager greenGrayBackground];
+    contentTableView.backgroundColor = [colorManager lightGrayBackground];
     contentTableView.separatorStyle = UITableViewCellSeparatorStyleNone; // 去掉分割线
     // contentTableView.contentInset = UIEdgeInsetsMake(14, 0, 0, 0); // 设置距离顶部的一段偏移，继承自scrollview
     contentTableView.tag = index + 1;

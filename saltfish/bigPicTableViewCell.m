@@ -60,13 +60,13 @@
         [self.contentView addSubview:_picImageView];
 
         // 遮黑
-        UIView *blackBackground = [[UIView alloc] initWithFrame:CGRectMake(0, 244-64, _screenWidth, 64)];
+        UIView *blackBackground = [[UIView alloc] initWithFrame:CGRectMake(0, 244-90, _screenWidth, 64)];
 //        blackBackground.backgroundColor = [UIColor blackColor];
 //        blackBackground.alpha = 0.6;
         // 遮黑的渐变图片
-        UIImage *blackImage = [UIImage imageNamed:@"black_bottom2.png"]; // 使用ImageView通过name找到图片
+        UIImage *blackImage = [UIImage imageNamed:@"black_bottom3.png"]; // 使用ImageView通过name找到图片
         UIImageView *oneImageView = [[UIImageView alloc] initWithImage:blackImage]; // 把oneImage添加到oneImageView上
-        oneImageView.frame = CGRectMake(0, 0, _screenWidth, 64); // 设置图片位置和大小
+        oneImageView.frame = CGRectMake(0, 0, _screenWidth, 90); // 设置图片位置和大小
         [blackBackground addSubview:oneImageView];
         [self.contentView addSubview:blackBackground];
 

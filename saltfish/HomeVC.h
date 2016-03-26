@@ -14,7 +14,9 @@
 
 // 顶部频道区域
 @property (nonatomic, strong) UIView *basedChannelsView;
-@property (nonatomic, strong) NSArray *channels;
+@property (nonatomic, strong) NSArray *channels;  // 频道列表（文本）
+@property (nonatomic, strong) UILabel *channelLabel; // 频道label
+@property (nonatomic, strong) NSMutableArray *channelsLabelArray; // 频道label列表
 @property (nonatomic, strong) UIScrollView *channelScrollView;   // 顶部scrollview
 @property (nonatomic, strong) UIView *focusView;  // 紫色焦点
 
