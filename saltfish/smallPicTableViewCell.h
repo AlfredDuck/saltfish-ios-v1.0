@@ -12,13 +12,13 @@
 // 标题
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) UILabel *titleLabel;
-@property (nonatomic, copy) UILabel *readedTitleLabel;
 // 热度
 @property (nonatomic, copy) NSString *hotDegree;
 @property (nonatomic, copy) UILabel *hotDegreeLabel;
 // 图片
 @property (nonatomic, copy) NSString *picURL;
 @property (nonatomic, copy) UIImageView *picImageView;
+@property (nonatomic, copy) UIView *whiteTransparentView;
 // 整体cell高度
 @property (nonatomic) float cellHeight;
 //

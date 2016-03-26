@@ -55,15 +55,6 @@
         //_titleLabel.backgroundColor = [UIColor yellowColor];
         _titleLabel.numberOfLines = 2;
         [self.contentView addSubview:_titleLabel];
-        
-        // readed标题
-        _readedTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(102, 12, _screenWidth-104-8, 38)];
-        _readedTitleLabel.text = _title;
-        _readedTitleLabel.font = [UIFont fontWithName:@"Helvetica Bold" size: 16];
-        _readedTitleLabel.textColor = [UIColor lightGrayColor];
-        _readedTitleLabel.numberOfLines = 2;
-        _readedTitleLabel.hidden = YES;
-        [self.contentView addSubview:_readedTitleLabel];
 
         // 热度
         _hotDegreeLabel = [[UILabel alloc] initWithFrame:CGRectMake(102, 48, 200, 30)];
@@ -81,6 +72,13 @@
         // 需要AFNetwork
         [_picImageView sd_setImageWithURL:[NSURL URLWithString:_picURL] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
         [self.contentView addSubview:_picImageView];
+        
+        // 白色半透曚层
+        _whiteTransparentView = [[UIView alloc] initWithFrame:CGRectMake(8, 12, 80, 60)];
+        _whiteTransparentView.backgroundColor = [UIColor whiteColor];
+        _whiteTransparentView.alpha = 0.5;
+        _whiteTransparentView.hidden = YES;
+        [self.contentView addSubview:_whiteTransparentView];
 
         // 背景、分割线
         UIView *partLine = [[UIView alloc] initWithFrame:CGRectMake(0, 84, _screenWidth, 4)];
@@ -130,9 +128,11 @@
         NSLog(@"%@", _array);
         NSLog(@"%@", articleID);
         _titleLabel.textColor = [UIColor lightGrayColor];
+        //_whiteTransparentView.hidden = NO;
     }
     else {
         _titleLabel.textColor = [colorManager mainTextColor];
+        //_whiteTransparentView.hidden = YES;
     }
 }
 

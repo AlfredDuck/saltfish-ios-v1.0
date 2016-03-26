@@ -76,7 +76,6 @@
     // 状态栏底色
     UIView *statusBarBackground = [[UIView alloc] initWithFrame:CGRectMake(0, 0, _screenWidth, 20)];
     statusBarBackground.backgroundColor = [UIColor whiteColor];
-    statusBarBackground.alpha = 0.9;
     [self.view addSubview:statusBarBackground];
     
     // 状态栏分割线
@@ -156,7 +155,7 @@
     
     // loading 菊花
     _loadingFlower = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    _loadingFlower.frame = CGRectMake(44, 0, 44, 44);
+    _loadingFlower.frame = CGRectMake(40, 0, 44, 44);
     //[_loadingFlower startAnimating];
     //[_loadingFlower stopAnimating];
     [basedBottomBarBackground addSubview:_loadingFlower];
