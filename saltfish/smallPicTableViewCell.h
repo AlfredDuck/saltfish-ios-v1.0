@@ -12,6 +12,7 @@
 // 标题
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) UILabel *titleLabel;
+@property (nonatomic, copy) UILabel *readedTitleLabel;
 // 热度
 @property (nonatomic, copy) NSString *hotDegree;
 @property (nonatomic, copy) UILabel *hotDegreeLabel;
@@ -21,11 +22,14 @@
 // 整体cell高度
 @property (nonatomic) float cellHeight;
 //
+@property (nonatomic, copy) NSArray *array;
+//
 @property (nonatomic) NSInteger screenWidth;
 @property (nonatomic) NSInteger screenHeight;
 //
 - (void)rewriteTitle:(NSString *)newTitle;
 - (void)rewriteHotDegree:(NSString *)newDegree;
 - (void)rewritePicURL:(NSString *)newPicURL;
+- (void)showAsBeenRead: (NSString *)aritlceID;
 
 @end

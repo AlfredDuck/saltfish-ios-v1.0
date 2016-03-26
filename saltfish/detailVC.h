@@ -8,6 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+// 定义代理
+@protocol detailVCDelegate <NSObject>
+@required
+-(void)refreshReadedStatus;
+@end
+
+
 @interface detailVC : UIViewController<UIWebViewDelegate>
 // 文章id
 @property (nonatomic, strong) NSString *articleID;
@@ -31,4 +38,7 @@
 //
 @property (nonatomic) NSInteger screenWidth;
 @property (nonatomic) NSInteger screenHeight;
+// 定义代理
+@property (nonatomic, assign) id <detailVCDelegate> delegate;
+
 @end

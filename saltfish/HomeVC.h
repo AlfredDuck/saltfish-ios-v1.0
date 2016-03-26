@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "saltFishLaunch.h"
+#import "detailVC.h"
 
-@interface HomeVC : UIViewController <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, launchDelegate>
+@interface HomeVC : UIViewController <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, launchDelegate, detailVCDelegate>
 
 // 顶部频道区域
 @property (nonatomic, strong) UIView *basedChannelsView;

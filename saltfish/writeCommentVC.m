@@ -23,7 +23,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        self.title = @"三分田";
+        self.title = @"title";
         self.view.backgroundColor = [UIColor whiteColor];
     }
     return self;

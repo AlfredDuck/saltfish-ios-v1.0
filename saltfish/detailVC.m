@@ -26,7 +26,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        self.title = @"三分田";
+        self.title = @"title";
         self.view.backgroundColor = [UIColor whiteColor];
     }
     return self;
@@ -40,14 +40,14 @@
     
     // 创建UI
     [self basedBottomBar];
-    // 记录已读未读
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     if (_firstLoad) {
         NSLog(@"详情页的articleID: %@", _articleID);
+        // 记录为已读
+        [self logAsRead];
         // 请求webview
         [self basedWebView];
         // 请求评论数
@@ -56,6 +56,11 @@
     _firstLoad = NO;
     [self praiseButtonStatus];
 
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [self.delegate refreshReadedStatus];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -233,9 +238,6 @@
         NSString *praiseNum = (NSString *)[responseObject objectForKey:@"praiseNum"];
         [self basedCommentNumLabelWith:[NSString stringWithFormat:@"%@", commentNum]];
         [self basedPraiseNumLabelWith:[NSString stringWithFormat:@"%@", praiseNum]];
-        
-        // 记录此文章已读
-        [self readOrUnread];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
@@ -474,15 +476,22 @@
 
 
 
-// 记录已读未读
-- (void)readOrUnread
+// 记录为已读
+- (void)logAsRead
 {
     NSLog(@"the article was read");
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     if ([userDefaults arrayForKey:@"readList"]) {
         // already have a read list
+        NSLog(@"already have a read list");
         NSMutableArray *marray = [[userDefaults arrayForKey:@"readList"] mutableCopy];
+        // 检查是否重复
+        if ([marray containsObject:_articleID]) {
+            NSLog(@"重复访问，不记录为已读");
+            return;
+        }
         [marray addObject:_articleID];
+        NSLog(@"%@", marray);
         [userDefaults setObject:[marray copy] forKey:@"readList"];
         
     } else {
@@ -490,6 +499,7 @@
         NSLog(@"didn't have a read list");
         NSMutableArray *marray = [[NSMutableArray alloc] init];
         [marray addObject:_articleID];
+        NSLog(@"%@", marray);
         [userDefaults setObject:[marray copy] forKey:@"readList"];
     }
 }
@@ -512,9 +522,5 @@
     }];
     return;
 }
-
-
-
-
 
 @end

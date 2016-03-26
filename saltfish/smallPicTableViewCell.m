@@ -55,6 +55,15 @@
         //_titleLabel.backgroundColor = [UIColor yellowColor];
         _titleLabel.numberOfLines = 2;
         [self.contentView addSubview:_titleLabel];
+        
+        // readed标题
+        _readedTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(102, 12, _screenWidth-104-8, 38)];
+        _readedTitleLabel.text = _title;
+        _readedTitleLabel.font = [UIFont fontWithName:@"Helvetica Bold" size: 16];
+        _readedTitleLabel.textColor = [UIColor lightGrayColor];
+        _readedTitleLabel.numberOfLines = 2;
+        _readedTitleLabel.hidden = YES;
+        [self.contentView addSubview:_readedTitleLabel];
 
         // 热度
         _hotDegreeLabel = [[UILabel alloc] initWithFrame:CGRectMake(102, 48, 200, 30)];
@@ -78,6 +87,9 @@
         partLine.backgroundColor = [colorManager lightGrayBackground];
         [self.contentView addSubview:partLine];
         self.contentView.backgroundColor = [UIColor whiteColor];
+        
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        _array = [userDefaults arrayForKey:@"readList"];
 
         // not usefull
         self.frame = CGRectMake(0, 0, 300, 300);
@@ -108,6 +120,20 @@
 {
     _picURL = newPicURL;
     [_picImageView sd_setImageWithURL:[NSURL URLWithString:_picURL] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+}
+
+- (void)showAsBeenRead:(NSString *)articleID
+{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    _array = [userDefaults arrayForKey:@"readList"];
+    if ([_array containsObject:articleID]) {
+        NSLog(@"%@", _array);
+        NSLog(@"%@", articleID);
+        _titleLabel.textColor = [UIColor lightGrayColor];
+    }
+    else {
+        _titleLabel.textColor = [colorManager mainTextColor];
+    }
 }
 
 

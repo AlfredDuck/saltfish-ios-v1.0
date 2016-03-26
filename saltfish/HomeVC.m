@@ -746,6 +746,26 @@
 
 
 
+
+
+#pragma mark - 自定义代理
+- (void)refreshReadedStatus
+{
+    // 获取当前tableview
+    NSLog(@"%lu", _currentChannel);
+    NSString *channelString = _channels[_currentChannel];
+    if (_scrollsToTopManager[channelString]) {
+        UITableView *tv = _scrollsToTopManager[channelString];
+        [tv reloadData];
+    }
+}
+
+
+
+
+
+
+
 /********************************/
 /***** uitableview *******/
 /********************************/
@@ -863,6 +883,10 @@
         [cellSmall rewritePicURL:[[[_contentListDataSource objectForKey:channelKey] objectAtIndex:row] objectForKey:@"picSmall"]];
         [cellSmall rewriteHotDegree:(NSString *)[[[_contentListDataSource objectForKey:channelKey] objectAtIndex:row] objectForKey:@"pageView"]];
         
+        // cell是否已读
+        NSString *cellArticleID = [[[_contentListDataSource objectForKey:channelKey] objectAtIndex:row] objectForKey:@"_id"];
+        [cellSmall showAsBeenRead:[[[_contentListDataSource objectForKey:channelKey] objectAtIndex:row] objectForKey:@"_id"]];
+        
         // 取消选中的背景色
         cellSmall.selectionStyle = UITableViewCellSelectionStyleNone;
         return cellSmall;
@@ -928,16 +952,16 @@
     NSLog(@"cell点击事件at row: %lu", (unsigned long)row);
     
     // 临时用的...
-//    if (row == 0) {
-//        NSLog(@"清空缓存");
-//        NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
-//        NSDictionary *dictionary = [user dictionaryRepresentation];
-//        for(NSString* key in [dictionary allKeys]){
-//            [user removeObjectForKey:key];
-//            [user synchronize];
-//        }
-//        return;
-//    }
+    if (row == 0) {
+        NSLog(@"清空缓存");
+        NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+        NSDictionary *dictionary = [user dictionaryRepresentation];
+        for(NSString* key in [dictionary allKeys]){
+            [user removeObjectForKey:key];
+            [user synchronize];
+        }
+        return;
+    }
     
     // testing
     if (row == 0) {
@@ -977,6 +1001,7 @@
     // 进入article详情页
     detailVC *detailPage = [[detailVC alloc] init];
     detailPage.articleID = articleID;
+    detailPage.delegate = self;
     [self.navigationController pushViewController:detailPage animated:YES];
     //开启iOS7的滑动返回效果
     if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
@@ -986,7 +1011,6 @@
     // 返回时是非选中状态
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
-
 
 
 @end
