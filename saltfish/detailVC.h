@@ -34,6 +34,8 @@
 @property (nonatomic, strong) UIButton *shareButton;
 @property (nonatomic, strong) UIView *shareButtonView;
 @property (nonatomic, strong) UILabel *shareNumLabel;
+// loading flower
+@property (nonatomic, strong) UIActivityIndicatorView *loadingFlower;
 
 //
 @property (nonatomic) NSInteger screenWidth;

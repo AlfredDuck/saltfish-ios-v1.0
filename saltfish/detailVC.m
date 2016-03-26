@@ -114,7 +114,7 @@
     UIImageView *commentImageView = [[UIImageView alloc] initWithImage:commentImage]; // 把oneImage添加到oneImageView上
     commentImageView.frame = CGRectMake(10.5, 11.5, 23, 21); // 设置图片位置和大小
     // [oneImageView setContentMode:UIViewContentModeCenter];
-    _commentButtonView = [[UIView alloc] initWithFrame:CGRectMake(_screenWidth-60, 0, 44, 44)];
+    _commentButtonView = [[UIView alloc] initWithFrame:CGRectMake(_screenWidth-54, 0, 44, 44)];
     [_commentButtonView addSubview:commentImageView];
     // 为UIView添加点击事件
     // 一定要先将userInteractionEnabled置为YES，这样才能响应单击事件
@@ -129,7 +129,7 @@
     _praiseImageView = [[UIImageView alloc] initWithImage:praiseImage]; // 把oneImage添加到oneImageView上
     _praiseImageView.frame = CGRectMake(11.5, 11, 21, 22); // 设置图片位置和大小
     // [oneImageView setContentMode:UIViewContentModeCenter];
-    _praiseButtonView = [[UIView alloc] initWithFrame:CGRectMake(_screenWidth-60*2, 0, 44, 44)];
+    _praiseButtonView = [[UIView alloc] initWithFrame:CGRectMake(_screenWidth-54*2, 0, 44, 44)];
     [_praiseButtonView addSubview:_praiseImageView];
     // 为UIView添加点击事件
     // 一定要先将userInteractionEnabled置为YES，这样才能响应单击事件
@@ -145,7 +145,7 @@
     UIImageView *shareImageView = [[UIImageView alloc] initWithImage:shareImage]; // 把oneImage添加到oneImageView上
     shareImageView.frame = CGRectMake(12, 13, 20, 18); // 设置图片位置和大小
     // [oneImageView setContentMode:UIViewContentModeCenter];
-    _shareButtonView = [[UIView alloc] initWithFrame:CGRectMake(_screenWidth-60*3, 0, 44, 44)];
+    _shareButtonView = [[UIView alloc] initWithFrame:CGRectMake(_screenWidth-54*3, 0, 44, 44)];
     [_shareButtonView addSubview:shareImageView];
     // 为UIView添加点击事件
     // 一定要先将userInteractionEnabled置为YES，这样才能响应单击事件
@@ -153,6 +153,13 @@
     UITapGestureRecognizer *singleTapOnshareButton = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickShareButton)]; // 设置手势
     [_shareButtonView addGestureRecognizer:singleTapOnshareButton]; // 给图片添加手势
     [basedBottomBarBackground addSubview:_shareButtonView];
+    
+    // loading 菊花
+    _loadingFlower = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    _loadingFlower.frame = CGRectMake(44, 0, 44, 44);
+    //[_loadingFlower startAnimating];
+    //[_loadingFlower stopAnimating];
+    [basedBottomBarBackground addSubview:_loadingFlower];
     
 }
 
@@ -308,6 +315,7 @@
 - (void)webViewDidStartLoad:(UIWebView *)webView
 {
     NSLog(@"请求+1");
+    [_loadingFlower startAnimating];
 }
 
 // 请求完成
@@ -318,6 +326,7 @@
     }
     else {
         NSLog(@"webview 请求完成");
+        [_loadingFlower stopAnimating];
     }
 }
 
