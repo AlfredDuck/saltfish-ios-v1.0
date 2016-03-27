@@ -340,7 +340,6 @@
 {
     NSString *urlString = [[request URL] absoluteString];
     NSLog(@"捕获网页请求：%@", urlString);
-    
     // 字符串分割成数组
     NSArray *arr = [urlString componentsSeparatedByString:@"://"];
     
@@ -362,7 +361,9 @@
     
     // share to weibo
     if ([arr[0] isEqualToString:@"saltfish-share-weibo"]) {
-        NSLog(@"Share to Weibo");
+        NSLog(@"Share to Weibo:%@", arr[1]);
+        [self shareToWeibo];
+        return false;
     }
     
     return true;
@@ -480,6 +481,7 @@
 
 - (void)clickShareButton {
     NSLog(@"点分享");
+    [self shareToWeibo];
 }
 
 
@@ -514,21 +516,84 @@
 
 
 
-// share to weibo
+#pragma mark - 分享操作
+// 分享到新浪微博
 - (void)shareToWeibo
 {
     NSLog(@"weibo share test");
-    //        WBAuthorizeRequest *request = [WBAuthorizeRequest request];
-    //        request.redirectURI = @"https://api.weibo.com/oauth2/default.html";
-    //        [WeiboSDK sendRequest: request];
     
-    [WBHttpRequest requestForShareAStatus:@"big short" contatinsAPicture:nil orPictureUrl:@"https://img1.doubanio.com/view/photo/photo/public/p2277484043.jpg" withAccessToken:@"2.008LimdBNBy6sD5321dc16e6qCZkkC" andOtherProperties:nil queue:nil withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
-        // callback code
-        NSLog(@"share success?");
-        NSLog(@"%@?%@", result, httpRequest.httpMethod);
-        NSLog(@"%@?%@", httpRequest.url, httpRequest.params);
-    }];
-    return;
+    // 新浪微博授权
+//    WBAuthorizeRequest *request = [WBAuthorizeRequest request];
+//    request.redirectURI = @"https://api.weibo.com/oauth2/default.html";
+//    [WeiboSDK sendRequest: request];
+    
+    // share
+//    [WBHttpRequest requestForShareAStatus:@"big short" contatinsAPicture:nil orPictureUrl:@"https://img1.doubanio.com/view/photo/photo/public/p2277484043.jpg" withAccessToken:@"2.008LimdBNBy6sD5321dc16e6qCZkkC" andOtherProperties:nil queue:nil withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
+//        // callback code
+//        NSLog(@"share success?");
+//        NSLog(@"%@?%@", result, httpRequest.httpMethod);
+//        NSLog(@"%@?%@", httpRequest.url, httpRequest.params);
+//    }];
+    
+    // repost
+//    [WBHttpRequest requestForRepostAStatus:@"1458053687985" repostText:@"small talk" withAccessToken:@"2.008LimdBNBy6sD5321dc16e6qCZkkC" andOtherProperties:nil queue:nil withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
+//        // callback code
+//        NSLog(@"share success?");
+//        NSLog(@"%@?%@", result, httpRequest.httpMethod);
+//        NSLog(@"%@?%@", httpRequest.url, httpRequest.params);
+//    }];
+    
+    // 获取用户资料
+    NSMutableDictionary *ding = [[NSMutableDictionary alloc] init];
+    [ding setObject:@"..." forKey:@"kill"];
+    [WBHttpRequest requestWithAccessToken:@"2.008LimdBNBy6sD5321dc16e6qCZkkC" url:@"https://api.weibo.com/2/users/show.json" httpMethod:@"GET" params:ding delegate:self withTag:@"userinfo"];
+    
+    // 发送消息到新浪微博
+//    [WBProvideMessageForWeiboResponse responseWithMessage:[self messageToShare]];
+//    WBSendMessageToWeiboRequest *request = [WBSendMessageToWeiboRequest requestWithMessage:[self messageToShare]];
+//    request.userInfo = nil;
+//    [WeiboSDK sendRequest:request];
 }
+
+
+#pragma mark - 消息的封装
+- (WBMessageObject *)messageToShare
+{
+    WBMessageObject *message = [WBMessageObject message];
+    message.text = @"测试通过WeiboSDK发送文字到微博!";
+    WBImageObject *image = [WBImageObject object];
+    image.imageData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"share_button" ofType:@"png"]];
+    message.imageObject = image;
+    
+    //下面注释的是发送图片和媒体文件
+    //    if (self.imageSwitch.on)
+    //    {
+    //        WBImageObject *image = [WBImageObject object];
+    //        image.imageData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"image_1" ofType:@"jpg"]];
+    //        message.imageObject = image;
+    //    }
+    //
+    //    if (self.mediaSwitch.on)
+    //    {
+    //        WBWebpageObject *webpage = [WBWebpageObject object];
+    //        webpage.objectID = @"identifier1";
+    //        webpage.title = @"分享网页标题";
+    //        webpage.description = [NSString stringWithFormat:@"分享网页内容简介-%.0f", [[NSDate date] timeIntervalSince1970]];
+    //        webpage.thumbnailData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"image_2" ofType:@"jpg"]];
+    //        webpage.webpageUrl = @"http://sina.cn?a=1";
+    //        message.mediaObject = webpage;
+    //    }
+    
+    return message;
+}
+
+
+#pragma mark -新浪获取用户资料回调方法
+- (void)request:(WBHttpRequest *)request didFinishLoadingWithResult:(NSString *)result
+{
+    //返回账户信息的字符串
+    NSLog(@"%@",result);
+}
+
 
 @end

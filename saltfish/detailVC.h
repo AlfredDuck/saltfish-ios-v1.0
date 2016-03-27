@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "WeiboSDK.h"
+
 
 // 定义代理
 @protocol detailVCDelegate <NSObject>
@@ -15,7 +17,7 @@
 @end
 
 
-@interface detailVC : UIViewController<UIWebViewDelegate>
+@interface detailVC : UIViewController<UIWebViewDelegate, WBHttpRequestDelegate>
 // 文章id
 @property (nonatomic, strong) NSString *articleID;
 //

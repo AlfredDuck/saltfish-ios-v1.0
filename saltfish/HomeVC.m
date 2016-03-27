@@ -1013,36 +1013,7 @@
         return;
     }
     
-    // testing
-    if (row == 0) {
-        NSLog(@"weibo share test");
-        
-        // authorize
-//        WBAuthorizeRequest *request = [WBAuthorizeRequest request];
-//        request.redirectURI = @"https://api.weibo.com/oauth2/default.html";
-//        [WeiboSDK sendRequest: request];
-        
-        // share
-//        [WBHttpRequest requestForShareAStatus:@"big short" contatinsAPicture:nil orPictureUrl:@"https://img1.doubanio.com/view/photo/photo/public/p2277484043.jpg" withAccessToken:@"2.008LimdBNBy6sD5321dc16e6qCZkkC" andOtherProperties:nil queue:nil withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
-//            // callback code
-//            NSLog(@"share success?");
-//            NSLog(@"%@?%@", result, httpRequest.httpMethod);
-//            NSLog(@"%@?%@", httpRequest.url, httpRequest.params);
-//        }];
-        
-        // repost
-        [WBHttpRequest requestForRepostAStatus:@"1458053687985" repostText:@"small talk" withAccessToken:@"2.008LimdBNBy6sD5321dc16e6qCZkkC" andOtherProperties:nil queue:nil withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
-            // callback code
-            NSLog(@"share success?");
-            NSLog(@"%@?%@", result, httpRequest.httpMethod);
-            NSLog(@"%@?%@", httpRequest.url, httpRequest.params);
-        }];
-        
-        return;
-    }
-    
     NSString *channelKey = @"";
-
     channelKey = [_channels objectAtIndex:_currentChannel];
     NSString *articleID = [[[_contentListDataSource objectForKey:channelKey] objectAtIndex:row] objectForKey:@"_id"];
     NSLog(@"articleID: %@", articleID);

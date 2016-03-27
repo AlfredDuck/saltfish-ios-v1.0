@@ -53,13 +53,35 @@
 }
 
 // Weibo Request
-- (void)didReceiveWeiboResponse:(WBAuthorizeResponse *)response
+//- (void)didReceiveWeiboResponse:(WBAuthorizeResponse *)response
+//{
+//    NSLog(@"weibo hhhhhhhhhhh");
+//    NSLog(@"%@", response.userID);
+//    NSLog(@"%@", response.accessToken);
+//    NSLog(@"%@", response.expirationDate);
+//    NSLog(@"%@", response.refreshToken);
+//}
+
+#pragma mark - 微博响应信息，如认证是否成功
+- (void)didReceiveWeiboResponse:(WBBaseResponse *)response
 {
-    NSLog(@"weibo hhhhhhhhhhh");
-    NSLog(@"%@", response.userID);
-    NSLog(@"%@", response.accessToken);
-    NSLog(@"%@", response.expirationDate);
-    NSLog(@"%@", response.refreshToken);
+    if ([response isKindOfClass:WBSendMessageToWeiboResponse.class])
+    {
+        // 说明分享成功
+        if(response.statusCode == 0){
+            //分享成功之后的代码
+            NSLog(@"新浪微博分享成功的响应！");
+        }
+    }
+    else if ([response isKindOfClass:WBAuthorizeResponse.class]){
+        WBAuthorizeResponse *res = (WBAuthorizeResponse *)response;
+        NSLog(@"新浪微博授权成功的响应！");
+        NSLog(@"%@", res.userID);
+        NSLog(@"%@", res.accessToken);
+        NSLog(@"%@", res.expirationDate);
+        NSLog(@"%@", res.refreshToken);
+        
+    }
 }
 
 
