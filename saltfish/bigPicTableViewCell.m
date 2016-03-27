@@ -33,16 +33,12 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         // Initialization code
-        /*
-        CGRect nameLabelRect = CGRectMake(0, 5, 70, 15);
-        UILabel *nameLabel = [[UILabel alloc] initWithFrame:nameLabelRect];
-        nameLabel.text = @"Name:";
-        nameLabel.font = [UIFont boldSystemFontOfSize:12];
-        [self.contentView addSubview: nameLabel];
-        */
-
         _screenHeight = [UIScreen mainScreen].bounds.size.height;
         _screenWidth = [UIScreen mainScreen].bounds.size.width;
+        
+        // 图片尺寸
+        float imgWidth = _screenWidth;   // 320
+        float imgHeight = _screenWidth*244/320;  //244
 
         // 一些初始化的值
         _title = @"曾经沧海难为水，除却巫山不是云霓裳佳人顾盼倾城山外山";
@@ -50,7 +46,7 @@
         self.tag = 999999;
 
         // 图片(尺寸固定)
-        _picImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, _screenWidth, 244)];
+        _picImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, imgWidth, imgHeight)];
         _picImageView.backgroundColor = [UIColor brownColor];
         // uiimageview居中裁剪
         _picImageView.contentMode = UIViewContentModeScaleAspectFill;
@@ -60,18 +56,18 @@
         [self.contentView addSubview:_picImageView];
 
         // 遮黑
-        UIView *blackBackground = [[UIView alloc] initWithFrame:CGRectMake(0, 244-90, _screenWidth, 64)];
+        UIView *blackBackground = [[UIView alloc] initWithFrame:CGRectMake(0, imgHeight-90, imgWidth, 64)];
 //        blackBackground.backgroundColor = [UIColor blackColor];
 //        blackBackground.alpha = 0.6;
         // 遮黑的渐变图片
         UIImage *blackImage = [UIImage imageNamed:@"black_bottom3.png"]; // 使用ImageView通过name找到图片
         UIImageView *oneImageView = [[UIImageView alloc] initWithImage:blackImage]; // 把oneImage添加到oneImageView上
-        oneImageView.frame = CGRectMake(0, 0, _screenWidth, 90); // 设置图片位置和大小
+        oneImageView.frame = CGRectMake(0, 0, imgWidth, 90); // 设置图片位置和大小
         [blackBackground addSubview:oneImageView];
         [self.contentView addSubview:blackBackground];
 
         // 标题
-        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(9, 244-64+4, _screenWidth-20, 60)];
+        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(9, imgHeight-64+4, imgWidth-20, 60)];
         _titleLabel.text = _title;
         _titleLabel.font = [UIFont fontWithName:@"Helvetica Bold" size: 20];
         _titleLabel.numberOfLines = 2;

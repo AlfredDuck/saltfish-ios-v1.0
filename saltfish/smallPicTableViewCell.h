@@ -18,7 +18,6 @@
 // 图片
 @property (nonatomic, copy) NSString *picURL;
 @property (nonatomic, copy) UIImageView *picImageView;
-@property (nonatomic, copy) UIView *whiteTransparentView;
 // 整体cell高度
 @property (nonatomic) float cellHeight;
 //

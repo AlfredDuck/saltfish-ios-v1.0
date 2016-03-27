@@ -206,8 +206,8 @@
         // 初始化 TableView
         [self basedTableView];
         
-        // 如果数据少于 10 ，则直接显示 la fin
-        if ([data count] < 5) {
+        // 如果数据少于 20 ，则直接显示 la fin
+        if ([data count] < 20) {
             [_commentTableView.mj_footer endRefreshingWithNoMoreData];
         }
         

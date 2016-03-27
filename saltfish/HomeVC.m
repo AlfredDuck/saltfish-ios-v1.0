@@ -976,10 +976,16 @@
    // 这里的cell高度是 2 种固定高度
    NSInteger row = [indexPath row];
    if (row == 0) {
-      return 244; //bigcell
+       //bigcell
+       float imgWidth = _screenWidth;
+       float imgHeight = imgWidth * 244 / 320;
+       return imgHeight;
    }
    else {
-      return 84+4; //smallcell
+       //smallcell
+       float imgWidth = _screenWidth/4.0;  // 80px
+       float imgHeight = imgWidth*3/4;   // 60px
+       return imgHeight + 24 + 4;
    }
     
 //    // picBased height

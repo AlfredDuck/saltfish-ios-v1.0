@@ -30,16 +30,12 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         // Initialization code
-        /*
-        CGRect nameLabelRect = CGRectMake(0, 5, 70, 15);
-        UILabel *nameLabel = [[UILabel alloc] initWithFrame:nameLabelRect];
-        nameLabel.text = @"Name:";
-        nameLabel.font = [UIFont boldSystemFontOfSize:12];
-        [self.contentView addSubview: nameLabel];
-        */
-
         _screenHeight = [UIScreen mainScreen].bounds.size.height;
         _screenWidth = [UIScreen mainScreen].bounds.size.width;
+        
+        //  图片长宽
+        float imgWidth = _screenWidth/4.0;  // 80px
+        float imgHeight = imgWidth*3/4;   // 60px
 
         // 一些初始化的值
         _title = @"曾经沧海难为水，除却巫山不是风雨云。怎么你还不来啊";
@@ -48,7 +44,7 @@
         self.tag = 999999;
 
         // 标题
-        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(102, 12, _screenWidth-104-8, 38)];
+        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(8+imgWidth+14, 12, _screenWidth-(8+imgWidth+14+8), 38)];
         _titleLabel.text = _title;
         _titleLabel.font = [UIFont fontWithName:@"Helvetica Bold" size: 16];
         _titleLabel.textColor = [colorManager mainTextColor];
@@ -57,14 +53,14 @@
         [self.contentView addSubview:_titleLabel];
 
         // 热度
-        _hotDegreeLabel = [[UILabel alloc] initWithFrame:CGRectMake(102, 48, 200, 30)];
+        _hotDegreeLabel = [[UILabel alloc] initWithFrame:CGRectMake(8+imgWidth+14, 48, _screenWidth-(8+imgWidth+14+8), 30)];
         _hotDegreeLabel.text = _hotDegree;
         _hotDegreeLabel.font = [UIFont fontWithName:@"Helvetica" size: 12.0f];
         _hotDegreeLabel.textColor = [colorManager lightTextColor];
         [self.contentView addSubview:_hotDegreeLabel];
 
         // 图片(尺寸固定)
-        _picImageView = [[UIImageView alloc] initWithFrame:CGRectMake(8, 12, 80, 60)];
+        _picImageView = [[UIImageView alloc] initWithFrame:CGRectMake(8, 12, imgWidth, imgHeight)];
         _picImageView.backgroundColor = [UIColor grayColor];
         // uiimageview居中裁剪
         _picImageView.contentMode = UIViewContentModeScaleAspectFill;
@@ -72,16 +68,9 @@
         // 需要AFNetwork
         [_picImageView sd_setImageWithURL:[NSURL URLWithString:_picURL] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
         [self.contentView addSubview:_picImageView];
-        
-        // 白色半透曚层
-        _whiteTransparentView = [[UIView alloc] initWithFrame:CGRectMake(8, 12, 80, 60)];
-        _whiteTransparentView.backgroundColor = [UIColor whiteColor];
-        _whiteTransparentView.alpha = 0.5;
-        _whiteTransparentView.hidden = YES;
-        [self.contentView addSubview:_whiteTransparentView];
 
         // 背景、分割线
-        UIView *partLine = [[UIView alloc] initWithFrame:CGRectMake(0, 84, _screenWidth, 4)];
+        UIView *partLine = [[UIView alloc] initWithFrame:CGRectMake(0, imgHeight+12+12, _screenWidth, 4)];
         partLine.backgroundColor = [colorManager lightGrayBackground];
         [self.contentView addSubview:partLine];
         self.contentView.backgroundColor = [UIColor whiteColor];
@@ -128,11 +117,9 @@
         NSLog(@"%@", _array);
         NSLog(@"%@", articleID);
         _titleLabel.textColor = [UIColor lightGrayColor];
-        //_whiteTransparentView.hidden = NO;
     }
     else {
         _titleLabel.textColor = [colorManager mainTextColor];
-        //_whiteTransparentView.hidden = YES;
     }
 }
 
