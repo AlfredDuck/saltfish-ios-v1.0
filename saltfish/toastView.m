@@ -15,10 +15,10 @@
 {
 
     UILabel *toast = [[UILabel alloc] initWithFrame:CGRectMake(0, superView.frame.size.height, superView.frame.size.width, 60)];
-    toast.font = [UIFont fontWithName:@"Helvetica" size:14.0f];
+    toast.font = [UIFont fontWithName:@"Helvetica" size:16.0f];
     toast.textAlignment = UITextAlignmentCenter;
     toast.textColor = [UIColor whiteColor];
-    toast.alpha = 0.8;
+    toast.alpha = 0.92;
     toast.text = text;
     toast.backgroundColor = [colorManager purple];
     

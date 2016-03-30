@@ -10,6 +10,7 @@
 #import "commentVC.h"
 #import "colorManager.h"
 #import "urlManager.h"
+#import "toastView.h"
 #import "AFNetworking.h"
 #import "WeiboSDK.h"
 #import "WeiboUser.h"
@@ -498,7 +499,16 @@
         [self shareToWeibo];
     }else if(buttonIndex == 3) {
         NSLog(@"复制文章链接");
+        [self copyShareLink];
     }
+}
+
+- (void)copyShareLink
+{
+    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+    pasteboard.string = @"河狸会打洞";
+    NSLog(@"复制成功");
+    [toastView showToastWith:@"复制成功" duration:2.0 superView:self.view];
 }
 
 
