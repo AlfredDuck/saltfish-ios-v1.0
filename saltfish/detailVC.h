@@ -17,7 +17,7 @@
 @end
 
 
-@interface detailVC : UIViewController<UIWebViewDelegate, WBHttpRequestDelegate>
+@interface detailVC : UIViewController<UIWebViewDelegate, WBHttpRequestDelegate, UIActionSheetDelegate>
 // 文章id
 @property (nonatomic, strong) NSString *articleID;
 //

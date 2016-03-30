@@ -12,6 +12,7 @@
 #import "urlManager.h"
 #import "AFNetworking.h"
 #import "WeiboSDK.h"
+#import "WeiboUser.h"
 
 
 @interface detailVC ()
@@ -478,10 +479,26 @@
 
 
 
-
+#pragma mark - UIActionSheet
 - (void)clickShareButton {
     NSLog(@"点分享");
-    [self shareToWeibo];
+    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"分享到" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"微信好友", @"微信朋友圈", @"新浪微博", @"复制文章链接", nil];
+    [sheet showInView:self.view];
+    //[self shareToWeibo];
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 0) {
+        NSLog(@"微信好友");
+    }else if (buttonIndex == 1) {
+        NSLog(@"微信朋友圈");
+    }else if(buttonIndex == 2) {
+        NSLog(@"新浪微博");
+        [self shareToWeibo];
+    }else if(buttonIndex == 3) {
+        NSLog(@"复制文章链接");
+    }
 }
 
 
@@ -527,32 +544,24 @@
 //    request.redirectURI = @"https://api.weibo.com/oauth2/default.html";
 //    [WeiboSDK sendRequest: request];
     
-    // share
-//    [WBHttpRequest requestForShareAStatus:@"big short" contatinsAPicture:nil orPictureUrl:@"https://img1.doubanio.com/view/photo/photo/public/p2277484043.jpg" withAccessToken:@"2.008LimdBNBy6sD5321dc16e6qCZkkC" andOtherProperties:nil queue:nil withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
-//        // callback code
-//        NSLog(@"share success?");
-//        NSLog(@"%@?%@", result, httpRequest.httpMethod);
-//        NSLog(@"%@?%@", httpRequest.url, httpRequest.params);
-//    }];
-    
-    // repost
-//    [WBHttpRequest requestForRepostAStatus:@"1458053687985" repostText:@"small talk" withAccessToken:@"2.008LimdBNBy6sD5321dc16e6qCZkkC" andOtherProperties:nil queue:nil withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
-//        // callback code
-//        NSLog(@"share success?");
-//        NSLog(@"%@?%@", result, httpRequest.httpMethod);
-//        NSLog(@"%@?%@", httpRequest.url, httpRequest.params);
-//    }];
-    
     // 获取用户资料
-    NSMutableDictionary *ding = [[NSMutableDictionary alloc] init];
-    [ding setObject:@"..." forKey:@"kill"];
-    [WBHttpRequest requestWithAccessToken:@"2.008LimdBNBy6sD5321dc16e6qCZkkC" url:@"https://api.weibo.com/2/users/show.json" httpMethod:@"GET" params:ding delegate:self withTag:@"userinfo"];
+//    [WBHttpRequest requestForUserProfile:@"3865613398" withAccessToken:@"2.008LimdBNBy6sD5321dc16e6qCZkkC" andOtherProperties:nil queue:nil withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
+//        // result 是一个 WeiboUser 类的实例
+//        if (error) {
+//            NSLog(@"%@",error);
+//            return;
+//        }
+//        NSLog(@"%@", ((WeiboUser *)result).name);
+//        NSLog(@"%@", ((WeiboUser *)result).location);
+//        NSLog(@"%@", ((WeiboUser *)result).userDescription);
+//        NSLog(@"%@", ((WeiboUser *)result).profileImageUrl);
+//    }];
     
-    // 发送消息到新浪微博
-//    [WBProvideMessageForWeiboResponse responseWithMessage:[self messageToShare]];
-//    WBSendMessageToWeiboRequest *request = [WBSendMessageToWeiboRequest requestWithMessage:[self messageToShare]];
-//    request.userInfo = nil;
-//    [WeiboSDK sendRequest:request];
+    // 发送消息到新浪微博(不需要 access token)
+    [WBProvideMessageForWeiboResponse responseWithMessage:[self messageToShare]];
+    WBSendMessageToWeiboRequest *request = [WBSendMessageToWeiboRequest requestWithMessage:[self messageToShare]];
+    request.userInfo = nil;
+    [WeiboSDK sendRequest:request];
 }
 
 
@@ -587,13 +596,6 @@
     return message;
 }
 
-
-#pragma mark -新浪获取用户资料回调方法
-- (void)request:(WBHttpRequest *)request didFinishLoadingWithResult:(NSString *)result
-{
-    //返回账户信息的字符串
-    NSLog(@"%@",result);
-}
 
 
 @end
