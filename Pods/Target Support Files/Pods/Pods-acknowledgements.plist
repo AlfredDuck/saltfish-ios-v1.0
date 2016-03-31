@@ -96,6 +96,14 @@ THE SOFTWARE.
 		</dict>
 		<dict>
 			<key>FooterText</key>
+			<string>&#169; 1998 - 2015 Tencent All Right Reserved.</string>
+			<key>Title</key>
+			<string>WXSDKCoreKit</string>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+		</dict>
+		<dict>
+			<key>FooterText</key>
 			<string></string>
 			<key>Title</key>
 			<string>WeiboSDK</string>

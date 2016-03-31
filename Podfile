@@ -3,3 +3,4 @@ pod "AFNetworking", "~>2.1"
 pod "SDWebImage", "~>3.7.3"
 pod "MJRefresh", "~>3.0.7"
 pod “WeiboSDK”, “~>3.1.3”
+pod “WXSDKCoreKit”, “~>1.6.2”

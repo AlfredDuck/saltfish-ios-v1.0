@@ -9,9 +9,11 @@
 #import "AppDelegate.h"
 #import "HomeVC.h"
 #import "WeiboSDK.h"
+#import "WXApi.h"
 
 #define kAPPKey        @"3552509555"
 #define kRedirectURI   @"http://www.sina.com"
+#define WXKey          @"wxd53fa52039cea997"
 
 @interface AppDelegate ()
 @end
@@ -29,6 +31,9 @@
     // weibo SDK
     [WeiboSDK enableDebugMode:YES];
     [WeiboSDK registerApp:kAPPKey];
+    
+    // weixin SDK 向微信注册
+    [WXApi registerApp:WXKey];
 
     // set homeVC as the rootViewController
     HomeVC *homeVC = [[HomeVC alloc] init];
@@ -40,16 +45,38 @@
 }
 
 
-/* weiboSDK要求 */
-// 重写AppDelegate 的handleOpenURL和openURL⽅方法
+/* weiboSDK & weixinSDK 要求 */
+// 重写AppDelegate 的handleOpenURL和openURL方法
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
 {
-    return [WeiboSDK handleOpenURL:url delegate:self];
+    // 通过判断url的前缀，决定用哪个
+    NSString *string =[url absoluteString];
+    NSLog(@"回调url的前缀：%@", string);
+
+//    if ([string hasPrefix:@"weibo"]) {
+//        return [WeiboSDK handleOpenURL:url delegate:self];
+//    }else if ([string hasPrefix:@"weixin"]){
+//        return [WXApi handleOpenURL:url delegate:self];
+//    }else {
+//        return NO;
+//    }
+    return [WXApi handleOpenURL:url delegate:self];
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
-    return [WeiboSDK handleOpenURL:url delegate:self];
+    // 通过判断url的前缀，决定用哪个
+    NSString *string =[url absoluteString];
+    NSLog(@"回调url的前缀：%@", string);
+    
+//    if ([string hasPrefix:@"weibo"]) {
+//        return [WeiboSDK handleOpenURL:url delegate:self];
+//    }else if ([string hasPrefix:@"weixin"]){
+//        return [WXApi handleOpenURL:url delegate:self];
+//    }else {
+//        return NO;
+//    }
+    return [WXApi handleOpenURL:url delegate:self];
 }
 
 // Weibo Request
@@ -80,7 +107,19 @@
         NSLog(@"%@", res.accessToken);
         NSLog(@"%@", res.expirationDate);
         NSLog(@"%@", res.refreshToken);
-        
+    }
+}
+
+- (void)onResp:(BaseResp*)resp
+{
+    //
+    NSLog(@"从微信返回app");
+    if([resp isKindOfClass:[SendMessageToWXResp class]])
+    {
+        NSString *strMsg = [NSString stringWithFormat:@"errcode:%d", resp.errCode];
+        NSLog(@"%@", strMsg);
+        // 分享成功 errcode：0
+        // 取消分享 errcode: -2
     }
 }
 

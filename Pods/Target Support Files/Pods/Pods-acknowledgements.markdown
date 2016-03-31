@@ -71,6 +71,10 @@ THE SOFTWARE.
 
 
 
+## WXSDKCoreKit
+
+© 1998 - 2015 Tencent All Right Reserved.
+
 ## WeiboSDK
 
 

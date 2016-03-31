@@ -14,6 +14,7 @@
 #import "AFNetworking.h"
 #import "WeiboSDK.h"
 #import "WeiboUser.h"
+#import "WXApi.h"
 
 
 @interface detailVC ()
@@ -492,8 +493,10 @@
 {
     if (buttonIndex == 0) {
         NSLog(@"微信好友");
+        [self shareToWeixinWithTimeLine:NO];
     }else if (buttonIndex == 1) {
         NSLog(@"微信朋友圈");
+        [self shareToWeixinWithTimeLine:YES];
     }else if(buttonIndex == 2) {
         NSLog(@"新浪微博");
         [self shareToWeibo];
@@ -543,7 +546,35 @@
 
 
 
-#pragma mark - 分享操作
+
+
+#pragma mark - 分享到微信
+- (void)shareToWeixinWithTimeLine:(BOOL)isTimeLine
+{
+    WXMediaMessage *message = [[WXMediaMessage alloc] init];
+    message.title  = @"分享到微信test";
+    message.description = @"test";
+    [message setThumbImage:[UIImage imageNamed:@"share_button.png"]];
+    
+    WXWebpageObject *webPageObject = [WXWebpageObject object];
+    webPageObject.webpageUrl = @"http://www.douban.com";
+    message.mediaObject = webPageObject;
+    
+    SendMessageToWXReq *req = [[SendMessageToWXReq alloc] init];
+    req.text = @"分享到微信test";
+    req.message = message;
+    if (isTimeLine) {
+        req.scene = WXSceneTimeline;
+    } else {
+        req.scene = WXSceneSession;
+    }
+    [WXApi sendReq:req];
+}
+
+
+
+
+#pragma mark - 分享到微博
 // 分享到新浪微博
 - (void)shareToWeibo
 {
