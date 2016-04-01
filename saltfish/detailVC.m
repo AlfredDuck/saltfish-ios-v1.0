@@ -368,6 +368,18 @@
         [self shareToWeibo];
         return false;
     }
+    // share to weixin
+    if ([arr[0] isEqualToString:@"saltfish-share-weixin"]) {
+        NSLog(@"Share to Weibo:%@", arr[1]);
+        [self shareToWeixinWithTimeLine:NO];
+        return false;
+    }
+    // share to weixin-timeline
+    if ([arr[0] isEqualToString:@"saltfish-share-weixin-timeline"]) {
+        NSLog(@"Share to Weibo:%@", arr[1]);
+        [self shareToWeixinWithTimeLine:YES];
+        return false;
+    }
     
     return true;
     //如没有location对应的属性，则读取网络相关资源
@@ -551,6 +563,18 @@
 #pragma mark - 分享到微信
 - (void)shareToWeixinWithTimeLine:(BOOL)isTimeLine
 {
+    // 判断是否安装微信
+    if (![WXApi isWXAppInstalled]) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"还没有安装微信哦" delegate:nil cancelButtonTitle:@"知道了" otherButtonTitles:nil];
+        [alert show];
+        return;
+    }
+    if (![WXApi isWXAppSupportApi]) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"你的微信版本太低，不支持分享哦" delegate:nil cancelButtonTitle:@"知道了" otherButtonTitles:nil];
+        [alert show];
+        return;
+    }
+    
     WXMediaMessage *message = [[WXMediaMessage alloc] init];
     message.title  = @"分享到微信test";
     message.description = @"test";
@@ -578,7 +602,12 @@
 // 分享到新浪微博
 - (void)shareToWeibo
 {
-    NSLog(@"weibo share test");
+    // 判断是否安装了微博客户端
+    if (![WeiboSDK isWeiboAppInstalled]) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"还没有安装新浪微博哦" delegate:nil cancelButtonTitle:@"知道了" otherButtonTitles:nil];
+        [alert show];
+        return;
+    }
     
     // 新浪微博授权
 //    WBAuthorizeRequest *request = [WBAuthorizeRequest request];

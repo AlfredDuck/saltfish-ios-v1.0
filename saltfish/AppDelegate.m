@@ -53,14 +53,13 @@
     NSString *string =[url absoluteString];
     NSLog(@"回调url的前缀：%@", string);
 
-//    if ([string hasPrefix:@"weibo"]) {
-//        return [WeiboSDK handleOpenURL:url delegate:self];
-//    }else if ([string hasPrefix:@"weixin"]){
-//        return [WXApi handleOpenURL:url delegate:self];
-//    }else {
-//        return NO;
-//    }
-    return [WXApi handleOpenURL:url delegate:self];
+    if ([string hasPrefix:@"wb"]) {
+        return [WeiboSDK handleOpenURL:url delegate:self];
+    }else if ([string hasPrefix:@"wx"]){
+        return [WXApi handleOpenURL:url delegate:self];
+    }else {
+        return NO;
+    }
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
@@ -69,14 +68,13 @@
     NSString *string =[url absoluteString];
     NSLog(@"回调url的前缀：%@", string);
     
-//    if ([string hasPrefix:@"weibo"]) {
-//        return [WeiboSDK handleOpenURL:url delegate:self];
-//    }else if ([string hasPrefix:@"weixin"]){
-//        return [WXApi handleOpenURL:url delegate:self];
-//    }else {
-//        return NO;
-//    }
-    return [WXApi handleOpenURL:url delegate:self];
+    if ([string hasPrefix:@"wb"]) {
+        return [WeiboSDK handleOpenURL:url delegate:self];
+    }else if ([string hasPrefix:@"wx"]){
+        return [WXApi handleOpenURL:url delegate:self];
+    }else {
+        return NO;
+    }
 }
 
 // Weibo Request
@@ -94,10 +92,13 @@
 {
     if ([response isKindOfClass:WBSendMessageToWeiboResponse.class])
     {
-        // 说明分享成功
+        // 分享到微信的返回值
         if(response.statusCode == 0){
-            //分享成功之后的代码
-            NSLog(@"新浪微博分享成功的响应！");
+            NSLog(@"新浪微博分享成功！");
+        } else if (response.statusCode == -1) {
+            NSLog(@"用户取消分享");
+        } else if (response.statusCode == -2) {
+            NSLog(@"分享失败");
         }
     }
     else if ([response isKindOfClass:WBAuthorizeResponse.class]){
