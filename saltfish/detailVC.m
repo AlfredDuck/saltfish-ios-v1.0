@@ -12,6 +12,7 @@
 #import "urlManager.h"
 #import "toastView.h"
 #import "AFNetworking.h"
+#import "UIImageView+WebCache.h"
 #import "WeiboSDK.h"
 #import "WeiboUser.h"
 #import "WXApi.h"
@@ -55,6 +56,8 @@
         [self basedWebView];
         // 请求评论数
         [self connectForCommentNumWith:_articleID];
+        // 请求分享信息
+        [self connectForShareInfoWith:_articleID];
     }
     _firstLoad = NO;
     [self praiseButtonStatus];
@@ -281,6 +284,48 @@
 }
 
 
+/* 拉取分享用的链接、标题、描述和图片等 */
+- (void)connectForShareInfoWith:(NSString *)articleID
+{
+    NSLog(@"拉取分享信息");
+    
+    // 准备请求参数
+    NSString *host = [urlManager urlHost];
+    NSString *urlString = [host stringByAppendingString:@"/article/share_info"];
+    NSDictionary *parameters = @{@"article_id": articleID};
+    
+    // 创建 GET 请求
+    AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];
+    connectManager.requestSerializer.timeoutInterval = 20.0;   //设置超时时间
+    [connectManager GET:urlString parameters: parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        // GET callback
+        NSString *errcode = [responseObject objectForKey:@"errcode"];
+        if ([errcode isEqualToString:@"err"]) {
+            NSLog(@"查询或写入出错");
+            return;
+        }
+        
+        // 将分享信息保存在内存
+        _shareInfo = [[NSDictionary alloc] init];
+        _shareInfo = [[responseObject objectForKey:@"data"] copy];
+        NSLog(@"shareInfo:%@", _shareInfo);
+        NSLog(@"%@", [_shareInfo objectForKey:@"title"]);
+        NSLog(@"%@", [_shareInfo objectForKey:@"description"]);
+        NSLog(@"%@", [_shareInfo objectForKey:@"link"]);
+        
+        // 拉取分享用的图片,并缓存下来
+        _imageViewForShare = [[UIImageView alloc] init];
+        [_imageViewForShare sd_setImageWithURL:[NSURL URLWithString:[_shareInfo objectForKey:@"pic"]] placeholderImage:[UIImage imageNamed:@"comment_button.png"]];
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+}
+
+
+
+
 
 
 
@@ -378,6 +423,12 @@
     if ([arr[0] isEqualToString:@"saltfish-share-weixin-timeline"]) {
         NSLog(@"Share to Weibo:%@", arr[1]);
         [self shareToWeixinWithTimeLine:YES];
+        return false;
+    }
+    // copy link
+    if ([arr[0] isEqualToString:@"saltfish-share-copy-link"]) {
+        NSLog(@"Share to Weibo:%@", arr[1]);
+        [self copyShareLink];
         return false;
     }
     
@@ -498,7 +549,6 @@
     NSLog(@"点分享");
     UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"分享到" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"微信好友", @"微信朋友圈", @"新浪微博", @"复制文章链接", nil];
     [sheet showInView:self.view];
-    //[self shareToWeibo];
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -575,17 +625,23 @@
         return;
     }
     
+    // 构建消息体
     WXMediaMessage *message = [[WXMediaMessage alloc] init];
-    message.title  = @"分享到微信test";
-    message.description = @"test";
-    [message setThumbImage:[UIImage imageNamed:@"share_button.png"]];
+//    message.title = (NSString *)[_shareInfo objectForKey:@"title"];
+//    message.description = (NSString *)[_shareInfo objectForKey:@"description"];
+    message.title = @"微信分享测试";
+    message.description = @"死侍是个小贱贱";
+    //[message setThumbImage:[UIImage imageNamed:@"share_button.png"]];
+    [message setThumbImage:_imageViewForShare.image];
     
     WXWebpageObject *webPageObject = [WXWebpageObject object];
-    webPageObject.webpageUrl = @"http://www.douban.com";
+//    webPageObject.webpageUrl = (NSString *)[_shareInfo objectForKey:@"link"];
+    webPageObject.webpageUrl = @"https://movie.douban.com/subject/3718279/?tag=热门&from=gaia";
     message.mediaObject = webPageObject;
     
+    // 发送消息
     SendMessageToWXReq *req = [[SendMessageToWXReq alloc] init];
-    req.text = @"分享到微信test";
+    req.text = @"test";
     req.message = message;
     if (isTimeLine) {
         req.scene = WXSceneTimeline;
