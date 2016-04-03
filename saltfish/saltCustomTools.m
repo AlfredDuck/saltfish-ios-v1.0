@@ -34,7 +34,7 @@
             NSLog(@"share+1,查询或写入出错");
             return;
         }
-        NSLog(@"praise + 1 , success");
+        NSLog(@"share+1,success");
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);

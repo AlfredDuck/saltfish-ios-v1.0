@@ -98,7 +98,7 @@
 
 - (void)rewriteHotDegree:(NSString *)newDegree
 {
-    _hotDegree = [NSString stringWithFormat:@"人气 %@", newDegree];
+    _hotDegree = newDegree;
     //_hotDegree = [@"人气 " stringByAppendingString:newDegree];
     _hotDegreeLabel.text = _hotDegree;
 }

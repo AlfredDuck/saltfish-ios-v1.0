@@ -925,10 +925,9 @@
         // 修改cell内容
         [cellSmall rewriteTitle:[[[_contentListDataSource objectForKey:channelKey] objectAtIndex:row] objectForKey:@"title"]];
         [cellSmall rewritePicURL:[[[_contentListDataSource objectForKey:channelKey] objectAtIndex:row] objectForKey:@"picSmall"]];
-        [cellSmall rewriteHotDegree:(NSString *)[[[_contentListDataSource objectForKey:channelKey] objectAtIndex:row] objectForKey:@"pageView"]];
+        [cellSmall rewriteHotDegree:[[[_contentListDataSource objectForKey:channelKey] objectAtIndex:row] objectForKey:@"subtitle"]];
         
         // cell是否已读
-        NSString *cellArticleID = [[[_contentListDataSource objectForKey:channelKey] objectAtIndex:row] objectForKey:@"_id"];
         [cellSmall showAsBeenRead:[[[_contentListDataSource objectForKey:channelKey] objectAtIndex:row] objectForKey:@"_id"]];
         
         // 取消选中的背景色
