@@ -17,10 +17,8 @@
 
 
 @interface saltFishLaunch : NSObject
-
 - (void)basedChannelConfig;
 - (void)basedUUID;
 // Define Delegate
 @property (nonatomic, assign) id <launchDelegate> delegate;
-
 @end

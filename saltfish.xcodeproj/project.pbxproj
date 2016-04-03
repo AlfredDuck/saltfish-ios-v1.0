@@ -17,12 +17,12 @@
 		BB2E970D1C1D1599001B7CAA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BB2E970C1C1D1599001B7CAA /* main.m */; };
 		BB2E97101C1D1599001B7CAA /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BB2E970F1C1D1599001B7CAA /* AppDelegate.m */; };
 		BB2E97131C1D1599001B7CAA /* saltfish.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = BB2E97111C1D1599001B7CAA /* saltfish.xcdatamodeld */; };
-		BB2E97161C1D1599001B7CAA /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB2E97151C1D1599001B7CAA /* ViewController.m */; };
 		BB2E971B1C1D1599001B7CAA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BB2E971A1C1D1599001B7CAA /* Images.xcassets */; };
 		BB2E972A1C1D1599001B7CAA /* saltfishTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BB2E97291C1D1599001B7CAA /* saltfishTests.m */; };
 		BB6B47E81CA6DD2F00CABA95 /* black_top3.png in Resources */ = {isa = PBXBuildFile; fileRef = BB6B47E71CA6DD2F00CABA95 /* black_top3.png */; };
 		BB6B47EA1CA6DF1000CABA95 /* black_bottom3.png in Resources */ = {isa = PBXBuildFile; fileRef = BB6B47E91CA6DF1000CABA95 /* black_bottom3.png */; };
 		BB88EBB21C32D5E400F39B26 /* close.png in Resources */ = {isa = PBXBuildFile; fileRef = BB88EBB11C32D5E400F39B26 /* close.png */; };
+		BB8C2A8F1CB134CC004112F9 /* saltCustomTools.m in Sources */ = {isa = PBXBuildFile; fileRef = BB8C2A8E1CB134CC004112F9 /* saltCustomTools.m */; };
 		BB99E7D01C9EC9D500CDBBDD /* comment_button.png in Resources */ = {isa = PBXBuildFile; fileRef = BB99E7CF1C9EC9D500CDBBDD /* comment_button.png */; };
 		BB99E7D21C9ECA1300CDBBDD /* praise_button.png in Resources */ = {isa = PBXBuildFile; fileRef = BB99E7D11C9ECA1300CDBBDD /* praise_button.png */; };
 		BB99E7D41C9ECA1A00CDBBDD /* praise_button_red.png in Resources */ = {isa = PBXBuildFile; fileRef = BB99E7D31C9ECA1A00CDBBDD /* praise_button_red.png */; };
@@ -77,8 +77,6 @@
 		BB2E970E1C1D1599001B7CAA /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		BB2E970F1C1D1599001B7CAA /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		BB2E97121C1D1599001B7CAA /* saltfish.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = saltfish.xcdatamodel; sourceTree = "<group>"; };
-		BB2E97141C1D1599001B7CAA /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		BB2E97151C1D1599001B7CAA /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		BB2E971A1C1D1599001B7CAA /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		BB2E97231C1D1599001B7CAA /* saltfishTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = saltfishTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB2E97281C1D1599001B7CAA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -86,6 +84,8 @@
 		BB6B47E71CA6DD2F00CABA95 /* black_top3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = black_top3.png; path = "../../coding/salt-App效果图/black_top3.png"; sourceTree = "<group>"; };
 		BB6B47E91CA6DF1000CABA95 /* black_bottom3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = black_bottom3.png; path = "../../coding/salt-App效果图/black_bottom3.png"; sourceTree = "<group>"; };
 		BB88EBB11C32D5E400F39B26 /* close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = close.png; sourceTree = "<group>"; };
+		BB8C2A8D1CB134CC004112F9 /* saltCustomTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = saltCustomTools.h; sourceTree = "<group>"; };
+		BB8C2A8E1CB134CC004112F9 /* saltCustomTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = saltCustomTools.m; sourceTree = "<group>"; };
 		BB99E7CF1C9EC9D500CDBBDD /* comment_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = comment_button.png; path = "../../coding/salt-App效果图/comment_button.png"; sourceTree = "<group>"; };
 		BB99E7D11C9ECA1300CDBBDD /* praise_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = praise_button.png; path = "../../coding/salt-App效果图/praise_button.png"; sourceTree = "<group>"; };
 		BB99E7D31C9ECA1A00CDBBDD /* praise_button_red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = praise_button_red.png; path = "../../coding/salt-App效果图/praise_button_red.png"; sourceTree = "<group>"; };
@@ -195,6 +195,7 @@
 		BB2E97091C1D1599001B7CAA /* saltfish */ = {
 			isa = PBXGroup;
 			children = (
+				BB8C2A8C1CB1343C004112F9 /* something more */,
 				BB28C47C1C5F211D00527872 /* toast */,
 				BBE5883C1C5E1E460067D783 /* url manager */,
 				BBE6CCD41C206AE500AA9525 /* pics */,
@@ -206,8 +207,6 @@
 				BBE588411C5E56FB0067D783 /* before launch */,
 				BB2E970E1C1D1599001B7CAA /* AppDelegate.h */,
 				BB2E970F1C1D1599001B7CAA /* AppDelegate.m */,
-				BB2E97141C1D1599001B7CAA /* ViewController.h */,
-				BB2E97151C1D1599001B7CAA /* ViewController.m */,
 				BB2E971A1C1D1599001B7CAA /* Images.xcassets */,
 				BB2E97111C1D1599001B7CAA /* saltfish.xcdatamodeld */,
 				BB2E970A1C1D1599001B7CAA /* Supporting Files */,
@@ -248,6 +247,15 @@
 				BBAD45471C1D44FF007A54F3 /* HomeVC.m */,
 			);
 			name = home;
+			sourceTree = "<group>";
+		};
+		BB8C2A8C1CB1343C004112F9 /* something more */ = {
+			isa = PBXGroup;
+			children = (
+				BB8C2A8D1CB134CC004112F9 /* saltCustomTools.h */,
+				BB8C2A8E1CB134CC004112F9 /* saltCustomTools.m */,
+			);
+			name = "something more";
 			sourceTree = "<group>";
 		};
 		BBAD45491C1D4C24007A54F3 /* detail page */ = {
@@ -511,8 +519,8 @@
 				BBEAA0AF1C21A9ED00279011 /* commentVC.m in Sources */,
 				BB2E970D1C1D1599001B7CAA /* main.m in Sources */,
 				BB261FA11C1D91070079D037 /* smallPicTableViewCell.m in Sources */,
-				BB2E97161C1D1599001B7CAA /* ViewController.m in Sources */,
 				BBAD45481C1D44FF007A54F3 /* HomeVC.m in Sources */,
+				BB8C2A8F1CB134CC004112F9 /* saltCustomTools.m in Sources */,
 				BBCB95551C30143400011BDD /* writeCommentVC.m in Sources */,
 				BB28C47F1C5F215A00527872 /* toastView.m in Sources */,
 				BB2E97131C1D1599001B7CAA /* saltfish.xcdatamodeld in Sources */,

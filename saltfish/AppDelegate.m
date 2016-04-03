@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "HomeVC.h"
+#import "saltCustomTools.h"
 #import "WeiboSDK.h"
 #import "WXApi.h"
 
@@ -95,6 +96,9 @@
         // 分享到微信的返回值
         if(response.statusCode == 0){
             NSLog(@"新浪微博分享成功！");
+            // 告知server端
+            shareSuccessNote *note = [[shareSuccessNote alloc] init];
+            [note shareSuccessWhichIs:@"weibo"];
         } else if (response.statusCode == -1) {
             NSLog(@"用户取消分享");
         } else if (response.statusCode == -2) {
@@ -111,6 +115,8 @@
     }
 }
 
+
+#pragma mark - 微信的返回信息
 - (void)onResp:(BaseResp*)resp
 {
     //
@@ -121,6 +127,12 @@
         NSLog(@"%@", strMsg);
         // 分享成功 errcode：0
         // 取消分享 errcode: -2
+        if (resp.errCode == 0) {
+            // 告知server端
+            shareSuccessNote *note = [[shareSuccessNote alloc] init];
+            [note shareSuccessWhichIs:@"weixin"];
+        }
+        
     }
 }
 

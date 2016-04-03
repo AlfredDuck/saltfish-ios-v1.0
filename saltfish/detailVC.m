@@ -701,7 +701,7 @@
     // 发送消息到新浪微博(不需要 access token)
     [WBProvideMessageForWeiboResponse responseWithMessage:[self messageToShare]];
     WBSendMessageToWeiboRequest *request = [WBSendMessageToWeiboRequest requestWithMessage:[self messageToShare]];
-    request.userInfo = nil;
+    request.userInfo = nil;  // 开发者自己定义的一些标识可以放在这里面
     [WeiboSDK sendRequest:request];
 }
 
