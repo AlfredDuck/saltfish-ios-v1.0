@@ -38,7 +38,9 @@
 @property (nonatomic, strong) UILabel *shareNumLabel;
 // share info （进入页面预先拉取，在内存中缓存）
 @property (nonatomic, strong) NSDictionary *shareInfo;
-@property (nonatomic, strong) UIImageView *imageViewForShare;
+@property (nonatomic, strong) UIImage *shareImageForWeibo;
+@property (nonatomic, strong) UIImage *shareImageForWeixin;
+
 // loading flower
 @property (nonatomic, strong) UIActivityIndicatorView *loadingFlower;
 

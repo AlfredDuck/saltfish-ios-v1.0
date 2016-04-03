@@ -312,11 +312,28 @@
         NSLog(@"shareInfo:%@", _shareInfo);
         NSLog(@"%@", [_shareInfo objectForKey:@"title"]);
         NSLog(@"%@", [_shareInfo objectForKey:@"description"]);
-        NSLog(@"%@", [_shareInfo objectForKey:@"link"]);
         
-        // 拉取分享用的图片,并缓存下来
-        _imageViewForShare = [[UIImageView alloc] init];
-        [_imageViewForShare sd_setImageWithURL:[NSURL URLWithString:[_shareInfo objectForKey:@"pic"]] placeholderImage:[UIImage imageNamed:@"comment_button.png"]];
+        // 下载weixin分享用的图片，并保存在内存
+        NSURL *weixinImageURL = [NSURL URLWithString:[_shareInfo objectForKey:@"pic_weixin"]];
+        [[SDWebImageManager sharedManager] downloadImageWithURL:weixinImageURL options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+            // 下载进度block
+        } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+            // 下载完成block
+            NSLog(@"下载微信分享用的图片：完成");
+            _shareImageForWeixin = [image copy];
+            NSLog(@"%@",_shareImageForWeixin);
+        }];
+        
+        // 下载weibo分享用的图片，并保存在内存
+        NSURL *weiboImageURL = [NSURL URLWithString:[_shareInfo objectForKey:@"pic_weibo"]];
+        [[SDWebImageManager sharedManager] downloadImageWithURL:weiboImageURL options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+            // 下载进度block
+        } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+            // 下载完成block
+            NSLog(@"下载weibo分享用的图片：完成");
+            _shareImageForWeibo = [image copy];
+            NSLog(@"%@",_shareImageForWeibo);
+        }];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
@@ -627,21 +644,18 @@
     
     // 构建消息体
     WXMediaMessage *message = [[WXMediaMessage alloc] init];
-//    message.title = (NSString *)[_shareInfo objectForKey:@"title"];
-//    message.description = (NSString *)[_shareInfo objectForKey:@"description"];
-    message.title = @"微信分享测试";
-    message.description = @"死侍是个小贱贱";
-    //[message setThumbImage:[UIImage imageNamed:@"share_button.png"]];
-    [message setThumbImage:_imageViewForShare.image];
+    message.title = (NSString *)[_shareInfo objectForKey:@"title"];
+    message.description = (NSString *)[_shareInfo objectForKey:@"description"];
+    // [message setThumbImage:[UIImage imageNamed:@"share_button.png"]];  // 微信原方法
+    // 微信要求分享的图片不超过32k，否则会出现未知错误。目前后台不能压缩图片，那么就从后台传默认图片吧
+    [message setThumbImage:_shareImageForWeixin];
     
     WXWebpageObject *webPageObject = [WXWebpageObject object];
-//    webPageObject.webpageUrl = (NSString *)[_shareInfo objectForKey:@"link"];
-    webPageObject.webpageUrl = @"https://movie.douban.com/subject/3718279/?tag=热门&from=gaia";
+    webPageObject.webpageUrl = (NSString *)[_shareInfo objectForKey:@"link"];
     message.mediaObject = webPageObject;
     
     // 发送消息
     SendMessageToWXReq *req = [[SendMessageToWXReq alloc] init];
-    req.text = @"test";
     req.message = message;
     if (isTimeLine) {
         req.scene = WXSceneTimeline;
@@ -695,9 +709,19 @@
 - (WBMessageObject *)messageToShare
 {
     WBMessageObject *message = [WBMessageObject message];
-    message.text = @"测试通过WeiboSDK发送文字到微博!";
+    message.text = [_shareInfo objectForKey:@"text_weibo"];
+    
+    // 设置配图
     WBImageObject *image = [WBImageObject object];
-    image.imageData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"share_button" ofType:@"png"]];
+    // image.imageData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"image_1" ofType:@"jpg"]]; // 微博的原方法
+    
+    NSData *imageData;
+    if (UIImagePNGRepresentation(_shareImageForWeibo)) {
+        imageData = UIImagePNGRepresentation(_shareImageForWeibo);
+    } else if (UIImageJPEGRepresentation(_shareImageForWeibo, 1.0)){
+        imageData = UIImageJPEGRepresentation(_shareImageForWeibo, 1.0);
+    }
+    image.imageData = imageData;
     message.imageObject = image;
     
     //下面注释的是发送图片和媒体文件
