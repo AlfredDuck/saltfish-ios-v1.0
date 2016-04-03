@@ -302,7 +302,7 @@
         // GET callback
         NSString *errcode = [responseObject objectForKey:@"errcode"];
         if ([errcode isEqualToString:@"err"]) {
-            NSLog(@"查询或写入出错");
+            NSLog(@"查询分享信息出错");
             return;
         }
         
@@ -312,6 +312,7 @@
         NSLog(@"shareInfo:%@", _shareInfo);
         NSLog(@"%@", [_shareInfo objectForKey:@"title"]);
         NSLog(@"%@", [_shareInfo objectForKey:@"description"]);
+        NSLog(@"%@", [_shareInfo objectForKey:@"link"]);
         
         // 下载weixin分享用的图片，并保存在内存
         NSURL *weixinImageURL = [NSURL URLWithString:[_shareInfo objectForKey:@"pic_weixin"]];
@@ -588,7 +589,7 @@
 - (void)copyShareLink
 {
     UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-    pasteboard.string = @"河狸会打洞";
+    pasteboard.string = [_shareInfo objectForKey:@"link"];
     NSLog(@"复制成功");
     [toastView showToastWith:@"复制成功" duration:2.0 superView:self.view];
 }
