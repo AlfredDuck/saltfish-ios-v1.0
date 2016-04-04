@@ -169,33 +169,39 @@
 }
 
 
-// 显示评论数
-- (void)basedCommentNumLabelWith:(NSString *)num
+/* 显示评论数 */
+- (void)basedCommentNumLabelWith:(NSString *)numString
 {
+    if ([numString isEqualToString:@"0"]) {
+        return;
+    }
     _commentNumLabel = [[UILabel alloc] init];
-    _commentNumLabel.text = num;
+    _commentNumLabel.text = numString;
     _commentNumLabel.font = [UIFont fontWithName:@"Helvetica" size: 10];
     _commentNumLabel.textColor = [UIColor whiteColor];
-    _commentNumLabel.frame = CGRectMake(30, 4, 5*(unsigned long)num.length+7, 13);
+    _commentNumLabel.frame = CGRectMake(30, 4, 5*(unsigned long)numString.length+7, 13);
     _commentNumLabel.textAlignment = UITextAlignmentCenter;
     _commentNumLabel.backgroundColor = [colorManager red];
     [_commentButtonView addSubview:_commentNumLabel];
 }
 
-// 显示赞的数量
-- (void)basedPraiseNumLabelWith:(NSString *)num
+/* 显示赞的数量 */
+- (void)basedPraiseNumLabelWith:(NSString *)numString
 {
+    if ([numString isEqualToString:@"0"]) {
+        return;
+    }
     _praiseNumLabel = [[UILabel alloc] init];
-    _praiseNumLabel.text = num;
+    _praiseNumLabel.text = numString;
     _praiseNumLabel.font = [UIFont fontWithName:@"Helvetica" size: 10];
     _praiseNumLabel.textColor = [UIColor whiteColor];
-    _praiseNumLabel.frame = CGRectMake(30, 4, 5*(unsigned long)num.length+7, 13);
+    _praiseNumLabel.frame = CGRectMake(30, 4, 5*(unsigned long)numString.length+7, 13);
     _praiseNumLabel.textAlignment = UITextAlignmentCenter;
     _praiseNumLabel.backgroundColor = [colorManager red];
     [_praiseButtonView addSubview:_praiseNumLabel];
 }
 
-// 显示点赞按钮的状态
+/* 显示点赞按钮的状态 */
 - (void)praiseButtonStatus
 {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -525,11 +531,15 @@
     [self connectForAddOnePraiseWith:_articleID];
     
     // client praise num + 1
-    int i = [_praiseNumLabel.text intValue] + 1;
-    _praiseNumLabel.text = (NSString *)[NSString stringWithFormat:@"%ld", (long)i];
+    if (_praiseNumLabel.text) {
+        int i = [_praiseNumLabel.text intValue] + 1;
+        _praiseNumLabel.text = (NSString *)[NSString stringWithFormat:@"%ld", (long)i];
+    } else {
+        [self basedPraiseNumLabelWith:@"1"];
+    }
+   
     
     // change praise button status
-//    [_praiseButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
     _praiseImageView.image = [UIImage imageNamed:@"praise_button_red.png"];
     _praiseButtonView.tag = 11;
 }
