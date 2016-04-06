@@ -1001,16 +1001,16 @@
     NSLog(@"cell点击事件at row: %lu", (unsigned long)row);
     
     // 临时用的...
-    if (row == 0) {
-        NSLog(@"清空缓存");
-        NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
-        NSDictionary *dictionary = [user dictionaryRepresentation];
-        for(NSString* key in [dictionary allKeys]){
-            [user removeObjectForKey:key];
-            [user synchronize];
-        }
-        return;
-    }
+//    if (row == 0) {
+//        NSLog(@"清空缓存");
+//        NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+//        NSDictionary *dictionary = [user dictionaryRepresentation];
+//        for(NSString* key in [dictionary allKeys]){
+//            [user removeObjectForKey:key];
+//            [user synchronize];
+//        }
+//        return;
+//    }
     
     NSString *channelKey = @"";
     channelKey = [_channels objectAtIndex:_currentChannel];
