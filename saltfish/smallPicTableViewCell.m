@@ -34,8 +34,11 @@
         _screenWidth = [UIScreen mainScreen].bounds.size.width;
         
         //  图片长宽
-        float imgWidth = _screenWidth/4.0;  // 80px
-        float imgHeight = imgWidth*3/4;   // 60px
+        float imgW = _screenWidth/4.0;  // 80px
+        float imgH = imgW*3/4;   // 60px
+        
+        int imgWidth = ceil(imgW);  // 对布局参数取整，避免文字模糊
+        int imgHeight = ceil(imgH);
 
         // 一些初始化的值
         _title = @"曾经沧海难为水，除却巫山不是风雨云。怎么你还不来啊";

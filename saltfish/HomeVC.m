@@ -243,7 +243,7 @@
     //这个属性很重要，它可以决定是横向还是纵向滚动，一般来说也是其中的 View 的总宽度，和总的高度
     //这里同时考虑到每个 View 间的空隙，所以宽度是 200x3＋5＋10＋10＋5＝630
     //高度上与 ScrollView 相同，只在横向扩展，所以只要在横向上滚动
-    _channelScrollView.contentSize = CGSizeMake(allLengthOfChannels, 44);
+    _channelScrollView.contentSize = CGSizeMake(allLengthOfChannels, 30);
     
     //用它指定 ScrollView 中内容的当前位置，即相对于 ScrollView 的左上顶点的偏移
     _channelScrollView.contentOffset = CGPointMake(0, 0);
