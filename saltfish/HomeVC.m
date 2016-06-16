@@ -19,6 +19,8 @@
 #import "toastView.h"
 #import "WeiboSDK.h"
 
+#import "TechTestViewController.h"
+
 
 @interface HomeVC ()
 // 此处定义私有全局变量（不暴漏给外部使用）
@@ -1011,6 +1013,16 @@
 //        }
 //        return;
 //    }
+    
+    // 临时用的2：进入test页面
+    if (row == 0) {
+        NSLog(@"进行测试...");
+        
+        TechTestViewController *testPV = [[TechTestViewController alloc] init];
+        [self.navigationController pushViewController:testPV animated:YES];
+        
+        return;
+    }
     
     NSString *channelKey = @"";
     channelKey = [_channels objectAtIndex:_currentChannel];

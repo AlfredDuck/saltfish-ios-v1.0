@@ -19,6 +19,7 @@
 		BB2E97131C1D1599001B7CAA /* saltfish.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = BB2E97111C1D1599001B7CAA /* saltfish.xcdatamodeld */; };
 		BB2E971B1C1D1599001B7CAA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BB2E971A1C1D1599001B7CAA /* Images.xcassets */; };
 		BB2E972A1C1D1599001B7CAA /* saltfishTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BB2E97291C1D1599001B7CAA /* saltfishTests.m */; };
+		BB32FF911D12F3C300A2B5B8 /* TechTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB32FF901D12F3C300A2B5B8 /* TechTestViewController.m */; };
 		BB6B47E81CA6DD2F00CABA95 /* black_top3.png in Resources */ = {isa = PBXBuildFile; fileRef = BB6B47E71CA6DD2F00CABA95 /* black_top3.png */; };
 		BB6B47EA1CA6DF1000CABA95 /* black_bottom3.png in Resources */ = {isa = PBXBuildFile; fileRef = BB6B47E91CA6DF1000CABA95 /* black_bottom3.png */; };
 		BB88EBB21C32D5E400F39B26 /* close.png in Resources */ = {isa = PBXBuildFile; fileRef = BB88EBB11C32D5E400F39B26 /* close.png */; };
@@ -81,6 +82,8 @@
 		BB2E97231C1D1599001B7CAA /* saltfishTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = saltfishTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB2E97281C1D1599001B7CAA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BB2E97291C1D1599001B7CAA /* saltfishTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = saltfishTests.m; sourceTree = "<group>"; };
+		BB32FF8F1D12F3C300A2B5B8 /* TechTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TechTestViewController.h; sourceTree = "<group>"; };
+		BB32FF901D12F3C300A2B5B8 /* TechTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TechTestViewController.m; sourceTree = "<group>"; };
 		BB6B47E71CA6DD2F00CABA95 /* black_top3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = black_top3.png; path = "../../coding/salt-App效果图/black_top3.png"; sourceTree = "<group>"; };
 		BB6B47E91CA6DF1000CABA95 /* black_bottom3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = black_bottom3.png; path = "../../coding/salt-App效果图/black_bottom3.png"; sourceTree = "<group>"; };
 		BB88EBB11C32D5E400F39B26 /* close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = close.png; sourceTree = "<group>"; };
@@ -195,6 +198,7 @@
 		BB2E97091C1D1599001B7CAA /* saltfish */ = {
 			isa = PBXGroup;
 			children = (
+				BB32FF8E1D12F38900A2B5B8 /* tech test  */,
 				BB8C2A8C1CB1343C004112F9 /* something more */,
 				BB28C47C1C5F211D00527872 /* toast */,
 				BBE5883C1C5E1E460067D783 /* url manager */,
@@ -247,6 +251,15 @@
 				BBAD45471C1D44FF007A54F3 /* HomeVC.m */,
 			);
 			name = home;
+			sourceTree = "<group>";
+		};
+		BB32FF8E1D12F38900A2B5B8 /* tech test  */ = {
+			isa = PBXGroup;
+			children = (
+				BB32FF8F1D12F3C300A2B5B8 /* TechTestViewController.h */,
+				BB32FF901D12F3C300A2B5B8 /* TechTestViewController.m */,
+			);
+			name = "tech test ";
 			sourceTree = "<group>";
 		};
 		BB8C2A8C1CB1343C004112F9 /* something more */ = {
@@ -509,6 +522,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BB9B90AB1C9C4E1200A89A13 /* picBasedTableViewCell.m in Sources */,
+				BB32FF911D12F3C300A2B5B8 /* TechTestViewController.m in Sources */,
 				BB2E97101C1D1599001B7CAA /* AppDelegate.m in Sources */,
 				BBE5883F1C5E1E800067D783 /* urlManager.m in Sources */,
 				BBE6CCD21C1F19D400AA9525 /* detailVC.m in Sources */,
