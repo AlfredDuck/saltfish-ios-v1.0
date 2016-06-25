@@ -105,7 +105,7 @@
 
 
 #pragma mark - 重写 cell 中各个元素的数据
-- (void)rewriteIntroduction:(NSString *)newIntroduction
+- (void)rewriteIntroduction:(NSString *)newIntroduction followStatus:(BOOL)isFollowing
 {
     _introduction = newIntroduction;
     
@@ -132,8 +132,17 @@
     // ===================调整“关注”按钮的位置=================
     _followButton.frame  = CGRectMake((_screenWidth-75)/2.0, 68+newHeight+18, 75, 35);
     _pushSettingView.frame = CGRectMake(0, 68+newHeight+18+35+18, _screenWidth, 44);
-    _pushSettingView.alpha = 0;
-    _partLine.frame = CGRectMake(0, 68+newHeight+18+35+18, _screenWidth, 12);
+    
+    if (!isFollowing) {   // 代表没有关注
+        [_followButton setImage:[UIImage imageNamed:@"follow.png"]];
+        _pushSettingView.alpha = 0;
+        _partLine.frame = CGRectMake(0, 68+newHeight+18+35+18, _screenWidth, 12);
+    } else {
+        [_followButton setImage:[UIImage imageNamed:@"unfollow.png"]];
+        _pushSettingView.alpha = 1;
+        _partLine.frame = CGRectMake(0, 68+newHeight+18+35+18+44, _screenWidth, 12);
+    }
+
 }
 
 

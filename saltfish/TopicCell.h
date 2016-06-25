@@ -29,7 +29,7 @@
 @property (nonatomic) NSInteger screenWidth;
 @property (nonatomic) NSInteger screenHeight;
 
-- (void)rewriteIntroduction:(NSString *)newIntroduction;
+- (void)rewriteIntroduction:(NSString *)newIntroduction followStatus:(BOOL)isFollowing;
 
 // 定义代理
 @property (nonatomic, assign) id <TopicCellDelegate> delegate;

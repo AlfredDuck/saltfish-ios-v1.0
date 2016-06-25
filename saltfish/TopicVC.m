@@ -19,7 +19,7 @@
 // 私有变量
 @property (nonatomic) float backgroundImageHeight;
 @property (nonatomic) UITableView *oneTableView;
-@property (nonatomic) CGFloat pushViewHeight;
+@property (nonatomic) BOOL isFollowing;
 @end
 
 @implementation TopicVC
@@ -48,6 +48,8 @@
     _screenWidth = [UIScreen mainScreen].bounds.size.width;
     _backgroundImageHeight = 400.0;
     
+    _isFollowing = NO;
+    
     [self createUIParts];
 }
 
@@ -61,7 +63,7 @@
 {
     /* 整个顶部滑动动效分三部分：背景图(中层）、tableView（下层）、头像图片（上层）*/
     
-    NSString *urlStr = @"http://fe.topitme.com/e/0a/29/1159607208933290ael.jpg";
+    NSString *urlStr = @"http://f10.topitme.com/l/201008/17/12820484731757.jpg";
     
     
     /* 创建tableView */
@@ -90,7 +92,7 @@
     // 需要AFNetwork（异步加载）
     [_backgroundView sd_setImageWithURL:[NSURL URLWithString:urlStr] placeholderImage:[UIImage imageNamed:@"placeholder.png"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         NSLog(@"%@", imageURL);
-        UIImage *imgBlur = [self boxblurImage:image withBlurNumber:(CGFloat)0.90f];
+        UIImage *imgBlur = [self boxblurImage:image withBlurNumber:(CGFloat)0.60f];
         [_backgroundView setImage:imgBlur];
     }];
     
@@ -195,13 +197,16 @@
 #pragma mark - TopicCell 的代理方法
 - (void)changeTopicCellHeight
 {
-    _pushViewHeight = 44.0;
-    [UIView animateWithDuration:1.0 animations:^{   // uiview 动画（无需实例化）
-        NSIndexPath *indexPath=[NSIndexPath indexPathForRow:0 inSection:0];
-        [_oneTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
-    }];
-
-//    [self tableView:_oneTableView heightForRowAtIndexPath:indexPath];
+    if (_isFollowing) {
+        _isFollowing = NO;
+    } else {
+        _isFollowing = YES;
+    }
+//    [UIView animateWithDuration:0.3 animations:^{   // uiview 动画（无需实例化）
+//
+//    }];
+    NSIndexPath *indexPath=[NSIndexPath indexPathForRow:0 inSection:0];
+    [_oneTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 
@@ -237,7 +242,7 @@
             // 定义代理
             oneTopicCell.delegate = self;
         }
-        [oneTopicCell rewriteIntroduction:@"如楼上所说，现代武器是很厉害的；对付这种超级怪兽最方便的"];
+        [oneTopicCell rewriteIntroduction:@"如楼上所说，现代武器是很厉害的；对付这种超级怪兽最方便的如楼上所说，现代武器是很厉害的；对付这种超级怪兽最方便的" followStatus:_isFollowing];
         
         // 取消选中的背景色
         oneTopicCell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -262,14 +267,20 @@
     if (row == 0) {
         NSLog(@"。。。。。。。。。。。。。。");
         // ===================计算折行文本高度====================
-        NSString *str = @"如楼上所说，现代武器是很厉害的；对付这种超级怪兽最方便的";
+        NSString *str = @"如楼上所说，现代武器是很厉害的；对付这种超级怪兽最方便的如楼上所说，现代武器是很厉害的；对付这种超级怪兽最方便的";
         CGSize maxSize = {_screenWidth-50*2, 5000};  // 设置文本区域最大宽高(两边各留15px)
         CGSize labelSize = [str sizeWithFont:[UIFont fontWithName:@"Helvetica" size:13]
                            constrainedToSize:maxSize
                                lineBreakMode:[[UILabel alloc] init].lineBreakMode];   // str是要显示的字符串
         CGFloat newHeight = labelSize.height*16/13.0;
         
-        CGFloat height = 68+newHeight+18+35+18+12+_pushViewHeight;
+        CGFloat height;
+        if (!_isFollowing) { // unfollow
+            height = 68+newHeight+18+35+18+12;
+        } else {
+            height = 68+newHeight+18+35+18+12+44;
+        }
+        
         return height;
     }
     else {
