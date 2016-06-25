@@ -13,6 +13,7 @@
 + (UIColor *)lightGrayLineColor;
 + (UIColor *)lightGrayBackground;
 + (UIColor *)mainTextColor;
++ (UIColor *)secondTextColor;
 + (UIColor *)lightTextColor;
 + (UIColor *)purple;
 + (UIColor *)red;

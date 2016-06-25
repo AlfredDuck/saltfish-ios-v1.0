@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TopicCell.h"
 
-@interface TopicVC : UIViewController<UITableViewDataSource,UITableViewDelegate>
+@interface TopicVC : UIViewController <UITableViewDataSource, UITableViewDelegate, TopicCellDelegate>
 //
 @property (nonatomic, strong)UIImageView *backgroundView;
 @property (nonatomic, strong)UIImageView *portraitView;

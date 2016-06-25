@@ -11,11 +11,15 @@
 #import <Accelerate/Accelerate.h>
 #import "UIImageView+WebCache.h"
 #import "colorManager.h"
-#import "commentTableViewCell.h"
+#import "articleCell.h"
+#import "TopicCell.h"
+
 
 @interface TopicVC ()
 // 私有变量
 @property (nonatomic) float backgroundImageHeight;
+@property (nonatomic) UITableView *oneTableView;
+@property (nonatomic) CGFloat pushViewHeight;
 @end
 
 @implementation TopicVC
@@ -57,23 +61,23 @@
 {
     /* 整个顶部滑动动效分三部分：背景图(中层）、tableView（下层）、头像图片（上层）*/
     
-    NSString *urlStr = @"http://i10.topitme.com/l007/1000791711fc64cd4d.jpg";
+    NSString *urlStr = @"http://fe.topitme.com/e/0a/29/1159607208933290ael.jpg";
     
     
     /* 创建tableView */
     static NSString *CellWithIdentifier = @"commentCell";
-    UITableView *oneTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, _screenWidth, _screenHeight-64)];
-    oneTableView.backgroundColor = [UIColor brownColor];
-    [oneTableView setDelegate:self];
-    [oneTableView setDataSource:self];
+    _oneTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, _screenWidth, _screenHeight-64)];
+    _oneTableView.backgroundColor = [UIColor brownColor];
+    [_oneTableView setDelegate:self];
+    [_oneTableView setDataSource:self];
     
-    [oneTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:CellWithIdentifier];
-    oneTableView.backgroundColor = [UIColor whiteColor];
-    oneTableView.separatorStyle = UITableViewCellSeparatorStyleNone; // 去掉分割线
-    oneTableView.contentInset = UIEdgeInsetsMake(-20+86, 0, 0, 0); // 设置距离顶部的一段偏移，继承自scrollview
+    [_oneTableView registerClass:[articleCell class] forCellReuseIdentifier:CellWithIdentifier];
+    _oneTableView.backgroundColor = [UIColor whiteColor];
+    _oneTableView.separatorStyle = UITableViewCellSeparatorStyleNone; // 去掉分割线
+    _oneTableView.contentInset = UIEdgeInsetsMake(-20+86, 0, 0, 0); // 设置距离顶部的一段偏移，继承自scrollview
     // 响应点击状态栏的事件
-    oneTableView.scrollsToTop = YES;
-    [self.view addSubview:oneTableView];
+    _oneTableView.scrollsToTop = YES;
+    [self.view addSubview:_oneTableView];
     
     
     /* 创建背景图 */
@@ -86,7 +90,7 @@
     // 需要AFNetwork（异步加载）
     [_backgroundView sd_setImageWithURL:[NSURL URLWithString:urlStr] placeholderImage:[UIImage imageNamed:@"placeholder.png"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         NSLog(@"%@", imageURL);
-        UIImage *imgBlur = [self boxblurImage:image withBlurNumber:(CGFloat)0.98f];
+        UIImage *imgBlur = [self boxblurImage:image withBlurNumber:(CGFloat)0.90f];
         [_backgroundView setImage:imgBlur];
     }];
     
@@ -108,9 +112,9 @@
     /*=================================================================*/
     // 导航栏和返回按钮
     // back button pic
-    UIImage *oneImage = [UIImage imageNamed:@"back.png"]; // 使用ImageView通过name找到图片
+    UIImage *oneImage = [UIImage imageNamed:@"back2.png"]; // 使用ImageView通过name找到图片
     UIImageView *oneImageView = [[UIImageView alloc] initWithImage:oneImage]; // 把oneImage添加到oneImageView上
-    oneImageView.frame = CGRectMake(10, 14.5, 10, 15); // 设置图片位置和大小
+    oneImageView.frame = CGRectMake(11, 13.2, 22, 17.6); // 设置图片位置和大小
     // [oneImageView setContentMode:UIViewContentModeCenter];
     
     UIView *backView = [[UIView alloc] initWithFrame:CGRectMake(0, 20, 44, 44)];
@@ -126,7 +130,7 @@
     _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake((_screenWidth-200)/2, 20, 200, 44)];
     _titleLabel.text = @"#佐佐木希#";
     _titleLabel.textColor = [UIColor whiteColor];
-    _titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 14];
+    _titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 15.0];
     _titleLabel.textAlignment = UITextAlignmentCenter;
     _titleLabel.hidden = YES;
     [self.view addSubview:_titleLabel];
@@ -186,6 +190,25 @@
 
 
 
+
+
+#pragma mark - TopicCell 的代理方法
+- (void)changeTopicCellHeight
+{
+    _pushViewHeight = 44.0;
+    [UIView animateWithDuration:1.0 animations:^{   // uiview 动画（无需实例化）
+        NSIndexPath *indexPath=[NSIndexPath indexPathForRow:0 inSection:0];
+        [_oneTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
+    }];
+
+//    [self tableView:_oneTableView heightForRowAtIndexPath:indexPath];
+}
+
+
+
+
+
+
 #pragma mark - TableView 代理方法
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -195,34 +218,77 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 1000;
+    return 100;
 }
 
 // 填充cell
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellWithIdentifier= @"commentCell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellWithIdentifier];
+    static NSString *TopicCellWithIdentifier = @"topicCell+";
+    TopicCell *oneTopicCell = [tableView dequeueReusableCellWithIdentifier:TopicCellWithIdentifier];
+    
+    static NSString *ArticleCellWithIdentifier = @"articleCell+";
+    articleCell *oneArticleCell = [tableView dequeueReusableCellWithIdentifier:ArticleCellWithIdentifier];
     
     NSUInteger row = [indexPath row];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellWithIdentifier];
+    if (row == 0) {
+        if (oneTopicCell == nil) {
+            oneTopicCell = [[TopicCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:TopicCellWithIdentifier];
+            // 定义代理
+            oneTopicCell.delegate = self;
+        }
+        [oneTopicCell rewriteIntroduction:@"如楼上所说，现代武器是很厉害的；对付这种超级怪兽最方便的"];
+        
+        // 取消选中的背景色
+        oneTopicCell.selectionStyle = UITableViewCellSelectionStyleNone;
+        return oneTopicCell;
     }
-    cell.textLabel.text = @"hhh";
-    cell.backgroundColor = [UIColor whiteColor];
-    // 取消选中的背景色
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    else {
+        if (oneArticleCell == nil) {
+            oneArticleCell = [[articleCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:ArticleCellWithIdentifier];
+        }
+        // 取消选中的背景色
+        oneArticleCell.selectionStyle = UITableViewCellSelectionStyleNone;
+        return oneArticleCell;
+    }
+    
     // 直接往cell addsubView的方法会在每次划出屏幕再划回来时 再加载一次subview，因此会重复加载很多subview
-    return cell;
 }
 
 // 改变 cell 高度
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    CGFloat height = 42;
-    return height;
-    
+    NSUInteger row = [indexPath row];
+    if (row == 0) {
+        NSLog(@"。。。。。。。。。。。。。。");
+        // ===================计算折行文本高度====================
+        NSString *str = @"如楼上所说，现代武器是很厉害的；对付这种超级怪兽最方便的";
+        CGSize maxSize = {_screenWidth-50*2, 5000};  // 设置文本区域最大宽高(两边各留15px)
+        CGSize labelSize = [str sizeWithFont:[UIFont fontWithName:@"Helvetica" size:13]
+                           constrainedToSize:maxSize
+                               lineBreakMode:[[UILabel alloc] init].lineBreakMode];   // str是要显示的字符串
+        CGFloat newHeight = labelSize.height*16/13.0;
+        
+        CGFloat height = 68+newHeight+18+35+18+12+_pushViewHeight;
+        return height;
+    }
+    else {
+        CGFloat height = 10+100+10+4;
+        return height;
+    }
 }
+
+
+// tableView 点击事件
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSUInteger row = [indexPath row];
+    if (row == 0) {
+        NSLog(@"000000000000");
+    }
+}
+
+
 
 
 

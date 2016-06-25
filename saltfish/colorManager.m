@@ -15,11 +15,15 @@
 }
 + (UIColor *)lightGrayBackground
 {
-    return [UIColor colorWithRed:(242/255.0) green:(242/255.0) blue:(242/255.0) alpha:1];
+    return [UIColor colorWithRed:(233/255.0) green:(237/255.0) blue:(240/255.0) alpha:1];
 }
 + (UIColor *)mainTextColor
 {
     return [UIColor colorWithRed:(85/255.0) green:(85/255.0) blue:(85/255.0) alpha:1];
+}
++ (UIColor *)secondTextColor
+{
+    return [UIColor colorWithRed:(127/255.0) green:(129/255.0) blue:(134/255.0) alpha:1];
 }
 + (UIColor *)lightTextColor
 {
