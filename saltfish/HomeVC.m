@@ -19,7 +19,7 @@
 #import "toastView.h"
 #import "WeiboSDK.h"
 
-#import "TechTestViewController.h"
+#import "TopicVC.h"
 
 
 @interface HomeVC ()
@@ -1014,11 +1014,11 @@
 //        return;
 //    }
     
-    // 临时用的2：进入test页面
+    // 临时用的2：进入topic页面
     if (row == 0) {
         NSLog(@"进行测试...");
         
-        TechTestViewController *testPV = [[TechTestViewController alloc] init];
+        TopicVC *testPV = [[TopicVC alloc] init];
         [self.navigationController pushViewController:testPV animated:YES];
         
         return;

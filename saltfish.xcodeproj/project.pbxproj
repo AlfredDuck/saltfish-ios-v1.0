@@ -20,6 +20,7 @@
 		BB2E971B1C1D1599001B7CAA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BB2E971A1C1D1599001B7CAA /* Images.xcassets */; };
 		BB2E972A1C1D1599001B7CAA /* saltfishTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BB2E97291C1D1599001B7CAA /* saltfishTests.m */; };
 		BB32FF911D12F3C300A2B5B8 /* TechTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB32FF901D12F3C300A2B5B8 /* TechTestViewController.m */; };
+		BB65CA181D1E294E0098A53B /* articleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BB65CA171D1E294E0098A53B /* articleCell.m */; };
 		BB6B47E81CA6DD2F00CABA95 /* black_top3.png in Resources */ = {isa = PBXBuildFile; fileRef = BB6B47E71CA6DD2F00CABA95 /* black_top3.png */; };
 		BB6B47EA1CA6DF1000CABA95 /* black_bottom3.png in Resources */ = {isa = PBXBuildFile; fileRef = BB6B47E91CA6DF1000CABA95 /* black_bottom3.png */; };
 		BB88EBB21C32D5E400F39B26 /* close.png in Resources */ = {isa = PBXBuildFile; fileRef = BB88EBB11C32D5E400F39B26 /* close.png */; };
@@ -47,6 +48,7 @@
 		BBEAA0AF1C21A9ED00279011 /* commentVC.m in Sources */ = {isa = PBXBuildFile; fileRef = BBEAA0AE1C21A9ED00279011 /* commentVC.m */; };
 		BBEAA0B21C21ADF900279011 /* commentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BBEAA0B11C21ADF900279011 /* commentTableViewCell.m */; };
 		BBF97D611C65752C00A5D403 /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = BBF97D601C65752C00A5D403 /* placeholder.png */; };
+		BBFF6F6C1D167FE20089099F /* TopicVC.m in Sources */ = {isa = PBXBuildFile; fileRef = BBFF6F6B1D167FE20089099F /* TopicVC.m */; };
 		BF4178EC067BE3396A47881C /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84D65C4BEB822ACA8811C5E7 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -84,6 +86,8 @@
 		BB2E97291C1D1599001B7CAA /* saltfishTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = saltfishTests.m; sourceTree = "<group>"; };
 		BB32FF8F1D12F3C300A2B5B8 /* TechTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TechTestViewController.h; sourceTree = "<group>"; };
 		BB32FF901D12F3C300A2B5B8 /* TechTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TechTestViewController.m; sourceTree = "<group>"; };
+		BB65CA161D1E294E0098A53B /* articleCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = articleCell.h; sourceTree = "<group>"; };
+		BB65CA171D1E294E0098A53B /* articleCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = articleCell.m; sourceTree = "<group>"; };
 		BB6B47E71CA6DD2F00CABA95 /* black_top3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = black_top3.png; path = "../../coding/salt-App效果图/black_top3.png"; sourceTree = "<group>"; };
 		BB6B47E91CA6DF1000CABA95 /* black_bottom3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = black_bottom3.png; path = "../../coding/salt-App效果图/black_bottom3.png"; sourceTree = "<group>"; };
 		BB88EBB11C32D5E400F39B26 /* close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = close.png; sourceTree = "<group>"; };
@@ -121,6 +125,8 @@
 		BBEAA0B11C21ADF900279011 /* commentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = commentTableViewCell.m; sourceTree = "<group>"; };
 		BBF97D601C65752C00A5D403 /* placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = placeholder.png; sourceTree = "<group>"; };
 		BBF97D641C677AB900A5D403 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		BBFF6F6A1D167FE20089099F /* TopicVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopicVC.h; sourceTree = "<group>"; };
+		BBFF6F6B1D167FE20089099F /* TopicVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TopicVC.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -162,6 +168,8 @@
 				BBEAA0B11C21ADF900279011 /* commentTableViewCell.m */,
 				BB9B90A91C9C4E1200A89A13 /* picBasedTableViewCell.h */,
 				BB9B90AA1C9C4E1200A89A13 /* picBasedTableViewCell.m */,
+				BB65CA161D1E294E0098A53B /* articleCell.h */,
+				BB65CA171D1E294E0098A53B /* articleCell.m */,
 			);
 			name = tableViewCells;
 			sourceTree = "<group>";
@@ -198,12 +206,13 @@
 		BB2E97091C1D1599001B7CAA /* saltfish */ = {
 			isa = PBXGroup;
 			children = (
+				BBFF6F691D167F590089099F /* topic page */,
+				BBE6CCD41C206AE500AA9525 /* pics */,
+				BBE5883C1C5E1E460067D783 /* url manager */,
+				BBE6CCD31C206AC600AA9525 /* color manage */,
+				BB28C47C1C5F211D00527872 /* toast */,
 				BB32FF8E1D12F38900A2B5B8 /* tech test  */,
 				BB8C2A8C1CB1343C004112F9 /* something more */,
-				BB28C47C1C5F211D00527872 /* toast */,
-				BBE5883C1C5E1E460067D783 /* url manager */,
-				BBE6CCD41C206AE500AA9525 /* pics */,
-				BBE6CCD31C206AC600AA9525 /* color manage */,
 				BB261F991C1D908B0079D037 /* tableViewCells */,
 				BBAD454A1C1D4C5F007A54F3 /* comment page */,
 				BBAD45491C1D4C24007A54F3 /* detail page */,
@@ -333,6 +342,15 @@
 				BB6B47E71CA6DD2F00CABA95 /* black_top3.png */,
 			);
 			name = pics;
+			sourceTree = "<group>";
+		};
+		BBFF6F691D167F590089099F /* topic page */ = {
+			isa = PBXGroup;
+			children = (
+				BBFF6F6A1D167FE20089099F /* TopicVC.h */,
+				BBFF6F6B1D167FE20089099F /* TopicVC.m */,
+			);
+			name = "topic page";
 			sourceTree = "<group>";
 		};
 		E8EFD65369355762439FBA9C /* Frameworks */ = {
@@ -527,7 +545,9 @@
 				BBE5883F1C5E1E800067D783 /* urlManager.m in Sources */,
 				BBE6CCD21C1F19D400AA9525 /* detailVC.m in Sources */,
 				BBEAA0B21C21ADF900279011 /* commentTableViewCell.m in Sources */,
+				BBFF6F6C1D167FE20089099F /* TopicVC.m in Sources */,
 				BB261F9C1C1D90DF0079D037 /* bigPicTableViewCell.m in Sources */,
+				BB65CA181D1E294E0098A53B /* articleCell.m in Sources */,
 				BBE6CCD71C206B2600AA9525 /* colorManager.m in Sources */,
 				BBE588441C5E57610067D783 /* saltFishLaunch.m in Sources */,
 				BBEAA0AF1C21A9ED00279011 /* commentVC.m in Sources */,
