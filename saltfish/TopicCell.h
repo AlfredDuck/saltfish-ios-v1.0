@@ -9,8 +9,10 @@
 #import <UIKit/UIKit.h>
 
 @protocol TopicCellDelegate <NSObject>
+/*此处定义cell指向tableview所在页面的代理*/
 @required
-- (void)changeTopicCellHeight;
+- (void)clickFollowButton;  // 点击关注按钮
+- (void)changePushSwitch;   // 点击push开关
 @end
 
 @interface TopicCell : UITableViewCell
@@ -23,6 +25,7 @@
 // 关注按钮
 @property (nonatomic, copy) UIImageView *followButton;
 @property (nonatomic, copy) UIView *pushSettingView;
+@property (nonatomic, copy) UISwitch *pushSwitch;
 // 分割线
 @property (nonatomic, copy) UIView *partLine;
 //

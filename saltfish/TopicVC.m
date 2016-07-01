@@ -63,7 +63,7 @@
 {
     /* 整个顶部滑动动效分三部分：背景图(中层）、tableView（下层）、头像图片（上层）*/
     
-    NSString *urlStr = @"http://f10.topitme.com/l/201008/17/12820484731757.jpg";
+    NSString *urlStr = @"http://fb.topitme.com/b/0f/51/1139283992402510fbl.jpg";
     
     
     /* 创建tableView */
@@ -195,18 +195,21 @@
 
 
 #pragma mark - TopicCell 的代理方法
-- (void)changeTopicCellHeight
+
+- (void)clickFollowButton
 {
     if (_isFollowing) {
         _isFollowing = NO;
     } else {
         _isFollowing = YES;
     }
-//    [UIView animateWithDuration:0.3 animations:^{   // uiview 动画（无需实例化）
-//
-//    }];
+
     NSIndexPath *indexPath=[NSIndexPath indexPathForRow:0 inSection:0];
     [_oneTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationFade];
+    
+    //    [UIView animateWithDuration:0.3 animations:^{   // uiview 动画（无需实例化）单例
+    //
+    //    }];
 }
 
 
@@ -252,6 +255,9 @@
         if (oneArticleCell == nil) {
             oneArticleCell = [[articleCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:ArticleCellWithIdentifier];
         }
+        [oneArticleCell rewriteTitle:@"根据葛尔丹博士的史书，雷妮丝可能因坠地而死吧"];
+        NSArray *arr = @[@"#屌丝#",@"#白富美#",@"#野外漏出#",@"#艹范冰冰#",@"#耐辱奶乳#",@"#O(∩_∩)O哈哈~#"];
+        [oneArticleCell rewriteTopics:arr];
         // 取消选中的背景色
         oneArticleCell.selectionStyle = UITableViewCellSelectionStyleNone;
         return oneArticleCell;
@@ -284,7 +290,7 @@
         return height;
     }
     else {
-        CGFloat height = 10+100+10+4;
+        CGFloat height = 110+14;
         return height;
     }
 }

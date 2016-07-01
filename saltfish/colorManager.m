@@ -27,7 +27,7 @@
 }
 + (UIColor *)lightTextColor
 {
-    return [UIColor colorWithRed:(178/255.0) green:(178/255.0) blue:(178/255.0) alpha:1];
+    return [UIColor colorWithRed:(172/255.0) green:(172/255.0) blue:(172/255.0) alpha:1];
 }
 + (UIColor *)purple
 {

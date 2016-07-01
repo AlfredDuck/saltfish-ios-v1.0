@@ -41,7 +41,7 @@
         /* 主题 */
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 40, _screenWidth-40, 20)];
         _titleLabel.text = _title;
-        _titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 15.0];
+        _titleLabel.font = [UIFont fontWithName:@"Helvetica Bold" size: 15.0];
         _titleLabel.textColor = [colorManager mainTextColor];
         _titleLabel.textAlignment = UITextAlignmentCenter;
         _titleLabel.numberOfLines = 2;
@@ -79,12 +79,13 @@
         pushLabel.textColor = [colorManager secondTextColor];
         [_pushSettingView addSubview: pushLabel];
         
-        UISwitch *swi1=[[UISwitch alloc]init];
-        swi1.frame=CGRectMake(_screenWidth-64, 7, 0,0);
+        _pushSwitch = [[UISwitch alloc]init];
+        _pushSwitch.frame=CGRectMake(_screenWidth-64, 7, 0,0);   // switch大小固定，不用设置size
         //设置ON一边的背景颜色，默认是绿色
-        swi1.onTintColor = [UIColor colorWithRed:(47/255.0) green:(175/255.0) blue:(239/255.0) alpha:1];
-        [swi1 setOn:NO animated:YES];
-        [_pushSettingView addSubview:swi1];
+        _pushSwitch.onTintColor = [UIColor colorWithRed:(47/255.0) green:(175/255.0) blue:(239/255.0) alpha:1];
+        [_pushSwitch setOn:NO animated:YES];
+        [_pushSwitch addTarget:self action:@selector(clickSwitch:) forControlEvents:UIControlEventAllTouchEvents];
+        [_pushSettingView addSubview:_pushSwitch];
         
         [self.contentView addSubview:_pushSettingView];
         
@@ -102,6 +103,7 @@
     }
     return self;
 }
+
 
 
 #pragma mark - 重写 cell 中各个元素的数据
@@ -155,30 +157,12 @@
 {
     NSLog(@"click follow button");
     NSLog(@"%@", sender);
-    [self.delegate changeTopicCellHeight];
-    
-//    if (_followButton.tag == 110) {
-//        // 开始关注
-//        _followButton.tag = 120;
-//        [(UIImageView *)sender.view setImage:[UIImage imageNamed:@"unfollow.png"]];
-//        [UIView animateWithDuration:0.15 animations:^{   // uiview 动画（无需实例化）
-//            _pushSettingView.alpha = 1;
-//            CGFloat y2 = _partLine.frame.origin.y;
-//            _partLine.frame = CGRectMake(0, y2+44, _screenWidth, 12);
-//            [self.delegate changeTopicCellHeight];
-//        }];
-//        
-//        
-//    } else {
-//        // 取消关注
-//        _followButton.tag = 110;
-//        [(UIImageView *)sender.view setImage:[UIImage imageNamed:@"follow.png"]];
-//        [UIView animateWithDuration:0.15 animations:^{   // uiview 动画（无需实例化）
-//            _pushSettingView.alpha = 0;
-//            CGFloat y2 = _partLine.frame.origin.y;
-//            _partLine.frame = CGRectMake(0, y2-44, _screenWidth, 12);
-//        }];
-//    }
+    [self.delegate clickFollowButton];
+}
+
+- (void)clickSwitch:(UISwitch *)sender
+{
+    NSLog(@"%@", sender);
 }
 
 @end
