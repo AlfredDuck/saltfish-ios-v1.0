@@ -27,7 +27,7 @@
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     
-    [NSThread sleepForTimeInterval:2.0];  // launch time
+    [NSThread sleepForTimeInterval:1.0];  //   启动等待时间
     
     // weibo SDK
     [WeiboSDK enableDebugMode:YES];

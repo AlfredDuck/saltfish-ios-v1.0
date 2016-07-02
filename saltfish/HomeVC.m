@@ -20,6 +20,7 @@
 #import "WeiboSDK.h"
 
 #import "TopicVC.h"
+#import "ClassificationVC.h"
 
 
 @interface HomeVC ()
@@ -1017,10 +1018,24 @@
     // 临时用的2：进入topic页面
     if (row == 0) {
         NSLog(@"进行测试...");
-        
         TopicVC *testPV = [[TopicVC alloc] init];
         [self.navigationController pushViewController:testPV animated:YES];
-        
+        //开启iOS7的滑动返回效果
+        if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
+            self.navigationController.interactivePopGestureRecognizer.delegate = nil;
+        }
+        return;
+    }
+    
+    // 临时用的3：进入classification页面
+    if (row == 1) {
+        NSLog(@"进行测试...");
+        ClassificationVC *ClassificationPV = [[ClassificationVC alloc] init];
+        [self.navigationController pushViewController:ClassificationPV animated:YES];
+        //开启iOS7的滑动返回效果
+        if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
+            self.navigationController.interactivePopGestureRecognizer.delegate = nil;
+        }
         return;
     }
     

@@ -63,7 +63,7 @@
 {
     /* 整个顶部滑动动效分三部分：背景图(中层）、tableView（下层）、头像图片（上层）*/
     
-    NSString *urlStr = @"http://fb.topitme.com/b/0f/51/1139283992402510fbl.jpg";
+    NSString *urlStr = @"http://ff.topitme.com/f/a8/24/112624183945624a8fl.jpg";
     
     
     /* 创建tableView */
