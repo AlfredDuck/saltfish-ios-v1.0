@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "HomeVC.h"
+#import "SFRootViewController.h"
 #import "saltCustomTools.h"
 #import "WeiboSDK.h"
 #import "WXApi.h"
@@ -36,11 +37,17 @@
     // weixin SDK 向微信注册
     [WXApi registerApp:WXKey];
 
-    // set homeVC as the rootViewController
-    HomeVC *homeVC = [[HomeVC alloc] init];
-    UINavigationController *navVC = [[UINavigationController alloc] initWithRootViewController:homeVC];
-    self.window.rootViewController = navVC;
-    [navVC setNavigationBarHidden:YES];
+//    // set homeVC as the rootViewController
+//    HomeVC *homeVC = [[HomeVC alloc] init];
+//    UINavigationController *navVC = [[UINavigationController alloc] initWithRootViewController:homeVC];
+//    self.window.rootViewController = navVC;
+//    [navVC setNavigationBarHidden:YES];
+    
+    // 设置 RootViewController
+    SFRootViewController *rootVC = [[SFRootViewController alloc] init];
+//    UINavigationController *navVC = [[UINavigationController alloc] initWithRootViewController:rootVC];
+//    [navVC setNavigationBarHidden:YES];
+    self.window.rootViewController = rootVC;
 
     return YES;
 }

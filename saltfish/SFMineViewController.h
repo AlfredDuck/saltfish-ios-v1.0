@@ -9,5 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface SFMineViewController : UIViewController
-
+// 全局变量 屏幕长宽
+@property (nonatomic) NSInteger screenWidth;
+@property (nonatomic) NSInteger screenHeight;
 @end

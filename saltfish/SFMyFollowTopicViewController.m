@@ -1,23 +1,21 @@
 //
-//  SFDiscoveryViewController.m
+//  SFMyFollowTopicViewController.m
 //  saltfish
 //
 //  Created by alfred on 16/7/2.
 //  Copyright © 2016年 Alfred. All rights reserved.
 //
 
-#import "SFDiscoveryViewController.h"
+#import "SFMyFollowTopicViewController.h"
 #import "colorManager.h"
-#import "TopicTableViewCell.h"
+#import "myTopicTableViewCell.h"
 #import "TopicVC.h"
-#import "MJRefresh.h"
 
-
-@interface SFDiscoveryViewController ()
+@interface SFMyFollowTopicViewController ()
 
 @end
 
-@implementation SFDiscoveryViewController
+@implementation SFMyFollowTopicViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -25,16 +23,23 @@
     if (self) {
         // Custom initialization
         self.title = @"test";
-        self.view.backgroundColor = [UIColor redColor];
+        self.view.backgroundColor = [UIColor whiteColor];
     }
     return self;
 }
+
+// 修改状态栏色值
+// 在你自己的UIViewController里重写此方法，返回你需要的值(UIStatusBarStyleDefault 或者 UIStatusBarStyleLightContent)；
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    return UIStatusBarStyleLightContent;
+    // return UIStatusBarStyleDefault;
+}
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     _screenHeight = [UIScreen mainScreen].bounds.size.height;
     _screenWidth = [UIScreen mainScreen].bounds.size.width;
-    
     [self createUIParts];
 }
 
@@ -45,11 +50,11 @@
 
 
 
-
 #pragma mark - 构建 UI 零件
 - (void)createUIParts
 {
-    /* 标题栏 */
+    NSLog(@"what?");
+    /* title bar background */
     UIView *titleBarBackground = [[UIView alloc] initWithFrame:CGRectMake(0, 0, _screenWidth, 64)];
     titleBarBackground.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:titleBarBackground];
@@ -61,11 +66,26 @@
     
     /* title */
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake((_screenWidth-200)/2, 20, 200, 44)];
-    titleLabel.text = @"发现";
+    titleLabel.text = @"啦啦啦";
     titleLabel.textColor = [colorManager mainTextColor];
-    titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 15];
+    titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 16];
     titleLabel.textAlignment = UITextAlignmentCenter;
     [titleBarBackground addSubview:titleLabel];
+    
+    /* back button pic */
+    UIImage *oneImage = [UIImage imageNamed:@"back_black.png"]; // 使用ImageView通过name找到图片
+    UIImageView *oneImageView = [[UIImageView alloc] initWithImage:oneImage]; // 把oneImage添加到oneImageView上
+    oneImageView.frame = CGRectMake(11, 13.2, 22, 17.6); // 设置图片位置和大小
+    // [oneImageView setContentMode:UIViewContentModeCenter];
+    
+    UIView *backView = [[UIView alloc] initWithFrame:CGRectMake(0, 20, 44, 44)];
+    [backView addSubview:oneImageView];
+    // 为UIView添加点击事件
+    // 一定要先将userInteractionEnabled置为YES，这样才能响应单击事件
+    backView.userInteractionEnabled = YES; // 设置图片可以交互
+    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickBackButton)]; // 设置手势
+    [backView addGestureRecognizer:singleTap]; // 给图片添加手势
+    [titleBarBackground addSubview:backView];
     
     
     /* 创建tableView */
@@ -75,36 +95,25 @@
     [_oneTableView setDelegate:self];
     [_oneTableView setDataSource:self];
     
-    [_oneTableView registerClass:[TopicTableViewCell class] forCellReuseIdentifier:CellWithIdentifier];
+    [_oneTableView registerClass:[myTopicTableViewCell class] forCellReuseIdentifier:CellWithIdentifier];
     _oneTableView.backgroundColor = [colorManager lightGrayBackground];
     _oneTableView.separatorStyle = UITableViewCellSeparatorStyleNone; // 去掉分割线
-    // _oneTableView.contentInset = UIEdgeInsetsMake(100, 0, 0, 0); // 设置距离顶部的一段偏移，继承自scrollview
+    // _oneTableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0); // 设置距离顶部的一段偏移，继承自scrollview
     // 响应点击状态栏的事件
     _oneTableView.scrollsToTop = YES;
     [self.view addSubview:_oneTableView];
-    
-    // 下拉刷新 MJRefresh
-    _oneTableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
-        // 模拟延迟加载数据，因此2秒后才调用（真实开发中，可以移除这段gcd代码）
-         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-             // 结束刷新动作
-             [_oneTableView.mj_header endRefreshing];
-             NSLog(@"下拉刷新成功，结束刷新");
-         });
-
-    }];
-    
-    // 上拉刷新 MJRefresh
-    _oneTableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
-        // 结束加载更多
-        // [tableView.mj_footer endRefreshing];
-        [_oneTableView.mj_footer endRefreshingWithNoMoreData];
-    }];
-    
-    // 禁用 mjRefresh
-    // contentTableView.mj_footer = nil;
-    
 }
+
+
+
+
+#pragma mark - IBAction
+- (void)clickBackButton
+{
+    NSLog(@"back");
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 
 
 
@@ -125,11 +134,11 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *TopicCellWithIdentifier = @"topicCell+";
-    TopicTableViewCell *oneTopicCell = [tableView dequeueReusableCellWithIdentifier:TopicCellWithIdentifier];
+    myTopicTableViewCell *oneTopicCell = [tableView dequeueReusableCellWithIdentifier:TopicCellWithIdentifier];
     
     NSUInteger row = [indexPath row];
     if (oneTopicCell == nil) {
-        oneTopicCell = [[TopicTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:TopicCellWithIdentifier];
+        oneTopicCell = [[myTopicTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:TopicCellWithIdentifier];
     }
     
     // 取消选中的背景色
@@ -160,8 +169,6 @@
         self.navigationController.interactivePopGestureRecognizer.delegate = nil;
     }
 }
-
-
 
 
 

@@ -35,15 +35,12 @@
     return self;
 }
 
-// 修改状态栏色值
-// 在你自己的UIViewController里重写此方法，返回你需要的值(UIStatusBarStyleDefault 或者 UIStatusBarStyleLightContent)；
-- (UIStatusBarStyle)preferredStatusBarStyle {
-    return UIStatusBarStyleLightContent;
-    //return  UIStatusBarStyleDefault;
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    // 设置状态栏颜色的强力方法
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    
     _screenHeight = [UIScreen mainScreen].bounds.size.height;
     _screenWidth = [UIScreen mainScreen].bounds.size.width;
     _backgroundImageHeight = 400.0;
@@ -51,6 +48,7 @@
     _isFollowing = NO;
     
     [self createUIParts];
+
 }
 
 - (void)didReceiveMemoryWarning {
@@ -58,12 +56,12 @@
 }
 
 
-#pragma mark - 构建UI零件
+#pragma mark - 构建 UI 零件
 - (void)createUIParts
 {
     /* 整个顶部滑动动效分三部分：背景图(中层）、tableView（下层）、头像图片（上层）*/
     
-    NSString *urlStr = @"http://ff.topitme.com/f/a8/24/112624183945624a8fl.jpg";
+    NSString *urlStr = @"http://letsfilm.org/wp-content/uploads/2016/06/000020-1.jpg";
     
     
     /* 创建tableView */

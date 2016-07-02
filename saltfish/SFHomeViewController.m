@@ -20,7 +20,8 @@
     if (self) {
         // Custom initialization
         self.title = @"test";
-        self.view.backgroundColor = [UIColor whiteColor];
+        self.view.backgroundColor = [UIColor greenColor];
+        self.navigationController.navigationBar.hidden = YES;
     }
     return self;
 }
