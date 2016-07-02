@@ -8,6 +8,7 @@
 
 #import "SFDiscoveryViewController.h"
 #import "colorManager.h"
+#import "SFClassificationTableViewCell.h"
 #import "TopicTableViewCell.h"
 #import "TopicVC.h"
 #import "MJRefresh.h"
@@ -124,17 +125,30 @@
 // 填充cell
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    static NSString *ClassificationCellWithIdentifier = @"ClassificationCell+";
+    SFClassificationTableViewCell *oneClassificationCell = [tableView dequeueReusableCellWithIdentifier:ClassificationCellWithIdentifier];
+    
     static NSString *TopicCellWithIdentifier = @"topicCell+";
     TopicTableViewCell *oneTopicCell = [tableView dequeueReusableCellWithIdentifier:TopicCellWithIdentifier];
     
     NSUInteger row = [indexPath row];
-    if (oneTopicCell == nil) {
-        oneTopicCell = [[TopicTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:TopicCellWithIdentifier];
-    }
     
-    // 取消选中的背景色
-    oneTopicCell.selectionStyle = UITableViewCellSelectionStyleNone;
-    return oneTopicCell;
+    if (row == 0) {  // tableview 第一行
+        if (oneClassificationCell == nil) {
+            oneClassificationCell = [[SFClassificationTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:ClassificationCellWithIdentifier];
+        }
+        [oneClassificationCell rewritePics:@[@"旅行",@"娱乐八卦",@"Sunshine",@"电影",@"黑客帝国",@"科技圈",@"洛丽塔",@"肉体女生"]];
+        oneClassificationCell.selectionStyle = UITableViewCellSelectionStyleNone;  // 取消选中的背景色
+        return oneClassificationCell;
+        
+    } else {
+        if (oneTopicCell == nil) {
+            oneTopicCell = [[TopicTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:TopicCellWithIdentifier];
+        }
+        oneTopicCell.selectionStyle = UITableViewCellSelectionStyleNone;  // 取消选中的背景色
+        return oneTopicCell;
+    }
+
     // 直接往cell addsubView的方法会在每次划出屏幕再划回来时 再加载一次subview，因此会重复加载很多subview
 }
 
@@ -142,6 +156,10 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSUInteger row = [indexPath row];
+    if (row == 0) {
+        SFClassificationTableViewCell *cell = (SFClassificationTableViewCell *)[self tableView:tableView cellForRowAtIndexPath:indexPath];
+        return cell.cellHeight;
+    }
     
     CGFloat height = 58+24;
     return height;
