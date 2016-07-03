@@ -16,6 +16,8 @@
 @property (nonatomic) unsigned long cellHeight;
 // 底部分割线
 @property (nonatomic, copy) UIView *partLine;
+// 下一个模块的title
+@property (nonatomic, copy) UIView *titleForNextPart;
 // 记录已经生成图片矩阵，避免重复生成
 @property (nonatomic) BOOL hasPics;
 

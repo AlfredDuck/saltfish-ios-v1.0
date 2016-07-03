@@ -61,6 +61,18 @@
         [self.contentView addSubview: _partLine];
         self.contentView.backgroundColor = [UIColor whiteColor];
         
+        /* 下一个模块的标题，高度42px（放在这里，从架构上说并不合理，只是为了少写一种cell） */
+        _titleForNextPart = [[UIView alloc] initWithFrame:CGRectMake(0, 360, _screenWidth, 42)];
+        _titleForNextPart.backgroundColor = [UIColor whiteColor];
+        [self.contentView addSubview: _titleForNextPart];
+        // title
+        UILabel *nextTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 14, _screenWidth, 20)];
+        nextTitleLabel.font = [UIFont fontWithName:@"Helvetica" size: 14.0];
+        nextTitleLabel.text = @"推荐话题";
+        nextTitleLabel.textColor = [colorManager mainTextColor];
+        nextTitleLabel.textAlignment = UITextAlignmentCenter;
+        [_titleForNextPart addSubview:nextTitleLabel];
+        
         
         // not usefull
         self.frame = CGRectMake(0, 0, 300, 300);
@@ -102,7 +114,7 @@
     }
     NSLog(@"二维数组：%@", DoubleArr);
     
-    NSString *url = @"http://f10.topitme.com/m/201102/14/12976202049513.jpg";
+    NSString *url = @"http://i10.topitme.com/m074/1007429297c425ada8.jpg";
     // 根据设备宽度计算图片宽高
     int ww = ceil((_screenWidth - 11*2 - 16*2)/3.0);
     int hh = ceil(ww/107.0*89);
@@ -135,10 +147,10 @@
             classificationLable.numberOfLines = 3;
             classificationLable.textAlignment = UITextAlignmentCenter;
             // 文字阴影
-            classificationLable.layer.shadowOpacity = 0.8;
+            classificationLable.layer.shadowOpacity = 0.9;
             classificationLable.layer.shadowColor = [UIColor blackColor].CGColor;
             classificationLable.layer.shadowOffset = CGSizeMake(1.0, 1.0);
-            classificationLable.layer.shadowRadius = 1.0;
+            classificationLable.layer.shadowRadius = 0.5;
             [picImageView addSubview:classificationLable];
             
             [self.contentView addSubview:picImageView];
@@ -150,6 +162,9 @@
     _cellHeight = (15+48) + [DoubleArr count]*(hh+11) + (5+15);
     /* 底部分割线 */
     _partLine.frame = CGRectMake(0, _cellHeight-15, _screenWidth, 15);
+    /* 底部分割线下方的标题 */
+    _titleForNextPart.frame = CGRectMake(0, _cellHeight, _screenWidth, 42);
+    _cellHeight = _cellHeight + 42;  // 最终输出的cellHeight需要加上下方标题的高度😢
     
     _hasPics = YES;  // 记录已经创建pic矩阵
 }

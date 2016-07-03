@@ -9,5 +9,10 @@
 #import <UIKit/UIKit.h>
 
 @interface SFHomeViewController : UIViewController
+// tableview
+@property (nonatomic, strong) UITableView *oneTableView;
 
+// 全局变量 屏幕长宽
+@property (nonatomic) NSInteger screenWidth;
+@property (nonatomic) NSInteger screenHeight;
 @end

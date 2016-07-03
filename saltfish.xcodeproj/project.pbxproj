@@ -39,6 +39,7 @@
 		BB65CA231D1E802A0098A53B /* unfollow.png in Resources */ = {isa = PBXBuildFile; fileRef = BB65CA221D1E802A0098A53B /* unfollow.png */; };
 		BB6B47E81CA6DD2F00CABA95 /* black_top3.png in Resources */ = {isa = PBXBuildFile; fileRef = BB6B47E71CA6DD2F00CABA95 /* black_top3.png */; };
 		BB6B47EA1CA6DF1000CABA95 /* black_bottom3.png in Resources */ = {isa = PBXBuildFile; fileRef = BB6B47E91CA6DF1000CABA95 /* black_bottom3.png */; };
+		BB82EF281D290F4400FFB7FD /* SFHotTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BB82EF271D290F4400FFB7FD /* SFHotTableViewCell.m */; };
 		BB88EBB21C32D5E400F39B26 /* close.png in Resources */ = {isa = PBXBuildFile; fileRef = BB88EBB11C32D5E400F39B26 /* close.png */; };
 		BB8C2A8F1CB134CC004112F9 /* saltCustomTools.m in Sources */ = {isa = PBXBuildFile; fileRef = BB8C2A8E1CB134CC004112F9 /* saltCustomTools.m */; };
 		BB97FD9B1D27FC3200EBA61D /* SFClassificationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BB97FD9A1D27FC3200EBA61D /* SFClassificationTableViewCell.m */; };
@@ -131,6 +132,8 @@
 		BB65CA221D1E802A0098A53B /* unfollow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = unfollow.png; path = "../../coding/salt-App效果图/unfollow.png"; sourceTree = "<group>"; };
 		BB6B47E71CA6DD2F00CABA95 /* black_top3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = black_top3.png; path = "../../coding/salt-App效果图/black_top3.png"; sourceTree = "<group>"; };
 		BB6B47E91CA6DF1000CABA95 /* black_bottom3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = black_bottom3.png; path = "../../coding/salt-App效果图/black_bottom3.png"; sourceTree = "<group>"; };
+		BB82EF261D290F4400FFB7FD /* SFHotTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFHotTableViewCell.h; sourceTree = "<group>"; };
+		BB82EF271D290F4400FFB7FD /* SFHotTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFHotTableViewCell.m; sourceTree = "<group>"; };
 		BB88EBB11C32D5E400F39B26 /* close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = close.png; sourceTree = "<group>"; };
 		BB8C2A8D1CB134CC004112F9 /* saltCustomTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = saltCustomTools.h; sourceTree = "<group>"; };
 		BB8C2A8E1CB134CC004112F9 /* saltCustomTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = saltCustomTools.m; sourceTree = "<group>"; };
@@ -212,6 +215,7 @@
 				BB62F0731D26B68400ACFC92 /* TopicTableViewCell.m */,
 				BB62F0921D279F2400ACFC92 /* myTopicTableViewCell.h */,
 				BB62F0931D279F2400ACFC92 /* myTopicTableViewCell.m */,
+				BB82EF251D290EAB00FFB7FD /* home cell */,
 				BB97FD981D27FBCF00EBA61D /* discovery cell */,
 			);
 			name = tableViewCells;
@@ -346,6 +350,15 @@
 				BB62F08E1D27799B00ACFC92 /* SFMyFollowTopicViewController.m */,
 			);
 			name = "my follow topic page";
+			sourceTree = "<group>";
+		};
+		BB82EF251D290EAB00FFB7FD /* home cell */ = {
+			isa = PBXGroup;
+			children = (
+				BB82EF261D290F4400FFB7FD /* SFHotTableViewCell.h */,
+				BB82EF271D290F4400FFB7FD /* SFHotTableViewCell.m */,
+			);
+			name = "home cell";
 			sourceTree = "<group>";
 		};
 		BB8C2A8C1CB1343C004112F9 /* something more */ = {
@@ -684,6 +697,7 @@
 				BB62F0811D273C4300ACFC92 /* SFDiscoveryViewController.m in Sources */,
 				BB2E97131C1D1599001B7CAA /* saltfish.xcdatamodeld in Sources */,
 				BB62F0891D273FA600ACFC92 /* SFRootViewController.m in Sources */,
+				BB82EF281D290F4400FFB7FD /* SFHotTableViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
