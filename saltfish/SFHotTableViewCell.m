@@ -36,10 +36,11 @@
         _screenWidth = [UIScreen mainScreen].bounds.size.width;
         
         
-        /* =========== 焦点图 ============== */
+        /* ============= 焦点图 ScrollView ============== */
         
-        _basedScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 64, _screenWidth, 170)];
+        _basedScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, _screenWidth, 170)];
         _basedScrollView.backgroundColor = [UIColor grayColor];
+        _basedScrollView.delegate = self;
         
         //这个属性很重要，它可以决定是横向还是纵向滚动，一般来说也是其中的 View 的总宽度，和总的高度
         //这里同时考虑到每个 View 间的空隙，所以宽度是 200x3＋5＋10＋10＋5＝630
@@ -78,9 +79,13 @@
 
 
 
+
 #pragma mark - 重写 cell 中各个元素的数据
+
 - (void)rewriteHotArticles:(NSArray *)newArr
 {
+    _hotArticleData = [newArr copy];
+    
     // 循环创建轮播的图片
     for (int i=0; i<3; i++) {
         
@@ -91,7 +96,7 @@
         picImageView.contentMode = UIViewContentModeScaleAspectFill;
         picImageView.clipsToBounds  = YES;
         // 需要AFNetwork
-        [picImageView sd_setImageWithURL:[NSURL URLWithString:[[newArr objectAtIndex:i] objectForKey:@"url"]] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+        [picImageView sd_setImageWithURL:[NSURL URLWithString:[[_hotArticleData objectAtIndex:i] objectForKey:@"url"]] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
         
         // 遮黑
         UIView *halfBlack = [[UIView alloc] initWithFrame:CGRectMake(0, 0, _screenWidth, 170)];
@@ -101,7 +106,7 @@
         
         // 文本
         UILabel *picLabel = [[UILabel alloc] initWithFrame:CGRectMake(54, 0, _screenWidth-54*2, 170)];
-        picLabel.text = [[newArr objectAtIndex:i] objectForKey:@"title"];
+        picLabel.text = [[_hotArticleData objectAtIndex:i] objectForKey:@"title"];
         picLabel.textColor  = [UIColor whiteColor];
         picLabel.font = [UIFont fontWithName:@"Helvetica" size: 18.0f];
         picLabel.numberOfLines = 2;
@@ -115,10 +120,19 @@
         
         [_basedScrollView addSubview:picImageView];
     }
-
 }
 
 
+
+#pragma mark - ScrollView 代理
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    if ([scrollView isEqual:_basedScrollView]) {
+        NSLog(@"ScrollView 减速停止");
+        NSLog(@"ScrollView偏移：%f", _basedScrollView.contentOffset.x);
+    }
+}
 
 
 

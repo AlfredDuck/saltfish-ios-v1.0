@@ -85,9 +85,94 @@
                         @"http://f7.topitme.com/7/a4/75/115044609142d75a47l.jpg", @"url",
                         nil];
     
-    NSArray *data = @[d1,d2,d3];
+    _data = @[d1,d2,d3];
+    
+    /* 创建 TableView */
+    [self createBasedTableView];
+    /* 创建焦点图 */
+    //[self createHotArticles];
+
+}
+
+
+
+#pragma mark - 创建 热门话题
+- (void)createHotTopics
+{
+    
+}
+
+
+#pragma mark - 创建焦点图(热门文章）
+- (void)createHotArticles
+{
+    /* ============= 焦点图 ScrollView ============== */
+    
+    _basedScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 64, _screenWidth, 170)];
+    _basedScrollView.backgroundColor = [UIColor grayColor];
+    _basedScrollView.delegate = self;
+    
+    //这个属性很重要，它可以决定是横向还是纵向滚动，一般来说也是其中的 View 的总宽度，和总的高度
+    //这里同时考虑到每个 View 间的空隙，所以宽度是 200x3＋5＋10＋10＋5＝630
+    //高度上与 ScrollView 相同，只在横向扩展，所以只要在横向上滚动
+    _basedScrollView.contentSize = CGSizeMake(_screenWidth*3, 170);
+    //用它指定 ScrollView 中内容的当前位置，即相对于 ScrollView 的左上顶点的偏移
+    _basedScrollView.contentOffset = CGPointMake(0, 0);
+    //按页滚动，总是一次一个宽度，或一个高度单位的滚动
+    _basedScrollView.pagingEnabled = YES;
+    //隐藏滚动条
+    _basedScrollView.showsVerticalScrollIndicator = FALSE;
+    _basedScrollView.showsHorizontalScrollIndicator = FALSE;
+    // 是否边缘反弹
+    _basedScrollView.bounces = YES;
+    // 不响应点击状态栏的事件（留给uitableview用）
+    _basedScrollView.scrollsToTop = NO;
+    
+    [self.view addSubview:_basedScrollView];
     
     
+    /* 循环创建轮播的图片 */
+    for (int i=0; i<3; i++) {
+        
+        UIImageView *picImageView = [[UIImageView alloc] initWithFrame:CGRectMake(_screenWidth*i, 0, _screenWidth, 170)];
+        picImageView.backgroundColor = [UIColor grayColor];
+        
+        // uiimageview居中裁剪
+        picImageView.contentMode = UIViewContentModeScaleAspectFill;
+        picImageView.clipsToBounds  = YES;
+        // 需要AFNetwork
+        [picImageView sd_setImageWithURL:[NSURL URLWithString:[[_data objectAtIndex:i] objectForKey:@"url"]] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+        
+        // 遮黑
+        UIView *halfBlack = [[UIView alloc] initWithFrame:CGRectMake(0, 0, _screenWidth, 170)];
+        halfBlack.backgroundColor  = [UIColor blackColor];
+        halfBlack.alpha = 0.22;
+        [picImageView addSubview:halfBlack];
+        
+        // 文本
+        UILabel *picLabel = [[UILabel alloc] initWithFrame:CGRectMake(54, 0, _screenWidth-54*2, 170)];
+        picLabel.text = [[_data objectAtIndex:i] objectForKey:@"title"];
+        picLabel.textColor  = [UIColor whiteColor];
+        picLabel.font = [UIFont fontWithName:@"Helvetica" size: 18.0f];
+        picLabel.numberOfLines = 2;
+        picLabel.textAlignment = UITextAlignmentCenter;
+        // 文字阴影
+        picLabel.layer.shadowOpacity = 0.8;
+        picLabel.layer.shadowColor = [UIColor blackColor].CGColor;
+        picLabel.layer.shadowOffset = CGSizeMake(1.0, 1.0);
+        picLabel.layer.shadowRadius = 1.0;
+        [picImageView addSubview:picLabel];
+        
+        [_basedScrollView addSubview:picImageView];
+    }
+
+}
+
+
+
+#pragma mark - 创建 TableView
+- (void)createBasedTableView
+{
     /* 创建 tableview */
     static NSString *CellWithIdentifier = @"commentCell";
     _oneTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, _screenWidth, _screenHeight-64)];
@@ -98,7 +183,7 @@
     [_oneTableView registerClass:[SFHotTableViewCell class] forCellReuseIdentifier:CellWithIdentifier];
     _oneTableView.backgroundColor = [colorManager lightGrayBackground];
     _oneTableView.separatorStyle = UITableViewCellSeparatorStyleNone; // 去掉分割线
-    // _oneTableView.contentInset = UIEdgeInsetsMake(100, 0, 0, 0); // 设置距离顶部的一段偏移，继承自scrollview
+    _oneTableView.contentInset = UIEdgeInsetsMake(100, 0, 0, 0); // 设置距离顶部的一段偏移，继承自scrollview
     // 响应点击状态栏的事件
     _oneTableView.scrollsToTop = YES;
     [self.view addSubview:_oneTableView];
@@ -120,9 +205,11 @@
         [_oneTableView.mj_footer endRefreshingWithNoMoreData];
     }];
     
+    // 这个碉堡了！！
+    _oneTableView.mj_header.ignoredScrollViewContentInsetTop = 100.0;
+    
     // 禁用 mjRefresh
     // contentTableView.mj_footer = nil;
-
 }
 
 
@@ -143,29 +230,28 @@
 // 填充cell
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *hotCellWithIdentifier = @"hotCell+";
-    SFHotTableViewCell *oneHotCell = [tableView dequeueReusableCellWithIdentifier:hotCellWithIdentifier];
-    
     static NSString *articleCellWithIdentifier = @"articleCell+";
     articleCell *oneArticleCell = [tableView dequeueReusableCellWithIdentifier:articleCellWithIdentifier];
     
-    NSUInteger row = [indexPath row];
+    static NSString *hotCellWithIdentifier = @"articleCell+";
+    SFHotTableViewCell *oneHotCell = [tableView dequeueReusableCellWithIdentifier:hotCellWithIdentifier];
     
-    if (row == 0) {  // tableview 第一行
+    NSUInteger row = [indexPath row];
+    if (row == 0) {
         if (oneHotCell == nil) {
             oneHotCell = [[SFHotTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:hotCellWithIdentifier];
         }
+        [oneHotCell rewriteHotArticles:_data];
         oneHotCell.selectionStyle = UITableViewCellSelectionStyleNone;  // 取消选中的背景色
         return oneHotCell;
-        
-    } else {
+    }
+    else {
         if (oneArticleCell == nil) {
             oneArticleCell = [[articleCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:articleCellWithIdentifier];
         }
         oneArticleCell.selectionStyle = UITableViewCellSelectionStyleNone;  // 取消选中的背景色
         return oneArticleCell;
     }
-    
     // 直接往cell addsubView的方法会在每次划出屏幕再划回来时 再加载一次subview，因此会重复加载很多subview
 }
 
@@ -195,6 +281,21 @@
 //    if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
 //        self.navigationController.interactivePopGestureRecognizer.delegate = nil;
 //    }
+}
+
+
+
+
+#pragma mark - ScrollView 代理
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    if ([scrollView isEqual:_basedScrollView]) {
+        NSLog(@"少时诵诗书");
+        NSLog(@"ScrollView 减速停止");
+        NSLog(@"ScrollView偏移：%f", scrollView.contentOffset.x);
+    }
+    NSLog(@"fff");
 }
 
 
