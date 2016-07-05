@@ -84,8 +84,16 @@
                         @"003《权力的游戏》一季终，以后周一的期待又少了一个。 第六季大结局可以说把整季燃到了最高点",@"title",
                         @"http://f7.topitme.com/7/a4/75/115044609142d75a47l.jpg", @"url",
                         nil];
+    NSDictionary *d4 = [[NSDictionary alloc] initWithObjectsAndKeys:
+                        @"004墙绘，顾名思义就是在墙上作画。 如果可以",@"title",
+                        @"http://f10.topitme.com/l/201102/13/12975663235538.jpg", @"url",
+                        nil];
+    NSDictionary *d5 = [[NSDictionary alloc] initWithObjectsAndKeys:
+                        @"005大概没几个插画师能抵得住",@"title",
+                        @"http://f10.topitme.com/l/201102/13/12975659369227.jpg", @"url",
+                        nil];
     
-    _data = @[d1,d2,d3];
+    _data = @[d1,d2,d3,d4,d5];
     
     /* 创建 TableView */
     [self createBasedTableView];
@@ -103,7 +111,7 @@
 }
 
 
-#pragma mark - 创建焦点图(热门文章）
+#pragma mark - 创建焦点图(热门文章）(在cell中实现了，这里的代码用不到了，但是不要删除）
 - (void)createHotArticles
 {
     /* ============= 焦点图 ScrollView ============== */
@@ -183,7 +191,7 @@
     [_oneTableView registerClass:[SFHotTableViewCell class] forCellReuseIdentifier:CellWithIdentifier];
     _oneTableView.backgroundColor = [colorManager lightGrayBackground];
     _oneTableView.separatorStyle = UITableViewCellSeparatorStyleNone; // 去掉分割线
-    _oneTableView.contentInset = UIEdgeInsetsMake(100, 0, 0, 0); // 设置距离顶部的一段偏移，继承自scrollview
+    // _oneTableView.contentInset = UIEdgeInsetsMake(100, 0, 0, 0); // 设置距离顶部的一段偏移，继承自scrollview
     // 响应点击状态栏的事件
     _oneTableView.scrollsToTop = YES;
     [self.view addSubview:_oneTableView];
@@ -205,7 +213,7 @@
         [_oneTableView.mj_footer endRefreshingWithNoMoreData];
     }];
     
-    // 这个碉堡了！！
+    // 这个碉堡了，要珍藏！！
     _oneTableView.mj_header.ignoredScrollViewContentInsetTop = 100.0;
     
     // 禁用 mjRefresh
@@ -233,7 +241,7 @@
     static NSString *articleCellWithIdentifier = @"articleCell+";
     articleCell *oneArticleCell = [tableView dequeueReusableCellWithIdentifier:articleCellWithIdentifier];
     
-    static NSString *hotCellWithIdentifier = @"articleCell+";
+    static NSString *hotCellWithIdentifier = @"hotCell+";
     SFHotTableViewCell *oneHotCell = [tableView dequeueReusableCellWithIdentifier:hotCellWithIdentifier];
     
     NSUInteger row = [indexPath row];
@@ -295,7 +303,7 @@
         NSLog(@"ScrollView 减速停止");
         NSLog(@"ScrollView偏移：%f", scrollView.contentOffset.x);
     }
-    NSLog(@"fff");
+    NSLog(@"ggg");
 }
 
 
