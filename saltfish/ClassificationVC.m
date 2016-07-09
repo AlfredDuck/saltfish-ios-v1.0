@@ -51,7 +51,6 @@
 #pragma mark - 构建 UI 零件
 - (void)createUIParts
 {
-    NSLog(@"what?");
     /* title bar background */
     UIView *titleBarBackground = [[UIView alloc] initWithFrame:CGRectMake(0, 0, _screenWidth, 64)];
     titleBarBackground.backgroundColor = [UIColor whiteColor];

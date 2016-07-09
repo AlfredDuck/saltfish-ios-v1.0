@@ -11,6 +11,7 @@
 #import "SFClassificationTableViewCell.h"
 #import "TopicTableViewCell.h"
 #import "TopicVC.h"
+#import "ClassificationVC.h"
 #import "MJRefresh.h"
 
 
@@ -136,6 +137,7 @@
     if (row == 0) {  // tableview 第一行
         if (oneClassificationCell == nil) {
             oneClassificationCell = [[SFClassificationTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:ClassificationCellWithIdentifier];
+            oneClassificationCell.delegate = self;   // 设置自定义的cell代理
         }
         [oneClassificationCell rewritePics:@[@"旅行",@"娱乐八卦",@"Sunshine",@"电影",@"黑客帝国",@"科技圈",@"洛丽塔",@"肉体女生"]];
         oneClassificationCell.selectionStyle = UITableViewCellSelectionStyleNone;  // 取消选中的背景色
@@ -173,6 +175,21 @@
     
     TopicVC *topicPV = [[TopicVC alloc] init];
     [self.navigationController pushViewController:topicPV animated:YES];
+    //开启iOS7的滑动返回效果
+    if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
+        self.navigationController.interactivePopGestureRecognizer.delegate = nil;
+    }
+}
+
+
+
+
+#pragma mark - Classification Cell 代理
+- (void)clickClassification:(NSString *)classification
+{
+    NSLog(@"我在点击：%@", classification);
+    ClassificationVC *classPage = [[ClassificationVC alloc] init];
+    [self.navigationController pushViewController:classPage animated:YES];
     //开启iOS7的滑动返回效果
     if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
         self.navigationController.interactivePopGestureRecognizer.delegate = nil;

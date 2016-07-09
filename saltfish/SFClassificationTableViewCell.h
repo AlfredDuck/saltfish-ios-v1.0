@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol SFClassificationTableViewCellDelegate <NSObject>
+@required
+- (void)clickClassification:(NSString *)classification;
+@end
+
+
 @interface SFClassificationTableViewCell : UITableViewCell
 // 标题
 @property (nonatomic, copy) NSString *title;
@@ -20,6 +26,8 @@
 @property (nonatomic, copy) UIView *titleForNextPart;
 // 记录已经生成图片矩阵，避免重复生成
 @property (nonatomic) BOOL hasPics;
+// 代理
+@property (nonatomic, assign) id <SFClassificationTableViewCellDelegate>delegate;
 
 //
 @property (nonatomic) NSInteger screenWidth;

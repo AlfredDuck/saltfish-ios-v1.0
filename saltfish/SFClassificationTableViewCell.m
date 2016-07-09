@@ -188,6 +188,8 @@
     for (id item in [sender.view subviews]) {
         if ([item isKindOfClass:[UILabel class]]) {
             NSLog(@"%@", ((UILabel *)item).text);
+            // 调用在“发现”tab的cell代理方法
+            [self.delegate clickClassification:((UILabel *)item).text];
         }
     }
 }
