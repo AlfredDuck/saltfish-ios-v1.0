@@ -1,14 +1,14 @@
 //
-//  articleCell.h
+//  SFArticleTableViewCell.h
 //  saltfish
 //
-//  Created by alfred on 16/6/25.
+//  Created by alfred on 16/7/8.
 //  Copyright © 2016年 Alfred. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
-@interface articleCell : UITableViewCell <UIScrollViewDelegate>
+@interface SFArticleTableViewCell : UITableViewCell
 // 标题
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) UILabel *titleLabel;
@@ -18,6 +18,12 @@
 // 话题
 @property (nonatomic, copy) NSString *topic;
 @property (nonatomic, copy) UILabel *topicLabel;
+// 日期
+@property (nonatomic, copy) NSString *date;
+@property (nonatomic, copy) UILabel *dateLabel;
+// 话题头像
+@property (nonatomic, copy) NSString *topicImageURL;
+@property (nonatomic, copy) UIImageView *topicImageView;
 // cell高度
 @property (nonatomic) unsigned long cellHeight;
 // 图片
@@ -34,6 +40,8 @@
 - (void)rewriteHotScore:(NSString *)newHotScore;
 - (void)rewritePicURL:(NSString *)newPicURL;
 - (void)rewriteTopics:(NSString *)newTopic;
+- (void)rewriteTopicImageURL:(NSString *)newTopicImageURL;
 - (void)showAsBeenRead: (NSString *)aritlceID;
+
 
 @end

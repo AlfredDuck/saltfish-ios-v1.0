@@ -153,6 +153,11 @@
             classificationLable.layer.shadowRadius = 0.5;
             [picImageView addSubview:classificationLable];
             
+            // 添加手势
+            picImageView.userInteractionEnabled = YES; // 设置可以交互
+            UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickClassification:)]; // 设置手势
+            [picImageView addGestureRecognizer:singleTap]; // 添加手势
+            
             [self.contentView addSubview:picImageView];
             
         }
@@ -166,7 +171,7 @@
     _titleForNextPart.frame = CGRectMake(0, _cellHeight, _screenWidth, 42);
     _cellHeight = _cellHeight + 42;  // 最终输出的cellHeight需要加上下方标题的高度😢
     
-    _hasPics = YES;  // 记录已经创建pic矩阵
+    _hasPics = YES;  // 记录是否已经创建pic矩阵
 }
 
 
@@ -174,6 +179,20 @@
 
 
 #pragma mark - IBAction
+
+/* 点击类别 */
+- (void)clickClassification:(UIGestureRecognizer *)sender
+{
+    NSLog(@"%@",[sender.view subviews]);
+    // 从 sender 的子视图中找到 label
+    for (id item in [sender.view subviews]) {
+        if ([item isKindOfClass:[UILabel class]]) {
+            NSLog(@"%@", ((UILabel *)item).text);
+        }
+    }
+}
+
+
 
 
 @end

@@ -11,7 +11,7 @@
 #import <Accelerate/Accelerate.h>
 #import "UIImageView+WebCache.h"
 #import "colorManager.h"
-#import "articleCell.h"
+#import "SFArticleTableViewCell.h"
 #import "TopicCell.h"
 
 
@@ -65,13 +65,13 @@
     
     
     /* 创建tableView */
-    static NSString *CellWithIdentifier = @"commentCell";
+    static NSString *CellWithIdentifier = @"articleCell";
     _oneTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, _screenWidth, _screenHeight-64)];
     _oneTableView.backgroundColor = [UIColor brownColor];
     [_oneTableView setDelegate:self];
     [_oneTableView setDataSource:self];
     
-    [_oneTableView registerClass:[articleCell class] forCellReuseIdentifier:CellWithIdentifier];
+    [_oneTableView registerClass:[SFArticleTableViewCell class] forCellReuseIdentifier:CellWithIdentifier];
     _oneTableView.backgroundColor = [UIColor whiteColor];
     _oneTableView.separatorStyle = UITableViewCellSeparatorStyleNone; // 去掉分割线
     _oneTableView.contentInset = UIEdgeInsetsMake(-20+86, 0, 0, 0); // 设置距离顶部的一段偏移，继承自scrollview
@@ -234,7 +234,7 @@
     TopicCell *oneTopicCell = [tableView dequeueReusableCellWithIdentifier:TopicCellWithIdentifier];
     
     static NSString *ArticleCellWithIdentifier = @"articleCell+";
-    articleCell *oneArticleCell = [tableView dequeueReusableCellWithIdentifier:ArticleCellWithIdentifier];
+    SFArticleTableViewCell *oneArticleCell = [tableView dequeueReusableCellWithIdentifier:ArticleCellWithIdentifier];
     
     NSUInteger row = [indexPath row];
     if (row == 0) {
@@ -251,11 +251,13 @@
     }
     else {
         if (oneArticleCell == nil) {
-            oneArticleCell = [[articleCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:ArticleCellWithIdentifier];
+            oneArticleCell = [[SFArticleTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:ArticleCellWithIdentifier];
         }
-        [oneArticleCell rewriteTitle:@"根据葛尔丹博士的史书，雷妮丝可能因坠地而死吧"];
-        NSArray *arr = @[@"#屌丝#",@"#白富美#",@"#野外漏出#",@"#艹范冰冰#",@"#耐辱奶乳#",@"#O(∩_∩)O哈哈~#"];
-        [oneArticleCell rewriteTopics:arr];
+        [oneArticleCell rewriteTitle:@"根据葛尔丹博士的史书，雷妮丝可能因坠地而死吧\n"];
+        [oneArticleCell rewriteHotScore:@"评论23  点赞876"];
+        [oneArticleCell rewriteTopics:@"#胶片摄影#"];
+        [oneArticleCell rewritePicURL:@"https://img3.doubanio.com/view/photo/photo/public/p2246653686.jpg"];
+        [oneArticleCell rewriteTopicImageURL:@"https://img3.doubanio.com/view/photo/thumb/public/p2308564994.jpg"];
         // 取消选中的背景色
         oneArticleCell.selectionStyle = UITableViewCellSelectionStyleNone;
         return oneArticleCell;
@@ -288,7 +290,7 @@
         return height;
     }
     else {
-        CGFloat height = 110+14;
+        CGFloat height = 145;
         return height;
     }
 }

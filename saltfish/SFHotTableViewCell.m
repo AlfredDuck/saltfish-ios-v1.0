@@ -35,17 +35,19 @@
         _screenHeight = [UIScreen mainScreen].bounds.size.height;
         _screenWidth = [UIScreen mainScreen].bounds.size.width;
         
+        // 焦点图高度根据屏幕宽度计算
+        _hotArticleHeight = ceil(_screenWidth/375.0*170.0);
         
         /* ============= 焦点图 ScrollView ============== */
         
-        _basedScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, _screenWidth, 170)];
+        _basedScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, _screenWidth, _hotArticleHeight)];
         _basedScrollView.backgroundColor = [UIColor grayColor];
         _basedScrollView.delegate = self;
         
         //这个属性很重要，它可以决定是横向还是纵向滚动，一般来说也是其中的 View 的总宽度，和总的高度
         //这里同时考虑到每个 View 间的空隙，所以宽度是 200x3＋5＋10＋10＋5＝630
         //高度上与 ScrollView 相同，只在横向扩展，所以只要在横向上滚动
-        _basedScrollView.contentSize = CGSizeMake(_screenWidth*3, 170);
+        _basedScrollView.contentSize = CGSizeMake(_screenWidth*3, _hotArticleHeight);
         //用它指定 ScrollView 中内容的当前位置，即相对于 ScrollView 的左上顶点的偏移
         _basedScrollView.contentOffset = CGPointMake(0, 0);
         //按页滚动，总是一次一个宽度，或一个高度单位的滚动
@@ -61,8 +63,59 @@
         [self.contentView addSubview:_basedScrollView];
         
         
-        /* 焦点图下方的定位点 */
         
+        /* ================ 热门话题 ================= */
+        
+        /* cell标题 */
+        UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake((_screenWidth-200)/2.0, _hotArticleHeight+16, 200, 20)];
+        titleLabel.text = @"热门话题";
+        titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 14.0];
+        titleLabel.textColor = [colorManager mainTextColor];
+        titleLabel.textAlignment = UITextAlignmentCenter;
+        [self.contentView addSubview:titleLabel];
+        
+        // 根据设备宽度计算图片宽高
+        int ww = ceil((_screenWidth - 11*2 - 16*2)/3.0);
+        int hh = ceil(ww/107.0*89);
+        
+        _hotTopicPicArr = [[NSMutableArray alloc] init];
+        _hotTopicLabelArr = [[NSMutableArray alloc] init];
+        
+        for (int i=0; i<3; i++) {
+            
+            // 52px的上边距, xxpx的焦点图
+            UIImageView *picImageView = [[UIImageView alloc] initWithFrame:CGRectMake(16+i*(ww+11), 52+_hotArticleHeight, ww, hh)];
+            picImageView.backgroundColor = [UIColor grayColor];
+            
+            // uiimageview居中裁剪
+            picImageView.contentMode = UIViewContentModeScaleAspectFill;
+            picImageView.clipsToBounds  = YES;
+            // 需要AFNetwork
+            //[picImageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+            
+            // 遮黑
+            UIView *halfBlack = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ww, hh)];
+            halfBlack.backgroundColor  = [UIColor blackColor];
+            halfBlack.alpha = 0.22;
+            [picImageView addSubview:halfBlack];
+            
+            // 文本
+            UILabel *topicLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, ww, hh)];
+            topicLabel.textColor  = [UIColor whiteColor];
+            topicLabel.font = [UIFont fontWithName:@"Helvetica" size: 14.0f];
+            topicLabel.numberOfLines = 3;
+            topicLabel.textAlignment = UITextAlignmentCenter;
+            // 文字阴影
+            topicLabel.layer.shadowOpacity = 0.9;
+            topicLabel.layer.shadowColor = [UIColor blackColor].CGColor;
+            topicLabel.layer.shadowOffset = CGSizeMake(1.0, 1.0);
+            topicLabel.layer.shadowRadius = 0.5;
+            [picImageView addSubview:topicLabel];
+            
+            [self.contentView addSubview:picImageView];
+            [_hotTopicPicArr addObject:picImageView];
+            [_hotTopicLabelArr addObject:topicLabel];
+        }
 
         
         
@@ -115,7 +168,7 @@
         }
         NSLog(@"%d", kk);
         
-        UIImageView *picImageView = [[UIImageView alloc] initWithFrame:CGRectMake(_screenWidth*i, 0, _screenWidth, 170)];
+        UIImageView *picImageView = [[UIImageView alloc] initWithFrame:CGRectMake(_screenWidth*i, 0, _screenWidth, _hotArticleHeight)];
         picImageView.backgroundColor = [UIColor grayColor];
         
         // uiimageview居中裁剪
@@ -125,13 +178,13 @@
         [picImageView sd_setImageWithURL:[NSURL URLWithString:[[_hotArticleData objectAtIndex:kk] objectForKey:@"url"]] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
         
         // 遮黑
-        UIView *halfBlack = [[UIView alloc] initWithFrame:CGRectMake(0, 0, _screenWidth, 170)];
+        UIView *halfBlack = [[UIView alloc] initWithFrame:CGRectMake(0, 0, _screenWidth, _hotArticleHeight)];
         halfBlack.backgroundColor  = [UIColor blackColor];
         halfBlack.alpha = 0.22;
         [picImageView addSubview:halfBlack];
         
         // 文本
-        UILabel *picLabel = [[UILabel alloc] initWithFrame:CGRectMake(54, 0, _screenWidth-54*2, 170)];
+        UILabel *picLabel = [[UILabel alloc] initWithFrame:CGRectMake(54, 0, _screenWidth-54*2, _hotArticleHeight)];
         picLabel.text = [[_hotArticleData objectAtIndex:kk] objectForKey:@"title"];
         picLabel.textColor  = [UIColor whiteColor];
         picLabel.font = [UIFont fontWithName:@"Helvetica" size: 18.0f];
@@ -148,7 +201,7 @@
     }
     
     // 重新绘制 Scrollview 宽度
-    _basedScrollView.contentSize = CGSizeMake(_screenWidth*([newArr count]+2), 170);
+    _basedScrollView.contentSize = CGSizeMake(_screenWidth*([newArr count]+2), _hotArticleHeight);
     // 修改 Scrollview 的初始偏移
     _basedScrollView.contentOffset = CGPointMake(_screenWidth, 0);
     
@@ -170,15 +223,41 @@
     
     int num = (int)[_hotArticleData count];
     unsigned long ww = num*6 + (num-1)*10;
-    _direction.frame = CGRectMake((_screenWidth-ww)/2.0, 150, ww, 6);
+    _direction.frame = CGRectMake((_screenWidth-ww)/2.0, _hotArticleHeight-20, ww, 6);
     [self.contentView addSubview: _direction];
-    
     
     
     // 定时器 循环
     _timer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(scrollTimer) userInfo:nil repeats:YES];
 
 }
+
+
+/* 重写热门话题数据 */
+- (void)rewriteHotTopics:(NSArray *)newArr
+{
+    for (int i=0; i<3; i++) {
+        UILabel *topicLabel = [_hotTopicLabelArr objectAtIndex:i];
+        topicLabel.text = [[newArr objectAtIndex:i] objectForKey:@"title"];
+        
+        UIImageView *picImageView = [_hotTopicPicArr objectAtIndex:i];
+        // 需要AFNetwork        
+        [picImageView sd_setImageWithURL:[NSURL URLWithString:[[newArr objectAtIndex:i] objectForKey:@"url"]]placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+    }
+}
+
+
+/* 重置cell高度 */
+- (void)rewriteCellHeight
+{
+    UIImageView *TopicPic = [_hotTopicPicArr objectAtIndex:0];
+    unsigned long hh = TopicPic.frame.size.height;
+    _cellHeight = _hotArticleHeight + 52 + hh + 18 + 15;
+    
+    // 修改分割线位置
+    _partLine.frame = CGRectMake(0, _cellHeight-15, _screenWidth, 15);
+}
+
 
 
 

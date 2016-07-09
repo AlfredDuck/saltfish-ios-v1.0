@@ -81,29 +81,70 @@
     UIView *myTopicView = [[UIView alloc] initWithFrame:CGRectMake(0, 15, _screenWidth, 44)];
     myTopicView.backgroundColor = [UIColor whiteColor];
     // icon图片
-    UIImageView *myTopicIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@""]];
-    myTopicIcon.frame = CGRectMake(0, 0, 44, 44);
-    
+    UIImageView *myTopicIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"my_topic.png"]];
+    myTopicIcon.frame = CGRectMake(12.5, 12, 19, 20);
+    UIView *myTopicIconView = [[UIView alloc] initWithFrame:CGRectMake(8, 0, 44, 44)];
+    [myTopicIconView addSubview:myTopicIcon];
+    [myTopicView addSubview:myTopicIconView];
     // label
-    UILabel *myTopicLabel = [[UILabel alloc] initWithFrame:CGRectMake(55, 0, 200, 44)];
-    myTopicLabel.text = @"我的话题⭐️";
-    myTopicLabel.font = [UIFont fontWithName:@"Helvetica" size: 15.0];
+    UILabel *myTopicLabel = [[UILabel alloc] initWithFrame:CGRectMake(55, 0, _screenWidth-55, 44)];
+    myTopicLabel.text = @"我的话题";
+    myTopicLabel.font = [UIFont fontWithName:@"Helvetica" size: 14.0];
     [myTopicView addSubview:myTopicLabel];
     
     myTopicView.userInteractionEnabled = YES; // 设置可以交互
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickMyTopic)]; // 设置手势
     [myTopicView addGestureRecognizer:singleTap]; // 添加手势
-    
     [oneScrollView addSubview: myTopicView];
+    
     
     /* 去 AppStore 评价 */
     UIView *AppStoreView = [[UIView alloc] initWithFrame:CGRectMake(0, 15+44, _screenWidth, 44)];
     AppStoreView.backgroundColor = [UIColor whiteColor];
+    // 分割线
+    UIView *partLine = [[UIView alloc] initWithFrame:CGRectMake(55, 0, _screenWidth-55, 0.5)];
+    partLine.backgroundColor = [colorManager lightGrayBackground];
+    [AppStoreView addSubview:partLine];
+    // icon图片
+    UIImageView *AppStoreIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"app_store.png"]];
+    AppStoreIcon.frame = CGRectMake(12.5, 11.5, 19, 21);
+    UIView *AppStoreIconView = [[UIView alloc] initWithFrame:CGRectMake(8, 0, 44, 44)];
+    [AppStoreIconView addSubview:AppStoreIcon];
+    [AppStoreView addSubview:AppStoreIconView];
+    // label
+    UILabel *AppStoreLabel = [[UILabel alloc] initWithFrame:CGRectMake(55, 0, _screenWidth-55, 44)];
+    AppStoreLabel.text = @"去 App Store 给一个⭐️⭐️⭐️⭐️⭐️评价吧";
+    AppStoreLabel.font = [UIFont fontWithName:@"Helvetica" size: 14.0];
+    [AppStoreView addSubview:AppStoreLabel];
+    
+    AppStoreView.userInteractionEnabled = YES; // 设置可以交互
+    UITapGestureRecognizer *singleTap2 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickAppStore)]; // 设置手势
+    [AppStoreView addGestureRecognizer:singleTap2]; // 添加手势
     [oneScrollView addSubview: AppStoreView];
+    
     
     /* 吐槽区 */
     UIView *commentView = [[UIView alloc] initWithFrame:CGRectMake(0, 15+44+44, _screenWidth, 44)];
     commentView.backgroundColor = [UIColor whiteColor];
+    // 分割线
+    UIView *partLine2 = [[UIView alloc] initWithFrame:CGRectMake(55, 0, _screenWidth-55, 0.5)];
+    partLine2.backgroundColor = [colorManager lightGrayBackground];
+    [commentView addSubview:partLine2];
+    // icon图片
+    UIImageView *commentIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"my_comment.png"]];
+    commentIcon.frame = CGRectMake(11, 11.5, 22, 21);
+    UIView *commentIconView = [[UIView alloc] initWithFrame:CGRectMake(8, 0, 44, 44)];
+    [commentIconView addSubview:commentIcon];
+    [commentView addSubview:commentIconView];
+    // label
+    UILabel *commentLabel = [[UILabel alloc] initWithFrame:CGRectMake(55, 0, _screenWidth-55, 44)];
+    commentLabel.text = @"吐槽能量收集区";
+    commentLabel.font = [UIFont fontWithName:@"Helvetica" size: 14.0];
+    [commentView addSubview:commentLabel];
+    
+    commentView.userInteractionEnabled = YES; // 设置可以交互
+    UITapGestureRecognizer *singleTap3 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickComment)]; // 设置手势
+    [commentView addGestureRecognizer:singleTap3]; // 添加手势
     [oneScrollView addSubview: commentView];
 }
 
@@ -119,6 +160,16 @@
     if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
         self.navigationController.interactivePopGestureRecognizer.delegate = nil;
     }
+}
+
+- (void)clickAppStore
+{
+    
+}
+
+- (void)clickComment
+{
+    
 }
 
 

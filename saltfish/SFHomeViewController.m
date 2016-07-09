@@ -10,7 +10,7 @@
 #import "colorManager.h"
 #import "UIImageView+WebCache.h"
 #import "SFHotTableViewCell.h"
-#import "articleCell.h"
+#import "SFArticleTableViewCell.h"
 #import "MJRefresh.h"
 
 
@@ -93,7 +93,21 @@
                         @"http://f10.topitme.com/l/201102/13/12975659369227.jpg", @"url",
                         nil];
     
+    NSDictionary *t1 = [[NSDictionary alloc] initWithObjectsAndKeys:
+                        @"#台湾肯定音乐祭#",@"title",
+                        @"http://f10.topitme.com/m/201102/13/12975675911220.jpg", @"url",
+                        nil];
+    NSDictionary *t2 = [[NSDictionary alloc] initWithObjectsAndKeys:
+                        @"#Sunshine#",@"title",
+                        @"http://f10.topitme.com/t/201012/19/12927225068850.jpg", @"url",
+                        nil];
+    NSDictionary *t3 = [[NSDictionary alloc] initWithObjectsAndKeys:
+                        @"#吴亦凡艹粉#",@"title",
+                        @"http://f10.topitme.com/l/201102/13/12975659369227.jpg", @"url",
+                        nil];
+    
     _data = @[d1,d2,d3,d4,d5];
+    _data2 = @[t1,t2,t3];
     
     /* 创建 TableView */
     [self createBasedTableView];
@@ -214,7 +228,7 @@
     }];
     
     // 这个碉堡了，要珍藏！！
-    _oneTableView.mj_header.ignoredScrollViewContentInsetTop = 100.0;
+    // _oneTableView.mj_header.ignoredScrollViewContentInsetTop = 100.0;
     
     // 禁用 mjRefresh
     // contentTableView.mj_footer = nil;
@@ -235,11 +249,12 @@
     return 20;
 }
 
+
 // 填充cell
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *articleCellWithIdentifier = @"articleCell+";
-    articleCell *oneArticleCell = [tableView dequeueReusableCellWithIdentifier:articleCellWithIdentifier];
+    SFArticleTableViewCell *oneArticleCell = [tableView dequeueReusableCellWithIdentifier:articleCellWithIdentifier];
     
     static NSString *hotCellWithIdentifier = @"hotCell+";
     SFHotTableViewCell *oneHotCell = [tableView dequeueReusableCellWithIdentifier:hotCellWithIdentifier];
@@ -250,31 +265,38 @@
             oneHotCell = [[SFHotTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:hotCellWithIdentifier];
         }
         [oneHotCell rewriteHotArticles:_data];
+        [oneHotCell rewriteHotTopics:_data2];
+        [oneHotCell rewriteCellHeight];
         oneHotCell.selectionStyle = UITableViewCellSelectionStyleNone;  // 取消选中的背景色
         return oneHotCell;
     }
     else {
         if (oneArticleCell == nil) {
-            oneArticleCell = [[articleCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:articleCellWithIdentifier];
+            oneArticleCell = [[SFArticleTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:articleCellWithIdentifier];
         }
+        [oneArticleCell rewriteTitle:@"哈格兹的相册-那天阳光很好可惜我只带了一卷彩卷\n"];
+        [oneArticleCell rewriteHotScore:@"评论23  点赞876"];
+        [oneArticleCell rewriteTopics:@"#胶片摄影#"];
+        [oneArticleCell rewritePicURL:@"https://img3.doubanio.com/view/photo/photo/public/p2246653686.jpg"];
+        [oneArticleCell rewriteTopicImageURL:@"https://img3.doubanio.com/view/photo/thumb/public/p2308564994.jpg"];
         oneArticleCell.selectionStyle = UITableViewCellSelectionStyleNone;  // 取消选中的背景色
         return oneArticleCell;
     }
     // 直接往cell addsubView的方法会在每次划出屏幕再划回来时 再加载一次subview，因此会重复加载很多subview
 }
 
+
 // 改变 cell 高度
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSUInteger row = [indexPath row];
     if (row == 0) {
-//        SFClassificationTableViewCell *cell = (SFClassificationTableViewCell *)[self tableView:tableView cellForRowAtIndexPath:indexPath];
-//        return cell.cellHeight;
-        return 170;
+        SFHotTableViewCell *cell = (SFHotTableViewCell *)[self tableView:tableView cellForRowAtIndexPath:indexPath];
+        return cell.cellHeight;
     }
-    
-    CGFloat height = 58+24;
-    return height;
+    else {
+        return 145;
+    }
 }
 
 

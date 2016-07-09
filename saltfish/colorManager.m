@@ -11,7 +11,7 @@
 @implementation colorManager
 + (UIColor *)lightGrayLineColor
 {
-    return [UIColor colorWithRed:(205/255.0) green:(205/255.0) blue:(205/255.0) alpha:1];
+    return [UIColor colorWithRed:(173/255.0) green:(179/255.0) blue:(186/255.0) alpha:1];
 }
 + (UIColor *)lightGrayBackground
 {
@@ -19,15 +19,15 @@
 }
 + (UIColor *)mainTextColor
 {
-    return [UIColor colorWithRed:(85/255.0) green:(93/255.0) blue:(100/255.0) alpha:1];
+    return [UIColor colorWithRed:(66/255.0) green:(72/255.0) blue:(78/255.0) alpha:1];
 }
 + (UIColor *)secondTextColor
 {
-    return [UIColor colorWithRed:(127/255.0) green:(129/255.0) blue:(134/255.0) alpha:1];
+    return [UIColor colorWithRed:(122/255.0) green:(129/255.0) blue:(133/255.0) alpha:1];
 }
 + (UIColor *)lightTextColor
 {
-    return [UIColor colorWithRed:(122/255.0) green:(129/255.0) blue:(133/255.0) alpha:1];
+    return [UIColor colorWithRed:(172/255.0) green:(172/255.0) blue:(172/255.0) alpha:1];
 }
 + (UIColor *)purple
 {

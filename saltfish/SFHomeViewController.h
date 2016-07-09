@@ -15,6 +15,8 @@
 @property (nonatomic, strong) UIScrollView *basedScrollView;
 //
 @property (nonatomic, strong) NSArray *data;
+@property (nonatomic, strong) NSArray *data2;
+
 // 全局变量 屏幕长宽
 @property (nonatomic) NSInteger screenWidth;
 @property (nonatomic) NSInteger screenHeight;
