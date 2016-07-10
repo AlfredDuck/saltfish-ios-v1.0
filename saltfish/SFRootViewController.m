@@ -10,6 +10,7 @@
 #import "SFHomeViewController.h"
 #import "SFDiscoveryViewController.h"
 #import "SFMineViewController.h"
+#import "colorManager.h"
 
 @interface SFRootViewController ()
 
@@ -90,41 +91,100 @@
 - (void)createTabBar
 {
     /* tabbar 背景 */
-    _tabBarBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, _screenHeight-44, _screenWidth, 44)];
-    _tabBarBackgroundView.backgroundColor = [UIColor redColor];
+    _tabBarBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, _screenHeight-49, _screenWidth, 49)];
+    _tabBarBackgroundView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:_tabBarBackgroundView];
     
+    /* 分割线 */
+    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 0, _screenWidth, 0.5)];
+    line.backgroundColor = [colorManager lightGrayLineColor];
+    [_tabBarBackgroundView addSubview:line];
     
-    /* 三个底部tab */
-    // first tab
-    UIView *tabView01 = [[UIView alloc] init];
-    tabView01.backgroundColor  = [UIColor brownColor];
-    tabView01.tag = 1;   // 添加tag
-    tabView01.frame = CGRectMake(0, 0, ceil(_screenWidth/3.0), 44);  // 这里要取整
-    tabView01.userInteractionEnabled = YES; // 设置view可以交互
-    UITapGestureRecognizer *singleTap01 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickTab:)];   // 设置手势
-    [tabView01 addGestureRecognizer:singleTap01]; // 给view添加手势
-    [_tabBarBackgroundView addSubview:tabView01];
+    NSArray *tabText = @[@"动态",@"发现",@"我的"];
     
-    // second tab
-    UIView *tabView02 = [[UIView alloc] init];
-    tabView02.backgroundColor  = [UIColor brownColor];
-    tabView02.tag = 2;  // 添加tag
-    tabView02.frame = CGRectMake(ceil(_screenWidth/3.0), 0, ceil(_screenWidth/3.0), 44);  // 这里要取整
-    tabView02.userInteractionEnabled = YES; // 设置view可以交互
-    UITapGestureRecognizer *singleTap02 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickTab:)];   // 设置手势
-    [tabView02 addGestureRecognizer:singleTap02]; // 给view添加手势
-    [_tabBarBackgroundView addSubview:tabView02];
+    /* 循环创建三个底部tab（置灰状态） */
+    for (int i=0; i<3; i++) {
+        UIView *tabView = [[UIView alloc] init];
+        tabView.backgroundColor  = [UIColor whiteColor];
+        tabView.tag = 1+i;
+        tabView.frame = CGRectMake(ceil(_screenWidth/3.0)*i, 0.5, ceil(_screenWidth/3.0), 44);  // 这里要取整
+        
+        // 添加icon图
+        UIView *iconView = [[UIView alloc] initWithFrame:CGRectMake((ceil(_screenWidth/3.0)-30)/2.0, 6, 32, 25)];
+        [tabView addSubview:iconView];
+        UIImageView *icon = [[UIImageView alloc] init];
+        // 每个tab的icon图尺寸不一样，需要单独写尺寸
+        if (i==0) {
+            icon.image = [UIImage imageNamed:@"home_tab.png"];
+            icon.frame = CGRectMake(3.5, 1, 25, 23);
+        } else if (i == 1) {
+            icon.image = [UIImage imageNamed:@"discovery_tab.png"];
+            icon.frame = CGRectMake(0.5, 0, 31, 25);
+        } else if (i == 2 ) {
+            icon.image = [UIImage imageNamed:@"mine_tab.png"];
+            icon.frame = CGRectMake(6.5, 0, 19, 25);
+        }
+
+        [iconView addSubview: icon];
+        
+        // 添加tab文字
+        UILabel *tabLabel = [[UILabel alloc] initWithFrame:CGRectMake((ceil(_screenWidth/3.0)-40)/2.0, 31, 40, 14)];
+        tabLabel.text = [tabText objectAtIndex:i];
+        tabLabel.font = [UIFont fontWithName:@"Helvetica" size:10.0];
+        tabLabel.textColor = [colorManager tabTextColorGray];
+        tabLabel.textAlignment = UITextAlignmentCenter;
+        [tabView addSubview:tabLabel];
+        
+        // 设置手势
+        tabView.userInteractionEnabled = YES; // 设置view可以交互
+        UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickTab:)];   // 设置手势
+        [tabView addGestureRecognizer:singleTap]; // 给view添加手势
+        [_tabBarBackgroundView addSubview:tabView];
+    }
     
-    // third tab
-    UIView *tabView03 = [[UIView alloc] init];
-    tabView03.backgroundColor  = [UIColor brownColor];
-    tabView03.tag = 3;   // 添加tag
-    tabView03.frame = CGRectMake(ceil(_screenWidth/3.0)*2, 0, ceil(_screenWidth/3.0), 44);  // 这里要取整
-    tabView03.userInteractionEnabled = YES; // 设置view可以交互
-    UITapGestureRecognizer *singleTap03 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickTab:)];   // 设置手势
-    [tabView03 addGestureRecognizer:singleTap03]; // 给view添加手势
-    [_tabBarBackgroundView addSubview:tabView03];
+    
+    /* 循环创建三个底部tab（选中状态） */
+    for (int i=0; i<3; i++) {
+        UIView *tabView = [[UIView alloc] init];
+        tabView.backgroundColor  = [UIColor whiteColor];
+        tabView.tag = i+4;  // 添加tag
+        tabView.hidden = YES;
+        tabView.frame = CGRectMake(ceil(_screenWidth/3.0)*i, 0.5, ceil(_screenWidth/3.0), 44);  // 这里要取整
+        
+        // 初始状态第一个tab是焦点状态
+        if (i == 0) {
+            tabView.hidden = NO;
+        }
+        
+        // 添加icon图
+        UIView *iconView = [[UIView alloc] initWithFrame:CGRectMake((ceil(_screenWidth/3.0)-30)/2.0, 6, 32, 25)];
+        [tabView addSubview:iconView];
+        UIImageView *icon = [[UIImageView alloc] init];
+        // 每个tab的icon图尺寸不一样，需要单独写尺寸
+        if (i==0) {
+            icon.image = [UIImage imageNamed:@"home_tab_focus.png"];
+            icon.frame = CGRectMake(3.5, 1, 25, 23);
+        } else if (i == 1) {
+            icon.image = [UIImage imageNamed:@"discovery_tab_focus.png"];
+            icon.frame = CGRectMake(0.5, 0, 31, 25);
+        } else if (i == 2 ) {
+            icon.image = [UIImage imageNamed:@"mine_tab_focus.png"];
+            icon.frame = CGRectMake(6.5, 0, 19, 25);
+        }
+        
+        [iconView addSubview: icon];
+        
+        // 添加tab文字
+        UILabel *tabLabel = [[UILabel alloc] initWithFrame:CGRectMake((ceil(_screenWidth/3.0)-40)/2.0, 31, 40, 14)];
+        tabLabel.text = [tabText objectAtIndex:i];
+        tabLabel.font = [UIFont fontWithName:@"Helvetica" size:10.0];
+        tabLabel.textColor = [colorManager tabTextColorBlack];
+        tabLabel.textAlignment = UITextAlignmentCenter;
+        [tabView addSubview:tabLabel];
+        
+        [_tabBarBackgroundView addSubview:tabView];
+    }
+    
     
 }
 
@@ -134,8 +194,21 @@
 - (void)clickTab:(UIGestureRecognizer *)sender
 {
     NSLog(@"%ld", sender.view.tag);
-    self.selectedIndex = sender.view.tag - 1;
     
+    // 隐藏所有焦点icon
+    for (UIView *item in [_tabBarBackgroundView subviews]) {
+        if (item.tag > 3) {
+            item.hidden = YES;
+        }
+    }
+    
+    // 显示对应的焦点icon
+    UIView *ft = [_tabBarBackgroundView viewWithTag:sender.view.tag + 3];
+    ft.hidden = NO;
+    
+    /* 移动tab焦点 */
+    self.selectedIndex = sender.view.tag - 1;
+
 }
 
 

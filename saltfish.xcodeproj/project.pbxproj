@@ -69,6 +69,12 @@
 		BBF2B7501D30940600657FA6 /* my_topic.png in Resources */ = {isa = PBXBuildFile; fileRef = BBF2B74F1D30940600657FA6 /* my_topic.png */; };
 		BBF2B7521D30973B00657FA6 /* app_store.png in Resources */ = {isa = PBXBuildFile; fileRef = BBF2B7511D30973B00657FA6 /* app_store.png */; };
 		BBF2B7541D309AF900657FA6 /* my_comment.png in Resources */ = {isa = PBXBuildFile; fileRef = BBF2B7531D309AF900657FA6 /* my_comment.png */; };
+		BBF2B7561D313E1100657FA6 /* home_tab.png in Resources */ = {isa = PBXBuildFile; fileRef = BBF2B7551D313E1100657FA6 /* home_tab.png */; };
+		BBF2B7581D31D32A00657FA6 /* discovery_tab.png in Resources */ = {isa = PBXBuildFile; fileRef = BBF2B7571D31D32A00657FA6 /* discovery_tab.png */; };
+		BBF2B75A1D31D3C500657FA6 /* mine_tab.png in Resources */ = {isa = PBXBuildFile; fileRef = BBF2B7591D31D3C500657FA6 /* mine_tab.png */; };
+		BBF2B75C1D31D6AA00657FA6 /* home_tab_focus.png in Resources */ = {isa = PBXBuildFile; fileRef = BBF2B75B1D31D6AA00657FA6 /* home_tab_focus.png */; };
+		BBF2B75E1D31D6B300657FA6 /* mine_tab_focus.png in Resources */ = {isa = PBXBuildFile; fileRef = BBF2B75D1D31D6B300657FA6 /* mine_tab_focus.png */; };
+		BBF2B7601D31D6BE00657FA6 /* discovery_tab_focus.png in Resources */ = {isa = PBXBuildFile; fileRef = BBF2B75F1D31D6BE00657FA6 /* discovery_tab_focus.png */; };
 		BBF97D611C65752C00A5D403 /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = BBF97D601C65752C00A5D403 /* placeholder.png */; };
 		BBFF6F6C1D167FE20089099F /* TopicVC.m in Sources */ = {isa = PBXBuildFile; fileRef = BBFF6F6B1D167FE20089099F /* TopicVC.m */; };
 		BF4178EC067BE3396A47881C /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84D65C4BEB822ACA8811C5E7 /* libPods.a */; };
@@ -178,6 +184,12 @@
 		BBF2B74F1D30940600657FA6 /* my_topic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = my_topic.png; path = "../../coding/salt-App效果图/my_topic.png"; sourceTree = "<group>"; };
 		BBF2B7511D30973B00657FA6 /* app_store.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = app_store.png; path = "../../coding/salt-App效果图/app_store.png"; sourceTree = "<group>"; };
 		BBF2B7531D309AF900657FA6 /* my_comment.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = my_comment.png; path = "../../coding/salt-App效果图/my_comment.png"; sourceTree = "<group>"; };
+		BBF2B7551D313E1100657FA6 /* home_tab.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = home_tab.png; path = "../../coding/salt-App效果图/home_tab.png"; sourceTree = "<group>"; };
+		BBF2B7571D31D32A00657FA6 /* discovery_tab.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = discovery_tab.png; path = "../../coding/salt-App效果图/discovery_tab.png"; sourceTree = "<group>"; };
+		BBF2B7591D31D3C500657FA6 /* mine_tab.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = mine_tab.png; path = "../../coding/salt-App效果图/mine_tab.png"; sourceTree = "<group>"; };
+		BBF2B75B1D31D6AA00657FA6 /* home_tab_focus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = home_tab_focus.png; path = "../../coding/salt-App效果图/home_tab_focus.png"; sourceTree = "<group>"; };
+		BBF2B75D1D31D6B300657FA6 /* mine_tab_focus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = mine_tab_focus.png; path = "../../coding/salt-App效果图/mine_tab_focus.png"; sourceTree = "<group>"; };
+		BBF2B75F1D31D6BE00657FA6 /* discovery_tab_focus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = discovery_tab_focus.png; path = "../../coding/salt-App效果图/discovery_tab_focus.png"; sourceTree = "<group>"; };
 		BBF97D601C65752C00A5D403 /* placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = placeholder.png; sourceTree = "<group>"; };
 		BBF97D641C677AB900A5D403 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		BBFF6F6A1D167FE20089099F /* TopicVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopicVC.h; sourceTree = "<group>"; };
@@ -475,6 +487,12 @@
 				BBF2B74F1D30940600657FA6 /* my_topic.png */,
 				BBF2B7531D309AF900657FA6 /* my_comment.png */,
 				BBF2B7511D30973B00657FA6 /* app_store.png */,
+				BBF2B75D1D31D6B300657FA6 /* mine_tab_focus.png */,
+				BBF2B7591D31D3C500657FA6 /* mine_tab.png */,
+				BBF2B75F1D31D6BE00657FA6 /* discovery_tab_focus.png */,
+				BBF2B7571D31D32A00657FA6 /* discovery_tab.png */,
+				BBF2B75B1D31D6AA00657FA6 /* home_tab_focus.png */,
+				BBF2B7551D313E1100657FA6 /* home_tab.png */,
 				BB6B47E71CA6DD2F00CABA95 /* black_top3.png */,
 			);
 			name = pics;
@@ -605,18 +623,24 @@
 				BB88EBB21C32D5E400F39B26 /* close.png in Resources */,
 				BB65CA1A1D1E2F440098A53B /* back2.png in Resources */,
 				BBF2B7541D309AF900657FA6 /* my_comment.png in Resources */,
+				BBF2B75E1D31D6B300657FA6 /* mine_tab_focus.png in Resources */,
+				BBF2B7561D313E1100657FA6 /* home_tab.png in Resources */,
 				BB6B47E81CA6DD2F00CABA95 /* black_top3.png in Resources */,
+				BBF2B75A1D31D3C500657FA6 /* mine_tab.png in Resources */,
 				BB65CA231D1E802A0098A53B /* unfollow.png in Resources */,
 				BBF2B7501D30940600657FA6 /* my_topic.png in Resources */,
 				BB62F0711D26B52B00ACFC92 /* back_black.png in Resources */,
 				BB99E7D41C9ECA1A00CDBBDD /* praise_button_red.png in Resources */,
 				BB99E7D01C9EC9D500CDBBDD /* comment_button.png in Resources */,
+				BBF2B7601D31D6BE00657FA6 /* discovery_tab_focus.png in Resources */,
 				BBF97D611C65752C00A5D403 /* placeholder.png in Resources */,
 				BB0F14B21C26D8FC00FDB77C /* back.png in Resources */,
 				BBF2B7521D30973B00657FA6 /* app_store.png in Resources */,
 				BB99E7D21C9ECA1300CDBBDD /* praise_button.png in Resources */,
 				BB99E7D61C9ECA2900CDBBDD /* share_button.png in Resources */,
+				BBF2B7581D31D32A00657FA6 /* discovery_tab.png in Resources */,
 				BB62F08B1D27691900ACFC92 /* 000010-11.jpg in Resources */,
+				BBF2B75C1D31D6AA00657FA6 /* home_tab_focus.png in Resources */,
 				BB62F0911D279EE900ACFC92 /* notification.png in Resources */,
 				BB65CA211D1E65270098A53B /* follow.png in Resources */,
 				BB62F0761D26BF4B00ACFC92 /* follow_small.png in Resources */,

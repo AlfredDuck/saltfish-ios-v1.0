@@ -37,10 +37,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    // 设置状态栏颜色的强力方法
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-    
     _screenHeight = [UIScreen mainScreen].bounds.size.height;
     _screenWidth = [UIScreen mainScreen].bounds.size.width;
     _backgroundImageHeight = 400.0;
@@ -48,7 +44,11 @@
     _isFollowing = NO;
     
     [self createUIParts];
+}
 
+- (void)viewWillAppear:(BOOL)animated {
+    // 设置状态栏颜色的强力方法
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
 }
 
 - (void)didReceiveMemoryWarning {
