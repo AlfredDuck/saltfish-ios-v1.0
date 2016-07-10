@@ -139,6 +139,7 @@
         tabView.userInteractionEnabled = YES; // 设置view可以交互
         UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickTab:)];   // 设置手势
         [tabView addGestureRecognizer:singleTap]; // 给view添加手势
+        
         [_tabBarBackgroundView addSubview:tabView];
     }
     

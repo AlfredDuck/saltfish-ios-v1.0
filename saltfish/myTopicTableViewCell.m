@@ -53,7 +53,7 @@
         /* #话题# */
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(86, 17, _screenWidth-(58+11+16+11), 22)];
         _titleLabel.text = _title;
-        _titleLabel.font = [UIFont fontWithName:@"Helvetica Bold" size: 16.0];
+        _titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 15.0];
         _titleLabel.textColor = [colorManager mainTextColor];
         [self.contentView addSubview:_titleLabel];
         
@@ -61,7 +61,7 @@
         _updateTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(86, 44, _screenWidth-(58+11+16+11), 17)];
         _updateTimeLabel.text = _updateTime;
         _updateTimeLabel.font = [UIFont fontWithName:@"Helvetica" size: 12.0f];
-        _updateTimeLabel.textColor = [colorManager lightTextColor];
+        _updateTimeLabel.textColor = [colorManager secondTextColor];
         [self.contentView addSubview:_updateTimeLabel];
         
         /* 通知开启标记 */
@@ -75,7 +75,7 @@
         
         
         /* 背景、分割线 */
-        UIView *partLine = [[UIView alloc] initWithFrame:CGRectMake(0, 24+58-1, _screenWidth, 1)];
+        UIView *partLine = [[UIView alloc] initWithFrame:CGRectMake(0, 24+58-0.5, _screenWidth, 0.5)];
         partLine.backgroundColor = [colorManager lightGrayBackground];
         [self.contentView addSubview:partLine];
         self.contentView.backgroundColor = [UIColor whiteColor];

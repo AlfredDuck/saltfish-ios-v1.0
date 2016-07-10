@@ -11,6 +11,8 @@
 #import "UIImageView+WebCache.h"
 #import "SFHotTableViewCell.h"
 #import "SFArticleTableViewCell.h"
+#import "detailVC.h"
+#import "TopicVC.h"
 #import "MJRefresh.h"
 
 
@@ -64,7 +66,7 @@
     
     /* title */
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake((_screenWidth-200)/2, 20, 200, 44)];
-    titleLabel.text = @"咸鱼腥闻";
+    titleLabel.text = @"轻闻";
     titleLabel.textColor = [colorManager mainTextColor];
     titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 15];
     titleLabel.textAlignment = UITextAlignmentCenter;
@@ -250,6 +252,7 @@
 }
 
 
+
 // 填充cell
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -263,6 +266,7 @@
     if (row == 0) {
         if (oneHotCell == nil) {
             oneHotCell = [[SFHotTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:hotCellWithIdentifier];
+            oneHotCell.delegate = self;
         }
         [oneHotCell rewriteHotArticles:_data];
         [oneHotCell rewriteHotTopics:_data2];
@@ -286,6 +290,7 @@
 }
 
 
+
 // 改变 cell 高度
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -305,12 +310,18 @@
 {
     NSUInteger row = [indexPath row];
     
-//    TopicVC *topicPV = [[TopicVC alloc] init];
-//    [self.navigationController pushViewController:topicPV animated:YES];
-//    //开启iOS7的滑动返回效果
-//    if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
-//        self.navigationController.interactivePopGestureRecognizer.delegate = nil;
-//    }
+    if (row >= 1) {
+        detailVC *detailPage = [[detailVC alloc] init];
+        detailPage.articleID = @"ddddd";
+        [self.navigationController pushViewController:detailPage animated:YES];
+        //开启iOS7的滑动返回效果
+        if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
+            self.navigationController.interactivePopGestureRecognizer.delegate = nil;
+        }
+    }
+
+    // 返回时是非选中状态
+    // [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 
@@ -328,6 +339,30 @@
     NSLog(@"ggg");
 }
 
+
+
+#pragma mark - HotCell（第一个cell） 的代理
+
+- (void)clickHotArticle:(NSString *)articleID
+{
+    detailVC *detailPage = [[detailVC alloc] init];
+    detailPage.articleID = @"ddddd";
+    [self.navigationController pushViewController:detailPage animated:YES];
+    //开启iOS7的滑动返回效果
+    if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
+        self.navigationController.interactivePopGestureRecognizer.delegate = nil;
+    }
+}
+
+- (void)clickHotTopic:(NSString *)topic
+{
+    TopicVC *topicPage = [[TopicVC alloc] init];
+    [self.navigationController pushViewController:topicPage animated:YES];
+    //开启iOS7的滑动返回效果
+    if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
+        self.navigationController.interactivePopGestureRecognizer.delegate = nil;
+    }
+}
 
 
 

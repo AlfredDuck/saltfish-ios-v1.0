@@ -8,6 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol SFHotTableViewCellDelegate <NSObject>
+@required
+- (void)clickHotArticle:(NSString *)articleID;
+- (void)clickHotTopic:(NSString *)topic;
+@end
+
+
 @interface SFHotTableViewCell : UITableViewCell <UIScrollViewDelegate>
 // 焦点图scrollview
 @property (nonatomic, copy) UIScrollView *basedScrollView;
@@ -34,6 +41,8 @@
 //
 @property (nonatomic) NSInteger screenWidth;
 @property (nonatomic) NSInteger screenHeight;
+// 代理
+@property (nonatomic, assign) id <SFHotTableViewCellDelegate>delegate;
 //
 - (void)rewriteHotArticles:(NSArray *)newArr;
 - (void)rewriteHotTopics:(NSArray *)newArr;

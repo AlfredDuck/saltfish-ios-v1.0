@@ -112,6 +112,11 @@
             topicLabel.layer.shadowRadius = 0.5;
             [picImageView addSubview:topicLabel];
             
+            // 点击手势
+            picImageView.userInteractionEnabled = YES; // 设置view可以交互
+            UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickHotTopic:)];   // 设置手势
+            [picImageView addGestureRecognizer:singleTap]; // 给view添加手势
+            
             [self.contentView addSubview:picImageView];
             [_hotTopicPicArr addObject:picImageView];
             [_hotTopicLabelArr addObject:topicLabel];
@@ -196,6 +201,11 @@
         picLabel.layer.shadowOffset = CGSizeMake(1.0, 1.0);
         picLabel.layer.shadowRadius = 1.0;
         [picImageView addSubview:picLabel];
+        
+        // 点击手势
+        picImageView.userInteractionEnabled = YES; // 设置view可以交互
+        UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickHotArticle:)];   // 设置手势
+        [picImageView addGestureRecognizer:singleTap]; // 给view添加手势
         
         [_basedScrollView addSubview:picImageView];
     }
@@ -371,40 +381,39 @@
     // 重新设置指示器
     [(UIView *)[directions objectAtIndex:picNumNextShow] setAlpha:0.8];
 
-    
     // 移动到下一张图片
     [_basedScrollView setContentOffset:CGPointMake(ww + _screenWidth, 0) animated:YES];
     
-    
-//    // 指示器移动到下一个
-//    NSArray *directions = [_direction subviews];
-//    for (int i=0; i<[directions count]; i++) {
-//        [(UIView *)[directions objectAtIndex:i] setAlpha:0.4];
-//    }
-//    // 移动到第几张图片？
-//    int picNum = (int)ww/_screenWidth + 1;
-//
-//    // picNum是队首
-//    if (picNum == 0) {
-//        [(UIView *)[directions objectAtIndex:[_hotArticleData count]-1] setAlpha:0.8];
-//    }
-//    // picNum在队伍中间
-//    else if (picNum > 0 && picNum < [_hotArticleData count]) {
-//        [(UIView *)[directions objectAtIndex:picNum-1] setAlpha:0.8];
-//    }
-
-//    // picNum是队尾
-//    if (picNum == [_hotArticleData count]+1) {
-//        [(UIView *)[directions objectAtIndex:1] setAlpha:0.8];
-//    }
-//    // picNum是队首
-//    else if (picNum == 0) {
-//        [(UIView *)[directions objectAtIndex:[_hotArticleData count]-1] setAlpha:0.8];
-//    }
-//    // picNum在队伍中间
-//    else {
-//        [(UIView *)[directions objectAtIndex:picNum-1] setAlpha:0.8];
-//    }
 }
+
+
+
+#pragma mark - IBAction
+- (void)clickHotArticle:(UIGestureRecognizer *)sender
+{
+    NSLog(@"%@",[sender.view subviews]);
+    // 从 sender 的子视图中找到 label
+    for (id item in [sender.view subviews]) {
+        if ([item isKindOfClass:[UILabel class]]) {
+            NSLog(@"%@", ((UILabel *)item).text);
+            // 调用在“发现”tab的cell代理方法
+            [self.delegate clickHotArticle:((UILabel *)item).text];
+        }
+    }
+}
+
+- (void)clickHotTopic:(UIGestureRecognizer *)sender
+{
+    NSLog(@"%@",[sender.view subviews]);
+    // 从 sender 的子视图中找到 label
+    for (id item in [sender.view subviews]) {
+        if ([item isKindOfClass:[UILabel class]]) {
+            NSLog(@"%@", ((UILabel *)item).text);
+            // 调用在“发现”tab的cell代理方法
+            [self.delegate clickHotTopic:((UILabel *)item).text];
+        }
+    }
+}
+
 
 @end
