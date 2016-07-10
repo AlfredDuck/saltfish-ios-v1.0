@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "SFClassificationTableViewCell.h"
+#import "SFTabBarViewController.h"
 
-@interface SFDiscoveryViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, SFClassificationTableViewCellDelegate>
+@interface SFDiscoveryViewController : SFTabBarViewController <UITableViewDelegate, UITableViewDataSource, SFClassificationTableViewCellDelegate>
 @property (nonatomic, strong) UITableView *oneTableView;
 // 全局变量 屏幕长宽
 @property (nonatomic) NSInteger screenWidth;

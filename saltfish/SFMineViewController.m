@@ -44,6 +44,8 @@
     _screenWidth = [UIScreen mainScreen].bounds.size.width;
     
     [self createUIParts];
+    [super createTabBarWith:2];  // 调用父类方法，构建tabbar
+    NSLog(@"%@",[super tabBarBackgroundView]);
 }
 
 - (void)didReceiveMemoryWarning {

@@ -38,6 +38,7 @@
     _screenWidth = [UIScreen mainScreen].bounds.size.width;
     
     [self createUIParts];
+    [super createTabBarWith:1];  // 调用父类方法，构建tabbar
 }
 
 - (void)didReceiveMemoryWarning {

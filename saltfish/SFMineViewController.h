@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SFTabBarViewController.h"
 
-@interface SFMineViewController : UIViewController
+@interface SFMineViewController : SFTabBarViewController
 // 全局变量 屏幕长宽
 @property (nonatomic) NSInteger screenWidth;
 @property (nonatomic) NSInteger screenHeight;

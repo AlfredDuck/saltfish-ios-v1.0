@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BB0661F81D322D5C00FB79FE /* SFTabBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0661F71D322D5C00FB79FE /* SFTabBarViewController.m */; };
 		BB0F14B21C26D8FC00FDB77C /* back.png in Resources */ = {isa = PBXBuildFile; fileRef = BB0F14B11C26D8FC00FDB77C /* back.png */; };
 		BB0F14B41C26E60100FDB77C /* portrait.png in Resources */ = {isa = PBXBuildFile; fileRef = BB0F14B31C26E60100FDB77C /* portrait.png */; };
 		BB261F9C1C1D90DF0079D037 /* bigPicTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BB261F9B1C1D90DF0079D037 /* bigPicTableViewCell.m */; };
@@ -94,6 +95,8 @@
 		13BF285CA35A2C9244619A82 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		84D65C4BEB822ACA8811C5E7 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9DB55F0396D17EF158B60BB /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		BB0661F61D322D5C00FB79FE /* SFTabBarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFTabBarViewController.h; sourceTree = "<group>"; };
+		BB0661F71D322D5C00FB79FE /* SFTabBarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFTabBarViewController.m; sourceTree = "<group>"; };
 		BB0F14B11C26D8FC00FDB77C /* back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = back.png; sourceTree = "<group>"; };
 		BB0F14B31C26E60100FDB77C /* portrait.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = portrait.png; sourceTree = "<group>"; };
 		BB261F9A1C1D90DF0079D037 /* bigPicTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bigPicTableViewCell.h; sourceTree = "<group>"; };
@@ -224,6 +227,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BB0661F91D322D6A00FB79FE /* First Level Base */ = {
+			isa = PBXGroup;
+			children = (
+				BB0661F61D322D5C00FB79FE /* SFTabBarViewController.h */,
+				BB0661F71D322D5C00FB79FE /* SFTabBarViewController.m */,
+			);
+			name = "First Level Base";
+			sourceTree = "<group>";
+		};
 		BB261F991C1D908B0079D037 /* tableViewCells */ = {
 			isa = PBXGroup;
 			children = (
@@ -345,6 +357,7 @@
 		BB62F07B1D273B5100ACFC92 /* First Level */ = {
 			isa = PBXGroup;
 			children = (
+				BB0661F91D322D6A00FB79FE /* First Level Base */,
 				BB62F07C1D273C2000ACFC92 /* SFHomeViewController.h */,
 				BB62F07D1D273C2000ACFC92 /* SFHomeViewController.m */,
 				BB62F07F1D273C4300ACFC92 /* SFDiscoveryViewController.h */,
@@ -732,6 +745,7 @@
 				BB97FD9B1D27FC3200EBA61D /* SFClassificationTableViewCell.m in Sources */,
 				BB261FA11C1D91070079D037 /* smallPicTableViewCell.m in Sources */,
 				BBAD45481C1D44FF007A54F3 /* HomeVC.m in Sources */,
+				BB0661F81D322D5C00FB79FE /* SFTabBarViewController.m in Sources */,
 				BB8C2A8F1CB134CC004112F9 /* saltCustomTools.m in Sources */,
 				BBCB95551C30143400011BDD /* writeCommentVC.m in Sources */,
 				BB62F06F1D26AC3A00ACFC92 /* ClassificationVC.m in Sources */,

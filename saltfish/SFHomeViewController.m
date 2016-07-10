@@ -40,6 +40,7 @@
     _screenWidth = [UIScreen mainScreen].bounds.size.width;
     
     [self createUIParts];
+    [super createTabBarWith:0];  // 调用父类方法，构建tabbar
 }
 
 - (void)didReceiveMemoryWarning {
@@ -199,7 +200,7 @@
 {
     /* 创建 tableview */
     static NSString *CellWithIdentifier = @"commentCell";
-    _oneTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, _screenWidth, _screenHeight-64)];
+    _oneTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, _screenWidth, _screenHeight-64-49)];
     _oneTableView.backgroundColor = [UIColor brownColor];
     [_oneTableView setDelegate:self];
     [_oneTableView setDataSource:self];
@@ -309,6 +310,11 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSUInteger row = [indexPath row];
+    
+    if (row == 1) {
+        self.tabBarController.selectedIndex = 2;
+        return;
+    }
     
     if (row >= 1) {
         detailVC *detailPage = [[detailVC alloc] init];

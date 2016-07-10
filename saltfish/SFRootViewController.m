@@ -40,7 +40,7 @@
     _screenWidth = [UIScreen mainScreen].bounds.size.width;
     
     [self createFirstLevelPages];
-    [self createTabBar];
+    //[self createTabBar];
 }
 
 
@@ -87,7 +87,7 @@
 }
 
 
-#pragma mark - 创建底部 tabBar
+#pragma mark - 创建底部 tabBar (用不到了，但是代码不要删除）
 - (void)createTabBar
 {
     /* tabbar 背景 */

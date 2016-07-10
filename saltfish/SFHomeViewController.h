@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "SFHotTableViewCell.h"
+#import "SFTabBarViewController.h"
 
-@interface SFHomeViewController : UIViewController <UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate, SFHotTableViewCellDelegate>
+@interface SFHomeViewController : SFTabBarViewController <UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate, SFHotTableViewCellDelegate>
 // tableview
 @property (nonatomic, strong) UITableView *oneTableView;
 //
