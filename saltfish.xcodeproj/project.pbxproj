@@ -240,14 +240,9 @@
 			isa = PBXGroup;
 			children = (
 				BB97FD9C1D27FC8B00EBA61D /* old cells */,
-				BB65CA161D1E294E0098A53B /* articleCell.h */,
-				BB65CA171D1E294E0098A53B /* articleCell.m */,
-				BB65CA1B1D1E33760098A53B /* TopicCell.h */,
-				BB65CA1C1D1E33760098A53B /* TopicCell.m */,
-				BB62F0721D26B68400ACFC92 /* TopicTableViewCell.h */,
-				BB62F0731D26B68400ACFC92 /* TopicTableViewCell.m */,
-				BB62F0921D279F2400ACFC92 /* myTopicTableViewCell.h */,
-				BB62F0931D279F2400ACFC92 /* myTopicTableViewCell.m */,
+				BBFDDC941D33E66A00AE94D1 /* common cell */,
+				BBFDDC931D33E65400AE94D1 /* my topic cell */,
+				BBFDDC921D33E62100AE94D1 /* Topic page top */,
 				BB82EF251D290EAB00FFB7FD /* home cell */,
 				BB97FD981D27FBCF00EBA61D /* discovery cell */,
 			);
@@ -509,6 +504,35 @@
 				BB6B47E71CA6DD2F00CABA95 /* black_top3.png */,
 			);
 			name = pics;
+			sourceTree = "<group>";
+		};
+		BBFDDC921D33E62100AE94D1 /* Topic page top */ = {
+			isa = PBXGroup;
+			children = (
+				BB65CA1B1D1E33760098A53B /* TopicCell.h */,
+				BB65CA1C1D1E33760098A53B /* TopicCell.m */,
+			);
+			name = "Topic page top";
+			sourceTree = "<group>";
+		};
+		BBFDDC931D33E65400AE94D1 /* my topic cell */ = {
+			isa = PBXGroup;
+			children = (
+				BB62F0921D279F2400ACFC92 /* myTopicTableViewCell.h */,
+				BB62F0931D279F2400ACFC92 /* myTopicTableViewCell.m */,
+			);
+			name = "my topic cell";
+			sourceTree = "<group>";
+		};
+		BBFDDC941D33E66A00AE94D1 /* common cell */ = {
+			isa = PBXGroup;
+			children = (
+				BB65CA161D1E294E0098A53B /* articleCell.h */,
+				BB65CA171D1E294E0098A53B /* articleCell.m */,
+				BB62F0721D26B68400ACFC92 /* TopicTableViewCell.h */,
+				BB62F0731D26B68400ACFC92 /* TopicTableViewCell.m */,
+			);
+			name = "common cell";
 			sourceTree = "<group>";
 		};
 		BBFF6F691D167F590089099F /* topic page */ = {

@@ -8,6 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol SFArticleTableViewCellDelegate <NSObject>
+@required
+- (void)clickTopic:(NSString *)topic;
+@end
+
 @interface SFArticleTableViewCell : UITableViewCell
 // 标题
 @property (nonatomic, copy) NSString *title;
@@ -35,6 +40,9 @@
 //
 @property (nonatomic) NSInteger screenWidth;
 @property (nonatomic) NSInteger screenHeight;
+
+// 代理
+@property (nonatomic, assign) id <SFArticleTableViewCellDelegate>delegate;
 //
 - (void)rewriteTitle:(NSString *)newTitle;
 - (void)rewriteHotScore:(NSString *)newHotScore;

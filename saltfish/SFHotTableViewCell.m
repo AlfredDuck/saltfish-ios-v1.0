@@ -338,7 +338,7 @@
     unsigned long ww = _basedScrollView.contentOffset.x;  // 获取当前的偏移
     int picNumCurrent = (int)ww/_screenWidth;  // 获取当前的图片指针
     int picNumNextShow = 0;
-    NSLog(@"当前在第%d帧", picNumCurrent);
+    // NSLog(@"当前在第%d帧", picNumCurrent);
     
     // 指示器归零
     NSArray *directions = [_direction subviews];
@@ -352,30 +352,30 @@
         [_basedScrollView setContentOffset:CGPointMake(_screenWidth, 0) animated:NO];
         ww = _screenWidth;
         picNumCurrent = 1;
-        NSLog(@"修正后在第%d帧",picNumCurrent);
-        NSLog(@"将移到第%d帧",picNumCurrent + 1);
+        // NSLog(@"修正后在第%d帧",picNumCurrent);
+        // NSLog(@"将移到第%d帧",picNumCurrent + 1);
         picNumNextShow = picNumCurrent + 1 - 1;
-        NSLog(@"实际看到是第%d帧", picNumNextShow);
+        // NSLog(@"实际看到是第%d帧", picNumNextShow);
     }
     // 如果当前在倒数第二位
     if (picNumCurrent == [_hotArticleData count]) {
-        NSLog(@"将移到第%d帧",picNumCurrent + 1);
+        // NSLog(@"将移到第%d帧",picNumCurrent + 1);
         picNumNextShow = 0;
-        NSLog(@"实际看到是第%d帧", picNumNextShow);
+        // NSLog(@"实际看到是第%d帧", picNumNextShow);
     }
     // 如果当前在队首
     else if (picNumCurrent == 0) {
         // 此时无需悄无声息的调换位置，因为只是一个顺序滚动
-        NSLog(@"修正后在第%d帧",picNumCurrent);
-        NSLog(@"将移到第%d帧",picNumCurrent + 1);
+        // NSLog(@"修正后在第%d帧",picNumCurrent);
+        // NSLog(@"将移到第%d帧",picNumCurrent + 1);
         picNumNextShow = picNumCurrent + 1 - 1;
-        NSLog(@"实际看到是第%d帧", picNumNextShow);
+        // NSLog(@"实际看到是第%d帧", picNumNextShow);
     }
     // 如果当前在队伍中间
     else {
-        NSLog(@"将移动到第%d帧", picNumCurrent + 1);
+        // NSLog(@"将移动到第%d帧", picNumCurrent + 1);
         picNumNextShow = picNumCurrent + 1 - 1;
-        NSLog(@"实际看到是第%d帧", picNumNextShow);
+        // NSLog(@"实际看到是第%d帧", picNumNextShow);
     }
     
     // 重新设置指示器

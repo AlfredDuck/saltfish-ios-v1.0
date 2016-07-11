@@ -278,6 +278,7 @@
     else {
         if (oneArticleCell == nil) {
             oneArticleCell = [[SFArticleTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:articleCellWithIdentifier];
+            oneArticleCell.delegate = self;
         }
         [oneArticleCell rewriteTitle:@"哈格兹的相册-那天阳光很好可惜我只带了一卷彩卷\n"];
         [oneArticleCell rewriteHotScore:@"评论23  点赞876"];
@@ -347,6 +348,7 @@
 
 
 
+
 #pragma mark - HotCell（第一个cell） 的代理
 
 - (void)clickHotArticle:(NSString *)articleID
@@ -362,6 +364,19 @@
 
 - (void)clickHotTopic:(NSString *)topic
 {
+    TopicVC *topicPage = [[TopicVC alloc] init];
+    [self.navigationController pushViewController:topicPage animated:YES];
+    //开启iOS7的滑动返回效果
+    if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
+        self.navigationController.interactivePopGestureRecognizer.delegate = nil;
+    }
+}
+
+
+#pragma mark - ArticleCell 的代理
+ - (void)clickTopic:(NSString *)topic
+{
+    //
     TopicVC *topicPage = [[TopicVC alloc] init];
     [self.navigationController pushViewController:topicPage animated:YES];
     //开启iOS7的滑动返回效果

@@ -8,6 +8,7 @@
 
 #import "SFArticleTableViewCell.h"
 #import "UIImageView+WebCache.h"
+#import "TopicVC.h"
 #import "colorManager.h"
 
 @implementation SFArticleTableViewCell
@@ -56,13 +57,23 @@
         // 需要AFNetwork
         [_topicImageView sd_setImageWithURL:[NSURL URLWithString:_picURL] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
         [self.contentView addSubview:_topicImageView];
+        // 点击手势
+        _topicImageView.userInteractionEnabled = YES; // 设置view可以交互
+        UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickTopicPortrait:)];   // 设置手势
+        [_topicImageView addGestureRecognizer:singleTap]; // 给view添加手势
+        
         
         /* 话题标题 */
         _topicLabel = [[UILabel alloc] initWithFrame:CGRectMake(41, 17, 200, 17)];
         _topicLabel.text = _topic;
         _topicLabel.font = [UIFont fontWithName:@"Helvetica" size: 12.0];
         _topicLabel.textColor = [colorManager secondTextColor];
+        // 点击手势
+        _topicLabel.userInteractionEnabled = YES; // 设置view可以交互
+        UITapGestureRecognizer *singleTap2 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickTopicOfArticle:)];   // 设置手势
+        [_topicLabel addGestureRecognizer:singleTap2]; // 给view添加手势
         [self.contentView addSubview:_topicLabel];
+        
         
         /* 日期 */
         _dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(_screenWidth-100-14, 17, 100, 17)];
@@ -81,6 +92,7 @@
         _titleLabel.numberOfLines = 2;
         [self.contentView addSubview:_titleLabel];
         
+        
         /* 图片(尺寸固定) */
         _picImageView = [[UIImageView alloc] initWithFrame:CGRectMake(_screenWidth-ww-14, 51, ww, hh)];
         _picImageView.backgroundColor = [UIColor grayColor];
@@ -90,6 +102,7 @@
         // 需要AFNetwork
         [_picImageView sd_setImageWithURL:[NSURL URLWithString:_picURL] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
         [self.contentView addSubview:_picImageView];
+        
         
         /* 热度 */
         _hotScoreLabel = [[UILabel alloc] initWithFrame:CGRectMake(19, 104, 240, 16)];
@@ -162,6 +175,33 @@
     else {
         _titleLabel.textColor = [colorManager mainTextColor];
     }
+}
+
+
+
+
+
+#pragma mark - IBAction
+
+// 点击话题文字
+- (void)clickTopicOfArticle:(UIGestureRecognizer *)sender
+{
+    //
+    NSLog(@"点文字");
+    NSLog(@"%@", sender.view.superview);
+    NSLog(@"%@", _topic);
+    
+    // 调用代理方法
+    [self.delegate clickTopic:_topic];
+}
+
+// 点击话题头像
+- (void)clickTopicPortrait:(UIGestureRecognizer *)sender
+{
+    NSLog(@"点头像");
+    NSLog(@"%@", _topic);
+    // 调用代理方法
+    [self.delegate clickTopic:_topic];
 }
 
 
