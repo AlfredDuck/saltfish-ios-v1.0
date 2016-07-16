@@ -116,6 +116,12 @@
     NSLog(@"退出登录！");
     NSUserDefaults *sfUserDefault = [NSUserDefaults standardUserDefaults];
     [sfUserDefault removeObjectForKey:@"loginInfo"];
+    
+    // 调用代理
+    [self.delegate signout];
+    
+    // 退出页面
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 

@@ -214,8 +214,8 @@
 #pragma mark - 头像
 - (void)createPortrait
 {
-    UIView *portraitBackground = [[UIView alloc] initWithFrame:CGRectMake((_screenWidth-74)/2.0, 53, 74, 74)];
-    [self.view addSubview:portraitBackground];
+    _portraitBackground = [[UIView alloc] initWithFrame:CGRectMake((_screenWidth-74)/2.0, 53, 74, 74)];
+    [self.view addSubview:_portraitBackground];
     
     // 绘制透明圆形背景
     UIView *round = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 74, 74)];
@@ -223,7 +223,7 @@
     round.layer.cornerRadius = 37.0; //设置图片圆角的尺度
     round.backgroundColor = [UIColor whiteColor];
     round.alpha = 0.55;
-    [portraitBackground addSubview:round];
+    [_portraitBackground addSubview:round];
     
     // 绘制头像图片
     UIImageView *portraitImage = [[UIImageView alloc] initWithFrame:CGRectMake(2, 2, 70, 70)];
@@ -236,12 +236,12 @@
     // 从网络获取图片
     NSString *url = [[[NSUserDefaults standardUserDefaults] dictionaryForKey:@"loginInfo"] objectForKey:@"portrait"];
     [portraitImage sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
-    [portraitBackground addSubview:portraitImage];
+    [_portraitBackground addSubview:portraitImage];
     
     // 添加手势
-    portraitBackground.userInteractionEnabled = YES; // 设置可以交互
+    _portraitBackground.userInteractionEnabled = YES; // 设置可以交互
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickPortrait)]; // 设置手势
-    [portraitBackground addGestureRecognizer:singleTap]; // 添加手势
+    [_portraitBackground addGestureRecognizer:singleTap]; // 添加手势
 }
 
 
@@ -258,6 +258,7 @@
 {
     SFPersonalViewController *personalPage = [[SFPersonalViewController alloc] init];
     [self.navigationController pushViewController:personalPage animated:YES];
+    personalPage.delegate = self;
     //开启iOS7的滑动返回效果
     if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
         self.navigationController.interactivePopGestureRecognizer.delegate = nil;
@@ -267,11 +268,19 @@
 - (void)clickMyTopic
 {
     NSLog(@"click my topic");
-    SFMyFollowTopicViewController *myTopicPV = [[SFMyFollowTopicViewController alloc] init];
-    [self.navigationController pushViewController:myTopicPV animated:YES];
-    //开启iOS7的滑动返回效果
-    if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
-        self.navigationController.interactivePopGestureRecognizer.delegate = nil;
+    NSUserDefaults *sfUserDefault = [NSUserDefaults standardUserDefaults];
+    if ([sfUserDefault dictionaryForKey:@"loginInfo"]) {
+        // 当前是登录状态
+        SFMyFollowTopicViewController *myTopicPV = [[SFMyFollowTopicViewController alloc] init];
+        [self.navigationController pushViewController:myTopicPV animated:YES];
+        //开启iOS7的滑动返回效果
+        if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
+            self.navigationController.interactivePopGestureRecognizer.delegate = nil;
+        }
+    }
+    else {
+        // 未登录状态
+        [self chooseLoginWayWith:@"请先登录"];
     }
 }
 
@@ -286,26 +295,20 @@
 - (void)chooseLoginWayWith:(NSString *)title
 {
     NSLog(@"选择登录方式");
-    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:title delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"邮箱登录/注册", @"使用新浪微博帐号", @"测试获取用户信息",nil];
+    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:title delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles: @"使用新浪微博帐号", nil];
     [sheet showInView:self.view];
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex == 0) {
-
-    }
-    else if (buttonIndex == 1) {
         NSLog(@"新浪微博登录");
         SFLoginAndSignup *login = [[SFLoginAndSignup alloc] init];
         [login requestForWeiboAuthorize];
         [login waitForWeiboAuthorizeResult];
         login.delegate = self;
     }
-    else if (buttonIndex == 2) {
-    }
 }
-
 
 
 #pragma mark - SFLogin&Signup 代理
@@ -319,12 +322,26 @@
     _nickname.text = [userData objectForKey:@"nickname"];
     
     /* 隐藏登录按钮 */
-    _loginButtonBackground.hidden = YES;
+    [_loginButtonBackground removeFromSuperview];
     
     /* 创建头像 */
     [self createPortrait];
 }
 
+
+
+#pragma mark - SFPersonalViewController 代理
+- (void)signout
+{
+    NSLog(@"我特么注销了，你知道吗？");
+    _nickname.text = @"部分功能需登录后才能使用哦";
+    
+    /* 创建登录按钮 */
+    [self createLoginButton];
+    
+    /* 隐藏头像 */
+    [_portraitBackground removeFromSuperview];
+}
 
 
 @end
