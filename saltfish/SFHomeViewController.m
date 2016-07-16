@@ -7,6 +7,7 @@
 //
 
 #import "SFHomeViewController.h"
+#import "AFNetworking.h"
 #import "colorManager.h"
 #import "UIImageView+WebCache.h"
 #import "SFHotTableViewCell.h"
@@ -14,6 +15,7 @@
 #import "detailVC.h"
 #import "TopicVC.h"
 #import "MJRefresh.h"
+#import "urlManager.h"
 
 
 @interface SFHomeViewController ()
@@ -39,8 +41,12 @@
     _screenHeight = [UIScreen mainScreen].bounds.size.height;
     _screenWidth = [UIScreen mainScreen].bounds.size.width;
     
+    /* 构建页面元素 */
     [self createUIParts];
     [super createTabBarWith:0];  // 调用父类方法，构建tabbar
+    
+    /* 网络请求 */
+    // [self connectForHotArticles:_oneTableView];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -77,40 +83,40 @@
     // 焦点图数据（临时）
     NSDictionary *d1 = [[NSDictionary alloc] initWithObjectsAndKeys:
                         @"001三吉彩花又特么来中国捞钱了",@"title",
-                        @"http://fc.topitme.com/c/a7/18/11398941169b318a7cl.jpg", @"url",
+                        @"http://fc.topitme.com/c/a7/18/11398941169b318a7cl.jpg", @"picURL",
                         nil];
     NSDictionary *d2 = [[NSDictionary alloc] initWithObjectsAndKeys:
                         @"002国风灯具所承载的东方韵味总是让人感到内心的平实。在酷暑难耐的夜晚",@"title",
-                        @"http://i10.topitme.com/l044/10044083580cb1e8f4.jpg", @"url",
+                        @"http://i10.topitme.com/l044/10044083580cb1e8f4.jpg", @"picURL",
                         nil];
     NSDictionary *d3 = [[NSDictionary alloc] initWithObjectsAndKeys:
                         @"003《权力的游戏》一季终，以后周一的期待又少了一个。 第六季大结局可以说把整季燃到了最高点",@"title",
-                        @"http://f7.topitme.com/7/a4/75/115044609142d75a47l.jpg", @"url",
+                        @"http://f7.topitme.com/7/a4/75/115044609142d75a47l.jpg", @"picURL",
                         nil];
     NSDictionary *d4 = [[NSDictionary alloc] initWithObjectsAndKeys:
                         @"004墙绘，顾名思义就是在墙上作画。 如果可以",@"title",
-                        @"http://f10.topitme.com/l/201102/13/12975663235538.jpg", @"url",
+                        @"http://f10.topitme.com/l/201102/13/12975663235538.jpg", @"picURL",
                         nil];
     NSDictionary *d5 = [[NSDictionary alloc] initWithObjectsAndKeys:
                         @"005大概没几个插画师能抵得住",@"title",
-                        @"http://f10.topitme.com/l/201102/13/12975659369227.jpg", @"url",
+                        @"http://f10.topitme.com/l/201102/13/12975659369227.jpg", @"picURL",
                         nil];
     
     NSDictionary *t1 = [[NSDictionary alloc] initWithObjectsAndKeys:
                         @"#台湾肯定音乐祭#",@"title",
-                        @"http://f10.topitme.com/m/201102/13/12975675911220.jpg", @"url",
+                        @"http://f10.topitme.com/m/201102/13/12975675911220.jpg", @"picURL",
                         nil];
     NSDictionary *t2 = [[NSDictionary alloc] initWithObjectsAndKeys:
                         @"#Sunshine#",@"title",
-                        @"http://f10.topitme.com/t/201012/19/12927225068850.jpg", @"url",
+                        @"http://f10.topitme.com/t/201012/19/12927225068850.jpg", @"picURL",
                         nil];
     NSDictionary *t3 = [[NSDictionary alloc] initWithObjectsAndKeys:
                         @"#吴亦凡艹粉#",@"title",
-                        @"http://f10.topitme.com/l/201102/13/12975659369227.jpg", @"url",
+                        @"http://f10.topitme.com/l/201102/13/12975659369227.jpg", @"picURL",
                         nil];
     
-    _data = @[d1,d2,d3,d4,d5];
-    _data2 = @[t1,t2,t3];
+    _hotArticleData = @[d1,d2,d3,d4,d5];
+    _hotTopicData = @[t1,t2,t3];
     
     /* 创建 TableView */
     [self createBasedTableView];
@@ -119,13 +125,6 @@
 
 }
 
-
-
-#pragma mark - 创建 热门话题
-- (void)createHotTopics
-{
-    
-}
 
 
 #pragma mark - 创建焦点图(热门文章）(在cell中实现了，这里的代码用不到了，但是不要删除）
@@ -166,7 +165,7 @@
         picImageView.contentMode = UIViewContentModeScaleAspectFill;
         picImageView.clipsToBounds  = YES;
         // 需要AFNetwork
-        [picImageView sd_setImageWithURL:[NSURL URLWithString:[[_data objectAtIndex:i] objectForKey:@"url"]] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+        [picImageView sd_setImageWithURL:[NSURL URLWithString:[[_data objectAtIndex:i] objectForKey:@"picURL"]] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
         
         // 遮黑
         UIView *halfBlack = [[UIView alloc] initWithFrame:CGRectMake(0, 0, _screenWidth, 170)];
@@ -190,7 +189,50 @@
         
         [_basedScrollView addSubview:picImageView];
     }
+}
 
+
+
+
+#pragma mark - 网络请求
+
+/* 请求热门文章(焦点图)&热门话题 */
+- (void)connectForHot:(UITableView *)tableView
+{
+    NSLog(@"请求焦点图开始");
+    
+    // prepare request parameters
+    NSString *host = [urlManager urlHost];
+    NSString *urlString = [host stringByAppendingString:@"/index/hot_articles"];
+    
+    NSDictionary *parameters = @{};  // 参数为空
+    
+    // 创建 GET 请求
+    AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];
+    connectManager.requestSerializer.timeoutInterval = 20.0;   //设置超时时间
+    [connectManager GET:urlString parameters: parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        // GET请求成功
+        NSDictionary *data = [responseObject objectForKey:@"data"];
+        NSString *errcode = [responseObject objectForKey:@"errcode"];
+        NSLog(@"errcode：%@", errcode);
+        NSLog(@"data:%@", data);
+        
+        // 更新 hotArticleData 数据
+        _hotArticleData = [[data objectForKey:@"hotArticles"] copy];
+        // 更新 hotTopicData 数据
+        _hotTopicData = [[data objectForKey:@"hotTopics"] copy];
+
+        
+        // 刷新当前 tableview 的数据
+        // [tableView reloadData];
+        // 刷新特定的cell
+        NSIndexPath *indexPath=[NSIndexPath indexPathForRow:0 inSection:0];
+        [_oneTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
 }
 
 
@@ -269,8 +311,8 @@
             oneHotCell = [[SFHotTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:hotCellWithIdentifier];
             oneHotCell.delegate = self;
         }
-        [oneHotCell rewriteHotArticles:_data];
-        [oneHotCell rewriteHotTopics:_data2];
+        [oneHotCell rewriteHotArticles:_hotArticleData];
+        [oneHotCell rewriteHotTopics:_hotTopicData];
         [oneHotCell rewriteCellHeight];
         oneHotCell.selectionStyle = UITableViewCellSelectionStyleNone;  // 取消选中的背景色
         return oneHotCell;
@@ -313,7 +355,7 @@
     NSUInteger row = [indexPath row];
     
     if (row == 1) {
-        self.tabBarController.selectedIndex = 2;
+        [self connectForHot:_oneTableView];
         return;
     }
     

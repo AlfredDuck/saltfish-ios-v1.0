@@ -20,6 +20,8 @@
 		BB2E97131C1D1599001B7CAA /* saltfish.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = BB2E97111C1D1599001B7CAA /* saltfish.xcdatamodeld */; };
 		BB2E971B1C1D1599001B7CAA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BB2E971A1C1D1599001B7CAA /* Images.xcassets */; };
 		BB2E972A1C1D1599001B7CAA /* saltfishTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BB2E97291C1D1599001B7CAA /* saltfishTests.m */; };
+		BB5C0F0D1D39DB9400EEC34F /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = BB5C0F0C1D39DB9400EEC34F /* background.png */; };
+		BB5C0F151D39FBA600EEC34F /* SFPersonalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB5C0F141D39FBA600EEC34F /* SFPersonalViewController.m */; };
 		BB62F06F1D26AC3A00ACFC92 /* ClassificationVC.m in Sources */ = {isa = PBXBuildFile; fileRef = BB62F06E1D26AC3A00ACFC92 /* ClassificationVC.m */; };
 		BB62F0711D26B52B00ACFC92 /* back_black.png in Resources */ = {isa = PBXBuildFile; fileRef = BB62F0701D26B52B00ACFC92 /* back_black.png */; };
 		BB62F0741D26B68400ACFC92 /* TopicTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BB62F0731D26B68400ACFC92 /* TopicTableViewCell.m */; };
@@ -29,7 +31,6 @@
 		BB62F0811D273C4300ACFC92 /* SFDiscoveryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB62F0801D273C4300ACFC92 /* SFDiscoveryViewController.m */; };
 		BB62F0841D273C5800ACFC92 /* SFMineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB62F0831D273C5800ACFC92 /* SFMineViewController.m */; };
 		BB62F0891D273FA600ACFC92 /* SFRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB62F0881D273FA600ACFC92 /* SFRootViewController.m */; };
-		BB62F08B1D27691900ACFC92 /* 000010-11.jpg in Resources */ = {isa = PBXBuildFile; fileRef = BB62F08A1D27691900ACFC92 /* 000010-11.jpg */; };
 		BB62F08F1D27799B00ACFC92 /* SFMyFollowTopicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB62F08E1D27799B00ACFC92 /* SFMyFollowTopicViewController.m */; };
 		BB62F0911D279EE900ACFC92 /* notification.png in Resources */ = {isa = PBXBuildFile; fileRef = BB62F0901D279EE900ACFC92 /* notification.png */; };
 		BB62F0941D279F2400ACFC92 /* myTopicTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BB62F0931D279F2400ACFC92 /* myTopicTableViewCell.m */; };
@@ -115,6 +116,9 @@
 		BB2E97231C1D1599001B7CAA /* saltfishTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = saltfishTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB2E97281C1D1599001B7CAA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BB2E97291C1D1599001B7CAA /* saltfishTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = saltfishTests.m; sourceTree = "<group>"; };
+		BB5C0F0C1D39DB9400EEC34F /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = background.png; path = "../../coding/salt-App效果图/background.png"; sourceTree = "<group>"; };
+		BB5C0F131D39FBA600EEC34F /* SFPersonalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFPersonalViewController.h; sourceTree = "<group>"; };
+		BB5C0F141D39FBA600EEC34F /* SFPersonalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFPersonalViewController.m; sourceTree = "<group>"; };
 		BB62F06D1D26AC3A00ACFC92 /* ClassificationVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClassificationVC.h; sourceTree = "<group>"; };
 		BB62F06E1D26AC3A00ACFC92 /* ClassificationVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClassificationVC.m; sourceTree = "<group>"; };
 		BB62F0701D26B52B00ACFC92 /* back_black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = back_black.png; path = "../../coding/salt-App效果图/back_black.png"; sourceTree = "<group>"; };
@@ -130,7 +134,6 @@
 		BB62F0831D273C5800ACFC92 /* SFMineViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFMineViewController.m; sourceTree = "<group>"; };
 		BB62F0871D273FA600ACFC92 /* SFRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFRootViewController.h; sourceTree = "<group>"; };
 		BB62F0881D273FA600ACFC92 /* SFRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFRootViewController.m; sourceTree = "<group>"; };
-		BB62F08A1D27691900ACFC92 /* 000010-11.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = "000010-11.jpg"; path = "../../coding/salt-App效果图/000010-11.jpg"; sourceTree = "<group>"; };
 		BB62F08D1D27799B00ACFC92 /* SFMyFollowTopicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFMyFollowTopicViewController.h; sourceTree = "<group>"; };
 		BB62F08E1D27799B00ACFC92 /* SFMyFollowTopicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFMyFollowTopicViewController.m; sourceTree = "<group>"; };
 		BB62F0901D279EE900ACFC92 /* notification.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = notification.png; path = "../../coding/salt-App效果图/notification.png"; sourceTree = "<group>"; };
@@ -287,6 +290,7 @@
 				BB28C47C1C5F211D00527872 /* toast */,
 				BB8C2A8C1CB1343C004112F9 /* something more */,
 				BB261F991C1D908B0079D037 /* tableViewCells */,
+				BB5C0F121D39FB7200EEC34F /* personal information */,
 				BBAD454A1C1D4C5F007A54F3 /* comment page */,
 				BBAD45491C1D4C24007A54F3 /* detail page */,
 				BB62F08C1D27795A00ACFC92 /* my follow topic page */,
@@ -338,6 +342,15 @@
 				BBAD45471C1D44FF007A54F3 /* HomeVC.m */,
 			);
 			name = "old home";
+			sourceTree = "<group>";
+		};
+		BB5C0F121D39FB7200EEC34F /* personal information */ = {
+			isa = PBXGroup;
+			children = (
+				BB5C0F131D39FBA600EEC34F /* SFPersonalViewController.h */,
+				BB5C0F141D39FBA600EEC34F /* SFPersonalViewController.m */,
+			);
+			name = "personal information";
 			sourceTree = "<group>";
 		};
 		BB62F06C1D26AC1300ACFC92 /* classification page */ = {
@@ -476,7 +489,7 @@
 			isa = PBXGroup;
 			children = (
 				BB62F0901D279EE900ACFC92 /* notification.png */,
-				BB62F08A1D27691900ACFC92 /* 000010-11.jpg */,
+				BB5C0F0C1D39DB9400EEC34F /* background.png */,
 				BB99E7D51C9ECA2900CDBBDD /* share_button.png */,
 				BB99E7D31C9ECA1A00CDBBDD /* praise_button_red.png */,
 				BB99E7D11C9ECA1300CDBBDD /* praise_button.png */,
@@ -663,6 +676,7 @@
 				BBF2B75E1D31D6B300657FA6 /* mine_tab_focus.png in Resources */,
 				BBF2B7561D313E1100657FA6 /* home_tab.png in Resources */,
 				BB6B47E81CA6DD2F00CABA95 /* black_top3.png in Resources */,
+				BB5C0F0D1D39DB9400EEC34F /* background.png in Resources */,
 				BBF2B75A1D31D3C500657FA6 /* mine_tab.png in Resources */,
 				BB65CA231D1E802A0098A53B /* unfollow.png in Resources */,
 				BBF2B7501D30940600657FA6 /* my_topic.png in Resources */,
@@ -676,7 +690,6 @@
 				BB99E7D21C9ECA1300CDBBDD /* praise_button.png in Resources */,
 				BB99E7D61C9ECA2900CDBBDD /* share_button.png in Resources */,
 				BBF2B7581D31D32A00657FA6 /* discovery_tab.png in Resources */,
-				BB62F08B1D27691900ACFC92 /* 000010-11.jpg in Resources */,
 				BBF2B75C1D31D6AA00657FA6 /* home_tab_focus.png in Resources */,
 				BB62F0911D279EE900ACFC92 /* notification.png in Resources */,
 				BB65CA211D1E65270098A53B /* follow.png in Resources */,
@@ -764,6 +777,7 @@
 				BB62F08F1D27799B00ACFC92 /* SFMyFollowTopicViewController.m in Sources */,
 				BB62F07E1D273C2000ACFC92 /* SFHomeViewController.m in Sources */,
 				BB2E970D1C1D1599001B7CAA /* main.m in Sources */,
+				BB5C0F151D39FBA600EEC34F /* SFPersonalViewController.m in Sources */,
 				BB62F0841D273C5800ACFC92 /* SFMineViewController.m in Sources */,
 				BB65CA1D1D1E33760098A53B /* TopicCell.m in Sources */,
 				BB97FD9B1D27FC3200EBA61D /* SFClassificationTableViewCell.m in Sources */,

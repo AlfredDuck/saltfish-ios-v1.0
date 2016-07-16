@@ -29,6 +29,7 @@
     [self.window makeKeyAndVisible];
     
     [NSThread sleepForTimeInterval:1.0];  //   启动等待时间
+    // [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;  // 状态栏小菊花
     
     // weibo SDK
     [WeiboSDK enableDebugMode:YES];
@@ -85,15 +86,7 @@
     }
 }
 
-// Weibo Request
-//- (void)didReceiveWeiboResponse:(WBAuthorizeResponse *)response
-//{
-//    NSLog(@"weibo hhhhhhhhhhh");
-//    NSLog(@"%@", response.userID);
-//    NSLog(@"%@", response.accessToken);
-//    NSLog(@"%@", response.expirationDate);
-//    NSLog(@"%@", response.refreshToken);
-//}
+
 
 #pragma mark - 微博响应信息，如认证是否成功
 - (void)didReceiveWeiboResponse:(WBBaseResponse *)response
@@ -114,11 +107,26 @@
     }
     else if ([response isKindOfClass:WBAuthorizeResponse.class]){
         WBAuthorizeResponse *res = (WBAuthorizeResponse *)response;
-        NSLog(@"新浪微博授权成功的响应！");
-        NSLog(@"%@", res.userID);
-        NSLog(@"%@", res.accessToken);
-        NSLog(@"%@", res.expirationDate);
-        NSLog(@"%@", res.refreshToken);
+        NSLog(@"新浪微博授权结果的响应！");
+        NSLog(@"userID:%@", res.userID);
+        NSLog(@"accessToken:%@", res.accessToken);
+        NSLog(@"expirationDate:%@", res.expirationDate);
+        NSLog(@"refreshToken%@", res.refreshToken);
+        
+        // 如果userinfo不为空，则授权成功
+        if (res.userID) {
+            NSLog(@"授权成功");
+            // 创建一个广播：微博授权成功的广播
+            NSDictionary *info = @{
+                                   @"uid": res.userID,
+                                   @"token": res.accessToken
+                                   };
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"weiboAuthorizeSuccess" object:info];
+        }
+        else {
+            NSLog(@"授权失败");
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"weiboAuthorizeFalse" object:nil];
+        }
     }
 }
 

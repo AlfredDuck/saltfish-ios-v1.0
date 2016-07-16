@@ -7,6 +7,8 @@
 //
 
 #import "SFDiscoveryViewController.h"
+#import "AFNetworking.h"
+#import "urlManager.h"
 #import "colorManager.h"
 #import "SFClassificationTableViewCell.h"
 #import "TopicTableViewCell.h"
@@ -71,6 +73,18 @@
     [titleBarBackground addSubview:titleLabel];
     
     
+    /* 创建 tableview */
+    [self createTableView];
+    
+}
+
+
+
+
+#pragma markt - 创建 tableview
+- (void)createTableView
+{
+    
     /* 创建tableView */
     static NSString *CellWithIdentifier = @"commentCell";
     _oneTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, _screenWidth, _screenHeight-64)];
@@ -89,12 +103,12 @@
     // 下拉刷新 MJRefresh
     _oneTableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         // 模拟延迟加载数据，因此2秒后才调用（真实开发中，可以移除这段gcd代码）
-         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-             // 结束刷新动作
-             [_oneTableView.mj_header endRefreshing];
-             NSLog(@"下拉刷新成功，结束刷新");
-         });
-
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            // 结束刷新动作
+            [_oneTableView.mj_header endRefreshing];
+            NSLog(@"下拉刷新成功，结束刷新");
+        });
+        
     }];
     
     // 上拉刷新 MJRefresh
@@ -106,7 +120,6 @@
     
     // 禁用 mjRefresh
     // contentTableView.mj_footer = nil;
-    
 }
 
 
@@ -140,7 +153,7 @@
             oneClassificationCell = [[SFClassificationTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:ClassificationCellWithIdentifier];
             oneClassificationCell.delegate = self;   // 设置自定义的cell代理
         }
-        [oneClassificationCell rewritePics:@[@"旅行",@"娱乐八卦",@"Sunshine",@"电影",@"黑客帝国",@"科技圈",@"洛丽塔",@"肉体女生"]];
+        [oneClassificationCell rewritePics: _classificationData];
         oneClassificationCell.selectionStyle = UITableViewCellSelectionStyleNone;  // 取消选中的背景色
         return oneClassificationCell;
         
@@ -174,12 +187,21 @@
 {
     NSUInteger row = [indexPath row];
     
-    TopicVC *topicPV = [[TopicVC alloc] init];
-    [self.navigationController pushViewController:topicPV animated:YES];
-    //开启iOS7的滑动返回效果
-    if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
-        self.navigationController.interactivePopGestureRecognizer.delegate = nil;
+    //
+    if (row == 1) {
+        [self connectForClassifications:tableView];
+        return;
     }
+    
+    if (row >= 1) {
+        TopicVC *topicPV = [[TopicVC alloc] init];
+        [self.navigationController pushViewController:topicPV animated:YES];
+        //开启iOS7的滑动返回效果
+        if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
+            self.navigationController.interactivePopGestureRecognizer.delegate = nil;
+        }
+    }
+
 }
 
 
@@ -195,6 +217,48 @@
     if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
         self.navigationController.interactivePopGestureRecognizer.delegate = nil;
     }
+}
+
+
+
+
+#pragma mark - 网络请求
+- (void)connectForClassifications:(UITableView *)tableView
+{
+    NSLog(@"请求classification开始");
+    
+    // prepare request parameters
+    NSString *host = [urlManager urlHost];
+    NSString *urlString = [host stringByAppendingString:@"/index/classifications"];
+    
+    NSDictionary *parameters = @{};  // 参数为空
+    
+    // 创建 GET 请求
+    AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];
+    connectManager.requestSerializer.timeoutInterval = 20.0;   //设置超时时间
+    [connectManager GET:urlString parameters: parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        // GET请求成功
+        NSArray *data = [responseObject objectForKey:@"data"];
+        NSString *errcode = [responseObject objectForKey:@"errcode"];
+        NSLog(@"errcode：%@", errcode);
+        NSLog(@"data:%@", data);
+        
+        // 更新 Data 数据
+        _classificationData = [data copy];
+        data = nil;
+        
+        // 刷新当前 tableview 的数据
+        // [tableView reloadData];
+        // 刷新特定的cell
+        NSIndexPath *indexPath=[NSIndexPath indexPathForRow:0 inSection:0];
+        [_oneTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
+        
+        
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
 }
 
 

@@ -202,6 +202,7 @@
         _isFollowing = YES;
     }
 
+    // 刷新特定的一个cell
     NSIndexPath *indexPath=[NSIndexPath indexPathForRow:0 inSection:0];
     [_oneTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationFade];
     

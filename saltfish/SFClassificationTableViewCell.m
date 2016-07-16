@@ -101,12 +101,13 @@
      每隔3个元素，创建一个single
      原始数组只存到最后一个single里
      */
+    
     NSMutableArray *DoubleArr = [[NSMutableArray alloc] init];  // 创建一个二维数组容器
     NSMutableArray *singleArr = [[NSMutableArray alloc] init];  // 创建一个一维数组，存入二维数组的第一个位置
     [DoubleArr addObject:singleArr];
     
     for (int i=0; i<[newArr count]; i++) {
-        [[DoubleArr lastObject] addObject:[newArr objectAtIndex:i]];
+        [[DoubleArr lastObject] addObject:[[newArr objectAtIndex:i] objectForKey:@"classification"]];
         if ((i+1)%3 == 0 && (i+1)!=[newArr count]) {    // 每隔3个元素创建一个一维数组，如果是最后一个元素则不创建
             NSMutableArray *singleArr = [[NSMutableArray alloc] init];
             [DoubleArr addObject: singleArr];
@@ -114,7 +115,7 @@
     }
     NSLog(@"二维数组：%@", DoubleArr);
     
-    NSString *url = @"http://i10.topitme.com/m074/1007429297c425ada8.jpg";
+
     // 根据设备宽度计算图片宽高
     int ww = ceil((_screenWidth - 11*2 - 16*2)/3.0);
     int hh = ceil(ww/107.0*89);
@@ -131,6 +132,7 @@
             picImageView.contentMode = UIViewContentModeScaleAspectFill;
             picImageView.clipsToBounds  = YES;
             // 需要AFNetwork
+            NSString *url = [[newArr objectAtIndex:i] objectForKey:@"picURL"];
             [picImageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
             
             // 遮黑

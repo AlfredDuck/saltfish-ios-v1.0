@@ -12,15 +12,15 @@
 #import "SFTabBarViewController.h"
 
 @interface SFHomeViewController : SFTabBarViewController <UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate, SFHotTableViewCellDelegate, SFArticleTableViewCellDelegate>
-// tableview
-@property (nonatomic, strong) UITableView *oneTableView;
-//
-@property (nonatomic, strong) UIScrollView *basedScrollView;
-//
+
+@property (nonatomic, strong) UITableView *oneTableView;  // tableview
+@property (nonatomic, strong) UIScrollView *basedScrollView;  // 用不到了的
 @property (nonatomic, strong) NSArray *data;
 @property (nonatomic, strong) NSArray *data2;
+@property (nonatomic, strong) NSArray *hotArticleData;
+@property (nonatomic, strong) NSArray *hotTopicData;
 
-// 全局变量 屏幕长宽
-@property (nonatomic) NSInteger screenWidth;
-@property (nonatomic) NSInteger screenHeight;
+@property (nonatomic) NSInteger screenWidth;  // 全局变量 屏幕长宽
+@property (nonatomic) NSInteger screenHeight;  // 全局变量 屏幕长宽
+
 @end

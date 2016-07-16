@@ -180,7 +180,7 @@
         picImageView.contentMode = UIViewContentModeScaleAspectFill;
         picImageView.clipsToBounds  = YES;
         // 需要AFNetwork
-        [picImageView sd_setImageWithURL:[NSURL URLWithString:[[_hotArticleData objectAtIndex:kk] objectForKey:@"url"]] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+        [picImageView sd_setImageWithURL:[NSURL URLWithString:[[_hotArticleData objectAtIndex:kk] objectForKey:@"picURL"]] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
         
         // 遮黑
         UIView *halfBlack = [[UIView alloc] initWithFrame:CGRectMake(0, 0, _screenWidth, _hotArticleHeight)];
@@ -248,11 +248,11 @@
 {
     for (int i=0; i<3; i++) {
         UILabel *topicLabel = [_hotTopicLabelArr objectAtIndex:i];
-        topicLabel.text = [[newArr objectAtIndex:i] objectForKey:@"title"];
+        topicLabel.text = [[newArr objectAtIndex:i] objectForKey:@"topic"];
         
         UIImageView *picImageView = [_hotTopicPicArr objectAtIndex:i];
-        // 需要AFNetwork        
-        [picImageView sd_setImageWithURL:[NSURL URLWithString:[[newArr objectAtIndex:i] objectForKey:@"url"]]placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+        // 需要AFNetwork
+        [picImageView sd_setImageWithURL:[NSURL URLWithString:[[newArr objectAtIndex:i] objectForKey:@"picURL"]]placeholderImage:[UIImage imageNamed:@"placeholder.png"] ];
     }
 }
 
