@@ -15,6 +15,7 @@
 #import "TopicVC.h"
 #import "ClassificationVC.h"
 #import "MJRefresh.h"
+#import "SFLoginAndSignup.h"
 
 
 @interface SFDiscoveryViewController ()
@@ -193,6 +194,11 @@
         return;
     }
     
+    if (row == 2) {
+        [self chooseLoginWayWith:@"请先登录"];
+        return;
+    }
+    
     if (row >= 1) {
         TopicVC *topicPV = [[TopicVC alloc] init];
         [self.navigationController pushViewController:topicPV animated:YES];
@@ -259,6 +265,26 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
+}
+
+
+
+#pragma mark - 选择登录方式 UIActionSheet
+- (void)chooseLoginWayWith:(NSString *)title
+{
+    NSLog(@"选择登录方式");
+    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:title delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles: @"使用新浪微博帐号",nil];
+    [sheet showInView:self.view];
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 0) {
+        NSLog(@"新浪微博登录");
+        SFLoginAndSignup *Login = [[SFLoginAndSignup alloc] init];
+        [Login requestForWeiboAuthorize];
+        [Login waitForWeiboAuthorizeResult];
+    }
 }
 
 

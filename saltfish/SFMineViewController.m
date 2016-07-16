@@ -13,7 +13,7 @@
 #import "colorManager.h"
 #import "SFMyFollowTopicViewController.h"
 #import "SFPersonalViewController.h"
-#import "WeiboSDK.h"
+#import "SFLoginAndSignup.h"
 
 
 @interface SFMineViewController ()
@@ -41,9 +41,6 @@
     [self createUIParts];
     [super createTabBarWith:2];  // 调用父类方法，构建tabbar
     NSLog(@"%@",[super tabBarBackgroundView]);
-    
-    /* 注册 notificationCenter 观察者 */
-    [self waitForWeiboAuthorizeResult];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -73,15 +70,6 @@
     backgroundImageView.contentMode = UIViewContentModeScaleAspectFill;
     backgroundImageView.clipsToBounds  = YES;
     [self.view addSubview:backgroundImageView];
-    
-    /* 登录按钮 */
-    [self createLoginButton];
-    
-    /* 昵称/说明文字 */
-    [self createNickname];
-    
-    /* 头像和昵称 */
-    //[self createPortrait];
     
     
     /* 下方 scrollview 区域 */
@@ -160,6 +148,23 @@
     UITapGestureRecognizer *singleTap3 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickComment)]; // 设置手势
     [commentView addGestureRecognizer:singleTap3]; // 添加手势
     [oneScrollView addSubview: commentView];
+    
+    
+    
+    /* 根据登录状态来创建头部ui */
+    NSUserDefaults *sfUserDefault = [NSUserDefaults standardUserDefaults];
+    if ([sfUserDefault dictionaryForKey:@"loginInfo"]) {
+        // 当前是登录状态
+        NSString *nickname = [[sfUserDefault dictionaryForKey:@"loginInfo"] objectForKey:@"nickname"];
+        [self createNickname:nickname];
+        [self createPortrait];
+    }
+    else {
+        // 当前未登录
+        [self createNickname:@"部分功能需登录后才能使用哦"];
+        [self createLoginButton];
+    }
+
 }
 
 
@@ -167,8 +172,8 @@
 #pragma mark - 登录按钮
 - (void)createLoginButton
 {
-    UIView *loginButtonBackground = [[UIView alloc] initWithFrame:CGRectMake((_screenWidth-74)/2.0, 53, 74, 74)];
-    [self.view addSubview:loginButtonBackground];
+    _loginButtonBackground = [[UIView alloc] initWithFrame:CGRectMake((_screenWidth-74)/2.0, 53, 74, 74)];
+    [self.view addSubview:_loginButtonBackground];
     
     // 绘制透明圆形背景
     UIView *round = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 74, 74)];
@@ -176,7 +181,7 @@
     round.layer.cornerRadius = 37.0; //设置图片圆角的尺度
     round.backgroundColor = [UIColor whiteColor];
     round.alpha = 0.85;
-    [loginButtonBackground addSubview:round];
+    [_loginButtonBackground addSubview:round];
     
     // 文本
     UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(13, 27, 49, 20)];
@@ -184,22 +189,22 @@
     title.text = @"登录";
     title.font = [UIFont fontWithName:@"Helvetica" size: 14.0];
     title.textAlignment = UITextAlignmentCenter;
-    [loginButtonBackground addSubview:title];
+    [_loginButtonBackground addSubview:title];
     
     // 添加手势
-    loginButtonBackground.userInteractionEnabled = YES; // 设置可以交互
+    _loginButtonBackground.userInteractionEnabled = YES; // 设置可以交互
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickLoginButton)]; // 设置手势
-    [loginButtonBackground addGestureRecognizer:singleTap]; // 添加手势
+    [_loginButtonBackground addGestureRecognizer:singleTap]; // 添加手势
 }
 
 
 #pragma mark - 昵称/说明文字
-- (void)createNickname
+- (void)createNickname:(NSString *)text
 {
     // 文字说明
     _nickname = [[UILabel alloc] initWithFrame:CGRectMake((_screenWidth-188)/2.0, 139, 188, 17)];
     _nickname.textColor = [UIColor whiteColor];
-    _nickname.text = @"部分功能需登录后才能使用哦";
+    _nickname.text = text;
     _nickname.font = [UIFont fontWithName:@"Helvetica" size: 12.0];
     _nickname.textAlignment = UITextAlignmentCenter;
     [self.view addSubview:_nickname];
@@ -228,8 +233,8 @@
     // uiimageview居中裁剪
     portraitImage.contentMode = UIViewContentModeScaleAspectFill;
     portraitImage.clipsToBounds  = YES;
-    // 需要AFNetwork
-    NSString *url = @"http://i10.topitme.com/l041/100414512045354e75.jpg";
+    // 从网络获取图片
+    NSString *url = [[[NSUserDefaults standardUserDefaults] dictionaryForKey:@"loginInfo"] objectForKey:@"portrait"];
     [portraitImage sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
     [portraitBackground addSubview:portraitImage];
     
@@ -292,7 +297,10 @@
     }
     else if (buttonIndex == 1) {
         NSLog(@"新浪微博登录");
-        [self loginWithWeibo];
+        SFLoginAndSignup *login = [[SFLoginAndSignup alloc] init];
+        [login requestForWeiboAuthorize];
+        [login waitForWeiboAuthorizeResult];
+        login.delegate = self;
     }
     else if (buttonIndex == 2) {
     }
@@ -300,112 +308,22 @@
 
 
 
-#pragma mark - 新浪微博登录授权
-- (void)loginWithWeibo
+#pragma mark - SFLogin&Signup 代理
+- (void)weiboLoginSuccess
 {
-    WBAuthorizeRequest *authorReq = [[WBAuthorizeRequest alloc] init];
-    authorReq.redirectURI = @"https://api.weibo.com/oauth2/default.html";
-    authorReq.scope = @"";
-    authorReq.shouldShowWebViewForAuthIfCannotSSO = YES;
-    [WeiboSDK sendRequest:authorReq];
+    NSLog(@"我登录成功了，你知道吗？");
+    /* 显示昵称 */
+    NSUserDefaults *sfUserDefault = [NSUserDefaults standardUserDefaults];
+    NSDictionary *userData = [sfUserDefault dictionaryForKey:@"loginInfo"];
+    NSLog(@"%@", userData);
+    _nickname.text = [userData objectForKey:@"nickname"];
+    
+    /* 隐藏登录按钮 */
+    _loginButtonBackground.hidden = YES;
+    
+    /* 创建头像 */
+    [self createPortrait];
 }
-
-
-
-#pragma mark - 登录授权成功后，获取用户信息
-/* 注册观察者 */
-- (void)waitForWeiboAuthorizeResult
-{
-    // 新浪微博授权成功
-    [[NSNotificationCenter defaultCenter] addObserverForName:@"weiboAuthorizeSuccess" object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
-        NSLog(@"%@", note.name);
-        NSLog(@"%@", note.object);
-        
-        [self requestForUserInfoWithToken:[note.object objectForKey:@"token"] uid:[note.object objectForKey:@"uid"]];
-        
-    }];
-    
-    // 新浪微博授权失败
-    [[NSNotificationCenter defaultCenter] addObserverForName:@"weiboAuthorizeFalse" object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
-        NSLog(@"%@",note.name);
-    }];
-}
-
-
-/* 调用微博的用户信息接口 */
-- (void)requestForUserInfoWithToken:(NSString *)token uid:(NSString *)uid
-{
-    NSString *url = @"https://api.weibo.com/2/users/show.json";
-    NSDictionary *param = @{@"access_token":token,
-                            @"uid":uid
-                            };
-    // 请求用户信息
-    [WBHttpRequest requestWithURL:url httpMethod:@"GET" params:param queue:nil withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
-        NSLog(@"%@", result);
-        NSString *nickname = [result objectForKey:@"name"];
-        NSString *portrait = [result objectForKey:@"avatar_large"];
-        NSLog(@"用户昵称：%@,%@", nickname, portrait);
-        
-        NSDictionary *user = @{
-                               @"uid":uid,
-                               @"nickname":[result objectForKey:@"name"],
-                               @"portrait":[result objectForKey:@"avatar_large"]
-                               };
-        
-        // 登录注册
-        [self connectForloginOrSignup:user];
-        
-    }];
-}
-
-
-#pragma mark - 到server登录或注册
-- (void)connectForloginOrSignup:(NSDictionary *)userInformation
-{
-    NSLog(@"登录或注册请求");
-    
-    // prepare request parameters
-    NSString *host = [urlManager urlHost];
-    NSString *urlString = [host stringByAppendingString:@"/index/weibo_login"];
-    
-    NSDictionary *parameters = @{
-                                 @"uid":[userInformation objectForKey:@"uid"],
-                                 @"nickname": [userInformation objectForKey:@"nickname"],
-                                 @"portrait": [userInformation objectForKey:@"portrait"]
-                                 };
-    
-    // 创建 GET 请求
-    AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];
-    connectManager.requestSerializer.timeoutInterval = 20.0;   //设置超时时间
-    [connectManager GET:urlString parameters: parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        
-        // GET请求成功
-        NSDictionary *data = [responseObject objectForKey:@"data"];
-        NSString *errcode = [responseObject objectForKey:@"errcode"];
-        NSLog(@"errcode：%@", errcode);
-        NSLog(@"data:%@", data);
-        
-        // 登录成功后，重置UI
-        [self weiboLoginSuccess:data];
-        
-        
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-    }];
-}
-
-
-
-#pragma mark - 新浪微博登录成功后...
-- (void)weiboLoginSuccess:(NSDictionary *)userData
-{
-    // 账号信息记录到本地
-    
-    // 重置UI
-    
-}
-
-
 
 
 

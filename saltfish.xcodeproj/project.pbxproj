@@ -10,6 +10,7 @@
 		BB0661F81D322D5C00FB79FE /* SFTabBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0661F71D322D5C00FB79FE /* SFTabBarViewController.m */; };
 		BB0F14B21C26D8FC00FDB77C /* back.png in Resources */ = {isa = PBXBuildFile; fileRef = BB0F14B11C26D8FC00FDB77C /* back.png */; };
 		BB0F14B41C26E60100FDB77C /* portrait.png in Resources */ = {isa = PBXBuildFile; fileRef = BB0F14B31C26E60100FDB77C /* portrait.png */; };
+		BB11B3B61D3A56DE00366377 /* SFLoginAndSignup.m in Sources */ = {isa = PBXBuildFile; fileRef = BB11B3B51D3A56DE00366377 /* SFLoginAndSignup.m */; };
 		BB261F9C1C1D90DF0079D037 /* bigPicTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BB261F9B1C1D90DF0079D037 /* bigPicTableViewCell.m */; };
 		BB261F9D1C1D90DF0079D037 /* bigPicTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BB261F9B1C1D90DF0079D037 /* bigPicTableViewCell.m */; };
 		BB261FA11C1D91070079D037 /* smallPicTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BB261FA01C1D91070079D037 /* smallPicTableViewCell.m */; };
@@ -100,6 +101,8 @@
 		BB0661F71D322D5C00FB79FE /* SFTabBarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFTabBarViewController.m; sourceTree = "<group>"; };
 		BB0F14B11C26D8FC00FDB77C /* back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = back.png; sourceTree = "<group>"; };
 		BB0F14B31C26E60100FDB77C /* portrait.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = portrait.png; sourceTree = "<group>"; };
+		BB11B3B41D3A56DE00366377 /* SFLoginAndSignup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFLoginAndSignup.h; sourceTree = "<group>"; };
+		BB11B3B51D3A56DE00366377 /* SFLoginAndSignup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFLoginAndSignup.m; sourceTree = "<group>"; };
 		BB261F9A1C1D90DF0079D037 /* bigPicTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bigPicTableViewCell.h; sourceTree = "<group>"; };
 		BB261F9B1C1D90DF0079D037 /* bigPicTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = bigPicTableViewCell.m; sourceTree = "<group>"; };
 		BB261F9F1C1D91070079D037 /* smallPicTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = smallPicTableViewCell.h; sourceTree = "<group>"; };
@@ -239,6 +242,15 @@
 			name = "First Level Base";
 			sourceTree = "<group>";
 		};
+		BB11B3B31D3A569E00366377 /* login & signup */ = {
+			isa = PBXGroup;
+			children = (
+				BB11B3B41D3A56DE00366377 /* SFLoginAndSignup.h */,
+				BB11B3B51D3A56DE00366377 /* SFLoginAndSignup.m */,
+			);
+			name = "login & signup";
+			sourceTree = "<group>";
+		};
 		BB261F991C1D908B0079D037 /* tableViewCells */ = {
 			isa = PBXGroup;
 			children = (
@@ -297,6 +309,7 @@
 				BB62F06C1D26AC1300ACFC92 /* classification page */,
 				BBFF6F691D167F590089099F /* topic page */,
 				BB2E97331C1D15CF001B7CAA /* old home */,
+				BB11B3B31D3A569E00366377 /* login & signup */,
 				BB62F07B1D273B5100ACFC92 /* First Level */,
 				BB62F0851D273F0E00ACFC92 /* Root Level */,
 				BBE588411C5E56FB0067D783 /* before launch */,
@@ -784,6 +797,7 @@
 				BB261FA11C1D91070079D037 /* smallPicTableViewCell.m in Sources */,
 				BBAD45481C1D44FF007A54F3 /* HomeVC.m in Sources */,
 				BB0661F81D322D5C00FB79FE /* SFTabBarViewController.m in Sources */,
+				BB11B3B61D3A56DE00366377 /* SFLoginAndSignup.m in Sources */,
 				BB8C2A8F1CB134CC004112F9 /* saltCustomTools.m in Sources */,
 				BBCB95551C30143400011BDD /* writeCommentVC.m in Sources */,
 				BB62F06F1D26AC3A00ACFC92 /* ClassificationVC.m in Sources */,

@@ -10,7 +10,7 @@
 #import "SFClassificationTableViewCell.h"
 #import "SFTabBarViewController.h"
 
-@interface SFDiscoveryViewController : SFTabBarViewController <UITableViewDelegate, UITableViewDataSource, SFClassificationTableViewCellDelegate>
+@interface SFDiscoveryViewController : SFTabBarViewController <UIActionSheetDelegate, UITableViewDelegate, UITableViewDataSource, SFClassificationTableViewCellDelegate>
 @property (nonatomic, strong) UITableView *oneTableView;  // tableview
 @property (nonatomic, strong) NSArray *classificationData;  // 大分类数据
 // 全局变量 屏幕长宽

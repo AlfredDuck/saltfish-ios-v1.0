@@ -114,6 +114,8 @@
 - (void)clickSignout
 {
     NSLog(@"退出登录！");
+    NSUserDefaults *sfUserDefault = [NSUserDefaults standardUserDefaults];
+    [sfUserDefault removeObjectForKey:@"loginInfo"];
 }
 
 
