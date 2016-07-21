@@ -92,7 +92,33 @@
 
 
 #pragma mark - 重写 cell 中各个元素的数据
+- (void)rewritePic:(NSString *)newPicURL
+{
+    _picURL = newPicURL;
+    [_picImageView sd_setImageWithURL:[NSURL URLWithString:_picURL] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+}
 
+- (void)rewriteTitle:(NSString *)newTitle
+{
+    _title = newTitle;
+    _titleLabel.text = _title;
+}
+
+- (void)rewriteUpdateTime:(NSString *)newUpdateTime
+{
+    _updateTime = newUpdateTime;
+    _updateTimeLabel.text = _updateTime;
+}
+
+- (void)rewriteNotification:(NSString *)isNotificationOn
+{
+    if ([isNotificationOn isEqualToString:@"yes"]) {
+        [_notificationMark setImage:[UIImage imageNamed:@"notification.png"]];
+    }
+    else {
+        [_notificationMark setImage:[UIImage imageNamed:@"nothing.png"]];
+    }
+}
 
 #pragma mark - IBAction
 

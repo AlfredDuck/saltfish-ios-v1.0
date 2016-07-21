@@ -54,7 +54,7 @@
     
     /* title */
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake((_screenWidth-200)/2, 20, 200, 44)];
-    titleLabel.text = @"啦啦啦";
+    titleLabel.text = @"个人信息";
     titleLabel.textColor = [colorManager mainTextColor];
     titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 16];
     titleLabel.textAlignment = UITextAlignmentCenter;

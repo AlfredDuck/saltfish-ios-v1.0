@@ -25,4 +25,9 @@
 //
 @property (nonatomic) NSInteger screenWidth;
 @property (nonatomic) NSInteger screenHeight;
+
+- (void)rewritePic:(NSString *)newPicURL;
+- (void)rewriteTitle:(NSString *)newTitle;
+- (void)rewriteUpdateTime:(NSString *)newUpdateTime;
+- (void)rewriteNotification:(NSString *)isNotificationOn;
 @end

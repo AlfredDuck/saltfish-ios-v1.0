@@ -257,6 +257,7 @@
 		BB11B3B71D3B306500366377 /* mine sub page */ = {
 			isa = PBXGroup;
 			children = (
+				BB62F08C1D27795A00ACFC92 /* my follow topic page */,
 				BB11B3B81D3B308900366377 /* customer feedback */,
 				BB5C0F121D39FB7200EEC34F /* personal information */,
 			);
@@ -325,7 +326,6 @@
 				BB261F991C1D908B0079D037 /* tableViewCells */,
 				BBAD454A1C1D4C5F007A54F3 /* comment page */,
 				BBAD45491C1D4C24007A54F3 /* detail page */,
-				BB62F08C1D27795A00ACFC92 /* my follow topic page */,
 				BB62F06C1D26AC1300ACFC92 /* classification page */,
 				BBFF6F691D167F590089099F /* topic page */,
 				BB2E97331C1D15CF001B7CAA /* old home */,
