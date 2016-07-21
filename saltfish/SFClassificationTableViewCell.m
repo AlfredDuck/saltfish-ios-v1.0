@@ -107,7 +107,7 @@
     [DoubleArr addObject:singleArr];
     
     for (int i=0; i<[newArr count]; i++) {
-        [[DoubleArr lastObject] addObject:[[newArr objectAtIndex:i] objectForKey:@"classification"]];
+        [[DoubleArr lastObject] addObject:[newArr objectAtIndex:i]];
         if ((i+1)%3 == 0 && (i+1)!=[newArr count]) {    // 每隔3个元素创建一个一维数组，如果是最后一个元素则不创建
             NSMutableArray *singleArr = [[NSMutableArray alloc] init];
             [DoubleArr addObject: singleArr];
@@ -132,7 +132,7 @@
             picImageView.contentMode = UIViewContentModeScaleAspectFill;
             picImageView.clipsToBounds  = YES;
             // 需要AFNetwork
-            NSString *url = [[newArr objectAtIndex:i] objectForKey:@"picURL"];
+            NSString *url = [[[DoubleArr objectAtIndex:i] objectAtIndex:j] objectForKey:@"picURL"];
             [picImageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
             
             // 遮黑
@@ -143,9 +143,9 @@
             
             // 文本
             UILabel *classificationLable = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, ww, hh)];
-            classificationLable.text = [[DoubleArr objectAtIndex:i] objectAtIndex:j];
+            classificationLable.text = [[[DoubleArr objectAtIndex:i] objectAtIndex:j] objectForKey:@"classification"];
             classificationLable.textColor  = [UIColor whiteColor];
-            classificationLable.font = [UIFont fontWithName:@"Helvetica" size: 15.0f];
+            classificationLable.font = [UIFont fontWithName:@"Helvetica" size: 14.0f];
             classificationLable.numberOfLines = 3;
             classificationLable.textAlignment = UITextAlignmentCenter;
             // 文字阴影

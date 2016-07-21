@@ -38,6 +38,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;  // 状态栏小菊花
     _screenHeight = [UIScreen mainScreen].bounds.size.height;
     _screenWidth = [UIScreen mainScreen].bounds.size.width;
     _firstLoad = YES;

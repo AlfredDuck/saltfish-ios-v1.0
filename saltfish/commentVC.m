@@ -510,6 +510,7 @@
     NSLog(@"点击写评论button");
     writeCommentVC *writeCommentPage = [[writeCommentVC alloc] init];
     writeCommentPage.delegate = self;
+    writeCommentPage.pageTitle = @"写评论";
     writeCommentPage.articleID = _articleID;
     [self presentViewController:writeCommentPage animated:YES completion:nil];
 }

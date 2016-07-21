@@ -82,40 +82,32 @@
     
     // 焦点图数据（临时）
     NSDictionary *d1 = [[NSDictionary alloc] initWithObjectsAndKeys:
-                        @"001三吉彩花又特么来中国捞钱了",@"title",
-                        @"http://fc.topitme.com/c/a7/18/11398941169b318a7cl.jpg", @"picURL",
+                        @"",@"title",
+                        @"", @"picURL",
                         nil];
     NSDictionary *d2 = [[NSDictionary alloc] initWithObjectsAndKeys:
-                        @"002国风灯具所承载的东方韵味总是让人感到内心的平实。在酷暑难耐的夜晚",@"title",
-                        @"http://i10.topitme.com/l044/10044083580cb1e8f4.jpg", @"picURL",
+                        @"",@"title",
+                        @"", @"picURL",
                         nil];
     NSDictionary *d3 = [[NSDictionary alloc] initWithObjectsAndKeys:
-                        @"003《权力的游戏》一季终，以后周一的期待又少了一个。 第六季大结局可以说把整季燃到了最高点",@"title",
-                        @"http://f7.topitme.com/7/a4/75/115044609142d75a47l.jpg", @"picURL",
-                        nil];
-    NSDictionary *d4 = [[NSDictionary alloc] initWithObjectsAndKeys:
-                        @"004墙绘，顾名思义就是在墙上作画。 如果可以",@"title",
-                        @"http://f10.topitme.com/l/201102/13/12975663235538.jpg", @"picURL",
-                        nil];
-    NSDictionary *d5 = [[NSDictionary alloc] initWithObjectsAndKeys:
-                        @"005大概没几个插画师能抵得住",@"title",
-                        @"http://f10.topitme.com/l/201102/13/12975659369227.jpg", @"picURL",
+                        @"",@"title",
+                        @"", @"picURL",
                         nil];
     
     NSDictionary *t1 = [[NSDictionary alloc] initWithObjectsAndKeys:
-                        @"#台湾肯定音乐祭#",@"title",
-                        @"http://f10.topitme.com/m/201102/13/12975675911220.jpg", @"picURL",
+                        @"##",@"title",
+                        @"", @"picURL",
                         nil];
     NSDictionary *t2 = [[NSDictionary alloc] initWithObjectsAndKeys:
-                        @"#Sunshine#",@"title",
-                        @"http://f10.topitme.com/t/201012/19/12927225068850.jpg", @"picURL",
+                        @"##",@"title",
+                        @"", @"picURL",
                         nil];
     NSDictionary *t3 = [[NSDictionary alloc] initWithObjectsAndKeys:
-                        @"#吴亦凡艹粉#",@"title",
-                        @"http://f10.topitme.com/l/201102/13/12975659369227.jpg", @"picURL",
+                        @"##",@"title",
+                        @"", @"picURL",
                         nil];
     
-    _hotArticleData = @[d1,d2,d3,d4,d5];
+    _hotArticleData = @[d1,d2,d3];
     _hotTopicData = @[t1,t2,t3];
     
     /* 创建 TableView */

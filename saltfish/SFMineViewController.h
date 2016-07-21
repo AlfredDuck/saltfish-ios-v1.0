@@ -10,8 +10,9 @@
 #import "SFTabBarViewController.h"
 #import "SFLoginAndSignup.h"
 #import "SFPersonalViewController.h"
+#import "SFCustomerFeedbackViewController.h"
 
-@interface SFMineViewController : SFTabBarViewController <UIActionSheetDelegate, SFLoginAndSignupDelegate, SFPersonalViewControllerDelegate>
+@interface SFMineViewController : SFTabBarViewController <UIActionSheetDelegate, SFLoginAndSignupDelegate, SFPersonalViewControllerDelegate, SFCustomerFeedbackViewControllerDelegate>
 
 @property (nonatomic, strong) UILabel *nickname;  // 未登录时是说明文字，登录后是昵称
 @property (nonatomic, strong) UIView *loginButtonBackground;  // 登录按钮

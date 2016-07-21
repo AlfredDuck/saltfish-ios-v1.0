@@ -1,22 +1,22 @@
 //
-//  writeCommentVC.m
+//  SFCustomerFeedbackViewController.m
 //  saltfish
 //
-//  Created by alfred on 15/12/27.
-//  Copyright © 2015年 Alfred. All rights reserved.
+//  Created by alfred on 16/7/17.
+//  Copyright © 2016年 Alfred. All rights reserved.
 //
 
-#import "writeCommentVC.h"
+#import "SFCustomerFeedbackViewController.h"
 #import "toastView.h"
 #import "colorManager.h"
 #import "urlManager.h"
 #import "AFNetworking.h"
 
-@interface writeCommentVC ()
+@interface SFCustomerFeedbackViewController ()
 
 @end
 
-@implementation writeCommentVC
+@implementation SFCustomerFeedbackViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -33,12 +33,11 @@
     [super viewDidLoad];
     _screenHeight = [UIScreen mainScreen].bounds.size.height;
     _screenWidth = [UIScreen mainScreen].bounds.size.width;
-
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    NSLog(@"写评论页面articleID: %@", _articleID);
     // 创建 UI
     [self basedTitleBar];
     [self basedWriteText];
@@ -104,27 +103,6 @@
 // 创建输入文本区域
 - (void)basedWriteText
 {
-//    // 昵称输入框
-//    UIView *nickNameBackground = [[UIView alloc] initWithFrame:CGRectMake(0, 64+10, _screenWidth, 44)];
-//    nickNameBackground.backgroundColor = [UIColor whiteColor];
-//    UIView *line1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, _screenWidth, 0.5)];
-//    UIView *line2 = [[UIView alloc] initWithFrame:CGRectMake(0, 43.5, _screenWidth, 0.5)];
-//    line1.backgroundColor = [UIColor colorWithRed:236/255.0 green:236/255.0 blue:236/255.0 alpha:1];
-//    line2.backgroundColor = [UIColor colorWithRed:236/255.0 green:236/255.0 blue:236/255.0 alpha:1];
-//    [nickNameBackground addSubview:line1];
-//    [nickNameBackground addSubview:line2];
-//    
-//    [self.view addSubview:nickNameBackground];
-//    
-//    _nickNameTextField = [[UITextField alloc] initWithFrame:CGRectMake(13, 2, _screenWidth-30, 40)];
-//    [_nickNameTextField setBorderStyle:UITextBorderStyleNone]; // 外框类型
-//    _nickNameTextField.placeholder = @"壮士，留下名号吧"; // 默认显示的字
-//    // _nickNameTextField.backgroundColor = [UIColor yellowColor];
-//    _nickNameTextField.textColor = [colorManager mainTextColor];
-//    _nickNameTextField.font = [UIFont fontWithName:@"Helvetica" size:14];
-//    [_nickNameTextField setValue:[UIColor lightGrayColor] forKeyPath:@"_placeholderLabel.textColor"]; // 改placeholder颜色
-//    [nickNameBackground addSubview:_nickNameTextField];
-    
     // 评论输入框
     UIView *commentBackground = [[UIView alloc] initWithFrame:CGRectMake(0, 64+15, _screenWidth, 118)];
     commentBackground.backgroundColor = [UIColor whiteColor];
@@ -146,12 +124,12 @@
     [commentBackground addSubview:_contentTextView];
     
     // 自定义 UITextView 的 placeholder
-    _placeholder = [[UILabel alloc] initWithFrame:CGRectMake(13,1,100,40)];
-    _placeholder.text = @"输入评论";
+    _placeholder = [[UILabel alloc] initWithFrame:CGRectMake(13,1,310,40)];
+    _placeholder.text = @"把你对此APP的所有不满都发泄出来吧！";
     _placeholder.textColor = [UIColor lightGrayColor];
     _placeholder.font = [UIFont fontWithName:@"Helvetica" size: 14];
     [commentBackground addSubview:_placeholder];
-
+    
 }
 
 /* 发送按钮的两种状态 */
@@ -243,16 +221,10 @@
 - (void)connectForWriteComment:(NSString *)comment
 {
     NSLog(@"start write comment request !");
-//    
-//    {
-//    article_id: XXXX
-//    nickname: XXXX
-//    text: XXXX
-//    uuid: XXXX
-//    }
+
     // 准备请求参数
     NSString *host = [urlManager urlHost];
-    NSString *urlString = [host stringByAppendingString:@"/comment/write_comment"];
+    NSString *urlString = [host stringByAppendingString:@"/index/customer_feedback"];
     
     // 读取本地的uuid
     NSString *uuid;
@@ -263,7 +235,6 @@
     
     NSDictionary *parameters = @{
                                  @"text": comment,
-                                 @"article_id": _articleID,
                                  @"uuid": uuid
                                  };
     
@@ -281,9 +252,11 @@
         }
         NSLog(@"请求状态：%@", errcode);
         
-        // 返回上一页,并传送代理消息
-        [self.delegate writeCommentSuccess];
-        [self dismissViewControllerAnimated:YES completion:nil];
+        // 返回上一页
+        [self dismissViewControllerAnimated:YES completion:^{
+            [self.delegate sendFeedbackSuccess];
+        }];
+        
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);

@@ -13,7 +13,9 @@
 #import "colorManager.h"
 #import "SFMyFollowTopicViewController.h"
 #import "SFPersonalViewController.h"
+#import "SFCustomerFeedbackViewController.h"
 #import "SFLoginAndSignup.h"
+#import "toastView.h"
 
 
 @interface SFMineViewController ()
@@ -45,7 +47,6 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 - (void)dealloc {
@@ -284,9 +285,30 @@
     }
 }
 
-- (void)clickAppStore{}
+- (void)clickAppStore
+{
+}
 
-- (void)clickComment{}
+- (void)clickComment
+{
+    NSLog(@"click my topic");
+    NSUserDefaults *sfUserDefault = [NSUserDefaults standardUserDefaults];
+    if ([sfUserDefault dictionaryForKey:@"loginInfo"]) {
+        // 当前是登录状态
+        SFCustomerFeedbackViewController *customerFeedbackPage = [[SFCustomerFeedbackViewController alloc] init];
+        customerFeedbackPage.pageTitle = @"吐槽区";
+        customerFeedbackPage.delegate = self;
+        [self.navigationController presentViewController:customerFeedbackPage animated:YES completion:^{
+            NSLog(@"开启吐槽页面");
+            
+        }];
+    }
+    else {
+        // 未登录状态
+        [self chooseLoginWayWith:@"登录后再来吐槽吧"];
+    }
+}
+
 
 
 
@@ -333,7 +355,6 @@
 #pragma mark - SFPersonalViewController 代理
 - (void)signout
 {
-    NSLog(@"我特么注销了，你知道吗？");
     _nickname.text = @"部分功能需登录后才能使用哦";
     
     /* 创建登录按钮 */
@@ -341,6 +362,14 @@
     
     /* 隐藏头像 */
     [_portraitBackground removeFromSuperview];
+}
+
+
+
+#pragma mark - SFCutomerFeedback 代理
+- (void)sendFeedbackSuccess
+{
+    [toastView showToastWith:@"已收到你的吐槽[BINGO!]" duration:3.0 superView:self.view];
 }
 
 

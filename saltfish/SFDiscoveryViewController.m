@@ -42,6 +42,9 @@
     
     [self createUIParts];
     [super createTabBarWith:1];  // 调用父类方法，构建tabbar
+    
+    [self connectForClassifications:_oneTableView];
+    [self connectForLatestTopics:_oneTableView isRefresh:NO];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -73,6 +76,13 @@
     titleLabel.textAlignment = UITextAlignmentCenter;
     [titleBarBackground addSubview:titleLabel];
     
+    // loading 菊花
+    _loadingFlower = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    _loadingFlower.frame = CGRectMake(0, 20, 44, 44);
+    //[_loadingFlower startAnimating];
+    //[_loadingFlower stopAnimating];
+    [titleBarBackground addSubview:_loadingFlower];
+    
     
     /* 创建 tableview */
     [self createTableView];
@@ -81,14 +91,15 @@
 
 
 
+#pragma mark - 初始化 tableview 数据
 
-#pragma markt - 创建 tableview
+#pragma mark - 创建 tableview
 - (void)createTableView
 {
     
     /* 创建tableView */
     static NSString *CellWithIdentifier = @"commentCell";
-    _oneTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, _screenWidth, _screenHeight-64)];
+    _oneTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, _screenWidth, _screenHeight-64-49)];
     _oneTableView.backgroundColor = [UIColor brownColor];
     [_oneTableView setDelegate:self];
     [_oneTableView setDataSource:self];
@@ -104,11 +115,12 @@
     // 下拉刷新 MJRefresh
     _oneTableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         // 模拟延迟加载数据，因此2秒后才调用（真实开发中，可以移除这段gcd代码）
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            // 结束刷新动作
-            [_oneTableView.mj_header endRefreshing];
-            NSLog(@"下拉刷新成功，结束刷新");
-        });
+//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//            // 结束刷新动作
+//            [_oneTableView.mj_header endRefreshing];
+//            NSLog(@"下拉刷新成功，结束刷新");
+//        });
+        [self connectForLatestTopics:_oneTableView isRefresh:YES];
         
     }];
     
@@ -116,7 +128,8 @@
     _oneTableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
         // 结束加载更多
         // [tableView.mj_footer endRefreshing];
-        [_oneTableView.mj_footer endRefreshingWithNoMoreData];
+        // [_oneTableView.mj_footer endRefreshingWithNoMoreData];
+        [self connectForMoreTopics:_oneTableView];
     }];
     
     // 禁用 mjRefresh
@@ -135,7 +148,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 20;
+    return [_latestTopicsData count]+1;
 }
 
 // 填充cell
@@ -158,16 +171,22 @@
         oneClassificationCell.selectionStyle = UITableViewCellSelectionStyleNone;  // 取消选中的背景色
         return oneClassificationCell;
         
-    } else {
+    }
+    else {
         if (oneTopicCell == nil) {
             oneTopicCell = [[TopicTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:TopicCellWithIdentifier];
         }
+        [oneTopicCell rewriteTitle:[[_latestTopicsData objectAtIndex:row-1] objectForKey:@"title"]];
+        [oneTopicCell rewriteintroduction:[[_latestTopicsData objectAtIndex:row-1] objectForKey:@"introduction"]];
+        [oneTopicCell rewritePic:[[_latestTopicsData objectAtIndex:row-1] objectForKey:@"picURL"]];
+        [oneTopicCell rewriteFollowButton:[[_latestTopicsData objectAtIndex:row-1] objectForKey:@"isFollowing"]];
         oneTopicCell.selectionStyle = UITableViewCellSelectionStyleNone;  // 取消选中的背景色
         return oneTopicCell;
     }
 
     // 直接往cell addsubView的方法会在每次划出屏幕再划回来时 再加载一次subview，因此会重复加载很多subview
 }
+
 
 // 改变 cell 高度
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -191,6 +210,7 @@
     //
     if (row == 1) {
         [self connectForClassifications:tableView];
+        [self connectForLatestTopics:tableView isRefresh:NO];
         return;
     }
     
@@ -218,6 +238,7 @@
 {
     NSLog(@"我在点击：%@", classification);
     ClassificationVC *classPage = [[ClassificationVC alloc] init];
+    classPage.pageTitle = classification;
     [self.navigationController pushViewController:classPage animated:YES];
     //开启iOS7的滑动返回效果
     if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
@@ -228,14 +249,15 @@
 
 
 
-#pragma mark - 网络请求
+#pragma mark - 网络请求 - 请求分类
 - (void)connectForClassifications:(UITableView *)tableView
 {
     NSLog(@"请求classification开始");
+    [_loadingFlower startAnimating];
     
     // prepare request parameters
     NSString *host = [urlManager urlHost];
-    NSString *urlString = [host stringByAppendingString:@"/index/classifications"];
+    NSString *urlString = [host stringByAppendingString:@"/index/all_classifications"];
     
     NSDictionary *parameters = @{};  // 参数为空
     
@@ -248,7 +270,8 @@
         NSArray *data = [responseObject objectForKey:@"data"];
         NSString *errcode = [responseObject objectForKey:@"errcode"];
         NSLog(@"errcode：%@", errcode);
-        NSLog(@"data:%@", data);
+        //NSLog(@"data:%@", data);
+        [_loadingFlower stopAnimating];
         
         // 更新 Data 数据
         _classificationData = [data copy];
@@ -259,11 +282,105 @@
         // 刷新特定的cell
         NSIndexPath *indexPath=[NSIndexPath indexPathForRow:0 inSection:0];
         [_oneTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
+
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+}
+
+
+
+#pragma mark - 网络请求 - 请求最新话题
+//（第一次拉取和下拉刷新）
+- (void)connectForLatestTopics:(UITableView *)tableView isRefresh:(BOOL)isRefresh
+{
+    NSLog(@"请求 latest topics 开始");
+    [_loadingFlower startAnimating];
+    
+    // 准备请求参数
+    NSString *host = [urlManager urlHost];
+    NSString *urlString = [host stringByAppendingString:@"/index/latest_topics"];
+    
+    // 用户id和设备id
+    NSDictionary *parameters = @{@"uuid":@"",
+                                 @"userid":@""
+                                 };
+    //
+    
+    // 创建 GET 请求
+    AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];
+    connectManager.requestSerializer.timeoutInterval = 20.0;   //设置超时时间
+    [connectManager GET:urlString parameters: parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
+        // GET请求成功
+        NSArray *data = [responseObject objectForKey:@"data"];
+        NSString *errcode = [responseObject objectForKey:@"errcode"];
+        NSLog(@"errcode：%@", errcode);
+        //NSLog(@"data:%@", data);
+        [_loadingFlower stopAnimating];
+        
+        // 更新 Data 数据
+        _latestTopicsData = [data copy];
+        data = nil;
+        
+        // 刷新当前 tableview 的数据
+        [tableView reloadData];
+        
+        // 如果此次操作是下拉刷新
+        if (isRefresh) {
+            [tableView.mj_header endRefreshing];  // 结束下拉刷新
+        }
         
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
+    }];
+}
+
+
+// 拉取最新话题 - 分页加载
+- (void)connectForMoreTopics:(UITableView *)tableView
+{
+    // 准备请求参数
+    NSString *host = [urlManager urlHost];
+    NSString *urlString = [host stringByAppendingString:@"/index/latest_topics"];
+    
+    // 用户id和设备id
+    NSDictionary *parameters = @{@"uuid":@"",
+                                 @"userid":@""
+                                 };
+    // 创建 GET 请求
+    AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];
+    connectManager.requestSerializer.timeoutInterval = 20.0;   //设置超时时间
+    [connectManager GET:urlString parameters: parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        // GET请求成功
+        NSArray *data = [responseObject objectForKey:@"data"];
+        NSString *errcode = [responseObject objectForKey:@"errcode"];
+        NSLog(@"errcode：%@", errcode);
+        
+        if ([errcode isEqualToString:@"err"]) {
+            [tableView.mj_footer endRefreshingWithNoMoreData];
+            return;
+        }
+        [_loadingFlower stopAnimating];
+        
+        // 更新 Data 数据
+        NSMutableArray *marr = [_latestTopicsData mutableCopy];
+        [marr addObjectsFromArray:data];
+        _latestTopicsData = [marr copy];
+        marr = nil;
+        data = nil;
+        
+        // 刷新当前 tableview 的数据
+        [tableView reloadData];
+        
+        [tableView.mj_footer endRefreshing];  // 结束上拉加载更多
+        
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+        [tableView.mj_footer endRefreshing];
     }];
 }
 

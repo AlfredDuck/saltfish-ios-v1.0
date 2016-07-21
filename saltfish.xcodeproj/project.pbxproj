@@ -11,6 +11,7 @@
 		BB0F14B21C26D8FC00FDB77C /* back.png in Resources */ = {isa = PBXBuildFile; fileRef = BB0F14B11C26D8FC00FDB77C /* back.png */; };
 		BB0F14B41C26E60100FDB77C /* portrait.png in Resources */ = {isa = PBXBuildFile; fileRef = BB0F14B31C26E60100FDB77C /* portrait.png */; };
 		BB11B3B61D3A56DE00366377 /* SFLoginAndSignup.m in Sources */ = {isa = PBXBuildFile; fileRef = BB11B3B51D3A56DE00366377 /* SFLoginAndSignup.m */; };
+		BB11B3BB1D3B30E900366377 /* SFCustomerFeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB11B3BA1D3B30E900366377 /* SFCustomerFeedbackViewController.m */; };
 		BB261F9C1C1D90DF0079D037 /* bigPicTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BB261F9B1C1D90DF0079D037 /* bigPicTableViewCell.m */; };
 		BB261F9D1C1D90DF0079D037 /* bigPicTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BB261F9B1C1D90DF0079D037 /* bigPicTableViewCell.m */; };
 		BB261FA11C1D91070079D037 /* smallPicTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BB261FA01C1D91070079D037 /* smallPicTableViewCell.m */; };
@@ -103,6 +104,8 @@
 		BB0F14B31C26E60100FDB77C /* portrait.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = portrait.png; sourceTree = "<group>"; };
 		BB11B3B41D3A56DE00366377 /* SFLoginAndSignup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFLoginAndSignup.h; sourceTree = "<group>"; };
 		BB11B3B51D3A56DE00366377 /* SFLoginAndSignup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFLoginAndSignup.m; sourceTree = "<group>"; };
+		BB11B3B91D3B30E900366377 /* SFCustomerFeedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFCustomerFeedbackViewController.h; sourceTree = "<group>"; };
+		BB11B3BA1D3B30E900366377 /* SFCustomerFeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFCustomerFeedbackViewController.m; sourceTree = "<group>"; };
 		BB261F9A1C1D90DF0079D037 /* bigPicTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bigPicTableViewCell.h; sourceTree = "<group>"; };
 		BB261F9B1C1D90DF0079D037 /* bigPicTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = bigPicTableViewCell.m; sourceTree = "<group>"; };
 		BB261F9F1C1D91070079D037 /* smallPicTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = smallPicTableViewCell.h; sourceTree = "<group>"; };
@@ -251,6 +254,24 @@
 			name = "login & signup";
 			sourceTree = "<group>";
 		};
+		BB11B3B71D3B306500366377 /* mine sub page */ = {
+			isa = PBXGroup;
+			children = (
+				BB11B3B81D3B308900366377 /* customer feedback */,
+				BB5C0F121D39FB7200EEC34F /* personal information */,
+			);
+			name = "mine sub page";
+			sourceTree = "<group>";
+		};
+		BB11B3B81D3B308900366377 /* customer feedback */ = {
+			isa = PBXGroup;
+			children = (
+				BB11B3B91D3B30E900366377 /* SFCustomerFeedbackViewController.h */,
+				BB11B3BA1D3B30E900366377 /* SFCustomerFeedbackViewController.m */,
+			);
+			name = "customer feedback";
+			sourceTree = "<group>";
+		};
 		BB261F991C1D908B0079D037 /* tableViewCells */ = {
 			isa = PBXGroup;
 			children = (
@@ -302,13 +323,13 @@
 				BB28C47C1C5F211D00527872 /* toast */,
 				BB8C2A8C1CB1343C004112F9 /* something more */,
 				BB261F991C1D908B0079D037 /* tableViewCells */,
-				BB5C0F121D39FB7200EEC34F /* personal information */,
 				BBAD454A1C1D4C5F007A54F3 /* comment page */,
 				BBAD45491C1D4C24007A54F3 /* detail page */,
 				BB62F08C1D27795A00ACFC92 /* my follow topic page */,
 				BB62F06C1D26AC1300ACFC92 /* classification page */,
 				BBFF6F691D167F590089099F /* topic page */,
 				BB2E97331C1D15CF001B7CAA /* old home */,
+				BB11B3B71D3B306500366377 /* mine sub page */,
 				BB11B3B31D3A569E00366377 /* login & signup */,
 				BB62F07B1D273B5100ACFC92 /* First Level */,
 				BB62F0851D273F0E00ACFC92 /* Root Level */,
@@ -775,6 +796,7 @@
 			files = (
 				BB9B90AB1C9C4E1200A89A13 /* picBasedTableViewCell.m in Sources */,
 				BB62F0941D279F2400ACFC92 /* myTopicTableViewCell.m in Sources */,
+				BB11B3BB1D3B30E900366377 /* SFCustomerFeedbackViewController.m in Sources */,
 				BB2E97101C1D1599001B7CAA /* AppDelegate.m in Sources */,
 				BBE5883F1C5E1E800067D783 /* urlManager.m in Sources */,
 				BBE6CCD21C1F19D400AA9525 /* detailVC.m in Sources */,

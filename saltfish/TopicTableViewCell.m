@@ -36,9 +36,9 @@
         _screenWidth = [UIScreen mainScreen].bounds.size.width;
         
         // 一些初始化的值
-        _title = @"#三吉彩花#";
+        _title = @"##";
         _introduction = @"新宿御苑&佐助稻荷神社";
-        _picURL = @"http://f4.topitme.com/4/11/e9/1135586544a53e9114m.jpg";
+        _picURL = @"";
         self.tag = 999999;
         
         /* 图片(尺寸固定) */
@@ -59,7 +59,7 @@
         [self.contentView addSubview:_titleLabel];
         
         /* 介绍 */
-        _introductionLabel = [[UILabel alloc] initWithFrame:CGRectMake(86, 44, _screenWidth-(58+11+16+11), 17)];
+        _introductionLabel = [[UILabel alloc] initWithFrame:CGRectMake(86, 44, _screenWidth-(58+11+16+11+45+16), 17)];
         _introductionLabel.text = _introduction;
         _introductionLabel.font = [UIFont fontWithName:@"Helvetica" size: 12.0f];
         _introductionLabel.textColor = [colorManager secondTextColor];
@@ -97,6 +97,34 @@
 
 
 #pragma mark - 重写 cell 中各个元素的数据
+- (void)rewritePic:(NSString *)newPicURL
+{
+    _picURL = newPicURL;
+    [_picImageView sd_setImageWithURL:[NSURL URLWithString:_picURL] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+}
+
+- (void)rewriteTitle:(NSString *)newTitle
+{
+    _title = newTitle;
+    _titleLabel.text = _title;
+}
+
+- (void)rewriteintroduction:(NSString *)newIntroduction
+{
+    _introduction = newIntroduction;
+    _introductionLabel.text = _introduction;
+}
+
+- (void)rewriteFollowButton:(NSString *)isFollowing
+{
+    if ([isFollowing isEqualToString:@"yes"]) {
+        [_followButton setImage:[UIImage imageNamed:@"unfollow_small.png"]];
+    }
+    else {
+        [_followButton setImage:[UIImage imageNamed:@"follow_small.png"]];
+    }
+}
+
 
 
 #pragma mark - IBAction
