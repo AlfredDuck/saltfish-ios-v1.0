@@ -106,9 +106,18 @@
                         @"##",@"title",
                         @"", @"picURL",
                         nil];
+    NSDictionary *g1 = [[NSDictionary alloc] initWithObjectsAndKeys:
+                        @"title", @"",
+                        @"topic", @"",
+                        @"picURL", @"",
+                        @"topicImageURL", @"",
+                        @"hotScore", @"",
+                        nil];
     
     _hotArticleData = @[d1,d2,d3];
     _hotTopicData = @[t1,t2,t3];
+    NSArray *dd = @[g1];
+    _followedArticlesData = [dd mutableCopy];
     
     /* 创建 TableView */
     [self createBasedTableView];
@@ -186,49 +195,6 @@
 
 
 
-#pragma mark - 网络请求
-
-/* 请求热门文章(焦点图)&热门话题 */
-- (void)connectForHot:(UITableView *)tableView
-{
-    NSLog(@"请求焦点图开始");
-    
-    // prepare request parameters
-    NSString *host = [urlManager urlHost];
-    NSString *urlString = [host stringByAppendingString:@"/index/hot_articles"];
-    
-    NSDictionary *parameters = @{};  // 参数为空
-    
-    // 创建 GET 请求
-    AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];
-    connectManager.requestSerializer.timeoutInterval = 20.0;   //设置超时时间
-    [connectManager GET:urlString parameters: parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        
-        // GET请求成功
-        NSDictionary *data = [responseObject objectForKey:@"data"];
-        NSString *errcode = [responseObject objectForKey:@"errcode"];
-        NSLog(@"errcode：%@", errcode);
-        NSLog(@"data:%@", data);
-        
-        // 更新 hotArticleData 数据
-        _hotArticleData = [[data objectForKey:@"hotArticles"] copy];
-        // 更新 hotTopicData 数据
-        _hotTopicData = [[data objectForKey:@"hotTopics"] copy];
-
-        
-        // 刷新当前 tableview 的数据
-        // [tableView reloadData];
-        // 刷新特定的cell
-        NSIndexPath *indexPath=[NSIndexPath indexPathForRow:0 inSection:0];
-        [_oneTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
-        
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-    }];
-}
-
-
-
 #pragma mark - 创建 TableView
 - (void)createBasedTableView
 {
@@ -259,9 +225,7 @@
     
     // 上拉刷新 MJRefresh
     _oneTableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
-        // 结束加载更多
-        // [tableView.mj_footer endRefreshing];
-        [_oneTableView.mj_footer endRefreshingWithNoMoreData];
+        [self connectForMoreFollowedArticles:_oneTableView];
     }];
     
     // 这个碉堡了，要珍藏！！
@@ -283,9 +247,8 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 20;
+    return [_followedArticlesData count] + 1;
 }
-
 
 
 // 填充cell
@@ -314,11 +277,11 @@
             oneArticleCell = [[SFArticleTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:articleCellWithIdentifier];
             oneArticleCell.delegate = self;
         }
-        [oneArticleCell rewriteTitle:@"哈格兹的相册-那天阳光很好可惜我只带了一卷彩卷\n"];
-        [oneArticleCell rewriteHotScore:@"评论23  点赞876"];
-        [oneArticleCell rewriteTopics:@"#胶片摄影#"];
-        [oneArticleCell rewritePicURL:@"https://img3.doubanio.com/view/photo/photo/public/p2246653686.jpg"];
-        [oneArticleCell rewriteTopicImageURL:@"https://img3.doubanio.com/view/photo/thumb/public/p2308564994.jpg"];
+        [oneArticleCell rewriteTitle:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"title"]];
+        [oneArticleCell rewriteHotScore:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"hotScore"]];
+        [oneArticleCell rewriteTopics:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"topic"]];
+        [oneArticleCell rewritePicURL:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"picURL"]];
+        [oneArticleCell rewriteTopicImageURL:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"topicImageURL"]];
         oneArticleCell.selectionStyle = UITableViewCellSelectionStyleNone;  // 取消选中的背景色
         return oneArticleCell;
     }
@@ -348,6 +311,7 @@
     
     if (row == 1) {
         [self connectForHot:_oneTableView];
+        [self connectForFollowedArticles:_oneTableView];
         return;
     }
     
@@ -417,6 +381,129 @@
     if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
         self.navigationController.interactivePopGestureRecognizer.delegate = nil;
     }
+}
+
+
+
+#pragma mark - 网络请求 - 热门文章&话题
+
+/* 请求热门文章(焦点图)&热门话题 */
+- (void)connectForHot:(UITableView *)tableView
+{
+    NSLog(@"请求焦点图开始");
+    
+    // prepare request parameters
+    NSString *host = [urlManager urlHost];
+    NSString *urlString = [host stringByAppendingString:@"/index/hot_articles"];
+    
+    NSDictionary *parameters = @{};  // 参数为空
+    
+    // 创建 GET 请求
+    AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];
+    connectManager.requestSerializer.timeoutInterval = 20.0;   //设置超时时间
+    [connectManager GET:urlString parameters: parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        // GET请求成功
+        NSDictionary *data = [responseObject objectForKey:@"data"];
+        NSString *errcode = [responseObject objectForKey:@"errcode"];
+        NSLog(@"errcode：%@", errcode);
+        NSLog(@"data:%@", data);
+        
+        // 更新 hotArticleData 数据
+        _hotArticleData = [[data objectForKey:@"hotArticles"] copy];
+        // 更新 hotTopicData 数据
+        _hotTopicData = [[data objectForKey:@"hotTopics"] copy];
+        
+        
+        // 刷新当前 tableview 的数据
+        // [tableView reloadData];
+        // 刷新特定的cell
+        NSIndexPath *indexPath=[NSIndexPath indexPathForRow:0 inSection:0];
+        [_oneTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+}
+
+
+
+#pragma mark - 我关注话题的最新文章
+
+/* 初次拉取 */
+- (void)connectForFollowedArticles:(UITableView *)tableView
+{
+    NSLog(@"请求followedArticles开始");
+    
+    // prepare request parameters
+    NSString *host = [urlManager urlHost];
+    NSString *urlString = [host stringByAppendingString:@"/index/followed_articles"];
+    
+    NSDictionary *parameters = @{};  // 参数为空
+    
+    // 创建 GET 请求
+    AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];
+    connectManager.requestSerializer.timeoutInterval = 20.0;   //设置超时时间
+    [connectManager GET:urlString parameters: parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        // GET请求成功
+        NSArray *data = [responseObject objectForKey:@"data"];
+        NSString *errcode = [responseObject objectForKey:@"errcode"];
+        NSLog(@"errcode：%@", errcode);
+        NSLog(@"data:%@", data);
+        
+        // 更新 followedArticleData 数据
+        _followedArticlesData = [data mutableCopy];
+        
+        // 刷新当前 tableview 的数据
+        [tableView reloadData];
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+}
+
+
+/* 拉取更多 */
+- (void)connectForMoreFollowedArticles:(UITableView *)tableView
+{
+    NSLog(@"请求 moreFollowedArticles开始");
+    
+    // prepare request parameters
+    NSString *host = [urlManager urlHost];
+    NSString *urlString = [host stringByAppendingString:@"/index/followed_articles"];
+    
+    NSDictionary *parameters = @{};  // 参数为空
+    
+    // 创建 GET 请求
+    AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];
+    connectManager.requestSerializer.timeoutInterval = 20.0;   //设置超时时间
+    [connectManager GET:urlString parameters: parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        // GET请求成功
+        NSArray *data = [responseObject objectForKey:@"data"];
+        NSString *errcode = [responseObject objectForKey:@"errcode"];
+        NSLog(@"errcode：%@", errcode);
+        NSLog(@"data:%@", data);
+        
+        if ([errcode isEqualToString:@"err"]) {
+            [tableView.mj_footer endRefreshingWithNoMoreData];
+            return;
+        }
+        
+        // 更新 followedArticleData 数据
+        [_followedArticlesData addObjectsFromArray:data];
+        data = nil;
+        
+        // 刷新当前 tableview 的数据
+        [tableView reloadData];
+        
+        [tableView.mj_footer endRefreshing];  // 结束上拉加载更多
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+        [tableView.mj_footer endRefreshing];  // 结束上拉加载更多
+    }];
 }
 
 
