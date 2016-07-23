@@ -10,7 +10,17 @@
 #import "TopicCell.h"
 
 @interface TopicVC : UIViewController <UITableViewDataSource, UITableViewDelegate, TopicCellDelegate>
-//
+
+// 头部数据
+@property (nonatomic, strong) NSString *portraitURL;  // 头像url
+@property (nonatomic, strong) NSString *topic;  // 话题名称
+@property (nonatomic, strong) NSString *introduction;  // 话题简介
+
+// tableview
+@property (nonatomic, strong) UITableView *oneTableView;  // tableview
+@property (nonatomic, strong) NSDictionary *topicData;  // tableview第一个cell数据
+@property (nonatomic, strong) NSMutableArray *articleData;  // tableview 其他cell数据
+
 @property (nonatomic, strong)UIImageView *backgroundView;
 @property (nonatomic, strong)UIImageView *portraitView;
 @property (nonatomic, strong)UILabel *titleLabel;

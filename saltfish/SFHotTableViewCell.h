@@ -35,7 +35,7 @@
 // 热门话题label数组
 @property (nonatomic, copy) NSMutableArray *hotTopicLabelArr;
 
-@property (nonatomic) unsigned long cellHeight;
+@property (nonatomic) unsigned long cellHeight;  // cell高度
 // 分割线
 @property (nonatomic, copy) UIView *partLine;
 //

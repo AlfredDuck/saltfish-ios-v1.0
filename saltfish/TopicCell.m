@@ -107,7 +107,15 @@
 
 
 #pragma mark - 重写 cell 中各个元素的数据
-- (void)rewriteIntroduction:(NSString *)newIntroduction followStatus:(BOOL)isFollowing
+
+- (void)rewriteTopic:(NSString *)newTopic
+{
+    _title = newTopic;
+    _titleLabel.text = _title;
+}
+
+
+- (void)rewriteIntroduction:(NSString *)newIntroduction followStatus:(NSString *)isFollowing pushStatus:(NSString *)isPushOn
 {
     _introduction = newIntroduction;
     
@@ -135,16 +143,28 @@
     _followButton.frame  = CGRectMake((_screenWidth-75)/2.0, 68+newHeight+18, 75, 35);
     _pushSettingView.frame = CGRectMake(0, 68+newHeight+18+35+18, _screenWidth, 44);
     
-    if (!isFollowing) {   // 代表没有关注
+    if ([isFollowing isEqualToString:@"no"]) {
+        // 代表没有关注
         [_followButton setImage:[UIImage imageNamed:@"follow.png"]];
         _pushSettingView.alpha = 0;
         _partLine.frame = CGRectMake(0, 68+newHeight+18+35+18, _screenWidth, 12);
     } else {
+        // 已经关注
         [_followButton setImage:[UIImage imageNamed:@"unfollow.png"]];
         _pushSettingView.alpha = 1;
         _partLine.frame = CGRectMake(0, 68+newHeight+18+35+18+44, _screenWidth, 12);
+        
+        // push开关状态
+        if ([isPushOn isEqualToString:@"yes"]) {
+            [_pushSwitch setOn:YES];
+        } else {
+            [_pushSwitch setOn:NO];
+        }
     }
-
+    
+    // 设置cell高度
+    _cellHeight = _partLine.frame.origin.y + _partLine.frame.size.height;
+    
 }
 
 
@@ -163,6 +183,7 @@
 - (void)clickSwitch:(UISwitch *)sender
 {
     NSLog(@"%@", sender);
+    [self.delegate changePushSwitch];
 }
 
 @end

@@ -10,7 +10,9 @@
 #import <AFNetworking/AFNetworking.h>
 #import <Accelerate/Accelerate.h>
 #import "UIImageView+WebCache.h"
+#import "MJRefresh.h"
 #import "colorManager.h"
+#import "urlManager.h"
 #import "SFArticleTableViewCell.h"
 #import "TopicCell.h"
 
@@ -18,8 +20,8 @@
 @interface TopicVC ()
 // 私有变量
 @property (nonatomic) float backgroundImageHeight;
-@property (nonatomic) UITableView *oneTableView;
-@property (nonatomic) BOOL isFollowing;
+@property (nonatomic) NSString *isFollowing;
+@property (nonatomic) NSString *isPushOn;
 @end
 
 @implementation TopicVC
@@ -40,15 +42,33 @@
     _screenHeight = [UIScreen mainScreen].bounds.size.height;
     _screenWidth = [UIScreen mainScreen].bounds.size.width;
     _backgroundImageHeight = 400.0;
-    
-    _isFollowing = NO;
-    
-    [self createUIParts];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     // 设置状态栏颜色的强力方法
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    
+    // 初始化站位数据
+    _topicData = [[NSDictionary alloc] initWithObjectsAndKeys:
+                @"加载中", @"topic",
+                @"急急如律令", @"introduction",
+                @"no", @"isFollowing",
+                @"no", @"isPushOn",
+                  nil];
+    NSDictionary *g1 = [[NSDictionary alloc] initWithObjectsAndKeys:
+                        @"title", @"",
+                        @"topic", @"",
+                        @"picURL", @"",
+                        @"topicImageURL", @"",
+                        @"hotScore", @"",
+                        nil];
+    
+    NSArray *dd = @[g1];
+    _articleData = [dd mutableCopy];
+    
+    [self createUIParts];
+    [self connectForTopicCell:_oneTableView];
+    [self connectForArticleCell:_oneTableView];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -56,29 +76,15 @@
 }
 
 
+
 #pragma mark - 构建 UI 零件
 - (void)createUIParts
 {
     /* 整个顶部滑动动效分三部分：背景图(中层）、tableView（下层）、头像图片（上层）*/
-    
-    NSString *urlStr = @"http://letsfilm.org/wp-content/uploads/2016/06/000020-1.jpg";
-    
-    
-    /* 创建tableView */
-    static NSString *CellWithIdentifier = @"articleCell";
-    _oneTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, _screenWidth, _screenHeight-64)];
-    _oneTableView.backgroundColor = [UIColor brownColor];
-    [_oneTableView setDelegate:self];
-    [_oneTableView setDataSource:self];
-    
-    [_oneTableView registerClass:[SFArticleTableViewCell class] forCellReuseIdentifier:CellWithIdentifier];
-    _oneTableView.backgroundColor = [UIColor whiteColor];
-    _oneTableView.separatorStyle = UITableViewCellSeparatorStyleNone; // 去掉分割线
-    _oneTableView.contentInset = UIEdgeInsetsMake(-20+86, 0, 0, 0); // 设置距离顶部的一段偏移，继承自scrollview
-    // 响应点击状态栏的事件
-    _oneTableView.scrollsToTop = YES;
-    [self.view addSubview:_oneTableView];
-    
+        
+    // 创建 TableView
+    [self createTableView];
+
     
     /* 创建背景图 */
     _backgroundView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, _screenWidth, _backgroundImageHeight)];
@@ -88,13 +94,13 @@
     _backgroundView.contentMode = UIViewContentModeScaleAspectFill;
     _backgroundView.clipsToBounds  = YES;
     // 需要AFNetwork（异步加载）
-    [_backgroundView sd_setImageWithURL:[NSURL URLWithString:urlStr] placeholderImage:[UIImage imageNamed:@"placeholder.png"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+    [_backgroundView sd_setImageWithURL:[NSURL URLWithString:_portraitURL] placeholderImage:[UIImage imageNamed:@"placeholder.png"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         NSLog(@"%@", imageURL);
         UIImage *imgBlur = [self boxblurImage:image withBlurNumber:(CGFloat)0.60f];
         [_backgroundView setImage:imgBlur];
     }];
     
-    [self boxblurImage:_backgroundView.image withBlurNumber:20.0];
+    //[self boxblurImage:_backgroundView.image withBlurNumber:20.0];
     [self.view addSubview:_backgroundView];
     
     
@@ -105,7 +111,7 @@
     _portraitView.contentMode = UIViewContentModeScaleAspectFill;
     _portraitView.clipsToBounds  = YES;
     // 需要AFNetwork（延后处理）
-    [_portraitView sd_setImageWithURL:[NSURL URLWithString:urlStr] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+    [_portraitView sd_setImageWithURL:[NSURL URLWithString:_portraitURL] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
     [self.view addSubview:_portraitView];
     
     
@@ -128,7 +134,7 @@
     
     // title
     _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake((_screenWidth-200)/2, 20, 200, 44)];
-    _titleLabel.text = @"#佐佐木希#";
+    _titleLabel.text = _topic;
     _titleLabel.textColor = [UIColor whiteColor];
     _titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 15.0];
     _titleLabel.textAlignment = UITextAlignmentCenter;
@@ -138,24 +144,11 @@
 
 
 
-#pragma mark - IBAction
-- (void)clickBackButton
-{
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
-
 #pragma mark - TableView 滚动事件
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     NSLog(@"滚动事件发生");
     NSLog(@"tableview偏移：%f",scrollView.contentOffset.y);
-//    float yy = -(scrollView.contentOffset.y + _backgroundImageHeight - 64);
-//    _backgroundView.frame = CGRectMake(0, yy, _screenWidth, _backgroundImageHeight);
-//    
-//    if (_backgroundView.frame.origin.y <= -(_backgroundImageHeight-64)) {
-//        _backgroundView.frame = CGRectMake(0, -(_backgroundImageHeight-64), _screenWidth, _backgroundImageHeight);
-//    }
     
     /* 背景图控制 */
     float hh = -scrollView.contentOffset.y + 64;
@@ -165,11 +158,15 @@
     if (hh <= 64.0) {
         _backgroundView.frame = CGRectMake(0, 0, _screenWidth, 64.0);
         _titleLabel.hidden = NO;
+        //取消偏移 （底部的44px是给MJRefresh的上拉加载留出的）
+        _oneTableView.contentInset = UIEdgeInsetsMake(0, 0, 44, 0); // 设置距离顶部的一段偏移，继承自scrollview
     }
     else {
         // 背景图的高度随着tableview的cntentoffset变化
         _backgroundView.frame = CGRectMake(0, 0, _screenWidth, hh);
         _titleLabel.hidden = YES;
+        //恢复偏移
+        _oneTableView.contentInset = UIEdgeInsetsMake(-20+90, 0, 0, 0); // 设置距离顶部的一段偏移，继承自scrollview
     }
     
     /* 头像控制 */
@@ -185,128 +182,7 @@
     else {
         _portraitView.alpha = 1;
     }
-    
 }
-
-
-
-
-
-#pragma mark - TopicCell 的代理方法
-
-- (void)clickFollowButton
-{
-    if (_isFollowing) {
-        _isFollowing = NO;
-    } else {
-        _isFollowing = YES;
-    }
-
-    // 刷新特定的一个cell
-    NSIndexPath *indexPath=[NSIndexPath indexPathForRow:0 inSection:0];
-    [_oneTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationFade];
-    
-    //    [UIView animateWithDuration:0.3 animations:^{   // uiview 动画（无需实例化）单例
-    //
-    //    }];
-}
-
-
-
-
-
-
-#pragma mark - TableView 代理方法
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return 100;
-}
-
-// 填充cell
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    static NSString *TopicCellWithIdentifier = @"topicCell+";
-    TopicCell *oneTopicCell = [tableView dequeueReusableCellWithIdentifier:TopicCellWithIdentifier];
-    
-    static NSString *ArticleCellWithIdentifier = @"articleCell+";
-    SFArticleTableViewCell *oneArticleCell = [tableView dequeueReusableCellWithIdentifier:ArticleCellWithIdentifier];
-    
-    NSUInteger row = [indexPath row];
-    if (row == 0) {
-        if (oneTopicCell == nil) {
-            oneTopicCell = [[TopicCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:TopicCellWithIdentifier];
-            // 定义代理
-            oneTopicCell.delegate = self;
-        }
-        [oneTopicCell rewriteIntroduction:@"如楼上所说，现代武器是很厉害的；对付这种超级怪兽最方便的如楼上所说，现代武器是很厉害的；对付这种超级怪兽最方便的" followStatus:_isFollowing];
-        
-        // 取消选中的背景色
-        oneTopicCell.selectionStyle = UITableViewCellSelectionStyleNone;
-        return oneTopicCell;
-    }
-    else {
-        if (oneArticleCell == nil) {
-            oneArticleCell = [[SFArticleTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:ArticleCellWithIdentifier];
-        }
-        [oneArticleCell rewriteTitle:@"根据葛尔丹博士的史书，雷妮丝可能因坠地而死吧\n"];
-        [oneArticleCell rewriteHotScore:@"评论23  点赞876"];
-        [oneArticleCell rewriteTopics:@"#胶片摄影#"];
-        [oneArticleCell rewritePicURL:@"https://img3.doubanio.com/view/photo/photo/public/p2246653686.jpg"];
-        [oneArticleCell rewriteTopicImageURL:@"https://img3.doubanio.com/view/photo/thumb/public/p2308564994.jpg"];
-        // 取消选中的背景色
-        oneArticleCell.selectionStyle = UITableViewCellSelectionStyleNone;
-        return oneArticleCell;
-    }
-    
-    // 直接往cell addsubView的方法会在每次划出屏幕再划回来时 再加载一次subview，因此会重复加载很多subview
-}
-
-// 改变 cell 高度
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSUInteger row = [indexPath row];
-    if (row == 0) {
-        NSLog(@"。。。。。。。。。。。。。。");
-        // ===================计算折行文本高度====================
-        NSString *str = @"如楼上所说，现代武器是很厉害的；对付这种超级怪兽最方便的如楼上所说，现代武器是很厉害的；对付这种超级怪兽最方便的";
-        CGSize maxSize = {_screenWidth-50*2, 5000};  // 设置文本区域最大宽高(两边各留15px)
-        CGSize labelSize = [str sizeWithFont:[UIFont fontWithName:@"Helvetica" size:13]
-                           constrainedToSize:maxSize
-                               lineBreakMode:[[UILabel alloc] init].lineBreakMode];   // str是要显示的字符串
-        CGFloat newHeight = labelSize.height*16/13.0;
-        
-        CGFloat height;
-        if (!_isFollowing) { // unfollow
-            height = 68+newHeight+18+35+18+12;
-        } else {
-            height = 68+newHeight+18+35+18+12+44;
-        }
-        
-        return height;
-    }
-    else {
-        CGFloat height = 145;
-        return height;
-    }
-}
-
-
-// tableView 点击事件
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSUInteger row = [indexPath row];
-    if (row == 0) {
-        NSLog(@"000000000000");
-    }
-}
-
-
 
 
 
@@ -356,6 +232,282 @@
 
 
 
+#pragma mark - 创建 TableView
+- (void)createTableView
+{
+    /* 创建tableView */
+    static NSString *CellWithIdentifier = @"articleCell";
+    _oneTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, _screenWidth, _screenHeight-64)];
+    _oneTableView.backgroundColor = [colorManager lightGrayBackground];
+    [_oneTableView setDelegate:self];
+    [_oneTableView setDataSource:self];
+    
+    [_oneTableView registerClass:[SFArticleTableViewCell class] forCellReuseIdentifier:CellWithIdentifier];
+    _oneTableView.separatorStyle = UITableViewCellSeparatorStyleNone; // 去掉分割线
+    //_oneTableView.contentInset = UIEdgeInsetsMake(-20+90, 0, 0, 0); // 设置距离顶部的一段偏移，继承自scrollview
+    // 响应点击状态栏的事件
+    _oneTableView.scrollsToTop = YES;
+    [self.view addSubview:_oneTableView];
+    
+    // 上拉刷新 MJRefresh
+    _oneTableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
+        // 结束加载更多
+        // [tableView.mj_footer endRefreshing];
+        // [tableView.mj_footer endRefreshingWithNoMoreData];
+        [self connectForMoreArticleCell:_oneTableView];
+    }];
+}
+
+
+
+#pragma mark - TableView 代理方法
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return [_articleData count] + 1;
+}
+
+// 填充cell
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *TopicCellWithIdentifier = @"topicCell+";
+    TopicCell *oneTopicCell = [tableView dequeueReusableCellWithIdentifier:TopicCellWithIdentifier];
+    
+    static NSString *ArticleCellWithIdentifier = @"articleCell+";
+    SFArticleTableViewCell *oneArticleCell = [tableView dequeueReusableCellWithIdentifier:ArticleCellWithIdentifier];
+    
+    NSUInteger row = [indexPath row];
+    
+    if (row == 0) {
+        if (oneTopicCell == nil) {
+            oneTopicCell = [[TopicCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:TopicCellWithIdentifier];
+            // 定义代理
+            oneTopicCell.delegate = self;
+        }
+        NSString *introduction = [_topicData objectForKey:@"introduction"];
+        NSString *topic = [_topicData objectForKey:@"topic"];
+        [oneTopicCell rewriteTopic:topic];
+        [oneTopicCell rewriteIntroduction:introduction followStatus:_isFollowing pushStatus:_isPushOn];
+        
+        // 取消选中的背景色
+        oneTopicCell.selectionStyle = UITableViewCellSelectionStyleNone;
+        return oneTopicCell;
+    }
+    else {
+        if (oneArticleCell == nil) {
+            oneArticleCell = [[SFArticleTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:ArticleCellWithIdentifier];
+        }
+        [oneArticleCell rewriteTitle:[[_articleData objectAtIndex:row-1] objectForKey:@"title"]];
+        [oneArticleCell rewriteHotScore:[[_articleData objectAtIndex:row-1] objectForKey:@"hotScore"]];
+        [oneArticleCell rewriteTopics:[[_articleData objectAtIndex:row-1] objectForKey:@"topic"]];
+        [oneArticleCell rewritePicURL:[[_articleData objectAtIndex:row-1] objectForKey:@"picURL"]];
+        [oneArticleCell rewriteTopicImageURL:[[_articleData objectAtIndex:row-1] objectForKey:@"topicImageURL"]];
+        // 取消选中的背景色
+        oneArticleCell.selectionStyle = UITableViewCellSelectionStyleNone;
+        return oneArticleCell;
+    }
+    
+    // 直接往cell addsubView的方法会在每次划出屏幕再划回来时 再加载一次subview，因此会重复加载很多subview
+}
+
+// 改变 cell 高度
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSUInteger row = [indexPath row];
+    if (row == 0) {
+        TopicCell *cell = (TopicCell *)[self tableView:tableView cellForRowAtIndexPath:indexPath];
+        return cell.cellHeight;
+    }
+    else {
+        CGFloat height = 145;
+        return height;
+    }
+}
+
+
+// tableView 点击事件
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSUInteger row = [indexPath row];
+    if (row == 0) {
+        NSLog(@"000000000000");
+    }
+}
+
+
+
+
+
+#pragma mark - 网络请求
+
+/* 请求第一个cell的数据 */
+- (void)connectForTopicCell:(UITableView *)tableView
+{
+    // prepare request parameters
+    NSString *host = [urlManager urlHost];
+    NSString *urlString = [host stringByAppendingString:@"/index/topic"];
+    
+    NSDictionary *parameters = @{};  // 参数为空
+    
+    // 创建 GET 请求
+    AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];
+    connectManager.requestSerializer.timeoutInterval = 20.0;   //设置超时时间
+    [connectManager GET:urlString parameters: parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        // GET请求成功
+        NSDictionary *data = [responseObject objectForKey:@"data"];
+        NSString *errcode = [responseObject objectForKey:@"errcode"];
+        NSLog(@"errcode：%@", errcode);
+        
+        if ([errcode isEqualToString:@"err"]) {
+            return;
+        }
+        
+        // 更新第一个cell的数据
+        _topicData = data;
+        data = nil;
+        
+        // 更新isFollowing状态
+        _isFollowing = [_topicData objectForKey:@"isFollowing"];
+        _isPushOn = [_topicData objectForKey:@"isPushOn"];
+        
+        // 刷新tableview
+        [tableView reloadData];
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+}
+
+
+/* 请求文章cell数据 */
+- (void)connectForArticleCell:(UITableView *)tableView
+{
+    // prepare request parameters
+    NSString *host = [urlManager urlHost];
+    NSString *urlString = [host stringByAppendingString:@"/index/articles"];
+    
+    NSDictionary *parameters = @{};  // 参数为空
+    
+    // 创建 GET 请求
+    AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];
+    connectManager.requestSerializer.timeoutInterval = 20.0;   //设置超时时间
+    [connectManager GET:urlString parameters: parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        // GET请求成功
+        NSArray *data = [responseObject objectForKey:@"data"];
+        NSString *errcode = [responseObject objectForKey:@"errcode"];
+        NSLog(@"errcode：%@", errcode);
+        
+        if ([errcode isEqualToString:@"err"]) {
+            return;
+        }
+        
+        // 更新数据
+        _articleData = [data mutableCopy];
+        data = nil;
+        
+        // 刷新tableview
+        [tableView reloadData];
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+}
+
+
+- (void)connectForMoreArticleCell:(UITableView *)tableView
+{
+    // prepare request parameters
+    NSString *host = [urlManager urlHost];
+    NSString *urlString = [host stringByAppendingString:@"/index/articles"];
+    
+    NSDictionary *parameters = @{};  // 参数为空
+    
+    // 创建 GET 请求
+    AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];
+    connectManager.requestSerializer.timeoutInterval = 20.0;   //设置超时时间
+    [connectManager GET:urlString parameters: parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        // GET请求成功
+        NSArray *data = [responseObject objectForKey:@"data"];
+        NSString *errcode = [responseObject objectForKey:@"errcode"];
+        NSLog(@"errcode：%@", errcode);
+        
+        if ([errcode isEqualToString:@"err"]) {
+            [tableView.mj_footer endRefreshingWithNoMoreData];
+            return;
+        }
+        
+        // 追加数据
+        [_articleData addObjectsFromArray:data];
+        data = nil;
+        
+        // 刷新tableview
+        [tableView reloadData];
+        
+        [tableView.mj_footer endRefreshing];
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+        [tableView.mj_footer endRefreshing];
+    }];
+}
+
+
+
+
+
+#pragma mark - IBAction
+- (void)clickBackButton
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+
+
+#pragma mark - TopicCell 的代理方法
+
+- (void)clickFollowButton
+{
+    if ([_isFollowing isEqualToString:@"yes"]) {
+        _isFollowing = @"no";
+    }
+    else if ([_isFollowing isEqualToString:@"no"]) {
+        _isFollowing = @"yes";
+    }
+    else {
+        _isFollowing = @"no";
+    }
+    
+    // 刷新特定的一个cell
+    NSIndexPath *indexPath=[NSIndexPath indexPathForRow:0 inSection:0];
+    [_oneTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationFade];
+    
+    //    [UIView animateWithDuration:0.3 animations:^{   // uiview 动画（无需实例化）单例
+    //
+    //    }];
+}
+
+- (void)changePushSwitch
+{
+    if ([_isPushOn isEqualToString:@"yes"]) {
+        _isPushOn = @"no";
+    }
+    else if ([_isPushOn isEqualToString:@"no"]) {
+        _isPushOn = @"yes";
+    }
+    else {
+        _isPushOn = @"no";
+    }
+    NSLog(@"push开关：%@", _isPushOn);
+    
+}
 
 
 @end

@@ -16,26 +16,26 @@
 @end
 
 @interface TopicCell : UITableViewCell
-// 标题
-@property (nonatomic, copy) NSString *title;
+
+@property (nonatomic, copy) NSString *title;  // 标题
 @property (nonatomic, copy) UILabel *titleLabel;
-// 简介
-@property (nonatomic, copy) NSString *introduction;
+
+@property (nonatomic, copy) NSString *introduction;  // 简介
 @property (nonatomic, copy) UILabel *introductionLabel;
-// 关注按钮
-@property (nonatomic, copy) UIImageView *followButton;
+
+@property (nonatomic, copy) UIImageView *followButton;  // 关注按钮
 @property (nonatomic, copy) UIView *pushSettingView;
 @property (nonatomic, copy) UISwitch *pushSwitch;
-// 分割线
-@property (nonatomic, copy) UIView *partLine;
-//
+
+@property (nonatomic, copy) UIView *partLine;  // 分割线
+@property (nonatomic) unsigned long cellHeight;  // cell高度
+
 @property (nonatomic) NSInteger screenWidth;
 @property (nonatomic) NSInteger screenHeight;
 
-- (void)rewriteIntroduction:(NSString *)newIntroduction followStatus:(BOOL)isFollowing;
+- (void)rewriteTopic:(NSString *)newTopic;
+- (void)rewriteIntroduction:(NSString *)newIntroduction followStatus:(NSString *)isFollowing pushStatus:(NSString *)isPushOn;
 
-// 定义代理
-@property (nonatomic, assign) id <TopicCellDelegate> delegate;
-
+@property (nonatomic, assign) id <TopicCellDelegate> delegate;  // 定义代理
 
 @end

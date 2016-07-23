@@ -189,6 +189,8 @@
     NSUInteger row = [indexPath row];
     
     TopicVC *topicPV = [[TopicVC alloc] init];
+    topicPV.topic = @"#娜乌西卡#";
+    topicPV.portraitURL = @"https://img1.doubanio.com/view/photo/photo/public/p1375000419.jpg";
     [self.navigationController pushViewController:topicPV animated:YES];
     //开启iOS7的滑动返回效果
     if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
