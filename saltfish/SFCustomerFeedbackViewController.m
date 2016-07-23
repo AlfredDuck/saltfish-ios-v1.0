@@ -38,6 +38,9 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    // 设置状态栏颜色的强力方法
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+    
     // 创建 UI
     [self basedTitleBar];
     [self basedWriteText];

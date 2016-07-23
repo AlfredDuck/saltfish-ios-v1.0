@@ -49,6 +49,11 @@
     [_oneTableView.mj_header beginRefreshing];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    // 设置状态栏颜色的强力方法
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

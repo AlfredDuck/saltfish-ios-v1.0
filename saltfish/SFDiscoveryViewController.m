@@ -47,6 +47,11 @@
     [_oneTableView.mj_header beginRefreshing];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    // 设置状态栏颜色的强力方法
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -274,10 +279,10 @@
         data = nil;
         
         // 刷新当前 tableview 的数据
-        // [tableView reloadData];
+        [tableView reloadData];
         // 刷新特定的cell
-        NSIndexPath *indexPath=[NSIndexPath indexPathForRow:0 inSection:0];
-        [_oneTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
+        // NSIndexPath *indexPath=[NSIndexPath indexPathForRow:0 inSection:0];
+        // [_oneTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
 
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
