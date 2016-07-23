@@ -21,6 +21,8 @@
 @property (nonatomic, strong) NSArray *hotTopicData;  // 热门话题数据
 @property (nonatomic, strong) NSMutableArray *followedArticlesData;  // 关注话题的最新文章
 
+@property (nonatomic, strong) UIActivityIndicatorView *loadingFlower;  // 小菊花
+
 @property (nonatomic) NSInteger screenWidth;  // 全局变量 屏幕长宽
 @property (nonatomic) NSInteger screenHeight;  // 全局变量 屏幕长宽
 

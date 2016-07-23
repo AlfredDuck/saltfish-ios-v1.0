@@ -41,7 +41,7 @@
     [super viewDidLoad];
     _screenHeight = [UIScreen mainScreen].bounds.size.height;
     _screenWidth = [UIScreen mainScreen].bounds.size.width;
-    _backgroundImageHeight = 400.0;
+    _backgroundImageHeight = 64+70;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -207,8 +207,9 @@
     inBuffer.rowBytes = CGImageGetBytesPerRow(img);
     inBuffer.data = (void*)CFDataGetBytePtr(inBitmapData);
     pixelBuffer = malloc(CGImageGetBytesPerRow(img) * CGImageGetHeight(img));
-    if(pixelBuffer == NULL)
+    if(pixelBuffer == NULL){
         NSLog(@"No pixelbuffer");
+    }
     outBuffer.data = pixelBuffer;
     outBuffer.width = CGImageGetWidth(img);
     outBuffer.height = CGImageGetHeight(img);
@@ -244,7 +245,7 @@
     
     [_oneTableView registerClass:[SFArticleTableViewCell class] forCellReuseIdentifier:CellWithIdentifier];
     _oneTableView.separatorStyle = UITableViewCellSeparatorStyleNone; // 去掉分割线
-    //_oneTableView.contentInset = UIEdgeInsetsMake(-20+90, 0, 0, 0); // 设置距离顶部的一段偏移，继承自scrollview
+    _oneTableView.contentInset = UIEdgeInsetsMake(-20+90, 0, 0, 0); // 设置距离顶部的一段偏移，继承自scrollview
     // 响应点击状态栏的事件
     _oneTableView.scrollsToTop = YES;
     [self.view addSubview:_oneTableView];

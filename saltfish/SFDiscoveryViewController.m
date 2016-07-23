@@ -43,8 +43,8 @@
     [self createUIParts];
     [super createTabBarWith:1];  // 调用父类方法，构建tabbar
     
-    [self connectForClassifications:_oneTableView];
-    [self connectForLatestTopics:_oneTableView isRefresh:NO];
+    // 调用 MJRefresh 初始化数据
+    [_oneTableView.mj_header beginRefreshing];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -120,7 +120,8 @@
 //            [_oneTableView.mj_header endRefreshing];
 //            NSLog(@"下拉刷新成功，结束刷新");
 //        });
-        [self connectForLatestTopics:_oneTableView isRefresh:YES];
+        [self connectForLatestTopics:_oneTableView];
+        [self connectForClassifications:_oneTableView];
         
     }];
     
@@ -207,20 +208,15 @@
 {
     NSUInteger row = [indexPath row];
     
-    //
     if (row == 1) {
-        [self connectForClassifications:tableView];
-        [self connectForLatestTopics:tableView isRefresh:NO];
-        return;
-    }
-    
-    if (row == 2) {
         [self chooseLoginWayWith:@"请先登录"];
         return;
     }
     
     if (row >= 1) {
         TopicVC *topicPV = [[TopicVC alloc] init];
+        topicPV.topic = @"#wath#";
+        topicPV.portraitURL = @"https://img3.doubanio.com/view/photo/photo/public/p2279527592.jpg";
         [self.navigationController pushViewController:topicPV animated:YES];
         //开启iOS7的滑动返回效果
         if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
@@ -253,7 +249,6 @@
 - (void)connectForClassifications:(UITableView *)tableView
 {
     NSLog(@"请求classification开始");
-    [_loadingFlower startAnimating];
     
     // prepare request parameters
     NSString *host = [urlManager urlHost];
@@ -271,7 +266,8 @@
         NSString *errcode = [responseObject objectForKey:@"errcode"];
         NSLog(@"errcode：%@", errcode);
         //NSLog(@"data:%@", data);
-        [_loadingFlower stopAnimating];
+        
+        [tableView.mj_header endRefreshing];  // 结束下拉刷新
         
         // 更新 Data 数据
         _classificationData = [data copy];
@@ -285,6 +281,7 @@
 
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
+        [tableView.mj_header endRefreshing];
     }];
 }
 
@@ -292,10 +289,9 @@
 
 #pragma mark - 网络请求 - 请求最新话题
 //（第一次拉取和下拉刷新）
-- (void)connectForLatestTopics:(UITableView *)tableView isRefresh:(BOOL)isRefresh
+- (void)connectForLatestTopics:(UITableView *)tableView
 {
     NSLog(@"请求 latest topics 开始");
-    [_loadingFlower startAnimating];
     
     // 准备请求参数
     NSString *host = [urlManager urlHost];
@@ -319,6 +315,8 @@
         //NSLog(@"data:%@", data);
         [_loadingFlower stopAnimating];
         
+        [tableView.mj_header endRefreshing];  // 结束下拉刷新
+
         // 更新 Data 数据
         _latestTopicsData = [data copy];
         data = nil;
@@ -326,14 +324,9 @@
         // 刷新当前 tableview 的数据
         [tableView reloadData];
         
-        // 如果此次操作是下拉刷新
-        if (isRefresh) {
-            [tableView.mj_header endRefreshing];  // 结束下拉刷新
-        }
-        
-        
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
+        [tableView.mj_header endRefreshing];
     }];
 }
 

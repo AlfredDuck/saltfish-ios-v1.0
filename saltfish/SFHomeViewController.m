@@ -45,8 +45,8 @@
     [self createUIParts];
     [super createTabBarWith:0];  // 调用父类方法，构建tabbar
     
-    /* 网络请求 */
-    // [self connectForHotArticles:_oneTableView];
+    /* 调用 MJRefresh 初始化数据 */
+    [_oneTableView.mj_header beginRefreshing];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -78,6 +78,13 @@
     titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 15];
     titleLabel.textAlignment = UITextAlignmentCenter;
     [titleBarBackground addSubview:titleLabel];
+    
+    // loading 菊花
+    _loadingFlower = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    _loadingFlower.frame = CGRectMake(0, 20, 44, 44);
+    //[_loadingFlower startAnimating];
+    //[_loadingFlower stopAnimating];
+    [titleBarBackground addSubview:_loadingFlower];
     
     
     // 焦点图数据（临时）
@@ -216,11 +223,13 @@
     // 下拉刷新 MJRefresh
     _oneTableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         // 模拟延迟加载数据，因此2秒后才调用（真实开发中，可以移除这段gcd代码）
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            // 结束刷新动作
-            [_oneTableView.mj_header endRefreshing];
-            NSLog(@"下拉刷新成功，结束刷新");
-        });
+//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//            // 结束刷新动作
+//            [_oneTableView.mj_header endRefreshing];
+//            NSLog(@"下拉刷新成功，结束刷新");
+//        });
+        [self connectForHot:_oneTableView];
+        [self connectForFollowedArticles:_oneTableView];
     }];
     
     // 上拉刷新 MJRefresh
@@ -376,6 +385,8 @@
 {
     //
     TopicVC *topicPage = [[TopicVC alloc] init];
+    topicPage.topic = @"荷里活";
+    topicPage.portraitURL = @"https://img3.doubanio.com/view/photo/photo/public/p2359591225.jpg";
     [self.navigationController pushViewController:topicPage animated:YES];
     //开启iOS7的滑动返回效果
     if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
@@ -409,11 +420,13 @@
         NSLog(@"errcode：%@", errcode);
         NSLog(@"data:%@", data);
         
+        // 结束下啦刷新
+        [tableView.mj_header endRefreshing];
+        
         // 更新 hotArticleData 数据
         _hotArticleData = [[data objectForKey:@"hotArticles"] copy];
         // 更新 hotTopicData 数据
         _hotTopicData = [[data objectForKey:@"hotTopics"] copy];
-        
         
         // 刷新当前 tableview 的数据
         // [tableView reloadData];
@@ -423,6 +436,7 @@
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
+        [tableView.mj_header endRefreshing];
     }];
 }
 
@@ -452,6 +466,9 @@
         NSLog(@"errcode：%@", errcode);
         NSLog(@"data:%@", data);
         
+        // 结束下拉刷新
+        [tableView.mj_header endRefreshing];
+        
         // 更新 followedArticleData 数据
         _followedArticlesData = [data mutableCopy];
         
@@ -460,6 +477,7 @@
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
+        [tableView.mj_header endRefreshing];
     }];
 }
 
