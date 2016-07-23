@@ -127,28 +127,28 @@
     
     
     /* 吐槽区 */
-    UIView *commentView = [[UIView alloc] initWithFrame:CGRectMake(0, 15+44+44, _screenWidth, 44)];
-    commentView.backgroundColor = [UIColor whiteColor];
+    UIView *customerFeedbackView = [[UIView alloc] initWithFrame:CGRectMake(0, 15+44+44, _screenWidth, 44)];
+    customerFeedbackView.backgroundColor = [UIColor whiteColor];
     // 分割线
     UIView *partLine2 = [[UIView alloc] initWithFrame:CGRectMake(55, 0, _screenWidth-55, 0.5)];
     partLine2.backgroundColor = [colorManager lightGrayBackground];
-    [commentView addSubview:partLine2];
+    [customerFeedbackView addSubview:partLine2];
     // icon图片
     UIImageView *commentIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"my_comment.png"]];
     commentIcon.frame = CGRectMake(11, 11.5, 22, 21);
     UIView *commentIconView = [[UIView alloc] initWithFrame:CGRectMake(8, 0, 44, 44)];
     [commentIconView addSubview:commentIcon];
-    [commentView addSubview:commentIconView];
+    [customerFeedbackView addSubview:commentIconView];
     // label
     UILabel *commentLabel = [[UILabel alloc] initWithFrame:CGRectMake(55, 0, _screenWidth-55, 44)];
     commentLabel.text = @"吐槽能量收集区";
     commentLabel.font = [UIFont fontWithName:@"Helvetica" size: 14.0];
-    [commentView addSubview:commentLabel];
+    [customerFeedbackView addSubview:commentLabel];
     
-    commentView.userInteractionEnabled = YES; // 设置可以交互
-    UITapGestureRecognizer *singleTap3 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickComment)]; // 设置手势
-    [commentView addGestureRecognizer:singleTap3]; // 添加手势
-    [oneScrollView addSubview: commentView];
+    customerFeedbackView.userInteractionEnabled = YES; // 设置可以交互
+    UITapGestureRecognizer *singleTap3 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickCustomerFeedback)]; // 设置手势
+    [customerFeedbackView addGestureRecognizer:singleTap3]; // 添加手势
+    [oneScrollView addSubview: customerFeedbackView];
     
     
     
@@ -289,7 +289,7 @@
 {
 }
 
-- (void)clickComment
+- (void)clickCustomerFeedback
 {
     NSLog(@"click my topic");
     NSUserDefaults *sfUserDefault = [NSUserDefaults standardUserDefaults];
@@ -300,7 +300,6 @@
         customerFeedbackPage.delegate = self;
         [self.navigationController presentViewController:customerFeedbackPage animated:YES completion:^{
             NSLog(@"开启吐槽页面");
-            
         }];
     }
     else {

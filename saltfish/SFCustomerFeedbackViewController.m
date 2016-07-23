@@ -224,7 +224,7 @@
 
     // 准备请求参数
     NSString *host = [urlManager urlHost];
-    NSString *urlString = [host stringByAppendingString:@"/index/customer_feedback"];
+    NSString *urlString = [host stringByAppendingString:@"/user/customer_feedback"];
     
     // 读取本地的uuid
     NSString *uuid;
@@ -232,10 +232,21 @@
     if ([userDefault objectForKey:@"uuid"]) {
         uuid = [userDefault objectForKey:@"uuid"];
     }
+    // 读取本地的uid
+    NSString *uid;
+    NSString *userType;
+    if ([[userDefault dictionaryForKey:@"loginInfo"] objectForKey:@"uid"]) {
+        uid = [[userDefault dictionaryForKey:@"loginInfo"] objectForKey:@"uid"];
+        userType = [[userDefault dictionaryForKey:@"loginInfo"] objectForKey:@"userType"];
+    }
+    
     
     NSDictionary *parameters = @{
-                                 @"text": comment,
-                                 @"uuid": uuid
+                                 @"content": comment,
+                                 @"uid": uid,
+                                 @"user_type": userType,
+                                 @"device_type": @"ios",
+                                 @"device_id": uuid
                                  };
     
     // 创建 GET 请求

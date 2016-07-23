@@ -77,19 +77,19 @@
 }
 
 
-#pragma mark - 到server登录或注册
+#pragma mark - 到 轻闻server 登录或注册
 - (void)connectForloginOrSignup:(NSDictionary *)userInformation
 {
     NSLog(@"登录或注册请求");
     
     // prepare request parameters
     NSString *host = [urlManager urlHost];
-    NSString *urlString = [host stringByAppendingString:@"/index/weibo_login"];
+    NSString *urlString = [host stringByAppendingString:@"/user/weibo_login"];
     
     NSDictionary *parameters = @{
                                  @"uid":[userInformation objectForKey:@"uid"],
                                  @"nickname": [userInformation objectForKey:@"nickname"],
-                                 @"portrait": [userInformation objectForKey:@"portrait"]
+                                 @"portrait_url": [userInformation objectForKey:@"portrait"]
                                  };
     
     // 创建 GET 请求
@@ -103,7 +103,10 @@
         NSLog(@"errcode：%@", errcode);
         NSLog(@"data:%@", data);
         
-        // 新浪微博登录成功后...
+        if ([errcode isEqualToString:@"err"]) {  // 请求出错
+            NSLog(@"在轻闻server登录时出错");
+        }
+        // 新浪微博登录成功后,账号储存在本地
         [self weiboLoginSuccess:data];
         
         
@@ -113,9 +116,17 @@
 }
 
 
-#pragma mark - 新浪微博登录成功后...
-- (void)weiboLoginSuccess:(NSDictionary *)userData
+#pragma mark - 新浪微博登录成功后,账号储存在本地
+- (void)weiboLoginSuccess:(NSDictionary *)data
 {
+    // 不论server下发的有什么内容，本地只按照某种标准格式储存
+    NSDictionary *userData = [[NSDictionary alloc] initWithObjectsAndKeys:
+                              [data objectForKey:@"userType"], @"userType",  // 账户类型：邮箱、微博、微信等
+                              [data objectForKey:@"nickname"] ,@"nickname",  // 昵称
+                              [data objectForKey:@"weiboID"], @"uid",  // 用户id（此处是微博）
+                              [data objectForKey:@"portraitURL"], @"portrait",  // 头像url
+                              nil];
+    
     // 账号信息记录到本地
     NSUserDefaults *sfUserDefault = [NSUserDefaults standardUserDefaults];
     [sfUserDefault setObject:userData forKey:@"loginInfo"];
