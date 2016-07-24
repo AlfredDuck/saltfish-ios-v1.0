@@ -127,7 +127,7 @@
 //        });
         [self connectForLatestTopics:_oneTableView];
         [self connectForClassifications:_oneTableView];
-        
+        [_oneTableView.mj_footer endRefreshing];  // 下拉刷新时，重置一下 mj_footer 的状态
     }];
     
     // 上拉刷新 MJRefresh
@@ -184,7 +184,7 @@
         }
         [oneTopicCell rewriteTitle:[[_latestTopicsData objectAtIndex:row-1] objectForKey:@"title"]];
         [oneTopicCell rewriteintroduction:[[_latestTopicsData objectAtIndex:row-1] objectForKey:@"introduction"]];
-        [oneTopicCell rewritePic:[[_latestTopicsData objectAtIndex:row-1] objectForKey:@"picURL"]];
+        [oneTopicCell rewritePic:[[_latestTopicsData objectAtIndex:row-1] objectForKey:@"portrait"]];
         [oneTopicCell rewriteFollowButton:[[_latestTopicsData objectAtIndex:row-1] objectForKey:@"isFollowing"]];
         oneTopicCell.selectionStyle = UITableViewCellSelectionStyleNone;  // 取消选中的背景色
         return oneTopicCell;
@@ -220,8 +220,8 @@
     
     if (row >= 1) {
         TopicVC *topicPV = [[TopicVC alloc] init];
-        topicPV.topic = @"#wath#";
-        topicPV.portraitURL = @"https://img3.doubanio.com/view/photo/photo/public/p2279527592.jpg";
+        topicPV.topic = [[_latestTopicsData objectAtIndex:row-1] objectForKey:@"title"];
+        topicPV.portraitURL = [[_latestTopicsData objectAtIndex:row-1] objectForKey:@"portrait"];
         [self.navigationController pushViewController:topicPV animated:YES];
         //开启iOS7的滑动返回效果
         if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
@@ -257,7 +257,7 @@
     
     // prepare request parameters
     NSString *host = [urlManager urlHost];
-    NSString *urlString = [host stringByAppendingString:@"/index/all_classifications"];
+    NSString *urlString = [host stringByAppendingString:@"/discover/all_classifications"];
     
     NSDictionary *parameters = @{};  // 参数为空
     
@@ -300,13 +300,8 @@
     
     // 准备请求参数
     NSString *host = [urlManager urlHost];
-    NSString *urlString = [host stringByAppendingString:@"/index/latest_topics"];
-    
-    // 用户id和设备id
-    NSDictionary *parameters = @{@"uuid":@"",
-                                 @"userid":@""
-                                 };
-    //
+    NSString *urlString = [host stringByAppendingString:@"/discover/latest_topics"];
+    NSDictionary *parameters = @{};
     
     // 创建 GET 请求
     AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];
@@ -341,11 +336,13 @@
 {
     // 准备请求参数
     NSString *host = [urlManager urlHost];
-    NSString *urlString = [host stringByAppendingString:@"/index/latest_topics"];
+    NSString *urlString = [host stringByAppendingString:@"/discover/latest_topics"];
     
-    // 用户id和设备id
-    NSDictionary *parameters = @{@"uuid":@"",
-                                 @"userid":@""
+    // 取得当前最后一个cell的数据id
+    NSString *lastID = [[_latestTopicsData lastObject] objectForKey:@"_id"];
+    NSDictionary *parameters = @{
+                                 @"type":@"loadmore",
+                                 @"last_id":lastID
                                  };
     // 创建 GET 请求
     AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];

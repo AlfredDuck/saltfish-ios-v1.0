@@ -12,8 +12,8 @@
 
 @interface SFDiscoveryViewController : SFTabBarViewController <UIActionSheetDelegate, UITableViewDelegate, UITableViewDataSource, SFClassificationTableViewCellDelegate>
 @property (nonatomic, strong) UITableView *oneTableView;  // tableview
-@property (nonatomic, strong) NSArray *classificationData;  // 分类s
-@property (nonatomic, strong) NSArray *latestTopicsData;  // 最新话题s
+@property (nonatomic, strong) NSArray *classificationData;  // 分类数据
+@property (nonatomic, strong) NSArray *latestTopicsData;  // 最新话题数据
 
 @property (nonatomic, strong) UIActivityIndicatorView *loadingFlower;  // 小菊花
 // 全局变量 屏幕长宽

@@ -12,6 +12,7 @@
 #import "colorManager.h"
 #import "urlManager.h"
 #import "TopicTableViewCell.h"
+#import "TopicVC.h"
 
 @interface ClassificationVC ()
 
@@ -43,11 +44,19 @@
     _screenWidth = [UIScreen mainScreen].bounds.size.width;
     
     [self createUIParts];  // 构建UI
-    [self connectForClassificationList];  // 初次请求
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    // 设置状态栏颜色的强力方法
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+    
     _titleLabel.text = _pageTitle;
+    
+    if (_oneTableView) {
+        return;
+    }else {
+        [self connectForClassificationList];  // 初次请求
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -175,7 +184,7 @@
     
     [oneTopicCell rewriteTitle:[[_tableViewData objectAtIndex:row] objectForKey:@"title"]];
     [oneTopicCell rewriteintroduction:[[_tableViewData objectAtIndex:row] objectForKey:@"introduction"]];
-    [oneTopicCell rewritePic:[[_tableViewData objectAtIndex:row] objectForKey:@"picURL"]];
+    [oneTopicCell rewritePic:[[_tableViewData objectAtIndex:row] objectForKey:@"portrait"]];
     [oneTopicCell rewriteFollowButton:[[_tableViewData objectAtIndex:row] objectForKey:@"isFollowing"]];
     // 取消选中的背景色
     oneTopicCell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -195,10 +204,18 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSUInteger row = [indexPath row];
-    if (row == 0) {
-        NSLog(@"000000000000");
+    
+    TopicVC *topicPage = [[TopicVC alloc] init];
+    topicPage.topic = [[_tableViewData objectAtIndex:row] objectForKey:@"title"];
+    topicPage.portraitURL = [[_tableViewData objectAtIndex:row] objectForKey:@"portrait"];
+    [self.navigationController pushViewController:topicPage animated:YES];
+    //开启iOS7的滑动返回效果
+    if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
+        self.navigationController.interactivePopGestureRecognizer.delegate = nil;
     }
 }
+
+
 
 
 
@@ -209,9 +226,11 @@
     
     // prepare request parameters
     NSString *host = [urlManager urlHost];
-    NSString *urlString = [host stringByAppendingString:@"/index/classification"];
+    NSString *urlString = [host stringByAppendingString:@"/discover/classification"];
     
-    NSDictionary *parameters = @{};  // 参数为空
+    NSDictionary *parameters = @{
+                                 @"classification": _pageTitle
+                                 };
     
     // 创建 GET 请求
     AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];
@@ -222,6 +241,7 @@
         NSArray *data = [responseObject objectForKey:@"data"];
         NSString *errcode = [responseObject objectForKey:@"errcode"];
         NSLog(@"errcode：%@", errcode);
+        NSLog(@"data: %@", data);
         
         if ([errcode isEqualToString:@"err"]) {
             return;
@@ -246,9 +266,15 @@
     
     // prepare request parameters
     NSString *host = [urlManager urlHost];
-    NSString *urlString = [host stringByAppendingString:@"/index/classification"];
+    NSString *urlString = [host stringByAppendingString:@"/discover/classification"];
     
-    NSDictionary *parameters = @{};  // 参数为空
+    // 取得当前最后一个cell的数据id
+    NSString *lastID = [[_tableViewData lastObject] objectForKey:@"_id"];
+    NSDictionary *parameters = @{
+                                 @"type":@"loadmore",
+                                 @"last_id":lastID,
+                                 @"classification": _pageTitle
+                                 };
     
     // 创建 GET 请求
     AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];

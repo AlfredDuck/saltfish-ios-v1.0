@@ -291,7 +291,7 @@
             oneTopicCell.delegate = self;
         }
         NSString *introduction = [_topicData objectForKey:@"introduction"];
-        NSString *topic = [_topicData objectForKey:@"topic"];
+        NSString *topic = [_topicData objectForKey:@"title"];
         [oneTopicCell rewriteTopic:topic];
         [oneTopicCell rewriteIntroduction:introduction followStatus:_isFollowing pushStatus:_isPushOn];
         
@@ -346,14 +346,16 @@
 
 #pragma mark - 网络请求
 
-/* 请求第一个cell的数据 */
+/** 请求第一个cell的数据 **/
 - (void)connectForTopicCell:(UITableView *)tableView
 {
     // prepare request parameters
     NSString *host = [urlManager urlHost];
-    NSString *urlString = [host stringByAppendingString:@"/index/topic"];
+    NSString *urlString = [host stringByAppendingString:@"/topic/topic_info"];
     
-    NSDictionary *parameters = @{};  // 参数为空
+    NSDictionary *parameters = @{
+                                 @"title": _topic
+                                 };
     
     // 创建 GET 请求
     AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];
