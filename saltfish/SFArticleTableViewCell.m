@@ -163,6 +163,12 @@
     [_topicImageView sd_setImageWithURL:[NSURL URLWithString:_topicImageURL] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
 }
 
+- (void) rewriteDate:(NSString *)newDate
+{
+    _date = newDate;
+    _dateLabel.text = _date;
+}
+
 - (void)showAsBeenRead:(NSString *)articleID
 {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];

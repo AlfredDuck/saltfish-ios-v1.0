@@ -15,6 +15,7 @@
 #import "urlManager.h"
 #import "SFArticleTableViewCell.h"
 #import "TopicCell.h"
+#import "detailVC.h"
 
 
 @interface TopicVC ()
@@ -303,11 +304,13 @@
         if (oneArticleCell == nil) {
             oneArticleCell = [[SFArticleTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:ArticleCellWithIdentifier];
         }
+        [oneArticleCell rewriteTopics: _topic];
+        [oneArticleCell rewriteTopicImageURL:_portraitURL];
         [oneArticleCell rewriteTitle:[[_articleData objectAtIndex:row-1] objectForKey:@"title"]];
         [oneArticleCell rewriteHotScore:[[_articleData objectAtIndex:row-1] objectForKey:@"hotScore"]];
-        [oneArticleCell rewriteTopics:[[_articleData objectAtIndex:row-1] objectForKey:@"topic"]];
+        [oneArticleCell rewriteDate:[[_articleData objectAtIndex:row-1] objectForKey:@"date"]];
         [oneArticleCell rewritePicURL:[[_articleData objectAtIndex:row-1] objectForKey:@"picURL"]];
-        [oneArticleCell rewriteTopicImageURL:[[_articleData objectAtIndex:row-1] objectForKey:@"topicImageURL"]];
+        
         // 取消选中的背景色
         oneArticleCell.selectionStyle = UITableViewCellSelectionStyleNone;
         return oneArticleCell;
@@ -335,8 +338,14 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSUInteger row = [indexPath row];
-    if (row == 0) {
-        NSLog(@"000000000000");
+    
+    // 进入article详情页
+    detailVC *detailPage = [[detailVC alloc] init];
+    detailPage.articleID = [[_articleData objectAtIndex:row-1] objectForKey:@"_id"];
+    [self.navigationController pushViewController:detailPage animated:YES];
+    //开启iOS7的滑动返回效果
+    if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
+        self.navigationController.interactivePopGestureRecognizer.delegate = nil;
     }
 }
 
@@ -393,9 +402,11 @@
 {
     // prepare request parameters
     NSString *host = [urlManager urlHost];
-    NSString *urlString = [host stringByAppendingString:@"/index/articles"];
+    NSString *urlString = [host stringByAppendingString:@"/topic/articles"];
     
-    NSDictionary *parameters = @{};  // 参数为空
+    NSDictionary *parameters = @{
+                                 @"topic":_topic
+                                 };
     
     // 创建 GET 请求
     AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];
@@ -428,9 +439,15 @@
 {
     // prepare request parameters
     NSString *host = [urlManager urlHost];
-    NSString *urlString = [host stringByAppendingString:@"/index/articles"];
+    NSString *urlString = [host stringByAppendingString:@"/topic/articles"];
     
-    NSDictionary *parameters = @{};  // 参数为空
+    // 取得当前最后一个cell的数据id
+    NSString *lastID = [[_articleData lastObject] objectForKey:@"_id"];
+    NSDictionary *parameters = @{
+                                 @"type":@"loadmore",
+                                 @"last_id":lastID,
+                                 @"topic": _topic
+                                 };
     
     // 创建 GET 请求
     AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];

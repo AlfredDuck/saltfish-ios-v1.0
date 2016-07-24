@@ -213,7 +213,7 @@
 {
     NSUInteger row = [indexPath row];
     
-    if (row == 1) {
+    if (row == 2) {
         [self chooseLoginWayWith:@"请先登录"];
         return;
     }

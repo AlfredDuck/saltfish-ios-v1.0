@@ -34,6 +34,7 @@
 - (void)rewriteHotScore:(NSString *)newHotScore;
 - (void)rewritePicURL:(NSString *)newPicURL;
 - (void)rewriteTopics:(NSString *)newTopic;
+- (void)rewritePostTime:(NSString *)newPostTime;
 - (void)showAsBeenRead: (NSString *)aritlceID;
 
 @end

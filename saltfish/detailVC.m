@@ -49,6 +49,9 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    // 设置状态栏颜色的强力方法
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+    
     if (_firstLoad) {
         NSLog(@"详情页的articleID: %@", _articleID);
         // 记录为已读

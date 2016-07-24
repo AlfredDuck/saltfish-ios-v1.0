@@ -49,6 +49,7 @@
 - (void)rewritePicURL:(NSString *)newPicURL;
 - (void)rewriteTopics:(NSString *)newTopic;
 - (void)rewriteTopicImageURL:(NSString *)newTopicImageURL;
+- (void)rewriteDate:(NSString *)newDate;
 - (void)showAsBeenRead: (NSString *)aritlceID;
 
 
