@@ -366,7 +366,7 @@
 - (void)clickHotArticle:(NSString *)articleID
 {
     detailVC *detailPage = [[detailVC alloc] init];
-    detailPage.articleID = @"ddddd";
+    detailPage.articleID = articleID;
     [self.navigationController pushViewController:detailPage animated:YES];
     //开启iOS7的滑动返回效果
     if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
@@ -374,9 +374,11 @@
     }
 }
 
-- (void)clickHotTopic:(NSString *)topic
+- (void)clickHotTopic:(NSString *)topic pic:(NSString *)picURL
 {
     TopicVC *topicPage = [[TopicVC alloc] init];
+    topicPage.topic = topic;
+    topicPage.portraitURL = picURL;
     [self.navigationController pushViewController:topicPage animated:YES];
     //开启iOS7的滑动返回效果
     if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
@@ -410,7 +412,7 @@
     
     // prepare request parameters
     NSString *host = [urlManager urlHost];
-    NSString *urlString = [host stringByAppendingString:@"/index/hot_articles"];
+    NSString *urlString = [host stringByAppendingString:@"/index/hots"];
     
     NSDictionary *parameters = @{};  // 参数为空
     

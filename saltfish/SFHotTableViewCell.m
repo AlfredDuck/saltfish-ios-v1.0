@@ -117,6 +117,8 @@
             UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickHotTopic:)];   // 设置手势
             [picImageView addGestureRecognizer:singleTap]; // 给view添加手势
             
+            picImageView.tag = i + 1;
+            
             [self.contentView addSubview:picImageView];
             [_hotTopicPicArr addObject:picImageView];
             [_hotTopicLabelArr addObject:topicLabel];
@@ -207,6 +209,8 @@
         UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickHotArticle:)];   // 设置手势
         [picImageView addGestureRecognizer:singleTap]; // 给view添加手势
         
+        picImageView.tag = kk + 1;  // 设置焦点图的tag，用于点击跳转
+        
         [_basedScrollView addSubview:picImageView];
     }
     
@@ -246,6 +250,8 @@
 /* 重写热门话题数据 */
 - (void)rewriteHotTopics:(NSArray *)newArr
 {
+    _hotTopicData = newArr;
+    
     for (int i=0; i<3; i++) {
         UILabel *topicLabel = [_hotTopicLabelArr objectAtIndex:i];
         topicLabel.text = [[newArr objectAtIndex:i] objectForKey:@"topic"];
@@ -392,27 +398,27 @@
 - (void)clickHotArticle:(UIGestureRecognizer *)sender
 {
     NSLog(@"%@",[sender.view subviews]);
-    // 从 sender 的子视图中找到 label
-    for (id item in [sender.view subviews]) {
-        if ([item isKindOfClass:[UILabel class]]) {
-            NSLog(@"%@", ((UILabel *)item).text);
-            // 调用在“发现”tab的cell代理方法
-            [self.delegate clickHotArticle:((UILabel *)item).text];
-        }
-    }
+    NSLog(@"%lu", (unsigned long)sender.view.tag);
+    
+    NSString *articleID = [[_hotArticleData objectAtIndex:sender.view.tag - 1] objectForKey:@"articleID"];
+    [self.delegate clickHotArticle:articleID];  // 调用代理
+    
+//    // 从 sender 的子视图中找到 label
+//    for (id item in [sender.view subviews]) {
+//        if ([item isKindOfClass:[UILabel class]]) {
+//            NSLog(@"%@", ((UILabel *)item).text);
+//            // 调用在“发现”tab的cell代理方法
+//            [self.delegate clickHotArticle:((UILabel *)item).text];
+//        }
+//    }
 }
 
 - (void)clickHotTopic:(UIGestureRecognizer *)sender
 {
-    NSLog(@"%@",[sender.view subviews]);
-    // 从 sender 的子视图中找到 label
-    for (id item in [sender.view subviews]) {
-        if ([item isKindOfClass:[UILabel class]]) {
-            NSLog(@"%@", ((UILabel *)item).text);
-            // 调用在“发现”tab的cell代理方法
-            [self.delegate clickHotTopic:((UILabel *)item).text];
-        }
-    }
+    NSLog(@"%lu", (unsigned long)sender.view.tag);
+    NSString *topic = [[_hotTopicData objectAtIndex:sender.view.tag - 1] objectForKey:@"topic"];
+    NSString *picURL = [[_hotTopicData objectAtIndex:sender.view.tag - 1] objectForKey:@"picURL"];
+    [self.delegate clickHotTopic:topic pic:picURL];
 }
 
 
