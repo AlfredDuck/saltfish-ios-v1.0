@@ -332,6 +332,10 @@
     NSString *host = [urlManager urlHost];
     NSString *urlString = [host stringByAppendingString:@"/topic/follow"];
     
+    if ([[topic objectForKey:@"isFollowing"] isEqualToString:@"yes"]) {
+        urlString = [host stringByAppendingString:@"/topic/unfollow"];
+    }
+    
     NSDictionary *parameters = @{
                                  @"uid": uid,
                                  @"topic": [topic objectForKey:@"title"],
@@ -355,11 +359,11 @@
             NSLog(@"操作失败，请重试");
             return;
         }
-        NSLog(@"操作成功");
+        NSLog(@"关注状态改为%@",[data objectForKey:@"isFollowing"]);
         
         // 刷新 followButton 的状态
         NSMutableDictionary *cellData = [[_tableViewData objectAtIndex:index] mutableCopy];
-        [cellData setValue:@"yes" forKey:@"isFollowing"];
+        [cellData setValue:[data objectForKey:@"isFollowing"] forKey:@"isFollowing"];
         [_tableViewData replaceObjectAtIndex:index withObject:cellData];
         // 刷新特定的cell
          NSIndexPath *indexPath=[NSIndexPath indexPathForRow:index inSection:0];
