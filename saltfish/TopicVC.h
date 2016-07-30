@@ -21,9 +21,11 @@
 @property (nonatomic, strong) NSDictionary *topicData;  // tableview第一个cell数据
 @property (nonatomic, strong) NSMutableArray *articleData;  // tableview 其他cell数据
 
-@property (nonatomic, strong)UIImageView *backgroundView;
-@property (nonatomic, strong)UIImageView *portraitView;
-@property (nonatomic, strong)UILabel *titleLabel;
+@property (nonatomic, strong) UIImageView *backgroundView;
+@property (nonatomic, strong) UIImageView *portraitView;
+@property (nonatomic, strong) UILabel *titleLabel;
+@property (nonatomic, strong) NSString *uid;  // 登录账号id
+
 // 全局变量 屏幕长宽
 @property (nonatomic) NSInteger screenWidth;
 @property (nonatomic) NSInteger screenHeight;

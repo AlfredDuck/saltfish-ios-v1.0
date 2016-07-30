@@ -67,6 +67,12 @@
     NSArray *dd = @[g1];
     _articleData = [dd mutableCopy];
     
+    // 获取登录账户id
+    NSUserDefaults *sfUserDefault = [NSUserDefaults standardUserDefaults];
+    if ([sfUserDefault objectForKey:@"loginInfo"]) {
+        _uid = [[sfUserDefault objectForKey:@"loginInfo"] objectForKey:@"uid"];
+    }
+    
     [self createUIParts];
     [self connectForTopicCell:_oneTableView];
     [self connectForArticleCell:_oneTableView];
@@ -252,12 +258,12 @@
     [self.view addSubview:_oneTableView];
     
     // 上拉刷新 MJRefresh
-    _oneTableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
-        // 结束加载更多
-        // [tableView.mj_footer endRefreshing];
-        // [tableView.mj_footer endRefreshingWithNoMoreData];
-        [self connectForMoreArticleCell:_oneTableView];
-    }];
+//    _oneTableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
+//        // 结束加载更多
+//        // [tableView.mj_footer endRefreshing];
+//        // [tableView.mj_footer endRefreshingWithNoMoreData];
+//        [self connectForMoreArticleCell:_oneTableView];
+//    }];
 }
 
 
@@ -286,6 +292,7 @@
     NSUInteger row = [indexPath row];
     
     if (row == 0) {
+        // 第一个cell
         if (oneTopicCell == nil) {
             oneTopicCell = [[TopicCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:TopicCellWithIdentifier];
             // 定义代理
@@ -315,8 +322,6 @@
         oneArticleCell.selectionStyle = UITableViewCellSelectionStyleNone;
         return oneArticleCell;
     }
-    
-    // 直接往cell addsubView的方法会在每次划出屏幕再划回来时 再加载一次subview，因此会重复加载很多subview
 }
 
 // 改变 cell 高度
@@ -363,6 +368,7 @@
     NSString *urlString = [host stringByAppendingString:@"/topic/topic_info"];
     
     NSDictionary *parameters = @{
+                                 @"uid": _uid,
                                  @"title": _topic
                                  };
     
@@ -428,6 +434,14 @@
         
         // 刷新tableview
         [tableView reloadData];
+        
+        // 添加上拉刷新 MJRefresh
+        _oneTableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
+            // 结束加载更多
+            // [tableView.mj_footer endRefreshing];
+            // [tableView.mj_footer endRefreshingWithNoMoreData];
+            [self connectForMoreArticleCell:_oneTableView];
+        }];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
