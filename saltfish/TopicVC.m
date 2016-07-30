@@ -298,10 +298,10 @@
             // 定义代理
             oneTopicCell.delegate = self;
         }
-        NSString *introduction = [_topicData objectForKey:@"introduction"];
-        NSString *topic = [_topicData objectForKey:@"title"];
-        [oneTopicCell rewriteTopic:topic];
-        [oneTopicCell rewriteIntroduction:introduction followStatus:_isFollowing pushStatus:_isPushOn];
+        _introduction = [_topicData objectForKey:@"introduction"];
+        _topic = [_topicData objectForKey:@"title"];
+        [oneTopicCell rewriteTopic:_topic];
+        [oneTopicCell rewriteIntroduction:_introduction followStatus:_isFollowing pushStatus:_isPushOn];
         
         // 取消选中的背景色
         oneTopicCell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -343,6 +343,9 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSUInteger row = [indexPath row];
+    if (row == 0) {
+        return;
+    }
     
     // 进入article详情页
     detailVC *detailPage = [[detailVC alloc] init];
@@ -494,6 +497,56 @@
 }
 
 
+/** follow or unfollow 请求 **/
+- (void)connectForFollow
+{
+    NSLog(@"请求 follow 开始");
+    
+    // prepare request parameters
+    NSString *host = [urlManager urlHost];
+    NSString *urlString = [host stringByAppendingString:@"/topic/follow"];
+    
+    if ([_isFollowing isEqualToString:@"yes"]) {
+        urlString = [host stringByAppendingString:@"/topic/unfollow"];
+    }
+    
+    NSDictionary *parameters = @{
+                                 @"uid": _uid,
+                                 @"topic": _topic,
+                                 @"portrait": _portraitURL,
+                                 @"introduction": _introduction,
+                                 @"is_push_on": _isPushOn
+                                 };
+    
+    // 创建 GET 请求
+    AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];
+    connectManager.requestSerializer.timeoutInterval = 20.0;   //设置超时时间
+    [connectManager GET:urlString parameters: parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        // GET请求成功
+        NSDictionary *data = [responseObject objectForKey:@"data"];
+        NSString *errcode = [responseObject objectForKey:@"errcode"];
+        NSLog(@"errcode：%@", errcode);
+        NSLog(@"data: %@", data);
+        
+        if ([errcode isEqualToString:@"err"]) {
+            NSLog(@"操作失败，请重试");
+            return;
+        }
+        NSLog(@"关注状态改为%@",[data objectForKey:@"isFollowing"]);
+        
+        _isFollowing = [data objectForKey:@"isFollowing"];
+        
+        // 刷新特定的cell
+        NSIndexPath *indexPath=[NSIndexPath indexPathForRow:0 inSection:0];
+        [_oneTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+}
+
+
 
 
 
@@ -509,19 +562,21 @@
 
 - (void)clickFollowButton
 {
-    if ([_isFollowing isEqualToString:@"yes"]) {
-        _isFollowing = @"no";
-    }
-    else if ([_isFollowing isEqualToString:@"no"]) {
-        _isFollowing = @"yes";
-    }
-    else {
-        _isFollowing = @"no";
-    }
+//    if ([_isFollowing isEqualToString:@"yes"]) {
+//        _isFollowing = @"no";
+//    }
+//    else if ([_isFollowing isEqualToString:@"no"]) {
+//        _isFollowing = @"yes";
+//    }
+//    else {
+//        _isFollowing = @"no";
+//    }
+    // 发起 follow 请求
+    [self connectForFollow];
     
     // 刷新特定的一个cell
-    NSIndexPath *indexPath=[NSIndexPath indexPathForRow:0 inSection:0];
-    [_oneTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationFade];
+//    NSIndexPath *indexPath=[NSIndexPath indexPathForRow:0 inSection:0];
+//    [_oneTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationFade];
     
     //    [UIView animateWithDuration:0.3 animations:^{   // uiview 动画（无需实例化）单例
     //
