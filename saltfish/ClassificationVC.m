@@ -43,6 +43,12 @@
     _screenHeight = [UIScreen mainScreen].bounds.size.height;
     _screenWidth = [UIScreen mainScreen].bounds.size.width;
     
+    // 获取登录账户id
+    NSUserDefaults *sfUserDefault = [NSUserDefaults standardUserDefaults];
+    if ([sfUserDefault objectForKey:@"loginInfo"]) {
+        _uid = [[sfUserDefault objectForKey:@"loginInfo"] objectForKey:@"uid"];
+    }
+    
     [self createUIParts];  // 构建UI
 }
 
@@ -214,10 +220,8 @@
     NSDictionary *topic = [_tableViewData objectAtIndex:index];
     NSLog(@"%@", topic);
     
-    NSUserDefaults *sfUserDefault = [NSUserDefaults standardUserDefaults];
-    if ([sfUserDefault objectForKey:@"loginInfo"]) {
-        NSString *uid = [[sfUserDefault objectForKey:@"loginInfo"] objectForKey:@"uid"];
-        [self connectForFollowOneTopic:topic uid:uid];  // 发起关注Topic的请求
+    if (_uid) {
+        [self connectForFollowOneTopic:topic uid:_uid cellIndex:(unsigned int)index];  // 发起关注Topic的请求
     } else {
         NSLog(@"请先登录");
     }
@@ -236,6 +240,7 @@
     NSString *urlString = [host stringByAppendingString:@"/discover/classification"];
     
     NSDictionary *parameters = @{
+                                 @"uid": _uid,
                                  @"classification": _pageTitle
                                  };
     
@@ -279,6 +284,7 @@
     // 取得当前最后一个cell的数据id
     NSString *lastID = [[_tableViewData lastObject] objectForKey:@"_id"];
     NSDictionary *parameters = @{
+                                 @"uid": _uid,
                                  @"type":@"loadmore",
                                  @"last_id":lastID,
                                  @"classification": _pageTitle
@@ -316,8 +322,9 @@
 }
 
 
+
 /** 发起关注 Topic 的请求 **/
-- (void)connectForFollowOneTopic:(NSDictionary *)topic uid:(NSString *)uid
+- (void)connectForFollowOneTopic:(NSDictionary *)topic uid:(NSString *)uid cellIndex:(unsigned)index
 {
     NSLog(@"请求 follow 开始");
     
@@ -351,11 +358,11 @@
         NSLog(@"操作成功");
         
         // 刷新 followButton 的状态
-        NSMutableDictionary *cellData = [[_tableViewData objectAtIndex:0] mutableCopy];
+        NSMutableDictionary *cellData = [[_tableViewData objectAtIndex:index] mutableCopy];
         [cellData setValue:@"yes" forKey:@"isFollowing"];
-        [_tableViewData replaceObjectAtIndex:0 withObject:cellData];
+        [_tableViewData replaceObjectAtIndex:index withObject:cellData];
         // 刷新特定的cell
-         NSIndexPath *indexPath=[NSIndexPath indexPathForRow:0 inSection:0];
+         NSIndexPath *indexPath=[NSIndexPath indexPathForRow:index inSection:0];
          [_oneTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {

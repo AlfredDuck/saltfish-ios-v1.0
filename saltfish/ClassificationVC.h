@@ -14,6 +14,7 @@
 @property (nonatomic, strong) UILabel *titleLabel;  //
 @property (nonatomic, strong) UITableView *oneTableView;  // tableview
 @property (nonatomic, strong) NSMutableArray *tableViewData;  // tableview数据
+@property (nonatomic, strong) NSString *uid;  // 登录账户id
 
 // 全局变量 屏幕长宽
 @property (nonatomic) NSInteger screenWidth;
