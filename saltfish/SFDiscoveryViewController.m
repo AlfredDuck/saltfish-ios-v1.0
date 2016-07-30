@@ -181,11 +181,12 @@
     else {
         if (oneTopicCell == nil) {
             oneTopicCell = [[TopicTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:TopicCellWithIdentifier];
+            oneTopicCell.delegate = self;  // 设置代理
         }
         [oneTopicCell rewriteTitle:[[_latestTopicsData objectAtIndex:row-1] objectForKey:@"title"]];
         [oneTopicCell rewriteintroduction:[[_latestTopicsData objectAtIndex:row-1] objectForKey:@"introduction"]];
         [oneTopicCell rewritePic:[[_latestTopicsData objectAtIndex:row-1] objectForKey:@"portrait"]];
-        [oneTopicCell rewriteFollowButton:[[_latestTopicsData objectAtIndex:row-1] objectForKey:@"isFollowing"]];
+        [oneTopicCell rewriteFollowButton:[[_latestTopicsData objectAtIndex:row-1] objectForKey:@"isFollowing"] forIndex:(int)row-1];
         oneTopicCell.selectionStyle = UITableViewCellSelectionStyleNone;  // 取消选中的背景色
         return oneTopicCell;
     }
@@ -234,7 +235,7 @@
 
 
 
-#pragma mark - Classification Cell 代理
+#pragma mark - 自定义代理：Classification Cell
 - (void)clickClassification:(NSString *)classification
 {
     NSLog(@"我在点击：%@", classification);
@@ -245,6 +246,14 @@
     if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
         self.navigationController.interactivePopGestureRecognizer.delegate = nil;
     }
+}
+
+#pragma mark - 自定义代理：TopicTableViewCell
+- (void)clickFollowButtonForIndex:(unsigned long)index
+{
+    NSLog(@"点击第%ld个关注按钮", index);
+    NSString *topic = [[_latestTopicsData objectAtIndex:index] objectForKey:@"title"];
+    NSLog(@"%@",topic);
 }
 
 
@@ -358,7 +367,6 @@
             [tableView.mj_footer endRefreshingWithNoMoreData];
             return;
         }
-        [_loadingFlower stopAnimating];
         
         // 更新 Data 数据
         NSMutableArray *marr = [_latestTopicsData mutableCopy];

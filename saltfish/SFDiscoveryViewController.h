@@ -9,8 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "SFClassificationTableViewCell.h"
 #import "SFTabBarViewController.h"
+#import "TopicTableViewCell.h"
 
-@interface SFDiscoveryViewController : SFTabBarViewController <UIActionSheetDelegate, UITableViewDelegate, UITableViewDataSource, SFClassificationTableViewCellDelegate>
+@interface SFDiscoveryViewController : SFTabBarViewController <UIActionSheetDelegate, UITableViewDelegate, UITableViewDataSource, SFClassificationTableViewCellDelegate, TopicTableViewCellDelegate>
 @property (nonatomic, strong) UITableView *oneTableView;  // tableview
 @property (nonatomic, strong) NSArray *classificationData;  // 分类数据
 @property (nonatomic, strong) NSArray *latestTopicsData;  // 最新话题数据

@@ -148,17 +148,6 @@
 
 
 
-#pragma mark - IBAction
-- (void)clickBackButton
-{
-    NSLog(@"back");
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
-
-
-
-
 #pragma mark - TableView 代理方法
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -180,12 +169,13 @@
     NSUInteger row = [indexPath row];
     if (oneTopicCell == nil) {
         oneTopicCell = [[TopicTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:TopicCellWithIdentifier];
+        oneTopicCell.delegate = self;  // 设置代理
     }
     
     [oneTopicCell rewriteTitle:[[_tableViewData objectAtIndex:row] objectForKey:@"title"]];
     [oneTopicCell rewriteintroduction:[[_tableViewData objectAtIndex:row] objectForKey:@"introduction"]];
     [oneTopicCell rewritePic:[[_tableViewData objectAtIndex:row] objectForKey:@"portrait"]];
-    [oneTopicCell rewriteFollowButton:[[_tableViewData objectAtIndex:row] objectForKey:@"isFollowing"]];
+    [oneTopicCell rewriteFollowButton:[[_tableViewData objectAtIndex:row] objectForKey:@"isFollowing"] forIndex:(int)row];
     // 取消选中的背景色
     oneTopicCell.selectionStyle = UITableViewCellSelectionStyleNone;
     return oneTopicCell;
@@ -215,6 +205,23 @@
     }
 }
 
+
+
+
+#pragma mark - 自定义代理：TopicTableViewCell
+- (void)clickFollowButtonForIndex:(unsigned long)index
+{
+    NSDictionary *topic = [_tableViewData objectAtIndex:index];
+    NSLog(@"%@", topic);
+    
+    NSUserDefaults *sfUserDefault = [NSUserDefaults standardUserDefaults];
+    if ([sfUserDefault objectForKey:@"loginInfo"]) {
+        NSString *uid = [[sfUserDefault objectForKey:@"loginInfo"] objectForKey:@"uid"];
+        [self connectForFollowOneTopic:topic uid:uid];  // 发起关注Topic的请求
+    } else {
+        NSLog(@"请先登录");
+    }
+}
 
 
 
@@ -258,6 +265,7 @@
         NSLog(@"Error: %@", error);
     }];
 }
+
 
 
 - (void)connectForMore
@@ -305,6 +313,63 @@
         NSLog(@"Error: %@", error);
         [_oneTableView.mj_footer endRefreshing];
     }];
+}
+
+
+/** 发起关注 Topic 的请求 **/
+- (void)connectForFollowOneTopic:(NSDictionary *)topic uid:(NSString *)uid
+{
+    NSLog(@"请求 follow 开始");
+    
+    // prepare request parameters
+    NSString *host = [urlManager urlHost];
+    NSString *urlString = [host stringByAppendingString:@"/topic/follow"];
+    
+    NSDictionary *parameters = @{
+                                 @"uid": uid,
+                                 @"topic": [topic objectForKey:@"title"],
+                                 @"portrait": [topic objectForKey:@"portrait"],
+                                 @"introduction": [topic objectForKey:@"introduction"],
+                                 @"is_push_on":@"yes"
+                                 };
+    
+    // 创建 GET 请求
+    AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];
+    connectManager.requestSerializer.timeoutInterval = 20.0;   //设置超时时间
+    [connectManager GET:urlString parameters: parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        // GET请求成功
+        NSDictionary *data = [responseObject objectForKey:@"data"];
+        NSString *errcode = [responseObject objectForKey:@"errcode"];
+        NSLog(@"errcode：%@", errcode);
+        NSLog(@"data: %@", data);
+        
+        if ([errcode isEqualToString:@"err"]) {
+            NSLog(@"操作失败，请重试");
+            return;
+        }
+        NSLog(@"操作成功");
+        
+        // 刷新 followButton 的状态
+        NSMutableDictionary *cellData = [[_tableViewData objectAtIndex:0] mutableCopy];
+        [cellData setValue:@"yes" forKey:@"isFollowing"];
+        [_tableViewData replaceObjectAtIndex:0 withObject:cellData];
+        // 刷新特定的cell
+         NSIndexPath *indexPath=[NSIndexPath indexPathForRow:0 inSection:0];
+         [_oneTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+}
+
+
+
+#pragma mark - IBAction
+- (void)clickBackButton
+{
+    NSLog(@"back");
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 

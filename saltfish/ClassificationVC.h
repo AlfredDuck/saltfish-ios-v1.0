@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TopicTableViewCell.h"
 
-@interface ClassificationVC : UIViewController <UITableViewDelegate, UITableViewDataSource>
+@interface ClassificationVC : UIViewController <UITableViewDelegate, UITableViewDataSource, TopicTableViewCellDelegate>
 @property (nonatomic, strong) NSString *pageTitle;  // 页面标题
 @property (nonatomic, strong) UILabel *titleLabel;  //
 @property (nonatomic, strong) UITableView *oneTableView;  // tableview

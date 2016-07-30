@@ -134,7 +134,7 @@
     /* 创建 TableView */
     [self createBasedTableView];
     /* 创建焦点图 */
-    //[self createHotArticles];
+    // [self createHotArticles];
 
 }
 

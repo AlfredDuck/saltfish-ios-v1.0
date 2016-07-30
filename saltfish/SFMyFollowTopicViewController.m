@@ -36,6 +36,13 @@
     [super viewDidLoad];
     _screenHeight = [UIScreen mainScreen].bounds.size.height;
     _screenWidth = [UIScreen mainScreen].bounds.size.width;
+    
+    // 登录账户的uid
+    NSUserDefaults *sfUserDefault = [NSUserDefaults standardUserDefaults];
+    if ([sfUserDefault objectForKey:@"loginInfo"]) {
+        _uid = [[sfUserDefault objectForKey:@"loginInfo"] objectForKey:@"uid"];
+    }
+    
     [self createUIParts];  // 创建ui
     [self connectForMyTopics];  // 初始请求
 }
@@ -165,10 +172,10 @@
         oneTopicCell = [[myTopicTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:TopicCellWithIdentifier];
     }
     
-    [oneTopicCell rewriteTitle:[[_tableViewData objectAtIndex:row] objectForKey:@"title"]];
+    [oneTopicCell rewriteTitle:[[_tableViewData objectAtIndex:row] objectForKey:@"topic"]];
     [oneTopicCell rewriteUpdateTime:[[_tableViewData objectAtIndex:row] objectForKey:@"updateTime"]];
-    [oneTopicCell rewritePic:[[_tableViewData objectAtIndex:row] objectForKey:@"picURL"]];
-    [oneTopicCell rewriteNotification:[[_tableViewData objectAtIndex:row] objectForKey:@"isNotificationOn"]];
+    [oneTopicCell rewritePic:[[_tableViewData objectAtIndex:row] objectForKey:@"portrait"]];
+    [oneTopicCell rewriteNotification:[[_tableViewData objectAtIndex:row] objectForKey:@"isPushOn"]];
     // 取消选中的背景色
     oneTopicCell.selectionStyle = UITableViewCellSelectionStyleNone;
     return oneTopicCell;
@@ -207,9 +214,9 @@
     
     // prepare request parameters
     NSString *host = [urlManager urlHost];
-    NSString *urlString = [host stringByAppendingString:@"/index/my_topics"];
+    NSString *urlString = [host stringByAppendingString:@"/user/my_topics"];
     
-    NSDictionary *parameters = @{};  // 参数为空
+    NSDictionary *parameters = @{@"uid": _uid};
     
     // 创建 GET 请求
     AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];
@@ -244,7 +251,7 @@
     
     // prepare request parameters
     NSString *host = [urlManager urlHost];
-    NSString *urlString = [host stringByAppendingString:@"/index/my_topics"];
+    NSString *urlString = [host stringByAppendingString:@"/user/my_topics"];
     
     NSDictionary *parameters = @{};  // 参数为空
     

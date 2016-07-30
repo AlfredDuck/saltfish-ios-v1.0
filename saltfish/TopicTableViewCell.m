@@ -115,7 +115,7 @@
     _introductionLabel.text = _introduction;
 }
 
-- (void)rewriteFollowButton:(NSString *)isFollowing
+- (void)rewriteFollowButton:(NSString *)isFollowing forIndex:(int)index
 {
     if ([isFollowing isEqualToString:@"yes"]) {
         [_followButton setImage:[UIImage imageNamed:@"unfollow_small.png"]];
@@ -123,6 +123,9 @@
     else {
         [_followButton setImage:[UIImage imageNamed:@"follow_small.png"]];
     }
+    
+    // 给followbutton加tag,用于定位点击事件发生在哪个cell
+    _followButton.tag = index + 1;
 }
 
 
@@ -131,6 +134,7 @@
 - (void)clickFollowButton:(UIGestureRecognizer *)sender
 {
     NSLog(@"%@", sender);
+    [self.delegate clickFollowButtonForIndex:sender.view.tag - 1];  // 调用代理
 }
 
 

@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol TopicTableViewCellDelegate <NSObject>
+@required
+- (void)clickFollowButtonForIndex:(unsigned long)index;
+@end
+
+
 @interface TopicTableViewCell : UITableViewCell
 // 图片
 @property (nonatomic, copy) NSString *picURL;
@@ -26,9 +32,11 @@
 @property (nonatomic) NSInteger screenWidth;
 @property (nonatomic) NSInteger screenHeight;
 
+@property (nonatomic, assign) id <TopicTableViewCellDelegate> delegate;  // 代理
+
 - (void)rewritePic:(NSString *)newPicURL;
 - (void)rewriteTitle:(NSString *)newTitle;
 - (void)rewriteintroduction:(NSString *)newIntroduction;
-- (void)rewriteFollowButton:(NSString *)isFollowing;
+- (void)rewriteFollowButton:(NSString *)isFollowing forIndex:(int)index;
 
 @end

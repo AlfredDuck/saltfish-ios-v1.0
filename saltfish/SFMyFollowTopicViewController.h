@@ -11,6 +11,7 @@
 @interface SFMyFollowTopicViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UITabBarDelegate>
 @property (nonatomic, strong) UITableView *oneTableView;  // tableview
 @property (nonatomic, strong) NSMutableArray *tableViewData;  // tableview数据
+@property (nonatomic, strong) NSString *uid;  // 用户登录账户
 // 全局变量 屏幕长宽
 @property (nonatomic) NSInteger screenWidth;
 @property (nonatomic) NSInteger screenHeight;
