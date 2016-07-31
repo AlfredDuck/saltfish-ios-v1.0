@@ -41,6 +41,12 @@
     _screenHeight = [UIScreen mainScreen].bounds.size.height;
     _screenWidth = [UIScreen mainScreen].bounds.size.width;
     
+    // 登录账户的uid
+    NSUserDefaults *sfUserDefault = [NSUserDefaults standardUserDefaults];
+    if ([sfUserDefault objectForKey:@"loginInfo"]) {
+        _uid = [[sfUserDefault objectForKey:@"loginInfo"] objectForKey:@"uid"];
+    }
+    
     /* 构建页面元素 */
     [self createUIParts];
     [super createTabBarWith:0];  // 调用父类方法，构建tabbar
@@ -118,17 +124,10 @@
                         @"##",@"title",
                         @"", @"picURL",
                         nil];
-    NSDictionary *g1 = [[NSDictionary alloc] initWithObjectsAndKeys:
-                        @"title", @"",
-                        @"topic", @"",
-                        @"picURL", @"",
-                        @"topicImageURL", @"",
-                        @"hotScore", @"",
-                        nil];
     
     _hotArticleData = @[d1,d2,d3];
     _hotTopicData = @[t1,t2,t3];
-    NSArray *dd = @[g1];
+    NSArray *dd = @[];
     _followedArticlesData = [dd mutableCopy];
     
     /* 创建 TableView */
@@ -237,10 +236,10 @@
         [self connectForFollowedArticles:_oneTableView];
     }];
     
-    // 上拉刷新 MJRefresh
-    _oneTableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
-        [self connectForMoreFollowedArticles:_oneTableView];
-    }];
+    // 上拉刷新 MJRefresh (等到页面有数据后再使用)
+//    _oneTableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
+//        [self connectForMoreFollowedArticles:_oneTableView];
+//    }];
     
     // 这个碉堡了，要珍藏！！
     // _oneTableView.mj_header.ignoredScrollViewContentInsetTop = 100.0;
@@ -323,15 +322,9 @@
 {
     NSUInteger row = [indexPath row];
     
-    if (row == 1) {
-        [self connectForHot:_oneTableView];
-        [self connectForFollowedArticles:_oneTableView];
-        return;
-    }
-    
     if (row >= 1) {
         detailVC *detailPage = [[detailVC alloc] init];
-        detailPage.articleID = @"ddddd";
+        detailPage.articleID = [[_followedArticlesData objectAtIndex:row-1] objectForKey:@"_id"];
         [self.navigationController pushViewController:detailPage animated:YES];
         //开启iOS7的滑动返回效果
         if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
@@ -365,6 +358,10 @@
 
 - (void)clickHotArticle:(NSString *)articleID
 {
+    if (!articleID) {
+        return;
+    }
+    
     detailVC *detailPage = [[detailVC alloc] init];
     detailPage.articleID = articleID;
     [self.navigationController pushViewController:detailPage animated:YES];
@@ -376,6 +373,11 @@
 
 - (void)clickHotTopic:(NSString *)topic pic:(NSString *)picURL
 {
+    NSLog(@"热门话题%@",topic);
+    if (!topic) {
+        return;
+    }
+    
     TopicVC *topicPage = [[TopicVC alloc] init];
     topicPage.topic = topic;
     topicPage.portraitURL = picURL;
@@ -449,7 +451,7 @@
 
 
 
-#pragma mark - 我关注话题的最新文章
+#pragma mark - 网络请求 - 我关注话题的最新文章
 
 /* 初次拉取 */
 - (void)connectForFollowedArticles:(UITableView *)tableView
@@ -459,8 +461,7 @@
     // prepare request parameters
     NSString *host = [urlManager urlHost];
     NSString *urlString = [host stringByAppendingString:@"/index/followed_articles"];
-    
-    NSDictionary *parameters = @{};  // 参数为空
+    NSDictionary *parameters = @{@"uid": _uid};
     
     // 创建 GET 请求
     AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];
@@ -482,6 +483,11 @@
         // 刷新当前 tableview 的数据
         [tableView reloadData];
         
+        // 上拉刷新 MJRefresh (等到页面有数据后再使用)
+        tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
+            [self connectForMoreFollowedArticles:_oneTableView];
+        }];
+        
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
         [tableView.mj_header endRefreshing];
@@ -498,8 +504,12 @@
     NSString *host = [urlManager urlHost];
     NSString *urlString = [host stringByAppendingString:@"/index/followed_articles"];
     
-    NSDictionary *parameters = @{};  // 参数为空
-    
+    // 取得当前最后一个cell的数据id
+    NSString *lastID = [[_followedArticlesData lastObject] objectForKey:@"_id"];
+    NSDictionary *parameters = @{@"last_id":lastID,
+                                 @"type":@"loadmore",
+                                 @"uid": _uid};
+
     // 创建 GET 请求
     AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];
     connectManager.requestSerializer.timeoutInterval = 20.0;   //设置超时时间
@@ -512,6 +522,10 @@
         NSLog(@"data:%@", data);
         
         if ([errcode isEqualToString:@"err"]) {
+            [tableView.mj_footer endRefreshing];
+            return;
+        }
+        if ([data count] == 0) {
             [tableView.mj_footer endRefreshingWithNoMoreData];
             return;
         }

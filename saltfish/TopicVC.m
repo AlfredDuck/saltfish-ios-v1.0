@@ -49,22 +49,21 @@
     // 设置状态栏颜色的强力方法
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
+    if (_articleData) {
+        return;
+    }
+    
     // 初始化站位数据
     _topicData = [[NSDictionary alloc] initWithObjectsAndKeys:
-                @"加载中", @"topic",
-                @"急急如律令", @"introduction",
+                _topic, @"title",
+                @"         ", @"introduction",
                 @"no", @"isFollowing",
                 @"no", @"isPushOn",
                   nil];
-    NSDictionary *g1 = [[NSDictionary alloc] initWithObjectsAndKeys:
-                        @"title", @"",
-                        @"topic", @"",
-                        @"picURL", @"",
-                        @"topicImageURL", @"",
-                        @"hotScore", @"",
-                        nil];
+    _isFollowing = @"no";
+    _isPushOn = @"no";
     
-    NSArray *dd = @[g1];
+    NSArray *dd = @[];
     _articleData = [dd mutableCopy];
     
     // 获取登录账户id

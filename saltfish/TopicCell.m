@@ -52,6 +52,7 @@
         _introductionLabel.text = _introduction;
         _introductionLabel.font = [UIFont fontWithName:@"Helvetica" size: 13.0f];
         _introductionLabel.textColor = [colorManager secondTextColor];
+        _introductionLabel.textAlignment = UITextAlignmentCenter;
         [self.contentView addSubview:_introductionLabel];
         
         

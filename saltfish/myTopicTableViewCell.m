@@ -58,7 +58,7 @@
         [self.contentView addSubview:_titleLabel];
         
         /* 更新时间 */
-        _updateTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(86, 44, _screenWidth-(58+11+16+11), 17)];
+        _updateTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(86, 44, _screenWidth-(58+11+16+11+32+11), 17)];
         _updateTimeLabel.text = _updateTime;
         _updateTimeLabel.font = [UIFont fontWithName:@"Helvetica" size: 12.0f];
         _updateTimeLabel.textColor = [colorManager secondTextColor];

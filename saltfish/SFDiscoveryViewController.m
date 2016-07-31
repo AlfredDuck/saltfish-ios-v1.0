@@ -130,13 +130,13 @@
         [_oneTableView.mj_footer endRefreshing];  // 下拉刷新时，重置一下 mj_footer 的状态
     }];
     
-    // 上拉刷新 MJRefresh
-    _oneTableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
-        // 结束加载更多
-        // [tableView.mj_footer endRefreshing];
-        // [_oneTableView.mj_footer endRefreshingWithNoMoreData];
-        [self connectForMoreTopics:_oneTableView];
-    }];
+    // 上拉刷新 MJRefresh （等到页面数据加载后再使用）
+//    _oneTableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
+//        // 结束加载更多
+//        // [tableView.mj_footer endRefreshing];
+//        // [_oneTableView.mj_footer endRefreshingWithNoMoreData];
+//        [self connectForMoreTopics:_oneTableView];
+//    }];
     
     // 禁用 mjRefresh
     // contentTableView.mj_footer = nil;
@@ -332,6 +332,11 @@
         
         // 刷新当前 tableview 的数据
         [tableView reloadData];
+        
+        // 上拉刷新 MJRefresh （等到页面数据加载后再使用）
+        tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
+            [self connectForMoreTopics:_oneTableView];
+        }];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);

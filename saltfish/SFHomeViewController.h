@@ -20,6 +20,7 @@
 @property (nonatomic, strong) NSArray *hotArticleData;  // 热门文章数据
 @property (nonatomic, strong) NSArray *hotTopicData;  // 热门话题数据
 @property (nonatomic, strong) NSMutableArray *followedArticlesData;  // 关注话题的最新文章
+@property (nonatomic, strong) NSString *uid;  // 登录账户id
 
 @property (nonatomic, strong) UIActivityIndicatorView *loadingFlower;  // 小菊花
 

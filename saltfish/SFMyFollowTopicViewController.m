@@ -147,12 +147,12 @@
     //    }];
     
     // 上拉刷新 MJRefresh
-    _oneTableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
-        // 结束加载更多
-        // [tableView.mj_footer endRefreshing];
-        // [tableView.mj_footer endRefreshingWithNoMoreData];
-        [self connectForMore];
-    }];
+//    _oneTableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
+//        // 结束加载更多
+//        // [tableView.mj_footer endRefreshing];
+//        // [tableView.mj_footer endRefreshingWithNoMoreData];
+//        [self connectForMore];
+//    }];
 }
 
 
@@ -191,8 +191,8 @@
         oneTopicCell = [[myTopicTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:TopicCellWithIdentifier];
     }
     
-    [oneTopicCell rewriteTitle:[[_tableViewData objectAtIndex:row] objectForKey:@"topic"]];
-    [oneTopicCell rewriteUpdateTime:[[_tableViewData objectAtIndex:row] objectForKey:@"updateTime"]];
+    [oneTopicCell rewriteTitle:[[_tableViewData objectAtIndex:row] objectForKey:@"title"]];
+    [oneTopicCell rewriteUpdateTime:[[_tableViewData objectAtIndex:row] objectForKey:@"introduction"]];
     [oneTopicCell rewritePic:[[_tableViewData objectAtIndex:row] objectForKey:@"portrait"]];
     [oneTopicCell rewriteNotification:[[_tableViewData objectAtIndex:row] objectForKey:@"isPushOn"]];
     // 取消选中的背景色
@@ -215,8 +215,8 @@
     NSUInteger row = [indexPath row];
     
     TopicVC *topicPV = [[TopicVC alloc] init];
-    topicPV.topic = @"#娜乌西卡#";
-    topicPV.portraitURL = @"https://img1.doubanio.com/view/photo/photo/public/p1375000419.jpg";
+    topicPV.topic = [[_tableViewData objectAtIndex:row] objectForKey:@"title"];
+    topicPV.portraitURL = [[_tableViewData objectAtIndex:row] objectForKey:@"portrait"];
     [self.navigationController pushViewController:topicPV animated:YES];
     //开启iOS7的滑动返回效果
     if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
@@ -258,6 +258,13 @@
         // 创建 tableview
         [self createTableView];
         
+        if ([_tableViewData count] >= 10) {
+            // 上拉刷新 MJRefresh
+            _oneTableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
+                [self connectForMore];
+            }];
+        }
+        
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
@@ -272,7 +279,10 @@
     NSString *host = [urlManager urlHost];
     NSString *urlString = [host stringByAppendingString:@"/user/my_topics"];
     
-    NSDictionary *parameters = @{};  // 参数为空
+    NSDictionary *parameters = @{@"uid": _uid,
+                                 @"last_id": [[_tableViewData lastObject] objectForKey:@"_id"],
+                                 @"type": @"loadmore"
+                                 };
     
     // 创建 GET 请求
     AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];
@@ -285,6 +295,10 @@
         NSLog(@"errcode：%@", errcode);
         
         if ([errcode isEqualToString:@"err"]) {
+            [_oneTableView.mj_footer endRefreshing];
+            return;
+        }
+        if ([data count] == 0) {
             [_oneTableView.mj_footer endRefreshingWithNoMoreData];
             return;
         }

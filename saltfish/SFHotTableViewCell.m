@@ -41,7 +41,7 @@
         /* ============= 焦点图 ScrollView ============== */
         
         _basedScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, _screenWidth, _hotArticleHeight)];
-        _basedScrollView.backgroundColor = [UIColor grayColor];
+        _basedScrollView.backgroundColor = [UIColor whiteColor];
         _basedScrollView.delegate = self;
         
         //这个属性很重要，它可以决定是横向还是纵向滚动，一般来说也是其中的 View 的总宽度，和总的高度
@@ -85,7 +85,7 @@
             
             // 52px的上边距, xxpx的焦点图
             UIImageView *picImageView = [[UIImageView alloc] initWithFrame:CGRectMake(16+i*(ww+11), 52+_hotArticleHeight, ww, hh)];
-            picImageView.backgroundColor = [UIColor grayColor];
+            picImageView.backgroundColor = [UIColor whiteColor];
             
             // uiimageview居中裁剪
             picImageView.contentMode = UIViewContentModeScaleAspectFill;
@@ -176,13 +176,13 @@
         NSLog(@"%d", kk);
         
         UIImageView *picImageView = [[UIImageView alloc] initWithFrame:CGRectMake(_screenWidth*i, 0, _screenWidth, _hotArticleHeight)];
-        picImageView.backgroundColor = [UIColor grayColor];
+        picImageView.backgroundColor = [UIColor whiteColor];
         
         // uiimageview居中裁剪
         picImageView.contentMode = UIViewContentModeScaleAspectFill;
         picImageView.clipsToBounds  = YES;
         // 需要AFNetwork
-        [picImageView sd_setImageWithURL:[NSURL URLWithString:[[_hotArticleData objectAtIndex:kk] objectForKey:@"picURL"]] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+        [picImageView sd_setImageWithURL:[NSURL URLWithString:[[_hotArticleData objectAtIndex:kk] objectForKey:@"picURL"]]];
         
         // 遮黑
         UIView *halfBlack = [[UIView alloc] initWithFrame:CGRectMake(0, 0, _screenWidth, _hotArticleHeight)];
@@ -258,7 +258,7 @@
         
         UIImageView *picImageView = [_hotTopicPicArr objectAtIndex:i];
         // 需要AFNetwork
-        [picImageView sd_setImageWithURL:[NSURL URLWithString:[[newArr objectAtIndex:i] objectForKey:@"picURL"]]placeholderImage:[UIImage imageNamed:@"placeholder.png"] ];
+        [picImageView sd_setImageWithURL:[NSURL URLWithString:[[newArr objectAtIndex:i] objectForKey:@"picURL"]]];
     }
 }
 
