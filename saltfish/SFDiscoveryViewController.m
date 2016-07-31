@@ -40,6 +40,12 @@
     _screenHeight = [UIScreen mainScreen].bounds.size.height;
     _screenWidth = [UIScreen mainScreen].bounds.size.width;
     
+    // 登录账户的uid
+    NSUserDefaults *sfUserDefault = [NSUserDefaults standardUserDefaults];
+    if ([sfUserDefault objectForKey:@"loginInfo"]) {
+        _uid = [[sfUserDefault objectForKey:@"loginInfo"] objectForKey:@"uid"];
+    }
+    
     [self createUIParts];
     [super createTabBarWith:1];  // 调用父类方法，构建tabbar
     
@@ -248,12 +254,19 @@
     }
 }
 
+
 #pragma mark - 自定义代理：TopicTableViewCell
 - (void)clickFollowButtonForIndex:(unsigned long)index
 {
-    NSLog(@"点击第%ld个关注按钮", index);
-    NSString *topic = [[_latestTopicsData objectAtIndex:index] objectForKey:@"title"];
-    NSLog(@"%@",topic);
+    NSLog(@"%lu",index);
+    NSDictionary *topic = [_latestTopicsData objectAtIndex:index];
+    NSLog(@"%@", topic);
+    
+    if (_uid) {
+        [self connectForFollowOneTopic:topic uid:_uid cellIndex:(unsigned int)index];  // 发起关注Topic的请求
+    } else {
+        NSLog(@"请先登录");
+    }
 }
 
 
@@ -310,7 +323,7 @@
     // 准备请求参数
     NSString *host = [urlManager urlHost];
     NSString *urlString = [host stringByAppendingString:@"/discover/latest_topics"];
-    NSDictionary *parameters = @{};
+    NSDictionary *parameters = @{@"uid": _uid};
     
     // 创建 GET 请求
     AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];
@@ -327,7 +340,7 @@
         [tableView.mj_header endRefreshing];  // 结束下拉刷新
 
         // 更新 Data 数据
-        _latestTopicsData = [data copy];
+        _latestTopicsData = [data mutableCopy];
         data = nil;
         
         // 刷新当前 tableview 的数据
@@ -354,9 +367,9 @@
     
     // 取得当前最后一个cell的数据id
     NSString *lastID = [[_latestTopicsData lastObject] objectForKey:@"_id"];
-    NSDictionary *parameters = @{
-                                 @"type":@"loadmore",
-                                 @"last_id":lastID
+    NSDictionary *parameters = @{@"type":@"loadmore",
+                                 @"last_id":lastID,
+                                 @"uid": _uid
                                  };
     // 创建 GET 请求
     AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];
@@ -374,10 +387,7 @@
         }
         
         // 更新 Data 数据
-        NSMutableArray *marr = [_latestTopicsData mutableCopy];
-        [marr addObjectsFromArray:data];
-        _latestTopicsData = [marr copy];
-        marr = nil;
+        [_latestTopicsData addObjectsFromArray:data];
         data = nil;
         
         // 刷新当前 tableview 的数据
@@ -391,6 +401,61 @@
         [tableView.mj_footer endRefreshing];
     }];
 }
+
+
+/** 发起关注 Topic 的请求 **/
+- (void)connectForFollowOneTopic:(NSDictionary *)topic uid:(NSString *)uid cellIndex:(unsigned)index
+{
+    NSLog(@"请求 follow 开始");
+    
+    // prepare request parameters
+    NSString *host = [urlManager urlHost];
+    NSString *urlString = [host stringByAppendingString:@"/topic/follow"];
+    
+    if ([[topic objectForKey:@"isFollowing"] isEqualToString:@"yes"]) {
+        urlString = [host stringByAppendingString:@"/topic/unfollow"];
+    }
+    
+    NSDictionary *parameters = @{
+                                 @"uid": uid,
+                                 @"topic": [topic objectForKey:@"title"],
+                                 @"portrait": [topic objectForKey:@"portrait"],
+                                 @"introduction": [topic objectForKey:@"introduction"],
+                                 @"is_push_on":@"yes"
+                                 };
+    
+    // 创建 GET 请求
+    AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];
+    connectManager.requestSerializer.timeoutInterval = 20.0;   //设置超时时间
+    [connectManager GET:urlString parameters: parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        // GET请求成功
+        NSDictionary *data = [responseObject objectForKey:@"data"];
+        NSString *errcode = [responseObject objectForKey:@"errcode"];
+        NSLog(@"errcode：%@", errcode);
+        NSLog(@"data: %@", data);
+        
+        if ([errcode isEqualToString:@"err"]) {
+            NSLog(@"操作失败，请重试");
+            return;
+        }
+        NSLog(@"关注状态改为%@",[data objectForKey:@"isFollowing"]);
+        
+        // 刷新 followButton 的状态
+        NSMutableDictionary *cellData = [[_latestTopicsData objectAtIndex:index] mutableCopy];
+        [cellData setValue:[data objectForKey:@"isFollowing"] forKey:@"isFollowing"];
+        [_latestTopicsData replaceObjectAtIndex:index withObject:cellData];
+        // 刷新特定的cell
+        NSIndexPath *indexPath=[NSIndexPath indexPathForRow:index + 1 inSection:0];
+        [_oneTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+}
+
+
+
 
 
 
