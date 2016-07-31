@@ -547,6 +547,45 @@
 }
 
 
+/** push开关 请求 **/
+- (void)connectForPushSwitch
+{
+    NSLog(@"请求 push开关 开始");
+    
+    // prepare request parameters
+    NSString *host = [urlManager urlHost];
+    NSString *urlString = [host stringByAppendingString:@"/topic/push"];
+    NSDictionary *parameters = @{
+                                 @"uid": _uid,
+                                 @"topic": _topic,
+                                 @"portrait": _portraitURL,
+                                 @"introduction": _introduction,
+                                 @"is_push_on": _isPushOn
+                                 };
+    
+    // 创建 GET 请求
+    AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];
+    connectManager.requestSerializer.timeoutInterval = 20.0;   //设置超时时间
+    [connectManager GET:urlString parameters: parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        // GET请求成功
+        NSDictionary *data = [responseObject objectForKey:@"data"];
+        NSString *errcode = [responseObject objectForKey:@"errcode"];
+        NSLog(@"errcode：%@", errcode);
+        NSLog(@"data: %@", data);
+        
+        if ([errcode isEqualToString:@"err"]) {
+            NSLog(@"操作失败，请重试");
+            return;
+        }
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+
+}
+
+
 
 
 
@@ -595,6 +634,8 @@
         _isPushOn = @"no";
     }
     NSLog(@"push开关：%@", _isPushOn);
+    
+    [self connectForPushSwitch];
     
 }
 
