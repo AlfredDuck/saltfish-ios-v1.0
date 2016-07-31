@@ -26,7 +26,7 @@
     if (self) {
         // Custom initialization
         self.title = @"test";
-        self.view.backgroundColor = [UIColor whiteColor];
+        self.view.backgroundColor = [colorManager lightGrayBackground];
     }
     return self;
 }
@@ -107,6 +107,25 @@
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickBackButton)]; // 设置手势
     [backView addGestureRecognizer:singleTap]; // 给图片添加手势
     [titleBarBackground addSubview:backView];
+    
+    
+    /** loadingView **/
+    _loadingView = [[UIView alloc] initWithFrame:CGRectMake((_screenWidth-200)/2.0, (_screenHeight-60)/2.0, 200, 44+16)];
+    // 菊花
+    _loadingFlower = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    _loadingFlower.frame = CGRectMake((200-44)/2.0, 0, 44, 44);
+    [_loadingFlower startAnimating];
+    //[_loadingFlower stopAnimating];
+    // loading 文案
+    UILabel *loadingLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 44, 200, 16)];
+    loadingLabel.text = @"正在加载...";
+    loadingLabel.textColor = [colorManager secondTextColor];
+    loadingLabel.font = [UIFont fontWithName:@"Helvetica" size:12];
+    loadingLabel.textAlignment = UITextAlignmentCenter;
+    
+    [_loadingView addSubview:loadingLabel];
+    [_loadingView addSubview:_loadingFlower];
+    [titleBarBackground addSubview:_loadingView];
 
 }
 
