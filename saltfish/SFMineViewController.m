@@ -303,7 +303,8 @@
 - (void)clickAppStore
 {
     // 去appstore评论
-    NSString *iTunesLink = @"https://itunes.apple.com/us/app/lan-de-li-ni/id967965054?l=zh&ls=1&mt=8";
+//    https://itunes.apple.com/us/app/xian-yu-xing-wen-hao-wan-you/id1084092765?mt=8
+    NSString *iTunesLink = @"https://itunes.apple.com/us/app/xian-yu-xing-wen-hao-wan-you/id1084092765?mt=8";
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:iTunesLink]];
 }
 

@@ -48,12 +48,12 @@
         
         
         /* 话题头像 */
-        _topicImageView = [[UIImageView alloc] initWithFrame:CGRectMake(14, 15, 20, 20)];
+        _topicImageView = [[UIImageView alloc] initWithFrame:CGRectMake(14, 15, 24, 24)];
         _topicImageView.backgroundColor = [UIColor grayColor];
         // uiimageview居中裁剪
         _topicImageView.contentMode = UIViewContentModeScaleAspectFill;
         _topicImageView.clipsToBounds  = YES;
-        _topicImageView.layer.cornerRadius = 10;
+        _topicImageView.layer.cornerRadius = 12;
         // 需要AFNetwork
         [_topicImageView sd_setImageWithURL:[NSURL URLWithString:_picURL] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
         [self.contentView addSubview:_topicImageView];
@@ -64,9 +64,9 @@
         
         
         /* 话题标题 */
-        _topicLabel = [[UILabel alloc] initWithFrame:CGRectMake(41, 17, 200, 17)];
+        _topicLabel = [[UILabel alloc] initWithFrame:CGRectMake(45, 15, 200, 24)];
         _topicLabel.text = _topic;
-        _topicLabel.font = [UIFont fontWithName:@"Helvetica" size: 12.0];
+        _topicLabel.font = [UIFont fontWithName:@"Helvetica" size: 13.0];
         _topicLabel.textColor = [colorManager secondTextColor];
         // 点击手势
         _topicLabel.userInteractionEnabled = YES; // 设置view可以交互

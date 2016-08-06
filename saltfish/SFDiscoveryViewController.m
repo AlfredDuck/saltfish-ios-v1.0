@@ -413,6 +413,10 @@
         NSLog(@"errcode：%@", errcode);
         
         if ([errcode isEqualToString:@"err"]) {
+            [tableView.mj_footer endRefreshing];
+            return;
+        }
+        if (0 == [data count]) {
             [tableView.mj_footer endRefreshingWithNoMoreData];
             return;
         }
