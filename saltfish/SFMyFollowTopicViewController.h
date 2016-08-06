@@ -15,6 +15,7 @@
 
 @property (nonatomic, strong) UIView *loadingView;  // 页面第一次加载时显示的loading
 @property (nonatomic, strong) UIActivityIndicatorView *loadingFlower;  // 小菊花
+@property (nonatomic, strong) UILabel *emptyLabel;  // 页面为空的提示语
 
 // 全局变量 屏幕长宽
 @property (nonatomic) NSInteger screenWidth;

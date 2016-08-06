@@ -97,6 +97,15 @@
     [titleBarBackground addSubview:backView];
     
     
+    /** 为空提示语 **/
+    _emptyLabel = [[UILabel alloc] initWithFrame:CGRectMake((_screenWidth-200)/2, 84, 200, 30)];
+    _emptyLabel.text = @"- 你还没有关注任何主题 -";
+    _emptyLabel.textColor = [colorManager secondTextColor];
+    _emptyLabel.font = [UIFont fontWithName:@"Helvetica" size: 12];
+    _emptyLabel.textAlignment = UITextAlignmentCenter;
+    _emptyLabel.hidden = YES;
+    [titleBarBackground addSubview:_emptyLabel];
+    
     /** loadingView **/
     _loadingView = [[UIView alloc] initWithFrame:CGRectMake((_screenWidth-200)/2.0, (_screenHeight-60)/2.0, 200, 44+16)];
     // 菊花
@@ -251,6 +260,10 @@
         
         if ([errcode isEqualToString:@"err"]) {
             return;
+        } else if (0 == [data count]){
+            _loadingView.hidden = YES;
+            _emptyLabel.hidden = NO;
+            return;
         }
         
         // 更新当前 tableview 的数据
@@ -260,6 +273,7 @@
         // 创建 tableview
         [self createTableView];
         
+        // 超过一定量的数据，才显示上拉加载更多
         if ([_tableViewData count] >= 10) {
             // 上拉刷新 MJRefresh
             _oneTableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
