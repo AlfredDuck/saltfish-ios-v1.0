@@ -1,23 +1,108 @@
 //
-//  SFLoginAndSignup.m
+//  SFLoginViewController.m
 //  saltfish
 //
-//  Created by alfred on 16/7/16.
+//  Created by alfred on 16/8/6.
 //  Copyright © 2016年 Alfred. All rights reserved.
 //
 
-#import "SFLoginAndSignup.h"
+#import "SFLoginViewController.h"
+#import "colorManager.h"
 #import "WeiboSDK.h"
 #import "AFNetworking.h"
 #import "urlManager.h"
 
+@interface SFLoginViewController ()
 
-@implementation SFLoginAndSignup
+@end
+
+@implementation SFLoginViewController
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        // Custom initialization
+        self.title = @"title";
+        self.view.backgroundColor = [UIColor whiteColor];
+    }
+    return self;
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    _screenHeight = [UIScreen mainScreen].bounds.size.height;
+    _screenWidth = [UIScreen mainScreen].bounds.size.width;
+    [self createUIParts];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    // 设置状态栏颜色的强力方法
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+    
+    // 发起微博登录流程
+    [self requestForWeiboAuthorize];
+    [self waitForWeiboAuthorizeResult];
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+}
 
 - (void)dealloc {
     // uiviewcontroller 释放前会调用
     [[NSNotificationCenter defaultCenter] removeObserver:self];  // 注销观察者
 }
+
+
+
+#pragma mark - 构建UI
+- (void)createUIParts
+{
+    /* 关闭按钮 */
+    UIImage *oneImage = [UIImage imageNamed:@"close.png"]; // 使用ImageView通过name找到图片
+    UIImageView *oneImageView = [[UIImageView alloc] initWithImage:oneImage]; // 把oneImage添加到oneImageView上
+    oneImageView.frame = CGRectMake(14.5, 14.5, 15, 15); // 设置图片位置和大小
+    // [oneImageView setContentMode:UIViewContentModeCenter];
+    
+    UIView *backView = [[UIView alloc] initWithFrame:CGRectMake(0, 20, 44, 44)];
+    [backView addSubview:oneImageView];
+    // 为UIView添加点击事件
+    // 一定要先将userInteractionEnabled置为YES，这样才能响应单击事件
+    backView.userInteractionEnabled = YES; // 设置图片可以交互
+    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickCloseButton)]; // 设置手势
+    [backView addGestureRecognizer:singleTap]; // 给图片添加手势
+    [self.view addSubview:backView];
+    
+    /* 小菊花 */
+    UIView *loadingView = [[UIView alloc] initWithFrame:CGRectMake((_screenWidth-200)/2.0, (_screenHeight-60)/2.0, 200, 44+16)];
+    // 菊花
+    UIActivityIndicatorView *loadingFlower = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    loadingFlower.frame = CGRectMake((200-44)/2.0, 0, 44, 44);
+    [loadingFlower startAnimating];
+    //[_loadingFlower stopAnimating];
+    // loading 文案
+    UILabel *loadingLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 44, 200, 16)];
+    loadingLabel.text = @"正在登录...";
+    loadingLabel.textColor = [colorManager secondTextColor];
+    loadingLabel.font = [UIFont fontWithName:@"Helvetica" size:12];
+    loadingLabel.textAlignment = UITextAlignmentCenter;
+    
+    [loadingView addSubview:loadingLabel];
+    [loadingView addSubview:loadingFlower];
+    [self.view addSubview:loadingView];
+}
+
+
+
+#pragma mark - IBAction
+- (void)clickCloseButton {
+    [self dismissViewControllerAnimated:YES completion:^{
+        NSLog(@"退出登录页面");
+    }];
+}
+
+
 
 #pragma mark - 新浪微博授权请求
 - (void)requestForWeiboAuthorize
@@ -101,7 +186,7 @@
         NSDictionary *data = [responseObject objectForKey:@"data"];
         NSString *errcode = [responseObject objectForKey:@"errcode"];
         NSLog(@"errcode：%@", errcode);
-        NSLog(@"data:%@", data);
+        NSLog(@"在轻闻server登录成功的data:%@", data);
         
         if ([errcode isEqualToString:@"err"]) {  // 请求出错
             NSLog(@"在轻闻server登录时出错");
@@ -131,14 +216,15 @@
     NSUserDefaults *sfUserDefault = [NSUserDefaults standardUserDefaults];
     [sfUserDefault setObject:userData forKey:@"loginInfo"];
     // 检查所有 nsuserdefault
-//    NSArray *allkey = [[sfUserDefault dictionaryRepresentation] allKeys];
-//    NSLog(@"全部keys：%@", allkey);
+    //    NSArray *allkey = [[sfUserDefault dictionaryRepresentation] allKeys];
+    //    NSLog(@"全部keys：%@", allkey);
     
     // 调用代理方法，通知登录成功
     [self.delegate weiboLoginSuccess];
-    
+    // 退出登录页面
+    [self dismissViewControllerAnimated:YES completion:^{
+        NSLog(@"登录成功后退出登录页面");
+    }];
 }
-
-
 
 @end

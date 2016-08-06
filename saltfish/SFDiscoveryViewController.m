@@ -289,6 +289,18 @@
 }
 
 
+#pragma mark - 自定义代理：Login&Signup
+- (void)weiboLoginSuccess
+{
+    NSLog(@"发现页面微博登录成功");
+    NSUserDefaults *sf = [NSUserDefaults standardUserDefaults];
+    if ([sf objectForKey:@"loginInfo"]) {
+        _uid = [[sf objectForKey:@"loginInfo"] objectForKey:@"uid"];
+    }
+    [_oneTableView.mj_header beginRefreshing];  // 刷新页面
+}
+
+
 
 
 #pragma mark - 网络请求 - 请求分类
@@ -490,9 +502,16 @@
 {
     if (buttonIndex == 0) {
         NSLog(@"新浪微博登录");
-        SFLoginAndSignup *Login = [[SFLoginAndSignup alloc] init];
-        [Login requestForWeiboAuthorize];
-        [Login waitForWeiboAuthorizeResult];
+        
+        SFLoginViewController *loginPage = [[SFLoginViewController alloc] init];
+        [self.navigationController presentViewController:loginPage animated:YES completion:^{
+            NSLog(@"");
+        }];
+        
+//        SFLoginAndSignup *Login = [[SFLoginAndSignup alloc] init];
+//        // Login.delegate  = self;
+//        [Login requestForWeiboAuthorize];
+//        [Login waitForWeiboAuthorizeResult];
     }
 }
 

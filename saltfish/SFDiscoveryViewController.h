@@ -10,8 +10,10 @@
 #import "SFClassificationTableViewCell.h"
 #import "SFTabBarViewController.h"
 #import "TopicTableViewCell.h"
+#import "SFLoginAndSignup.h"
+#import "SFLoginViewController.h"
 
-@interface SFDiscoveryViewController : SFTabBarViewController <UIActionSheetDelegate, UITableViewDelegate, UITableViewDataSource, SFClassificationTableViewCellDelegate, TopicTableViewCellDelegate>
+@interface SFDiscoveryViewController : SFTabBarViewController <UIActionSheetDelegate, UITableViewDelegate, UITableViewDataSource, SFClassificationTableViewCellDelegate, TopicTableViewCellDelegate, SFLoginAndSignupDelegate>
 @property (nonatomic, strong) UITableView *oneTableView;  // tableview
 @property (nonatomic, strong) NSArray *classificationData;  // 分类数据
 @property (nonatomic, strong) NSMutableArray *latestTopicsData;  // 最新话题数据

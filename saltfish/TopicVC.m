@@ -50,6 +50,14 @@
     // 设置状态栏颜色的强力方法
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
+    // 获取登录账户id
+    NSUserDefaults *sfUserDefault = [NSUserDefaults standardUserDefaults];
+    if ([sfUserDefault objectForKey:@"loginInfo"]) {
+        _uid = [[sfUserDefault objectForKey:@"loginInfo"] objectForKey:@"uid"];
+    } else {
+        _uid = @"";
+    }
+    
     if (_articleData) {
         return;
     }
@@ -66,14 +74,6 @@
     
     NSArray *dd = @[];
     _articleData = [dd mutableCopy];
-    
-    // 获取登录账户id
-    NSUserDefaults *sfUserDefault = [NSUserDefaults standardUserDefaults];
-    if ([sfUserDefault objectForKey:@"loginInfo"]) {
-        _uid = [[sfUserDefault objectForKey:@"loginInfo"] objectForKey:@"uid"];
-    } else {
-        _uid = @"";
-    }
     
     [self createUIParts];
     [self connectForTopicCell:_oneTableView];

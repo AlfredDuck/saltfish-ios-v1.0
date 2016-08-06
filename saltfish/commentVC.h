@@ -8,8 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "writeCommentVC.h"
+#import "SFLoginAndSignup.h"
+#import "SFLoginViewController.h"
 
-@interface commentVC : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, writeCommentViewControllerDelegate>
+@interface commentVC : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, writeCommentViewControllerDelegate, SFLoginViewControllerDelegate>
 // 文章id
 @property (nonatomic, strong) NSString *articleID;
 @property (nonatomic, strong) NSString *uid;  // 登录账户id

@@ -14,6 +14,7 @@
 #import "TopicTableViewCell.h"
 #import "TopicVC.h"
 #import "SFLoginAndSignup.h"
+#import "SFLoginViewController.h"
 
 @interface ClassificationVC ()
 
@@ -44,14 +45,6 @@
     _screenHeight = [UIScreen mainScreen].bounds.size.height;
     _screenWidth = [UIScreen mainScreen].bounds.size.width;
     
-    // 获取登录账户id
-    NSUserDefaults *sfUserDefault = [NSUserDefaults standardUserDefaults];
-    if ([sfUserDefault objectForKey:@"loginInfo"]) {
-        _uid = [[sfUserDefault objectForKey:@"loginInfo"] objectForKey:@"uid"];
-    } else {
-        _uid = @"";
-    }
-    
     [self createUIParts];  // 构建UI
 }
 
@@ -59,7 +52,15 @@
     // 设置状态栏颜色的强力方法
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
     
-    _titleLabel.text = _pageTitle;
+    _titleLabel.text = _pageTitle;  // 设置标题
+    
+    // 获取登录账户id
+    NSUserDefaults *sfUserDefault = [NSUserDefaults standardUserDefaults];
+    if ([sfUserDefault objectForKey:@"loginInfo"]) {
+        _uid = [[sfUserDefault objectForKey:@"loginInfo"] objectForKey:@"uid"];
+    } else {
+        _uid = @"";
+    }
     
     if (_oneTableView) {
         return;
@@ -252,6 +253,12 @@
 
 
 
+//#pragma mark - 自定义代理：LoginViewController
+//- (void)weiboLoginSuccess {
+//    [self viewDidLoad];
+//}
+
+
 
 #pragma mark - 网络请求
 - (void)connectForClassificationList
@@ -420,9 +427,16 @@
 {
     if (buttonIndex == 0) {
         NSLog(@"新浪微博登录");
-        SFLoginAndSignup *Login = [[SFLoginAndSignup alloc] init];
-        [Login requestForWeiboAuthorize];
-        [Login waitForWeiboAuthorizeResult];
+        
+        SFLoginViewController *loginPage = [[SFLoginViewController alloc] init];
+        // loginPage.delegate = self;
+        [self.navigationController presentViewController:loginPage animated:YES completion:^{
+            NSLog(@"");
+        }];
+        
+//        SFLoginAndSignup *Login = [[SFLoginAndSignup alloc] init];
+//        [Login requestForWeiboAuthorize];
+//        [Login waitForWeiboAuthorizeResult];
     }
 }
 

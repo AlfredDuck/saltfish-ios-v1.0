@@ -22,6 +22,7 @@
 		BB2E97131C1D1599001B7CAA /* saltfish.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = BB2E97111C1D1599001B7CAA /* saltfish.xcdatamodeld */; };
 		BB2E971B1C1D1599001B7CAA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BB2E971A1C1D1599001B7CAA /* Images.xcassets */; };
 		BB2E972A1C1D1599001B7CAA /* saltfishTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BB2E97291C1D1599001B7CAA /* saltfishTests.m */; };
+		BB4B67A71D561DCA00018BEF /* SFLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB4B67A61D561DCA00018BEF /* SFLoginViewController.m */; };
 		BB5C0F0D1D39DB9400EEC34F /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = BB5C0F0C1D39DB9400EEC34F /* background.png */; };
 		BB5C0F151D39FBA600EEC34F /* SFPersonalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB5C0F141D39FBA600EEC34F /* SFPersonalViewController.m */; };
 		BB62F06F1D26AC3A00ACFC92 /* ClassificationVC.m in Sources */ = {isa = PBXBuildFile; fileRef = BB62F06E1D26AC3A00ACFC92 /* ClassificationVC.m */; };
@@ -122,6 +123,8 @@
 		BB2E97231C1D1599001B7CAA /* saltfishTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = saltfishTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB2E97281C1D1599001B7CAA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BB2E97291C1D1599001B7CAA /* saltfishTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = saltfishTests.m; sourceTree = "<group>"; };
+		BB4B67A51D561DCA00018BEF /* SFLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFLoginViewController.h; sourceTree = "<group>"; };
+		BB4B67A61D561DCA00018BEF /* SFLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFLoginViewController.m; sourceTree = "<group>"; };
 		BB5C0F0C1D39DB9400EEC34F /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = background.png; path = "../../coding/salt-App效果图/background.png"; sourceTree = "<group>"; };
 		BB5C0F131D39FBA600EEC34F /* SFPersonalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFPersonalViewController.h; sourceTree = "<group>"; };
 		BB5C0F141D39FBA600EEC34F /* SFPersonalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFPersonalViewController.m; sourceTree = "<group>"; };
@@ -250,6 +253,8 @@
 			children = (
 				BB11B3B41D3A56DE00366377 /* SFLoginAndSignup.h */,
 				BB11B3B51D3A56DE00366377 /* SFLoginAndSignup.m */,
+				BB4B67A51D561DCA00018BEF /* SFLoginViewController.h */,
+				BB4B67A61D561DCA00018BEF /* SFLoginViewController.m */,
 			);
 			name = "login & signup";
 			sourceTree = "<group>";
@@ -810,6 +815,7 @@
 				BBEAA0AF1C21A9ED00279011 /* commentVC.m in Sources */,
 				BBF2B74E1D3002FE00657FA6 /* SFArticleTableViewCell.m in Sources */,
 				BB62F08F1D27799B00ACFC92 /* SFMyFollowTopicViewController.m in Sources */,
+				BB4B67A71D561DCA00018BEF /* SFLoginViewController.m in Sources */,
 				BB62F07E1D273C2000ACFC92 /* SFHomeViewController.m in Sources */,
 				BB2E970D1C1D1599001B7CAA /* main.m in Sources */,
 				BB5C0F151D39FBA600EEC34F /* SFPersonalViewController.m in Sources */,

@@ -15,6 +15,7 @@
 #import "urlManager.h"
 #import "toastView.h"
 #import "SFLoginAndSignup.h"
+#import "SFLoginViewController.h"
 
 @interface commentVC ()
 @property (nonatomic) BOOL firstLoad;  //是否第一次加载（viewWillAppear多次调用的问题）
@@ -538,6 +539,18 @@
 
 
 
+#pragma mark - LoginViewController 的代理
+- (void)weiboLoginSuccess
+{
+    NSLog(@"评论页面得知登录成功");
+    NSUserDefaults *sf = [NSUserDefaults standardUserDefaults];
+    if ([sf objectForKey:@"loginInfo"]) {
+        _uid = [[sf objectForKey:@"loginInfo"] objectForKey:@"uid"];
+    }
+}
+
+
+
 #pragma mark - 选择登录方式 UIActionSheet
 - (void)chooseLoginWayWith:(NSString *)title
 {
@@ -550,9 +563,17 @@
 {
     if (buttonIndex == 0) {
         NSLog(@"新浪微博登录");
-        SFLoginAndSignup *Login = [[SFLoginAndSignup alloc] init];
-        [Login requestForWeiboAuthorize];
-        [Login waitForWeiboAuthorizeResult];
+        
+        SFLoginViewController *loginPage = [[SFLoginViewController alloc] init];
+        loginPage.delegate = self;
+        [self.navigationController presentViewController:loginPage animated:YES completion:^{
+            NSLog(@"");
+        }];
+        
+//        SFLoginAndSignup *Login = [[SFLoginAndSignup alloc] init];
+//        Login.delegate = self;
+//        [Login requestForWeiboAuthorize];
+//        [Login waitForWeiboAuthorizeResult];
     }
 }
 

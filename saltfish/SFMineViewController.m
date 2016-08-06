@@ -15,6 +15,7 @@
 #import "SFPersonalViewController.h"
 #import "SFCustomerFeedbackViewController.h"
 #import "SFLoginAndSignup.h"
+#import "SFLoginViewController.h"
 #import "toastView.h"
 
 
@@ -48,6 +49,27 @@
 - (void)viewWillAppear:(BOOL)animated {
     // 设置状态栏颜色的强力方法
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+
+    /* 根据登录状态来创建头部ui */
+    if (_loginButtonBackground) {
+        [_loginButtonBackground removeFromSuperview];
+    }
+    if (_portraitBackground) {
+        [_portraitBackground removeFromSuperview];
+    }
+    
+    NSUserDefaults *sfUserDefault = [NSUserDefaults standardUserDefaults];
+    if ([sfUserDefault dictionaryForKey:@"loginInfo"]) {
+        // 当前是登录状态
+        NSString *nickname = [[sfUserDefault dictionaryForKey:@"loginInfo"] objectForKey:@"nickname"];
+        _nickname.text = nickname;
+        [self createPortrait];
+    }
+    else {
+        // 当前未登录
+        _nickname.text = @"部分功能需登录后才能使用哦";
+        [self createLoginButton];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -122,7 +144,7 @@
     [AppStoreView addSubview:AppStoreIconView];
     // label
     UILabel *AppStoreLabel = [[UILabel alloc] initWithFrame:CGRectMake(55, 0, _screenWidth-55, 44)];
-    AppStoreLabel.text = @"去 App Store 给一个⭐️⭐️⭐️⭐️⭐️评价吧";
+    AppStoreLabel.text = @"去 App Store 给个5星评价吧";
     AppStoreLabel.font = [UIFont fontWithName:@"Helvetica" size: 15.0];
     AppStoreLabel.textColor = [colorManager mainTextColor];
     [AppStoreView addSubview:AppStoreLabel];
@@ -158,22 +180,7 @@
     [customerFeedbackView addGestureRecognizer:singleTap3]; // 添加手势
     [oneScrollView addSubview: customerFeedbackView];
     
-    
-    
-    /* 根据登录状态来创建头部ui */
-    NSUserDefaults *sfUserDefault = [NSUserDefaults standardUserDefaults];
-    if ([sfUserDefault dictionaryForKey:@"loginInfo"]) {
-        // 当前是登录状态
-        NSString *nickname = [[sfUserDefault dictionaryForKey:@"loginInfo"] objectForKey:@"nickname"];
-        [self createNickname:nickname];
-        [self createPortrait];
-    }
-    else {
-        // 当前未登录
-        [self createNickname:@"部分功能需登录后才能使用哦"];
-        [self createLoginButton];
-    }
-
+    [self createNickname:@""];
 }
 
 
@@ -295,6 +302,9 @@
 
 - (void)clickAppStore
 {
+    // 去appstore评论
+    NSString *iTunesLink = @"https://itunes.apple.com/us/app/lan-de-li-ni/id967965054?l=zh&ls=1&mt=8";
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:iTunesLink]];
 }
 
 - (void)clickCustomerFeedback
@@ -332,45 +342,50 @@
 {
     if (buttonIndex == 0) {
         NSLog(@"新浪微博登录");
-        SFLoginAndSignup *login = [[SFLoginAndSignup alloc] init];
-        [login requestForWeiboAuthorize];
-        [login waitForWeiboAuthorizeResult];
-        login.delegate = self;
+        // 开启登录中间页
+        SFLoginViewController *loginPage = [[SFLoginViewController alloc] init];
+        [self.navigationController presentViewController:loginPage animated:YES completion:^{
+            NSLog(@"开启登录页面");
+        }];
+//        SFLoginAndSignup *login = [[SFLoginAndSignup alloc] init];
+//        [login requestForWeiboAuthorize];
+//        [login waitForWeiboAuthorizeResult];
+//        login.delegate = self;
     }
 }
 
 
-#pragma mark - SFLogin&Signup 代理
-- (void)weiboLoginSuccess
-{
-    NSLog(@"我登录成功了，你知道吗？");
-    /* 显示昵称 */
-    NSUserDefaults *sfUserDefault = [NSUserDefaults standardUserDefaults];
-    NSDictionary *userData = [sfUserDefault dictionaryForKey:@"loginInfo"];
-    NSLog(@"%@", userData);
-    _nickname.text = [userData objectForKey:@"nickname"];
-    
-    /* 隐藏登录按钮 */
-    [_loginButtonBackground removeFromSuperview];
-    
-    /* 创建头像 */
-    [self createPortrait];
-}
+//#pragma mark - SFLogin&Signup 代理
+//- (void)weiboLoginSuccess
+//{
+//    NSLog(@"我登录成功了，你知道吗？");
+//    /* 显示昵称 */
+//    NSUserDefaults *sfUserDefault = [NSUserDefaults standardUserDefaults];
+//    NSDictionary *userData = [sfUserDefault dictionaryForKey:@"loginInfo"];
+//    NSLog(@"%@", userData);
+//    _nickname.text = [userData objectForKey:@"nickname"];
+//    
+//    /* 隐藏登录按钮 */
+//    [_loginButtonBackground removeFromSuperview];
+//    
+//    /* 创建头像 */
+//    [self createPortrait];
+//}
 
 
 
-#pragma mark - SFPersonalViewController 代理
-- (void)signout
-{
-    _nickname.text = @"部分功能需登录后才能使用哦";
-    
-    /* 隐藏头像 */
-    [_portraitBackground removeFromSuperview];
-    
-    /* 创建登录按钮 */
-    [self createLoginButton];
-    
-}
+//#pragma mark - SFPersonalViewController 代理
+//- (void)signout
+//{
+//    _nickname.text = @"部分功能需登录后才能使用哦";
+//    
+//    /* 隐藏头像 */
+//    [_portraitBackground removeFromSuperview];
+//    
+//    /* 创建登录按钮 */
+//    [self createLoginButton];
+//    
+//}
 
 
 
