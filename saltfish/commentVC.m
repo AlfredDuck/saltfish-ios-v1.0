@@ -461,6 +461,7 @@
     [cell rewriteNickname:[[_commentDataSource objectAtIndex:row] objectForKey:@"nickname"]];
     [cell rewriteCreateTime:[[_commentDataSource objectAtIndex:row] objectForKey:@"createTime"]];
     [cell rewriteComment:[[_commentDataSource objectAtIndex:row] objectForKey:@"text"]];
+    [cell rewritePortrait:[[_commentDataSource objectAtIndex:row] objectForKey:@"portrait"]];
     
     // 计算并存储cell高度，用来修改cell高度
     for (int i=0; i<=row; i++) {

@@ -42,6 +42,11 @@
     // 创建 UI
     [self basedTitleBar];
     [self basedWriteText];
+    
+    // 临时用...
+    NSUserDefaults *sf = [NSUserDefaults standardUserDefaults];
+    NSDictionary *dd = [sf objectForKey:@"loginInfo"];
+    NSLog(@"当前登录账户信息：%@",dd);
 }
 
 - (void)didReceiveMemoryWarning {
@@ -254,18 +259,35 @@
     NSString *host = [urlManager urlHost];
     NSString *urlString = [host stringByAppendingString:@"/comment/write_comment"];
     
-    // 读取本地的uuid
-    NSString *uuid;
-    NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
-    if ([userDefault objectForKey:@"uuid"]) {
-        uuid = [userDefault objectForKey:@"uuid"];
+    NSUserDefaults *sf = [NSUserDefaults standardUserDefaults];
+    NSString *uuid = @"";
+    NSString *nickname, *portrait, *oneUID;
+    
+    if ([sf objectForKey:@"uuid"]) {  // 获取uuid
+        uuid = [sf objectForKey:@"uuid"];
     }
     
-    NSDictionary *parameters = @{
-                                 @"text": comment,
+    if ([sf objectForKey:@"loginInfo"]) {  // 获取登录账户信息
+        nickname = [[sf objectForKey:@"loginInfo"] objectForKey:@"nickname"];
+        portrait = [[sf objectForKey:@"loginInfo"] objectForKey:@"portrait"];
+        oneUID = [[sf objectForKey:@"loginInfo"] objectForKey:@"uid"];
+    } else {
+        return;
+    }
+    
+//    当前登录账户信息：{
+//        "__proto__" =     {
+//        };
+//        nickname = "\U963f\U723e\U5f17\U96f7\U5fb7\U9d28";
+//        portrait = "http://tva4.sinaimg.cn/crop.0.1.750.750.180/59a58445jw8f2kh2bx8t3j20ku0kw74v.jpg";
+//        uid = 1504019525;
+//    }
+    NSDictionary *parameters = @{@"text": comment,
                                  @"article_id": _articleID,
-                                 @"uuid": uuid
-                                 };
+                                 @"uuid": uuid,
+                                 @"uid": oneUID,
+                                 @"portrait": portrait,
+                                 @"nickname": nickname};
     
     // 创建 GET 请求
     AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];

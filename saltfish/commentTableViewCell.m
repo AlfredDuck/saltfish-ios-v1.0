@@ -7,6 +7,7 @@
 //
 
 #import "commentTableViewCell.h"
+#import "UIImageView+WebCache.h"
 #import "colorManager.h"
 
 @implementation commentTableViewCell
@@ -43,6 +44,7 @@
         _nickname = @"梦遗大师";
         _comment = @"跟同学摄影的朋友们在金山海滩群拍，抢不到机位就用新入的小傻瓜机按了几张，1比3的比例，电影感极强，冲扫出来却很是喜欢";
         _createTime = @"2014-09-23";
+        _picURL = @"";
         self.tag = 999999;
         
         // 昵称
@@ -67,9 +69,18 @@
         [self.contentView addSubview:_createTimeLabel];
         
         // 头像(1.0是固定的默认头像)
+//        _picImageView = [[UIImageView alloc] initWithFrame:CGRectMake(13, 9, 26, 26)];
+//        UIImage *oneImage = [UIImage imageNamed:@"portrait.png"]; // 使用ImageView通过name找到图片
+//        [_picImageView setImage:oneImage];
+//        [self.contentView addSubview:_picImageView];
+        
+        // 头像(2.0是用户自己的头像)
         _picImageView = [[UIImageView alloc] initWithFrame:CGRectMake(13, 9, 26, 26)];
-        UIImage *oneImage = [UIImage imageNamed:@"portrait.png"]; // 使用ImageView通过name找到图片
-        [_picImageView setImage:oneImage];
+        _picImageView.backgroundColor = [UIColor grayColor];
+        // uiimageview居中裁剪
+        _picImageView.contentMode = UIViewContentModeScaleAspectFill;
+        _picImageView.clipsToBounds  = YES;
+        _picImageView.layer.cornerRadius = 13;
         [self.contentView addSubview:_picImageView];
         
         // 背景、分割线
@@ -90,6 +101,14 @@
 
 
 #pragma mark - 重写cell属性
+
+- (void)rewritePortrait:(NSString *)newPortrait
+{
+    _picURL = newPortrait;
+    // 需要SDWebImage
+    [_picImageView sd_setImageWithURL:[NSURL URLWithString:_picURL] placeholderImage:[UIImage imageNamed:@"portrait.png"]];
+}
+
 - (void)rewriteNickname:(NSString *)newNickname
 {
     _nickname = newNickname;

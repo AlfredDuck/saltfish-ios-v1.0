@@ -260,7 +260,7 @@
 #pragma mark - IBAction
 - (void)clickLoginButton
 {
-    [self chooseLoginWayWith:@"选择登录方式\n请先登录"];
+    [self chooseLoginWayWith:@"Welcome!\n请选择登录方式"];
 }
 
 - (void)clickPortrait

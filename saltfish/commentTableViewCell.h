@@ -31,6 +31,7 @@
 @property (nonatomic) NSInteger screenHeight;
 
 //
+- (void)rewritePortrait:(NSString *)newPortrait;
 - (void)rewriteNickname:(NSString *)newNickname;
 - (void)rewriteComment:(NSString *)newComment;
 - (void)rewriteCreateTime:(NSString *)newCreateTime;
