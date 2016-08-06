@@ -13,6 +13,7 @@
 #import "WeiboSDK.h"
 #import "WXApi.h"
 
+#define iOS8 [[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0 ? 1 : 0
 #define kAPPKey        @"3552509555"
 #define kRedirectURI   @"http://www.sina.com"
 #define WXKey          @"wxd53fa52039cea997"
@@ -34,15 +35,8 @@
     // weibo SDK
     [WeiboSDK enableDebugMode:YES];
     [WeiboSDK registerApp:kAPPKey];
-    
     // weixin SDK 向微信注册
     [WXApi registerApp:WXKey];
-
-//    // set homeVC as the rootViewController
-//    HomeVC *homeVC = [[HomeVC alloc] init];
-//    UINavigationController *navVC = [[UINavigationController alloc] initWithRootViewController:homeVC];
-//    self.window.rootViewController = navVC;
-//    [navVC setNavigationBarHidden:YES];
     
     // 设置 RootViewController
     SFRootViewController *rootVC = [[SFRootViewController alloc] init];
@@ -53,8 +47,10 @@
     return YES;
 }
 
+// ios token 参考： http://blog.csdn.net/sky_snow45/article/details/41205201
 
-/* weiboSDK & weixinSDK 要求 */
+
+#pragma mark - weiboSDK & weixinSDK 要求
 // 重写AppDelegate 的handleOpenURL和openURL方法
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
 {
@@ -155,12 +151,10 @@
 
 
 
-
-
-
 /********************************/
 /********* 暂时用不到的 ***********/
 /********************************/
+#pragma mark - 以下是暂时用不到的
 - (void)applicationWillResignActive:(UIApplication *)application {
    // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
    // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.

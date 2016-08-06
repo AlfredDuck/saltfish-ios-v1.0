@@ -36,7 +36,7 @@
         _screenWidth = [UIScreen mainScreen].bounds.size.width;
         
         // 一些初始化的值
-        _title = @"话题分类";
+        _title = @"主题分类";
         self.tag = 999999;
         
         
@@ -68,7 +68,7 @@
         // title
         UILabel *nextTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 14, _screenWidth, 20)];
         nextTitleLabel.font = [UIFont fontWithName:@"Helvetica" size: 14.0];
-        nextTitleLabel.text = @"推荐话题";
+        nextTitleLabel.text = @"推荐主题";
         nextTitleLabel.textColor = [colorManager mainTextColor];
         nextTitleLabel.textAlignment = UITextAlignmentCenter;
         [_titleForNextPart addSubview:nextTitleLabel];
@@ -138,14 +138,14 @@
             // 遮黑
             UIView *halfBlack = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ww, hh)];
             halfBlack.backgroundColor  = [UIColor blackColor];
-            halfBlack.alpha = 0.22;
+            halfBlack.alpha = 0.32;
             [picImageView addSubview:halfBlack];
             
             // 文本
             UILabel *classificationLable = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, ww, hh)];
             classificationLable.text = [[[DoubleArr objectAtIndex:i] objectAtIndex:j] objectForKey:@"classification"];
             classificationLable.textColor  = [UIColor whiteColor];
-            classificationLable.font = [UIFont fontWithName:@"Helvetica" size: 14.0f];
+            classificationLable.font = [UIFont fontWithName:@"Helvetica" size: 15.0f];
             classificationLable.numberOfLines = 3;
             classificationLable.textAlignment = UITextAlignmentCenter;
             // 文字阴影

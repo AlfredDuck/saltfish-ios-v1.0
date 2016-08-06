@@ -54,7 +54,7 @@
         /* #话题# */
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(86, 17, _screenWidth-(58+11+16+11), 22)];
         _titleLabel.text = _title;
-        _titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 15.0];
+        _titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 16.0];
         _titleLabel.textColor = [colorManager mainTextColor];
         [self.contentView addSubview:_titleLabel];
         
@@ -62,7 +62,7 @@
         _introductionLabel = [[UILabel alloc] initWithFrame:CGRectMake(86, 44, _screenWidth-(58+11+16+11+45+16), 17)];
         _introductionLabel.text = _introduction;
         _introductionLabel.font = [UIFont fontWithName:@"Helvetica" size: 12.0f];
-        _introductionLabel.textColor = [colorManager secondTextColor];
+        _introductionLabel.textColor = [colorManager lightTextColor];
         [self.contentView addSubview:_introductionLabel];
         
         /* 关注按钮 */

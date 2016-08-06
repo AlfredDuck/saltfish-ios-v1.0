@@ -45,6 +45,8 @@
     NSUserDefaults *sfUserDefault = [NSUserDefaults standardUserDefaults];
     if ([sfUserDefault objectForKey:@"loginInfo"]) {
         _uid = [[sfUserDefault objectForKey:@"loginInfo"] objectForKey:@"uid"];
+    } else {
+        _uid = @"";
     }
     
     /* 构建页面元素 */
@@ -58,6 +60,22 @@
 - (void)viewWillAppear:(BOOL)animated {
     // 设置状态栏颜色的强力方法
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+    
+    // 检查登录状态是否有变化
+    NSUserDefaults *sfUserDefault = [NSUserDefaults standardUserDefaults];
+    if ([sfUserDefault objectForKey:@"loginInfo"]) {  // 如果存在登录id
+        if (![_uid isEqualToString:[[sfUserDefault objectForKey:@"loginInfo"] objectForKey:@"uid"]]) {  // 当前uid是否是登录id
+            NSLog(@"登录状态发生了变化001");
+            _uid = [[sfUserDefault objectForKey:@"loginInfo"] objectForKey:@"uid"];
+            [_oneTableView.mj_header beginRefreshing];  // 重新拉取一下
+        }
+    } else {  // 如果不存在登录id
+        if (![_uid isEqualToString: @""]) {  // 当前uid是否存在
+            NSLog(@"登录状态发生了变化002");
+            _uid = @"";
+            [_oneTableView.mj_header beginRefreshing];  // 重新拉取一下
+        }
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -86,7 +104,7 @@
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake((_screenWidth-200)/2, 20, 200, 44)];
     titleLabel.text = @"轻闻";
     titleLabel.textColor = [colorManager mainTextColor];
-    titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 15];
+    titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 17.5];
     titleLabel.textAlignment = UITextAlignmentCenter;
     [titleBarBackground addSubview:titleLabel];
     
@@ -373,7 +391,7 @@
 
 - (void)clickHotTopic:(NSString *)topic pic:(NSString *)picURL
 {
-    NSLog(@"热门话题%@",topic);
+    NSLog(@"热门主题%@",topic);
     if (!topic) {
         return;
     }
@@ -394,7 +412,7 @@
 {
     //
     TopicVC *topicPage = [[TopicVC alloc] init];
-    topicPage.topic = @"荷里活";
+    topicPage.topic = topic;
     topicPage.portraitURL = @"https://img3.doubanio.com/view/photo/photo/public/p2359591225.jpg";
     [self.navigationController pushViewController:topicPage animated:YES];
     //开启iOS7的滑动返回效果

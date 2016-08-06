@@ -41,6 +41,8 @@
     NSUserDefaults *sfUserDefault = [NSUserDefaults standardUserDefaults];
     if ([sfUserDefault objectForKey:@"loginInfo"]) {
         _uid = [[sfUserDefault objectForKey:@"loginInfo"] objectForKey:@"uid"];
+    } else {
+        _uid = @"";
     }
     
     [self createUIParts];  // 创建ui
@@ -73,7 +75,7 @@
     
     /* title */
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake((_screenWidth-200)/2, 20, 200, 44)];
-    titleLabel.text = @"我的话题";
+    titleLabel.text = @"我关注的主题";
     titleLabel.textColor = [colorManager mainTextColor];
     titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 16];
     titleLabel.textAlignment = UITextAlignmentCenter;

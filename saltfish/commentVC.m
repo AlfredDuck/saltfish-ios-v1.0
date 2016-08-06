@@ -14,6 +14,7 @@
 #import "writeCommentVC.h"
 #import "urlManager.h"
 #import "toastView.h"
+#import "SFLoginAndSignup.h"
 
 @interface commentVC ()
 @property (nonatomic) BOOL firstLoad;  //是否第一次加载（viewWillAppear多次调用的问题）
@@ -37,6 +38,14 @@
     _screenHeight = [UIScreen mainScreen].bounds.size.height;
     _screenWidth = [UIScreen mainScreen].bounds.size.width;
     _firstLoad = YES;
+    
+    // 登录账户的uid
+    NSUserDefaults *sfUserDefault = [NSUserDefaults standardUserDefaults];
+    if ([sfUserDefault objectForKey:@"loginInfo"]) {
+        _uid = [[sfUserDefault objectForKey:@"loginInfo"] objectForKey:@"uid"];
+    } else {
+        _uid = @"";
+    }
     
     // 创建UI
     [self basedTitleBar];
@@ -508,11 +517,16 @@
 - (void)clickWriteCommentButton
 {
     NSLog(@"点击写评论button");
-    writeCommentVC *writeCommentPage = [[writeCommentVC alloc] init];
-    writeCommentPage.delegate = self;
-    writeCommentPage.pageTitle = @"写评论";
-    writeCommentPage.articleID = _articleID;
-    [self presentViewController:writeCommentPage animated:YES completion:nil];
+    NSLog(@"uid是：%@", _uid);
+    if (_uid && ![_uid isEqualToString:@""]) {
+        writeCommentVC *writeCommentPage = [[writeCommentVC alloc] init];
+        writeCommentPage.delegate = self;
+        writeCommentPage.pageTitle = @"写评论";
+        writeCommentPage.articleID = _articleID;
+        [self presentViewController:writeCommentPage animated:YES completion:nil];
+    } else {
+        [self chooseLoginWayWith:@"登录后方可评论"];
+    }
 }
 
 - (void)clickReloadButtonOn:(id)sender
@@ -520,6 +534,27 @@
     NSLog(@"点击重新加载请求");
     [self connectForCommentsWith: _articleID];
 }
+
+
+
+#pragma mark - 选择登录方式 UIActionSheet
+- (void)chooseLoginWayWith:(NSString *)title
+{
+    NSLog(@"选择登录方式");
+    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:title delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles: @"微博帐号登录",nil];
+    [sheet showInView:self.view];
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 0) {
+        NSLog(@"新浪微博登录");
+        SFLoginAndSignup *Login = [[SFLoginAndSignup alloc] init];
+        [Login requestForWeiboAuthorize];
+        [Login waitForWeiboAuthorizeResult];
+    }
+}
+
 
 
 @end

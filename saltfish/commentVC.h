@@ -9,9 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "writeCommentVC.h"
 
-@interface commentVC : UIViewController <UITableViewDelegate, UITableViewDataSource, writeCommentViewControllerDelegate>
+@interface commentVC : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, writeCommentViewControllerDelegate>
 // 文章id
 @property (nonatomic, strong) NSString *articleID;
+@property (nonatomic, strong) NSString *uid;  // 登录账户id
 
 // tableview
 @property (nonatomic, strong) UITableView *commentTableView;

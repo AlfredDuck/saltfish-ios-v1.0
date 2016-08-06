@@ -16,6 +16,7 @@
 #import "SFArticleTableViewCell.h"
 #import "TopicCell.h"
 #import "detailVC.h"
+#import "SFLoginAndSignup.h"
 
 
 @interface TopicVC ()
@@ -70,6 +71,8 @@
     NSUserDefaults *sfUserDefault = [NSUserDefaults standardUserDefaults];
     if ([sfUserDefault objectForKey:@"loginInfo"]) {
         _uid = [[sfUserDefault objectForKey:@"loginInfo"] objectForKey:@"uid"];
+    } else {
+        _uid = @"";
     }
     
     [self createUIParts];
@@ -106,7 +109,6 @@
         [_backgroundView setImage:imgBlur];
     }];
     
-    //[self boxblurImage:_backgroundView.image withBlurNumber:20.0];
     [self.view addSubview:_backgroundView];
     
     
@@ -142,7 +144,7 @@
     _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake((_screenWidth-200)/2, 20, 200, 44)];
     _titleLabel.text = _topic;
     _titleLabel.textColor = [UIColor whiteColor];
-    _titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 15.0];
+    _titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 16.0];
     _titleLabel.textAlignment = UITextAlignmentCenter;
     _titleLabel.hidden = YES;
     [self.view addSubview:_titleLabel];
@@ -538,7 +540,7 @@
         
         // 刷新特定的cell
         NSIndexPath *indexPath=[NSIndexPath indexPathForRow:0 inSection:0];
-        [_oneTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
+        [_oneTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationFade];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
@@ -609,8 +611,13 @@
 //    else {
 //        _isFollowing = @"no";
 //    }
-    // 发起 follow 请求
-    [self connectForFollow];
+    if (_uid && ![_uid isEqualToString:@""]) {
+        // 发起 follow 请求
+        [self connectForFollow];
+    } else {
+        [self chooseLoginWayWith:@"登录后方可关注此主题"];
+    }
+    
     
     // 刷新特定的一个cell
 //    NSIndexPath *indexPath=[NSIndexPath indexPathForRow:0 inSection:0];
@@ -636,6 +643,26 @@
     
     [self connectForPushSwitch];
     
+}
+
+
+
+#pragma mark - 选择登录方式 UIActionSheet
+- (void)chooseLoginWayWith:(NSString *)title
+{
+    NSLog(@"选择登录方式");
+    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:title delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles: @"微博帐号登录",nil];
+    [sheet showInView:self.view];
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 0) {
+        NSLog(@"新浪微博登录");
+        SFLoginAndSignup *Login = [[SFLoginAndSignup alloc] init];
+        [Login requestForWeiboAuthorize];
+        [Login waitForWeiboAuthorizeResult];
+    }
 }
 
 

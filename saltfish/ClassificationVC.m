@@ -13,6 +13,7 @@
 #import "urlManager.h"
 #import "TopicTableViewCell.h"
 #import "TopicVC.h"
+#import "SFLoginAndSignup.h"
 
 @interface ClassificationVC ()
 
@@ -47,6 +48,8 @@
     NSUserDefaults *sfUserDefault = [NSUserDefaults standardUserDefaults];
     if ([sfUserDefault objectForKey:@"loginInfo"]) {
         _uid = [[sfUserDefault objectForKey:@"loginInfo"] objectForKey:@"uid"];
+    } else {
+        _uid = @"";
     }
     
     [self createUIParts];  // 构建UI
@@ -239,10 +242,11 @@
     NSDictionary *topic = [_tableViewData objectAtIndex:index];
     NSLog(@"%@", topic);
     
-    if (_uid) {
+    if (_uid && ![_uid isEqualToString:@""]) {
         [self connectForFollowOneTopic:topic uid:_uid cellIndex:(unsigned int)index];  // 发起关注Topic的请求
     } else {
         NSLog(@"请先登录");
+        [self chooseLoginWayWith:@"登录后方可关注此主题"];
     }
 }
 
@@ -402,6 +406,25 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+
+
+#pragma mark - 选择登录方式 UIActionSheet
+- (void)chooseLoginWayWith:(NSString *)title
+{
+    NSLog(@"选择登录方式");
+    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:title delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles: @"微博帐号登录",nil];
+    [sheet showInView:self.view];
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 0) {
+        NSLog(@"新浪微博登录");
+        SFLoginAndSignup *Login = [[SFLoginAndSignup alloc] init];
+        [Login requestForWeiboAuthorize];
+        [Login waitForWeiboAuthorizeResult];
+    }
+}
 
 
 @end

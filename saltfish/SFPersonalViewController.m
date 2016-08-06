@@ -98,7 +98,7 @@
     UILabel *labels = [[UILabel alloc] initWithFrame:CGRectMake((_screenWidth-200)/2.0, 0, 200, 44)];
     labels.text = @"退出登录 ( ^_^ )/";
     labels.textColor = [UIColor colorWithRed:231/255.0 green:114/255.0 blue:114/255.0 alpha:1.0];
-    labels.font = [UIFont fontWithName:@"Helvetica" size: 14.0];
+    labels.font = [UIFont fontWithName:@"Helvetica" size: 15.0];
     labels.textAlignment = UITextAlignmentCenter;
     [signoutBackground addSubview:labels];
     

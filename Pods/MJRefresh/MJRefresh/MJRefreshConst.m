@@ -20,7 +20,7 @@ NSString *const MJRefreshHeaderRefreshingText = @"正在刷新...";
 
 NSString *const MJRefreshAutoFooterIdleText = @"上拉加载更多";
 NSString *const MJRefreshAutoFooterRefreshingText = @"正在加载更多...";
-NSString *const MJRefreshAutoFooterNoMoreDataText = @"~ la fin ~";   // 已经全部加载完毕
+NSString *const MJRefreshAutoFooterNoMoreDataText = @"~ END ~";   // 已经全部加载完毕
 
 NSString *const MJRefreshBackFooterIdleText = @"上拉可以加载更多";
 NSString *const MJRefreshBackFooterPullingText = @"松开立即加载更多";

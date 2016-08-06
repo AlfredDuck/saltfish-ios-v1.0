@@ -96,8 +96,9 @@
     [myTopicView addSubview:myTopicIconView];
     // label
     UILabel *myTopicLabel = [[UILabel alloc] initWithFrame:CGRectMake(55, 0, _screenWidth-55, 44)];
-    myTopicLabel.text = @"我的话题";
-    myTopicLabel.font = [UIFont fontWithName:@"Helvetica" size: 14.0];
+    myTopicLabel.text = @"我关注的主题";
+    myTopicLabel.font = [UIFont fontWithName:@"Helvetica" size: 15.0];
+    myTopicLabel.textColor = [colorManager mainTextColor];
     [myTopicView addSubview:myTopicLabel];
     
     myTopicView.userInteractionEnabled = YES; // 设置可以交互
@@ -122,7 +123,8 @@
     // label
     UILabel *AppStoreLabel = [[UILabel alloc] initWithFrame:CGRectMake(55, 0, _screenWidth-55, 44)];
     AppStoreLabel.text = @"去 App Store 给一个⭐️⭐️⭐️⭐️⭐️评价吧";
-    AppStoreLabel.font = [UIFont fontWithName:@"Helvetica" size: 14.0];
+    AppStoreLabel.font = [UIFont fontWithName:@"Helvetica" size: 15.0];
+    AppStoreLabel.textColor = [colorManager mainTextColor];
     [AppStoreView addSubview:AppStoreLabel];
     
     AppStoreView.userInteractionEnabled = YES; // 设置可以交互
@@ -147,7 +149,8 @@
     // label
     UILabel *commentLabel = [[UILabel alloc] initWithFrame:CGRectMake(55, 0, _screenWidth-55, 44)];
     commentLabel.text = @"吐槽能量收集区";
-    commentLabel.font = [UIFont fontWithName:@"Helvetica" size: 14.0];
+    commentLabel.font = [UIFont fontWithName:@"Helvetica" size: 15.0];
+    commentLabel.textColor = [colorManager mainTextColor];
     [customerFeedbackView addSubview:commentLabel];
     
     customerFeedbackView.userInteractionEnabled = YES; // 设置可以交互
@@ -321,7 +324,7 @@
 - (void)chooseLoginWayWith:(NSString *)title
 {
     NSLog(@"选择登录方式");
-    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:title delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles: @"使用新浪微博帐号", nil];
+    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:title delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles: @"微博帐号登录", nil];
     [sheet showInView:self.view];
 }
 
@@ -361,11 +364,12 @@
 {
     _nickname.text = @"部分功能需登录后才能使用哦";
     
+    /* 隐藏头像 */
+    [_portraitBackground removeFromSuperview];
+    
     /* 创建登录按钮 */
     [self createLoginButton];
     
-    /* 隐藏头像 */
-    [_portraitBackground removeFromSuperview];
 }
 
 

@@ -44,6 +44,8 @@
     NSUserDefaults *sfUserDefault = [NSUserDefaults standardUserDefaults];
     if ([sfUserDefault objectForKey:@"loginInfo"]) {
         _uid = [[sfUserDefault objectForKey:@"loginInfo"] objectForKey:@"uid"];
+    } else {
+        _uid = @"";
     }
     
     [self createUIParts];
@@ -56,6 +58,22 @@
 - (void)viewWillAppear:(BOOL)animated {
     // 设置状态栏颜色的强力方法
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+    
+    // 检查登录状态是否有变化
+    NSUserDefaults *sfUserDefault = [NSUserDefaults standardUserDefaults];
+    if ([sfUserDefault objectForKey:@"loginInfo"]) {  // 如果存在登录id
+        if (![_uid isEqualToString:[[sfUserDefault objectForKey:@"loginInfo"] objectForKey:@"uid"]]) {  // 当前uid是否是登录id
+            NSLog(@"登录状态发生了变化003");
+            _uid = [[sfUserDefault objectForKey:@"loginInfo"] objectForKey:@"uid"];
+            [_oneTableView.mj_header beginRefreshing];  // 重新拉取一下
+        }
+    } else {  // 如果不存在登录id
+        if (![_uid isEqualToString: @""]) {  // 当前uid是否存在
+            NSLog(@"登录状态发生了变化004");
+            _uid = @"";
+            [_oneTableView.mj_header beginRefreshing];  // 重新拉取一下
+        }
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -83,7 +101,7 @@
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake((_screenWidth-200)/2, 20, 200, 44)];
     titleLabel.text = @"发现";
     titleLabel.textColor = [colorManager mainTextColor];
-    titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 15];
+    titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 17.5];
     titleLabel.textAlignment = UITextAlignmentCenter;
     [titleBarBackground addSubview:titleLabel];
     
@@ -262,10 +280,11 @@
     NSDictionary *topic = [_latestTopicsData objectAtIndex:index];
     NSLog(@"%@", topic);
     
-    if (_uid) {
+    if (_uid && ![_uid isEqualToString:@""]) {
         [self connectForFollowOneTopic:topic uid:_uid cellIndex:(unsigned int)index];  // 发起关注Topic的请求
     } else {
         NSLog(@"请先登录");
+        [self chooseLoginWayWith:@"登录后方可关注此主题"];
     }
 }
 
@@ -463,7 +482,7 @@
 - (void)chooseLoginWayWith:(NSString *)title
 {
     NSLog(@"选择登录方式");
-    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:title delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles: @"使用新浪微博帐号",nil];
+    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:title delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles: @"微博帐号登录",nil];
     [sheet showInView:self.view];
 }
 

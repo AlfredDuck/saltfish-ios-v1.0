@@ -236,8 +236,8 @@
         uuid = [userDefault objectForKey:@"uuid"];
     }
     // 读取本地的uid
-    NSString *uid;
-    NSString *userType;
+    NSString *uid = @"";
+    NSString *userType = @"";
     if ([[userDefault dictionaryForKey:@"loginInfo"] objectForKey:@"uid"]) {
         uid = [[userDefault dictionaryForKey:@"loginInfo"] objectForKey:@"uid"];
         userType = [[userDefault dictionaryForKey:@"loginInfo"] objectForKey:@"userType"];

@@ -41,7 +41,7 @@
         /* 主题 */
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 40, _screenWidth-40, 20)];
         _titleLabel.text = _title;
-        _titleLabel.font = [UIFont fontWithName:@"Helvetica Bold" size: 15.0];
+        _titleLabel.font = [UIFont fontWithName:@"Helvetica Bold" size: 16.5];
         _titleLabel.textColor = [colorManager mainTextColor];
         _titleLabel.textAlignment = UITextAlignmentCenter;
         _titleLabel.numberOfLines = 2;
@@ -75,7 +75,7 @@
         _pushSettingView.backgroundColor  = [UIColor colorWithRed:(244/255.0) green:(246/255.0) blue:(247/255.0) alpha:1];
         
         UILabel *pushLabel = [[UILabel alloc] initWithFrame:CGRectMake(12, 0, 200, 44)];
-        pushLabel.text = @"话题有更新时提醒我";
+        pushLabel.text = @"此主题有更新时提醒我";
         pushLabel.font = [UIFont fontWithName:@"Helvetica" size: 14.0];
         pushLabel.textColor = [colorManager secondTextColor];
         [_pushSettingView addSubview: pushLabel];
@@ -138,12 +138,12 @@
     _introductionLabel.frame = CGRectMake(50, 68, labelSize.width, newHeight);  // 动态修改label高度,且需要根据行距作调整
     _introductionLabel.numberOfLines = 0;  // 不可少Label属性之一
     //_postTextLabel.lineBreakMode = UILineBreakModeCharacterWrap;  // 不可少Label属性之二
-    // =================================================
     
     // ===================调整“关注”按钮的位置=================
     _followButton.frame  = CGRectMake((_screenWidth-75)/2.0, 68+newHeight+18, 75, 35);
     _pushSettingView.frame = CGRectMake(0, 68+newHeight+18+35+18, _screenWidth, 44);
     
+    // ===================调整分割线位置====================
     if ([isFollowing isEqualToString:@"no"]) {
         // 代表没有关注
         [_followButton setImage:[UIImage imageNamed:@"follow.png"]];
