@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface toastView : UIView
-+ (void)showToastWith:(NSString *)text duration:(double)duration superView:(UIView *)superView;
++ (void)showToastWith:(NSString *)text isErr:(BOOL)isErr duration:(double)duration superView:(UIView *)superView;
 @end

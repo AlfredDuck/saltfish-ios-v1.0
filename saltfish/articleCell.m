@@ -58,7 +58,7 @@
         /* 标题 */
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(ww+18+14, 14, _screenWidth-(ww+14+18+12), 38)];
         _titleLabel.text = _title;
-        _titleLabel.font = [UIFont fontWithName:@"Helvetica Bold" size: 15.0];
+        _titleLabel.font = [UIFont fontWithName:@"Helvetica Bold" size: 16.0];
         _titleLabel.textColor = [colorManager mainTextColor];
         //_titleLabel.backgroundColor = [UIColor yellowColor];
         _titleLabel.numberOfLines = 2;

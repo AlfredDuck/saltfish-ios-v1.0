@@ -96,7 +96,7 @@
     [myTopicView addSubview:myTopicIconView];
     // label
     UILabel *myTopicLabel = [[UILabel alloc] initWithFrame:CGRectMake(55, 0, _screenWidth-55, 44)];
-    myTopicLabel.text = @"我关注的主题";
+    myTopicLabel.text = @"我关注的话题";
     myTopicLabel.font = [UIFont fontWithName:@"Helvetica" size: 15.0];
     myTopicLabel.textColor = [colorManager mainTextColor];
     [myTopicView addSubview:myTopicLabel];
@@ -377,7 +377,7 @@
 #pragma mark - SFCutomerFeedback 代理
 - (void)sendFeedbackSuccess
 {
-    [toastView showToastWith:@"已收到你的吐槽[BINGO!]" duration:3.0 superView:self.view];
+    [toastView showToastWith:@"已收到你的吐槽[BINGO!]" isErr:YES duration:3.0 superView:self.view];
 }
 
 

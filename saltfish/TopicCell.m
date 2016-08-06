@@ -38,7 +38,7 @@
         _introduction = @"脉动总装线是把总装分为几个工位，在不同工位组装不同部件和零配件，然后逐步";
         self.tag = 999998;
         
-        /* 主题 */
+        /* 话题 */
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 40, _screenWidth-40, 20)];
         _titleLabel.text = _title;
         _titleLabel.font = [UIFont fontWithName:@"Helvetica Bold" size: 16.5];
@@ -75,7 +75,7 @@
         _pushSettingView.backgroundColor  = [UIColor colorWithRed:(244/255.0) green:(246/255.0) blue:(247/255.0) alpha:1];
         
         UILabel *pushLabel = [[UILabel alloc] initWithFrame:CGRectMake(12, 0, 200, 44)];
-        pushLabel.text = @"此主题有更新时提醒我";
+        pushLabel.text = @"话题有更新时提醒我";
         pushLabel.font = [UIFont fontWithName:@"Helvetica" size: 14.0];
         pushLabel.textColor = [colorManager secondTextColor];
         [_pushSettingView addSubview: pushLabel];

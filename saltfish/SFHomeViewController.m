@@ -310,9 +310,9 @@
         }
         [oneArticleCell rewriteTitle:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"title"]];
         [oneArticleCell rewriteHotScore:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"hotScore"]];
-        [oneArticleCell rewriteTopics:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"topic"]];
+        [oneArticleCell rewriteTopics:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"topic"] forIndex:row - 1];
         [oneArticleCell rewritePicURL:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"picURL"]];
-        [oneArticleCell rewriteTopicImageURL:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"topicImageURL"]];
+        [oneArticleCell rewriteTopicImageURL:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"topicImageURL"] forIndex:row - 1];
         oneArticleCell.selectionStyle = UITableViewCellSelectionStyleNone;  // 取消选中的背景色
         return oneArticleCell;
     }
@@ -391,7 +391,7 @@
 
 - (void)clickHotTopic:(NSString *)topic pic:(NSString *)picURL
 {
-    NSLog(@"热门主题%@",topic);
+    NSLog(@"热门话题%@",topic);
     if (!topic) {
         return;
     }
@@ -408,12 +408,16 @@
 
 
 #pragma mark - ArticleCell 的代理
- - (void)clickTopic:(NSString *)topic
+ - (void)clickTopicForIndex:(unsigned long)index
 {
-    //
+    // 通过index获得话题内容
+    NSString *topic = [[_followedArticlesData objectAtIndex:index] objectForKey:@"topic"];
+    NSString *portrait = [[_followedArticlesData objectAtIndex:index] objectForKey:@"topicImageURL"];
+    
+    // 跳转话题页面
     TopicVC *topicPage = [[TopicVC alloc] init];
     topicPage.topic = topic;
-    topicPage.portraitURL = @"https://img3.doubanio.com/view/photo/photo/public/p2359591225.jpg";
+    topicPage.portraitURL = portrait;
     [self.navigationController pushViewController:topicPage animated:YES];
     //开启iOS7的滑动返回效果
     if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {

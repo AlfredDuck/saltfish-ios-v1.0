@@ -10,7 +10,7 @@
 
 @protocol SFArticleTableViewCellDelegate <NSObject>
 @required
-- (void)clickTopic:(NSString *)topic;
+- (void)clickTopicForIndex:(unsigned long)index;
 @end
 
 @interface SFArticleTableViewCell : UITableViewCell
@@ -47,8 +47,8 @@
 - (void)rewriteTitle:(NSString *)newTitle;
 - (void)rewriteHotScore:(NSString *)newHotScore;
 - (void)rewritePicURL:(NSString *)newPicURL;
-- (void)rewriteTopics:(NSString *)newTopic;
-- (void)rewriteTopicImageURL:(NSString *)newTopicImageURL;
+- (void)rewriteTopics:(NSString *)newTopic forIndex:(unsigned long)index;
+- (void)rewriteTopicImageURL:(NSString *)newTopicImageURL forIndex:(unsigned long)index;
 - (void)rewriteDate:(NSString *)newDate;
 - (void)showAsBeenRead: (NSString *)aritlceID;
 

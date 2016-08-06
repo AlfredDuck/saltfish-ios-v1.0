@@ -75,7 +75,7 @@
     
     /* title */
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake((_screenWidth-200)/2, 20, 200, 44)];
-    titleLabel.text = @"我关注的主题";
+    titleLabel.text = @"我关注的话题";
     titleLabel.textColor = [colorManager mainTextColor];
     titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 16];
     titleLabel.textAlignment = UITextAlignmentCenter;
@@ -99,7 +99,7 @@
     
     /** 为空提示语 **/
     _emptyLabel = [[UILabel alloc] initWithFrame:CGRectMake((_screenWidth-200)/2, 84, 200, 30)];
-    _emptyLabel.text = @"- 你还没有关注任何主题 -";
+    _emptyLabel.text = @"- 你还没有关注任何话题 -";
     _emptyLabel.textColor = [colorManager secondTextColor];
     _emptyLabel.font = [UIFont fontWithName:@"Helvetica" size: 12];
     _emptyLabel.textAlignment = UITextAlignmentCenter;

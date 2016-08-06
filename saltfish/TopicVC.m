@@ -312,8 +312,8 @@
         if (oneArticleCell == nil) {
             oneArticleCell = [[SFArticleTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:ArticleCellWithIdentifier];
         }
-        [oneArticleCell rewriteTopics: _topic];
-        [oneArticleCell rewriteTopicImageURL:_portraitURL];
+        [oneArticleCell rewriteTopics: _topic forIndex:row - 1];
+        [oneArticleCell rewriteTopicImageURL:_portraitURL forIndex:row - 1];
         [oneArticleCell rewriteTitle:[[_articleData objectAtIndex:row-1] objectForKey:@"title"]];
         [oneArticleCell rewriteHotScore:[[_articleData objectAtIndex:row-1] objectForKey:@"hotScore"]];
         [oneArticleCell rewriteDate:[[_articleData objectAtIndex:row-1] objectForKey:@"date"]];
@@ -615,7 +615,7 @@
         // 发起 follow 请求
         [self connectForFollow];
     } else {
-        [self chooseLoginWayWith:@"登录后方可关注此主题"];
+        [self chooseLoginWayWith:@"登录后方可关注此话题"];
     }
     
     

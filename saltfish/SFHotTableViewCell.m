@@ -68,7 +68,7 @@
         
         /* cell标题 */
         UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake((_screenWidth-200)/2.0, _hotArticleHeight+16, 200, 20)];
-        titleLabel.text = @"热门主题";
+        titleLabel.text = @"热门话题";
         titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 14.0];
         titleLabel.textColor = [colorManager mainTextColor];
         titleLabel.textAlignment = UITextAlignmentCenter;

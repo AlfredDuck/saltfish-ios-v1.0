@@ -284,7 +284,7 @@
         [self connectForFollowOneTopic:topic uid:_uid cellIndex:(unsigned int)index];  // 发起关注Topic的请求
     } else {
         NSLog(@"请先登录");
-        [self chooseLoginWayWith:@"登录后方可关注此主题"];
+        [self chooseLoginWayWith:@"登录后方可关注此话题"];
     }
 }
 

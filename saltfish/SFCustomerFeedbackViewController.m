@@ -230,7 +230,7 @@
     NSString *urlString = [host stringByAppendingString:@"/user/customer_feedback"];
     
     // 读取本地的uuid
-    NSString *uuid;
+    NSString *uuid = @"";
     NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
     if ([userDefault objectForKey:@"uuid"]) {
         uuid = [userDefault objectForKey:@"uuid"];
@@ -244,14 +244,21 @@
     }
     
     
-    NSDictionary *parameters = @{
-                                 @"content": comment,
-                                 @"uid": uid,
-                                 @"user_type": userType,
-                                 @"device_type": @"ios",
-                                 @"device_id": uuid
-                                 };
-    
+    //NSDictionary *parameters = @{
+//                                 @"content": comment,
+//                                 @"uid": uid,
+//                                 @"user_type": userType,
+//                                 @"device_type": @"ios",
+//                                 @"device_id": uuid
+//                                 };
+    NSDictionary *parameters = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                 comment,@"content",
+                                 uid,@"uid",
+                                 userType,@"user_type",
+                                 @"ios",@"device_type",
+                                 uuid,@"device_id",
+                                 nil];
+    NSLog(@"会不会执行到这里");
     // 创建 GET 请求
     AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];
     connectManager.requestSerializer.timeoutInterval = 20.0;   //设置超时时间
@@ -275,7 +282,7 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
         [self readyToSend];
-        [toastView showToastWith:@"发送失败，请重试" duration:3.0 superView:self.view];
+        [toastView showToastWith:@"发送失败，请重试" isErr:NO duration:3.0 superView:self.view];
     }];
 }
 

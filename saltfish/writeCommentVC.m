@@ -288,7 +288,7 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
         [self readyToSend];
-        [toastView showToastWith:@"发送失败，请重试" duration:3.0 superView:self.view];
+        [toastView showToastWith:@"发送失败，请重试" isErr:NO duration:3.0 superView:self.view];
     }];
 }
 

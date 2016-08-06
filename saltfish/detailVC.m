@@ -604,7 +604,7 @@
     UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
     pasteboard.string = [_shareInfo objectForKey:@"link"];
     NSLog(@"复制成功");
-    [toastView showToastWith:@"复制成功" duration:2.0 superView:self.view];
+    [toastView showToastWith:@"复制成功" isErr:YES duration:2.0 superView:self.view];
 }
 
 

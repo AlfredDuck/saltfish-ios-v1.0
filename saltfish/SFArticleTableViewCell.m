@@ -85,9 +85,9 @@
         
         
         /* 标题 */
-        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(19, 51, _screenWidth-(ww+14+18+19), 36)];
+        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(19, 51, _screenWidth-(ww+14+18+19), 38)];
         _titleLabel.text = _title;
-        _titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 15.0];
+        _titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 16.0];
         _titleLabel.textColor = [colorManager mainTextColor];
         _titleLabel.numberOfLines = 2;
         [self.contentView addSubview:_titleLabel];
@@ -151,16 +151,18 @@
     [_picImageView sd_setImageWithURL:[NSURL URLWithString:_picURL] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
 }
 
-- (void) rewriteTopics:(NSString *)newTopic
+- (void) rewriteTopics:(NSString *)newTopic forIndex:(unsigned long)index
 {
     _topic = newTopic;
     _topicLabel.text = _topic;
+    _topicLabel.tag = index + 1;  // tag是为了知道点击第几个cell
 }
 
-- (void) rewriteTopicImageURL:(NSString *)newTopicImageURL
+- (void) rewriteTopicImageURL:(NSString *)newTopicImageURL forIndex:(unsigned long)index
 {
     _topicImageURL = newTopicImageURL;
     [_topicImageView sd_setImageWithURL:[NSURL URLWithString:_topicImageURL] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+    _topicImageView.tag = index + 1;  // tag是为了知道点击第几个cell
 }
 
 - (void) rewriteDate:(NSString *)newDate
@@ -192,22 +194,15 @@
 // 点击话题文字
 - (void)clickTopicOfArticle:(UIGestureRecognizer *)sender
 {
-    //
-    NSLog(@"点文字");
-    NSLog(@"%@", sender.view.superview);
-    NSLog(@"%@", _topic);
-    
-    // 调用代理方法
-    [self.delegate clickTopic:_topic];
+    NSLog(@"点第%ldl个文章", sender.view.tag - 1);
+    [self.delegate clickTopicForIndex:sender.view.tag - 1];  // 调用代理方法
 }
 
 // 点击话题头像
 - (void)clickTopicPortrait:(UIGestureRecognizer *)sender
 {
-    NSLog(@"点头像");
-    NSLog(@"%@", _topic);
-    // 调用代理方法
-    [self.delegate clickTopic:_topic];
+    NSLog(@"点第%ldl个文章", sender.view.tag - 1);
+    [self.delegate clickTopicForIndex:sender.view.tag - 1];  // 调用代理方法
 }
 
 
