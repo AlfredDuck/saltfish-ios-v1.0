@@ -29,7 +29,7 @@
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     
-    [NSThread sleepForTimeInterval:5.0];  //   启动等待时间
+    [NSThread sleepForTimeInterval:1.0];  //   启动等待时间
     // [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;  // 状态栏小菊花
     
     // weibo SDK

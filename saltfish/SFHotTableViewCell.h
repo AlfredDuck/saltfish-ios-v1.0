@@ -32,8 +32,8 @@
 @property (nonatomic, copy) NSMutableArray *hotTopicLabelArr;
 
 @property (nonatomic) unsigned long cellHeight;  // cell高度
-// 分割线
-@property (nonatomic, copy) UIView *partLine;
+
+@property (nonatomic, copy) UIView *partLine;  // 分割线
 //
 @property (nonatomic) NSInteger screenWidth;
 @property (nonatomic) NSInteger screenHeight;

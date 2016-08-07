@@ -75,7 +75,7 @@
         [self.contentView addSubview:titleLabel];
         
         // 根据设备宽度计算图片宽高
-        int ww = ceil((_screenWidth - 11*2 - 16*2)/3.0);
+        int ww = ceil((_screenWidth - 16*2 - 16*2)/3.0);
         int hh = ceil(ww/107.0*89);
         
         _hotTopicPicArr = [[NSMutableArray alloc] init];
@@ -84,33 +84,43 @@
         for (int i=0; i<3; i++) {
             
             // 52px的上边距, xxpx的焦点图
-            UIImageView *picImageView = [[UIImageView alloc] initWithFrame:CGRectMake(16+i*(ww+11), 52+_hotArticleHeight, ww, hh)];
-            picImageView.backgroundColor = [UIColor whiteColor];
+            UIView *topicView = [[UIView alloc] initWithFrame:CGRectMake(16+i*(ww+16), 52+_hotArticleHeight, ww, hh)];
             
+            UIImageView *picImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, ww, hh)];
+            picImageView.backgroundColor = [UIColor whiteColor];
             // uiimageview居中裁剪
             picImageView.contentMode = UIViewContentModeScaleAspectFill;
             picImageView.clipsToBounds  = YES;
-            // 需要AFNetwork
+            // 需要SDWebimage
             //[picImageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+            [topicView addSubview:picImageView];
             
-            // 遮黑
-            UIView *halfBlack = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ww, hh)];
-            halfBlack.backgroundColor  = [UIColor blackColor];
-            halfBlack.alpha = 0.32;
-            [picImageView addSubview:halfBlack];
+//            // 遮黑
+//            UIView *halfBlack = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ww, hh)];
+//            halfBlack.backgroundColor  = [UIColor blackColor];
+//            halfBlack.alpha = 0.32;
+//            [picImageView addSubview:halfBlack];
             
-            // 文本
-            UILabel *topicLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, ww, hh)];
-            topicLabel.textColor  = [UIColor whiteColor];
-            topicLabel.font = [UIFont fontWithName:@"Helvetica" size: 14.0f];
-            topicLabel.numberOfLines = 3;
+            // 文本（在图下面，用UItextview有奇效）
+            UITextView *topicLabel = [[UITextView alloc] initWithFrame:CGRectMake(0, hh, ww, 35)];
+            topicLabel.textColor = [colorManager mainTextColor];
+            topicLabel.font = [UIFont fontWithName:@"Helvetica" size: 12.5f];
+            topicLabel.userInteractionEnabled = NO;
             topicLabel.textAlignment = UITextAlignmentCenter;
-            // 文字阴影
-            topicLabel.layer.shadowOpacity = 0.9;
-            topicLabel.layer.shadowColor = [UIColor blackColor].CGColor;
-            topicLabel.layer.shadowOffset = CGSizeMake(1.0, 1.0);
-            topicLabel.layer.shadowRadius = 0.5;
-            [picImageView addSubview:topicLabel];
+            [topicView addSubview:topicLabel];
+            
+//            // 文本（压在图上）
+//            UILabel *topicLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, ww, hh)];
+//            topicLabel.textColor  = [UIColor whiteColor];
+//            topicLabel.font = [UIFont fontWithName:@"Helvetica" size: 14.0f];
+//            topicLabel.numberOfLines = 3;
+//            topicLabel.textAlignment = UITextAlignmentCenter;
+//            // 文字阴影
+//            topicLabel.layer.shadowOpacity = 0.9;
+//            topicLabel.layer.shadowColor = [UIColor blackColor].CGColor;
+//            topicLabel.layer.shadowOffset = CGSizeMake(1.0, 1.0);
+//            topicLabel.layer.shadowRadius = 0.5;
+//            [picImageView addSubview:topicLabel];
             
             // 点击手势
             picImageView.userInteractionEnabled = YES; // 设置view可以交互
@@ -119,17 +129,19 @@
             
             picImageView.tag = i + 1;
             
-            [self.contentView addSubview:picImageView];
+            [self.contentView addSubview:topicView];
             [_hotTopicPicArr addObject:picImageView];
             [_hotTopicLabelArr addObject:topicLabel];
         }
 
         
         
-        /* 背景、分割线 */
-        _partLine = [[UIView alloc] initWithFrame:CGRectMake(0, 360-15, _screenWidth, 15)];
+        /* 分割线 + 下一段标题 */
+        _partLine = [[UIView alloc] initWithFrame:CGRectMake(0, 360-20, _screenWidth, 20)];
         _partLine.backgroundColor = [colorManager lightGrayBackground];
         [self.contentView addSubview: _partLine];
+        
+        /* cell 背景色 */
         self.contentView.backgroundColor = [UIColor whiteColor];
         
         
@@ -253,7 +265,7 @@
     _hotTopicData = newArr;
     
     for (int i=0; i<3; i++) {
-        UILabel *topicLabel = [_hotTopicLabelArr objectAtIndex:i];
+        UITextView *topicLabel = [_hotTopicLabelArr objectAtIndex:i];
         topicLabel.text = [[newArr objectAtIndex:i] objectForKey:@"topic"];
         
         UIImageView *picImageView = [_hotTopicPicArr objectAtIndex:i];
@@ -268,10 +280,10 @@
 {
     UIImageView *TopicPic = [_hotTopicPicArr objectAtIndex:0];
     unsigned long hh = TopicPic.frame.size.height;
-    _cellHeight = _hotArticleHeight + 52 + hh + 18 + 15;
+    _cellHeight = _hotArticleHeight + 52 + hh + 27 + 18 + 20;
     
     // 修改分割线位置
-    _partLine.frame = CGRectMake(0, _cellHeight-15, _screenWidth, 15);
+    _partLine.frame = CGRectMake(0, _cellHeight-20, _screenWidth, 20);
 }
 
 

@@ -64,7 +64,7 @@
         
         
         /* 话题标题 */
-        _topicLabel = [[UILabel alloc] initWithFrame:CGRectMake(45, 15, 200, 24)];
+        _topicLabel = [[UILabel alloc] initWithFrame:CGRectMake(47, 15, 200, 24)];
         _topicLabel.text = _topic;
         _topicLabel.font = [UIFont fontWithName:@"Helvetica" size: 13.0];
         _topicLabel.textColor = [colorManager secondTextColor];
@@ -85,7 +85,7 @@
         
         
         /* 标题 */
-        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(19, 51, _screenWidth-(ww+14+18+19), 38)];
+        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(19, 51, _screenWidth-(ww+14+18+12), 38)];
         _titleLabel.text = _title;
         _titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 16.0];
         _titleLabel.textColor = [colorManager mainTextColor];
