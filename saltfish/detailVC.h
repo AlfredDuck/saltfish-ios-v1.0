@@ -43,6 +43,8 @@
 
 // loading flower
 @property (nonatomic, strong) UIActivityIndicatorView *loadingFlower;
+// 加载进度条（假的进度）
+@property (nonatomic, strong) UIView *loadingProgressView;
 
 //
 @property (nonatomic) NSInteger screenWidth;

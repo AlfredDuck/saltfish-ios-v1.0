@@ -389,7 +389,8 @@
 - (void)webViewDidStartLoad:(UIWebView *)webView
 {
     NSLog(@"请求+1");
-    [_loadingFlower startAnimating];
+    // [_loadingFlower startAnimating];
+    [self createLoadingProgressView];  // 创建网页加载进度条
 }
 
 // 请求完成
@@ -400,7 +401,8 @@
     }
     else {
         NSLog(@"webview 请求完成");
-        [_loadingFlower stopAnimating];
+        // [_loadingFlower stopAnimating];
+        [self finishLoadingProgress];  // 结束网页加载进度条
     }
 }
 
@@ -463,6 +465,40 @@
     //如没有location对应的属性，则读取网络相关资源
 }
 
+
+
+
+#pragma mark - 网页加载进度条
+/** 创建进度条 **/
+- (void)createLoadingProgressView {
+    //
+    _loadingProgressView = [[UIView alloc] initWithFrame:CGRectMake(0, 20, 2, 2.5)];
+    _loadingProgressView.backgroundColor = [UIColor colorWithRed:132/255.0 green:211/255.0 blue:59/255.0 alpha:1];
+    [self.view addSubview:_loadingProgressView];
+    
+    // 进度条动画
+    [UIView animateWithDuration:3.5 animations:^{
+        _loadingProgressView.frame = CGRectMake(0, 20, _screenWidth * 0.85, 2.5);
+    }];
+}
+
+/** 结束进度条 **/
+- (void)finishLoadingProgress {
+    [_loadingProgressView.layer removeAllAnimations];  // 清除此view的所有动画
+    
+    // 加载完成后，快速结束进度条
+    [UIView animateWithDuration:0.5 animations:^{
+        _loadingProgressView.frame = CGRectMake(0, 20, _screenWidth, 2.5);
+    }];
+    
+    // 延迟一段时间后执行
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [_loadingProgressView.layer removeAllAnimations];  // 清除此view的所有动画
+        [UIView animateWithDuration:0.2 animations:^{
+            _loadingProgressView.alpha = 0;
+        }];
+    });
+}
 
 
 
