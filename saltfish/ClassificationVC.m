@@ -11,6 +11,7 @@
 #import "AFNetworking.h"
 #import "colorManager.h"
 #import "urlManager.h"
+#import "toastView.h"
 #import "TopicTableViewCell.h"
 #import "TopicVC.h"
 #import "SFLoginAndSignup.h"
@@ -386,7 +387,7 @@
         NSLog(@"data: %@", data);
         
         if ([errcode isEqualToString:@"err"]) {
-            NSLog(@"操作失败，请重试");
+            [toastView showToastWith:@"操作失败，服务器错误" isErr:NO duration:2.0 superView:self.view];  // toast提示
             return;
         }
         NSLog(@"关注状态改为%@",[data objectForKey:@"isFollowing"]);
@@ -395,12 +396,21 @@
         NSMutableDictionary *cellData = [[_tableViewData objectAtIndex:index] mutableCopy];
         [cellData setValue:[data objectForKey:@"isFollowing"] forKey:@"isFollowing"];
         [_tableViewData replaceObjectAtIndex:index withObject:cellData];
+        
         // 刷新特定的cell
          NSIndexPath *indexPath=[NSIndexPath indexPathForRow:index inSection:0];
          [_oneTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
         
+        // toast提示
+        if ([[data objectForKey:@"isFollowing"] isEqualToString:@"yes"]) {  // 如果是关注成功
+            [toastView showToastWith:@"关注成功 bingo！" isErr:YES duration:2.0 superView:self.view];
+        } else {  // 如果是取消关注成功
+            [toastView showToastWith:@"已取消关注" isErr:YES duration:2.0 superView:self.view];
+        }
+        
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
+        [toastView showToastWith:@"操作失败，请检查网络" isErr:NO duration:2.0 superView:self.view];  // toast提示
     }];
 }
 

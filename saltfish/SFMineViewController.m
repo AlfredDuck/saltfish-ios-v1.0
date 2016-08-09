@@ -221,7 +221,7 @@
     _nickname = [[UILabel alloc] initWithFrame:CGRectMake((_screenWidth-188)/2.0, 139, 188, 17)];
     _nickname.textColor = [UIColor whiteColor];
     _nickname.text = text;
-    _nickname.font = [UIFont fontWithName:@"Helvetica" size: 12.0];
+    _nickname.font = [UIFont fontWithName:@"Helvetica" size: 13.5];
     _nickname.textAlignment = UITextAlignmentCenter;
     [self.view addSubview:_nickname];
 }
