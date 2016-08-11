@@ -478,7 +478,8 @@
     
     // 进度条动画
     [UIView animateWithDuration:3.5 animations:^{
-        _loadingProgressView.frame = CGRectMake(0, 20, _screenWidth * 0.85, 2.5);
+        int y = (arc4random() % 15) + 70;  // 生成一个70-85之间的随机数
+        _loadingProgressView.frame = CGRectMake(0, 20, _screenWidth * y / 100.0, 2.5);
     }];
 }
 

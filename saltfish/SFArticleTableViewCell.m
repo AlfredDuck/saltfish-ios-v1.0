@@ -85,10 +85,10 @@
         
         
         /* 标题 */
-        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(19, 51, _screenWidth-(ww+14+18+12), 38)];
-        _titleLabel.text = _title;
-        _titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 16.0];
+        _titleLabel = [[UILabel alloc] init];
+        _titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 16.5];
         _titleLabel.textColor = [colorManager mainTextColor];
+        _titleLabel.frame = CGRectMake(19, 51, _screenWidth-(ww+14+18+12), 40);
         _titleLabel.numberOfLines = 2;
         [self.contentView addSubview:_titleLabel];
         
@@ -105,7 +105,7 @@
         
         
         /* 热度 */
-        _hotScoreLabel = [[UILabel alloc] initWithFrame:CGRectMake(19, 104, 240, 16)];
+        _hotScoreLabel = [[UILabel alloc] initWithFrame:CGRectMake(19, 106, 240, 16)];
         _hotScoreLabel.text = _hotScore;
         _hotScoreLabel.font = [UIFont fontWithName:@"Helvetica" size: 11.0f];
         _hotScoreLabel.textColor = [colorManager lightTextColor];
@@ -136,7 +136,13 @@
 - (void)rewriteTitle:(NSString *)newTitle
 {
     _title = newTitle;
-    _titleLabel.text = _title;
+    // ==================设置行距===================
+    NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:_title];
+    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+    style.lineSpacing = 2; //  行距
+    [text addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0, text.length)];
+    _titleLabel.attributedText = text;
+    
 }
 
 - (void)rewriteHotScore:(NSString *)newScore

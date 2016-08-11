@@ -41,14 +41,14 @@
         /* 话题 */
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 40, _screenWidth-40, 20)];
         _titleLabel.text = _title;
-        _titleLabel.font = [UIFont fontWithName:@"Helvetica Bold" size: 16.5];
+        _titleLabel.font = [UIFont fontWithName:@"Helvetica Bold" size: 17.0];
         _titleLabel.textColor = [colorManager mainTextColor];
         _titleLabel.textAlignment = UITextAlignmentCenter;
         _titleLabel.numberOfLines = 2;
         [self.contentView addSubview:_titleLabel];
         
         /* 简介 */
-        _introductionLabel = [[UILabel alloc] initWithFrame:CGRectMake(50, 68, _screenWidth-50*2, 30)];
+        _introductionLabel = [[UILabel alloc] initWithFrame:CGRectMake(50, 73, _screenWidth-50*2, 30)];
         _introductionLabel.text = _introduction;
         _introductionLabel.font = [UIFont fontWithName:@"Helvetica" size: 13.0f];
         _introductionLabel.textColor = [colorManager secondTextColor];
@@ -92,7 +92,7 @@
         
         
         /* 背景、分割线 */
-        _partLine = [[UIView alloc] initWithFrame:CGRectMake(0, 190, _screenWidth, 12)];
+        _partLine = [[UIView alloc] initWithFrame:CGRectMake(0, 190, _screenWidth, 15)];
         _partLine.backgroundColor = [colorManager lightGrayBackground];
         [self.contentView addSubview:_partLine];
         self.contentView.backgroundColor = [UIColor whiteColor];
@@ -135,25 +135,25 @@
                        constrainedToSize:maxSize
                            lineBreakMode:_introductionLabel.lineBreakMode];   // str是要显示的字符串
     CGFloat newHeight = labelSize.height*16/13.0;
-    _introductionLabel.frame = CGRectMake(50, 68, labelSize.width, newHeight);  // 动态修改label高度,且需要根据行距作调整
+    _introductionLabel.frame = CGRectMake(50, 73, labelSize.width, newHeight);  // 动态修改label高度,且需要根据行距作调整
     _introductionLabel.numberOfLines = 0;  // 不可少Label属性之一
     //_postTextLabel.lineBreakMode = UILineBreakModeCharacterWrap;  // 不可少Label属性之二
     
     // ===================调整“关注”按钮的位置=================
-    _followButton.frame  = CGRectMake((_screenWidth-75)/2.0, 68+newHeight+18, 75, 35);
-    _pushSettingView.frame = CGRectMake(0, 68+newHeight+18+35+18, _screenWidth, 44);
+    _followButton.frame  = CGRectMake((_screenWidth-75)/2.0, 73+newHeight+18, 75, 35);
+    _pushSettingView.frame = CGRectMake(0, 73+newHeight+18+35+18, _screenWidth, 44);
     
     // ===================调整分割线位置====================
     if ([isFollowing isEqualToString:@"no"]) {
         // 代表没有关注
         [_followButton setImage:[UIImage imageNamed:@"follow.png"]];
         _pushSettingView.alpha = 0;
-        _partLine.frame = CGRectMake(0, 68+newHeight+18+35+18, _screenWidth, 12);
+        _partLine.frame = CGRectMake(0, 73+newHeight+18+35+18, _screenWidth, 15);
     } else {
         // 已经关注
         [_followButton setImage:[UIImage imageNamed:@"unfollow.png"]];
         _pushSettingView.alpha = 1;
-        _partLine.frame = CGRectMake(0, 68+newHeight+18+35+18+44, _screenWidth, 12);
+        _partLine.frame = CGRectMake(0, 73+newHeight+18+35+18+44, _screenWidth, 15);
         
         // push开关状态
         if ([isPushOn isEqualToString:@"yes"]) {

@@ -221,10 +221,40 @@
     
     // 调用代理方法，通知登录成功
     [self.delegate weiboLoginSuccess];
-    // 退出登录页面
-    [self dismissViewControllerAnimated:YES completion:^{
-        NSLog(@"登录成功后退出登录页面");
-    }];
+    
+    // 显示登录结果
+    [self showLoginResult];
+    
+    // 延迟一段时间后执行
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        // 退出登录页面
+        [self dismissViewControllerAnimated:YES completion:^{
+            NSLog(@"登录成功后退出登录页面");
+        }];
+    });
+
 }
+
+
+
+#pragma mark - 登陆成功的提示
+/** 显示登录结果 **/
+- (void)showLoginResult
+{
+    UIView *oneView = [[UIView alloc] initWithFrame:CGRectMake((_screenWidth-200)/2.0, (_screenHeight-60)/2.0, 200, 60)];
+    oneView.backgroundColor = [UIColor grayColor];
+    
+    UILabel *oneLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 60)];
+    oneLabel.text = @"登录成功\nWelcome!";
+    oneLabel.textColor = [UIColor whiteColor];
+    oneLabel.font = [UIFont fontWithName:@"Helvetica" size:15];
+    oneLabel.numberOfLines = 2;
+    oneLabel.textAlignment = UITextAlignmentCenter;
+    
+    [oneView addSubview:oneLabel];
+    [self.view addSubview:oneView];
+}
+
+
 
 @end
