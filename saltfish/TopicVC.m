@@ -18,6 +18,7 @@
 #import "TopicCell.h"
 #import "detailVC.h"
 #import "SFLoginAndSignup.h"
+#import "SFLoginViewController.h"
 
 
 @interface TopicVC ()
@@ -52,9 +53,9 @@
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
     // 获取登录账户id
-    NSUserDefaults *sfUserDefault = [NSUserDefaults standardUserDefaults];
-    if ([sfUserDefault objectForKey:@"loginInfo"]) {
-        _uid = [[sfUserDefault objectForKey:@"loginInfo"] objectForKey:@"uid"];
+    NSUserDefaults *sf = [NSUserDefaults standardUserDefaults];
+    if ([sf objectForKey:@"loginInfo"]) {
+        _uid = [[sf objectForKey:@"loginInfo"] objectForKey:@"uid"];
     } else {
         _uid = @"";
     }
@@ -622,8 +623,7 @@
 //        _isFollowing = @"no";
 //    }
     if (_uid && ![_uid isEqualToString:@""]) {
-        // 发起 follow 请求
-        [self connectForFollow];
+        [self connectForFollow];  // 发起 follow 请求
     } else {
         [self chooseLoginWayWith:@"登录后方可关注此话题"];
     }
@@ -669,9 +669,13 @@
 {
     if (buttonIndex == 0) {
         NSLog(@"新浪微博登录");
-        SFLoginAndSignup *Login = [[SFLoginAndSignup alloc] init];
-        [Login requestForWeiboAuthorize];
-        [Login waitForWeiboAuthorizeResult];
+        SFLoginViewController *loginPage = [[SFLoginViewController alloc] init];
+        [self.navigationController presentViewController:loginPage animated:YES completion:^{
+            return;
+        }];
+//        SFLoginAndSignup *Login = [[SFLoginAndSignup alloc] init];
+//        [Login requestForWeiboAuthorize];
+//        [Login waitForWeiboAuthorizeResult];
     }
 }
 
