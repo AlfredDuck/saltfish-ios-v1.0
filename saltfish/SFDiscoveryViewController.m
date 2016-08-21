@@ -8,6 +8,7 @@
 
 #import "SFDiscoveryViewController.h"
 #import "AFNetworking.h"
+#import "UIImageView+WebCache.h"
 #import "urlManager.h"
 #import "colorManager.h"
 #import "toastView.h"
@@ -79,7 +80,7 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    [[SDImageCache sharedImageCache] clearMemory];  // 清理缓存SDWebImage
 }
 
 
@@ -239,10 +240,10 @@
 {
     NSUInteger row = [indexPath row];
     
-    if (row == 2) {
-        [self chooseLoginWayWith:@"请先登录"];
-        return;
-    }
+//    if (row == 2) {
+//        [self chooseLoginWayWith:@"请先登录"];
+//        return;
+//    }
     
     if (row >= 1) {
         TopicVC *topicPV = [[TopicVC alloc] init];
@@ -489,6 +490,11 @@
         // toast提示
         if ([[data objectForKey:@"isFollowing"] isEqualToString:@"yes"]) {  // 如果是关注成功
             [toastView showToastWith:@"关注成功 bingo！" isErr:YES duration:2.0 superView:self.view];
+            
+            // 创建一个广播：关注成功的广播
+            NSLog(@"发出一个广播");
+            NSDictionary *info = nil;
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"followSuccess" object:info];  // 广播出去
         } else {  // 如果是取消关注成功
             [toastView showToastWith:@"已取消关注" isErr:YES duration:2.0 superView:self.view];
         }

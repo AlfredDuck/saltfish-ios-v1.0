@@ -116,7 +116,7 @@
 
 
 #pragma mark - 登录授权成功后，获取用户信息
-/* 注册观察者 */
+/** 注册观察者 **/
 - (void)waitForWeiboAuthorizeResult
 {
     // 新浪微博授权成功
@@ -135,7 +135,7 @@
 }
 
 
-/* 调用微博的用户信息接口 */
+/** 调用微博的用户信息接口 **/
 - (void)requestForUserInfoWithToken:(NSString *)token uid:(NSString *)uid
 {
     NSString *url = @"https://api.weibo.com/2/users/show.json";

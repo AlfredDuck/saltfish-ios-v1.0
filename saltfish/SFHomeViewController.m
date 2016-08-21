@@ -19,7 +19,7 @@
 
 
 @interface SFHomeViewController ()
-
+@property (nonatomic, strong) UIView *notificationView;
 @end
 
 @implementation SFHomeViewController
@@ -55,6 +55,9 @@
     
     /* 调用 MJRefresh 初始化数据 */
     [_oneTableView.mj_header beginRefreshing];
+    
+    /* 收听广播 */
+    [self waitForNewFollow];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -80,7 +83,7 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    [[SDImageCache sharedImageCache] clearMemory];  // 清理缓存SDWebImage
 }
 
 
@@ -155,6 +158,29 @@
 
 }
 
+
+#pragma mark - 创建广播条
+/** 创建广播条 **/
+- (void)createNotificationTap {
+    /* 标题栏 */
+    _notificationView = [[UIView alloc] initWithFrame:CGRectMake(0, 64, _screenWidth, 34)];
+    _notificationView.backgroundColor = [UIColor colorWithRed:132/255.0 green:211/255.0 blue:59/255.0 alpha:1];  // 正向的提示用绿色
+    _notificationView.alpha = 0.96;
+    [self.view addSubview:_notificationView];
+    
+    /* 分割线 */
+//    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 34-0.5, _screenWidth, 0.5)];
+//    line.backgroundColor = [colorManager lightGrayLineColor];
+//    [_notificationView addSubview:line];
+    
+    /* text */
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake((_screenWidth-300)/2, 0, 300, 34)];
+    titleLabel.text = @"关注了新话题，请刷新查看";
+    titleLabel.textColor = [UIColor whiteColor];
+    titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 14];
+    titleLabel.textAlignment = UITextAlignmentCenter;
+    [_notificationView addSubview:titleLabel];
+}
 
 
 #pragma mark - 创建焦点图(热门文章）(在cell中实现了，这里的代码用不到了，但是不要删除）
@@ -309,6 +335,7 @@
             oneArticleCell.delegate = self;
         }
         [oneArticleCell rewriteTitle:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"title"]];
+        [oneArticleCell rewriteDate:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"date"]];
         [oneArticleCell rewriteHotScore:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"hotScore"]];
         [oneArticleCell rewriteTopics:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"topic"] forIndex:row - 1];
         [oneArticleCell rewritePicURL:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"picURL"]];
@@ -528,8 +555,10 @@
     
     // 取得当前最后一个cell的数据id
     NSString *lastID = [[_followedArticlesData lastObject] objectForKey:@"_id"];
+    NSString *postTime = [[_followedArticlesData lastObject] objectForKey:@"date"];
     NSDictionary *parameters = @{@"last_id":lastID,
                                  @"type":@"loadmore",
+                                 @"post_time":postTime,
                                  @"uid": _uid};
 
     // 创建 GET 请求
@@ -564,6 +593,22 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
         [tableView.mj_footer endRefreshing];  // 结束上拉加载更多
+    }];
+}
+
+
+
+
+#pragma mark - 注册观察者 - 是否有新的关注
+/** 注册观察者 - 是否有新的关注 **/
+- (void)waitForNewFollow
+{
+    // 收听到关注成功
+    [[NSNotificationCenter defaultCenter] addObserverForName:@"followSuccess" object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
+        NSLog(@"%@", note.name);
+        NSLog(@"%@", note.object);
+        NSLog(@"收听到关注成功");
+        // [self createNotificationTap];  // 显示广播条
     }];
 }
 

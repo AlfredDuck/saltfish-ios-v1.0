@@ -84,6 +84,7 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
+    [[SDImageCache sharedImageCache] clearMemory];  // 清理缓存
 }
 
 
@@ -463,9 +464,11 @@
     
     // 取得当前最后一个cell的数据id
     NSString *lastID = [[_articleData lastObject] objectForKey:@"_id"];
+    NSString *postTime = [[_articleData lastObject] objectForKey:@"date"];
     NSDictionary *parameters = @{
                                  @"type":@"loadmore",
                                  @"last_id":lastID,
+                                 @"post_time":postTime,
                                  @"topic": _topic
                                  };
     

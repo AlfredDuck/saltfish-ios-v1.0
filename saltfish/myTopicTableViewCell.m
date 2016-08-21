@@ -51,7 +51,7 @@
         [self.contentView addSubview:_picImageView];
         
         /* #话题# */
-        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(86, 17, _screenWidth-(58+11+16+11), 22)];
+        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(86, 19, _screenWidth-(58+11+16+11), 22)];
         _titleLabel.text = _title;
         _titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 16.0];
         _titleLabel.textColor = [colorManager mainTextColor];

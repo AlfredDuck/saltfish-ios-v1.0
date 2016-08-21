@@ -117,11 +117,11 @@
                                    @"uid": res.userID,
                                    @"token": res.accessToken
                                    };
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"weiboAuthorizeSuccess" object:info];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"weiboAuthorizeSuccess" object:info];  // 广播出去
         }
         else {
             NSLog(@"授权失败");
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"weiboAuthorizeFalse" object:nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"weiboAuthorizeFalse" object:nil];  // 广播出去
         }
     }
 }
