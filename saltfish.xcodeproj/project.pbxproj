@@ -48,6 +48,7 @@
 		BB8C2A8F1CB134CC004112F9 /* saltCustomTools.m in Sources */ = {isa = PBXBuildFile; fileRef = BB8C2A8E1CB134CC004112F9 /* saltCustomTools.m */; };
 		BB97FD9B1D27FC3200EBA61D /* SFClassificationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BB97FD9A1D27FC3200EBA61D /* SFClassificationTableViewCell.m */; };
 		BB990D131D729BA5004B016C /* SFArticleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BB990D121D729BA5004B016C /* SFArticleCell.m */; };
+		BB990D151D72C92D004B016C /* link.png in Resources */ = {isa = PBXBuildFile; fileRef = BB990D141D72C92D004B016C /* link.png */; };
 		BB99E7D01C9EC9D500CDBBDD /* comment_button.png in Resources */ = {isa = PBXBuildFile; fileRef = BB99E7CF1C9EC9D500CDBBDD /* comment_button.png */; };
 		BB99E7D21C9ECA1300CDBBDD /* praise_button.png in Resources */ = {isa = PBXBuildFile; fileRef = BB99E7D11C9ECA1300CDBBDD /* praise_button.png */; };
 		BB99E7D41C9ECA1A00CDBBDD /* praise_button_red.png in Resources */ = {isa = PBXBuildFile; fileRef = BB99E7D31C9ECA1A00CDBBDD /* praise_button_red.png */; };
@@ -164,6 +165,7 @@
 		BB97FD9A1D27FC3200EBA61D /* SFClassificationTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFClassificationTableViewCell.m; sourceTree = "<group>"; };
 		BB990D111D729BA5004B016C /* SFArticleCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFArticleCell.h; sourceTree = "<group>"; };
 		BB990D121D729BA5004B016C /* SFArticleCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFArticleCell.m; sourceTree = "<group>"; };
+		BB990D141D72C92D004B016C /* link.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = link.png; path = "../../coding/salt-App效果图/link.png"; sourceTree = "<group>"; };
 		BB99E7CF1C9EC9D500CDBBDD /* comment_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = comment_button.png; path = "../../coding/salt-App效果图/comment_button.png"; sourceTree = "<group>"; };
 		BB99E7D11C9ECA1300CDBBDD /* praise_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = praise_button.png; path = "../../coding/salt-App效果图/praise_button.png"; sourceTree = "<group>"; };
 		BB99E7D31C9ECA1A00CDBBDD /* praise_button_red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = praise_button_red.png; path = "../../coding/salt-App效果图/praise_button_red.png"; sourceTree = "<group>"; };
@@ -527,6 +529,7 @@
 		BBE6CCD41C206AE500AA9525 /* pics */ = {
 			isa = PBXGroup;
 			children = (
+				BB990D141D72C92D004B016C /* link.png */,
 				BB62F0901D279EE900ACFC92 /* notification.png */,
 				BB5C0F0C1D39DB9400EEC34F /* background.png */,
 				BB99E7D51C9ECA2900CDBBDD /* share_button.png */,
@@ -729,6 +732,7 @@
 				BB99E7D21C9ECA1300CDBBDD /* praise_button.png in Resources */,
 				BB99E7D61C9ECA2900CDBBDD /* share_button.png in Resources */,
 				BBF2B7581D31D32A00657FA6 /* discovery_tab.png in Resources */,
+				BB990D151D72C92D004B016C /* link.png in Resources */,
 				BBF2B75C1D31D6AA00657FA6 /* home_tab_focus.png in Resources */,
 				BB62F0911D279EE900ACFC92 /* notification.png in Resources */,
 				BB65CA211D1E65270098A53B /* follow.png in Resources */,

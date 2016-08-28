@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "TopicCell.h"
+#import "SFArticleCell.h"
 
-@interface TopicVC : UIViewController <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, TopicCellDelegate>
+@interface TopicVC : UIViewController <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, TopicCellDelegate, SFArticleCellDelegate>
 
 // 头部数据
 @property (nonatomic, strong) NSString *portraitURL;  // 头像url

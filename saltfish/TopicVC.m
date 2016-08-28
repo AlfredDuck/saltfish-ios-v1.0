@@ -15,10 +15,12 @@
 #import "urlManager.h"
 #import "toastView.h"
 #import "SFArticleTableViewCell.h"
+#import "SFArticleCell.h"
 #import "TopicCell.h"
 #import "detailVC.h"
 #import "SFLoginAndSignup.h"
 #import "SFLoginViewController.h"
+#import "IDMPhotoBrowser.h"
 
 
 @interface TopicVC ()
@@ -86,6 +88,8 @@
     [super didReceiveMemoryWarning];
     [[SDImageCache sharedImageCache] clearMemory];  // 清理缓存
 }
+
+
 
 
 
@@ -248,13 +252,13 @@
 - (void)createTableView
 {
     /* 创建tableView */
-    static NSString *CellWithIdentifier = @"articleCell";
+    static NSString *CellWithIdentifier = @"cell";
     _oneTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, _screenWidth, _screenHeight-64)];
     _oneTableView.backgroundColor = [colorManager lightGrayBackground];
     [_oneTableView setDelegate:self];
     [_oneTableView setDataSource:self];
     
-    [_oneTableView registerClass:[SFArticleTableViewCell class] forCellReuseIdentifier:CellWithIdentifier];
+    [_oneTableView registerClass:[SFArticleCell class] forCellReuseIdentifier:CellWithIdentifier];
     _oneTableView.separatorStyle = UITableViewCellSeparatorStyleNone; // 去掉分割线
     _oneTableView.contentInset = UIEdgeInsetsMake(-20+90, 0, 0, 0); // 设置距离顶部的一段偏移，继承自scrollview
     // 响应点击状态栏的事件
@@ -290,8 +294,11 @@
     static NSString *TopicCellWithIdentifier = @"topicCell+";
     TopicCell *oneTopicCell = [tableView dequeueReusableCellWithIdentifier:TopicCellWithIdentifier];
     
+//    static NSString *ArticleCellWithIdentifier = @"articleCell+";
+//    SFArticleTableViewCell *oneArticleCell = [tableView dequeueReusableCellWithIdentifier:ArticleCellWithIdentifier];
     static NSString *ArticleCellWithIdentifier = @"articleCell+";
-    SFArticleTableViewCell *oneArticleCell = [tableView dequeueReusableCellWithIdentifier:ArticleCellWithIdentifier];
+    SFArticleCell *oneArticleCell = [tableView dequeueReusableCellWithIdentifier:ArticleCellWithIdentifier];
+
     
     NSUInteger row = [indexPath row];
     
@@ -312,15 +319,26 @@
         return oneTopicCell;
     }
     else {
-        if (oneArticleCell == nil) {
-            oneArticleCell = [[SFArticleTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:ArticleCellWithIdentifier];
+        if (YES) {  // 这里用yes，代表不使用复用池，如果要使用复用池，可以考虑改造下面的initwithstyle函数
+            oneArticleCell = [[SFArticleCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:ArticleCellWithIdentifier];
+            oneArticleCell.delegate = self;
         }
-        [oneArticleCell rewriteTopics: _topic forIndex:row - 1];
-        [oneArticleCell rewriteTopicImageURL:_portraitURL forIndex:row - 1];
+        BOOL isShow;
+        if (nil == [[_articleData objectAtIndex:row-1] objectForKey:@"originalLink"]) {
+            isShow = NO;
+        } else {
+            isShow = YES;
+        }
+        [oneArticleCell rewriteLinkMark:isShow];
         [oneArticleCell rewriteTitle:[[_articleData objectAtIndex:row-1] objectForKey:@"title"]];
-        [oneArticleCell rewriteHotScore:[[_articleData objectAtIndex:row-1] objectForKey:@"hotScore"]];
-        [oneArticleCell rewriteDate:[[_articleData objectAtIndex:row-1] objectForKey:@"date"]];
-        [oneArticleCell rewritePicURL:[[_articleData objectAtIndex:row-1] objectForKey:@"picURL"]];
+        [oneArticleCell rewritePicURL:[[_articleData objectAtIndex:row-1] objectForKey:@"picURL"] withIndex:row-1];
+        
+//        [oneArticleCell rewriteTopics: _topic forIndex:row - 1];
+//        [oneArticleCell rewriteTopicImageURL:_portraitURL forIndex:row - 1];
+//        [oneArticleCell rewriteTitle:[[_articleData objectAtIndex:row-1] objectForKey:@"title"]];
+//        [oneArticleCell rewriteHotScore:[[_articleData objectAtIndex:row-1] objectForKey:@"hotScore"]];
+//        [oneArticleCell rewriteDate:[[_articleData objectAtIndex:row-1] objectForKey:@"date"]];
+//        [oneArticleCell rewritePicURL:[[_articleData objectAtIndex:row-1] objectForKey:@"picURL"]];
 
         // 取消选中的背景色
         oneArticleCell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -337,8 +355,8 @@
         return cell.cellHeight;
     }
     else {
-        CGFloat height = 145;
-        return height;
+        SFArticleCell *cell = (SFArticleCell *)[self tableView:tableView cellForRowAtIndexPath:indexPath];
+        return cell.cellHeight;
     }
 }
 
@@ -631,15 +649,10 @@
     } else {
         [self chooseLoginWayWith:@"登录后方可关注此话题"];
     }
-    
-    
     // 刷新特定的一个cell
 //    NSIndexPath *indexPath=[NSIndexPath indexPathForRow:0 inSection:0];
 //    [_oneTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationFade];
-    
-    //    [UIView animateWithDuration:0.3 animations:^{   // uiview 动画（无需实例化）单例
-    //
-    //    }];
+    //    [UIView animateWithDuration:0.3 animations:^{   // uiview 动画（无需实例化）单例}];
 }
 
 - (void)changePushSwitch
@@ -657,6 +670,18 @@
     
     [self connectForPushSwitch];
     
+}
+
+
+
+#pragma mark - SFArticleCell 的代理
+- (void)clickPicsForIndex:(unsigned long)index
+{
+    unsigned long indexTable = index/100 - 1;  // 取百位
+    unsigned long indexPic = index%100;  // 取个位
+    NSArray *arr = [[_articleData objectAtIndex:indexTable] objectForKey:@"picURL"];
+    [self checkPhotos: arr forIndex:indexPic];
+
 }
 
 
@@ -681,6 +706,31 @@
 //        [Login requestForWeiboAuthorize];
 //        [Login waitForWeiboAuthorizeResult];
     }
+}
+
+
+
+#pragma mark - 图片浏览器
+- (void)checkPhotos:(NSArray *)urls forIndex:(unsigned long)index
+{
+    // URLs array
+    NSMutableArray *photosURL = [NSMutableArray new];
+    for (NSString *urlStr in urls) {
+        NSURL *u = [NSURL URLWithString:urlStr];
+        [photosURL addObject:u];
+    }
+    
+//    NSArray *photosURL = @[[NSURL URLWithString:@"http://farm4.static.flickr.com/3567/3523321514_371d9ac42f_b.jpg"],
+//                           [NSURL URLWithString:@"http://farm4.static.flickr.com/3629/3339128908_7aecabc34b_b.jpg"],
+//                           [NSURL URLWithString:@"http://farm4.static.flickr.com/3364/3338617424_7ff836d55f_b.jpg"],
+//                           [NSURL URLWithString:@"http://farm4.static.flickr.com/3590/3329114220_5fbc5bc92b_b.jpg"]];
+    // photos array
+    NSArray *photos = [IDMPhoto photosWithURLs:photosURL];
+    
+    IDMPhotoBrowser *browser = [[IDMPhotoBrowser alloc] initWithPhotos:photos];
+    [browser setInitialPageIndex:index];
+    browser.displayToolbar = NO;
+    [self presentViewController:browser animated:YES completion:nil];
 }
 
 
