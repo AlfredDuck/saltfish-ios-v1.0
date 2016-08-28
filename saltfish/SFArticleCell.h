@@ -1,5 +1,5 @@
 //
-//  articleCell.h
+//  SFArticleCell.h
 //  saltfish
 //
 //  Created by alfred on 16/6/25.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface articleCell : UITableViewCell <UIScrollViewDelegate>
+@interface SFArticleCell : UITableViewCell <UIScrollViewDelegate>
 // 标题
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) UILabel *titleLabel;

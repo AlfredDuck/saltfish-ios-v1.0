@@ -367,9 +367,10 @@
     _webview.backgroundColor = [UIColor whiteColor];
     
     // 请求参数
-    NSString *host = [urlManager urlHost];
-    NSString *urlString = [host stringByAppendingString:@"/article?article_id="];
-    NSString *finalURL = [urlString stringByAppendingString:_articleID];
+//    NSString *host = [urlManager urlHost];
+//    NSString *urlString = [host stringByAppendingString:@"/article?article_id="];
+//    NSString *finalURL = [urlString stringByAppendingString:_articleID];
+    NSString *finalURL = _originalLink;
     NSLog(@"%@", finalURL);
 
     

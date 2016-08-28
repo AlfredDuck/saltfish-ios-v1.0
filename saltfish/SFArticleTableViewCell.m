@@ -154,6 +154,10 @@
 - (void)rewritePicURL:(NSString *)newPicURL
 {
     _picURL = newPicURL;
+    if ((NSNull *)newPicURL == [NSNull null]) {
+        _picURL = @"";
+    }
+    NSLog(@"%@",_picURL);
     [_picImageView sd_setImageWithURL:[NSURL URLWithString:_picURL] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
 }
 

@@ -370,6 +370,7 @@
     if (row >= 1) {
         detailVC *detailPage = [[detailVC alloc] init];
         detailPage.articleID = [[_followedArticlesData objectAtIndex:row-1] objectForKey:@"_id"];
+        detailPage.originalLink = [[_followedArticlesData objectAtIndex:row-1] objectForKey:@"originalLink"];
         [self.navigationController pushViewController:detailPage animated:YES];
         //开启iOS7的滑动返回效果
         if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
@@ -401,7 +402,7 @@
 
 #pragma mark - HotCell（第一个cell） 的代理
 
-- (void)clickHotArticle:(NSString *)articleID
+- (void)clickHotArticle:(NSString *)articleID withOriginalLink:(NSString *)originalLink
 {
     if (!articleID) {
         return;
@@ -409,6 +410,7 @@
     
     detailVC *detailPage = [[detailVC alloc] init];
     detailPage.articleID = articleID;
+    detailPage.originalLink = originalLink;
     [self.navigationController pushViewController:detailPage animated:YES];
     //开启iOS7的滑动返回效果
     if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {

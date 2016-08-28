@@ -10,7 +10,7 @@
 
 @protocol SFHotTableViewCellDelegate <NSObject>
 @required
-- (void)clickHotArticle:(NSString *)articleID;
+- (void)clickHotArticle:(NSString *)articleID withOriginalLink:(NSString *)originalLink;
 - (void)clickHotTopic:(NSString *)topic pic:(NSString *)picURL;
 @end
 

@@ -6,11 +6,11 @@
 //  Copyright © 2016年 Alfred. All rights reserved.
 //
 
-#import "articleCell.h"
+#import "SFArticleCell.h"
 #import "UIImageView+WebCache.h"
 #import "colorManager.h"
 
-@implementation articleCell
+@implementation SFArticleCell
 
 - (void)awakeFromNib {
     // Initialization code

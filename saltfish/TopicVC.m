@@ -321,7 +321,7 @@
         [oneArticleCell rewriteHotScore:[[_articleData objectAtIndex:row-1] objectForKey:@"hotScore"]];
         [oneArticleCell rewriteDate:[[_articleData objectAtIndex:row-1] objectForKey:@"date"]];
         [oneArticleCell rewritePicURL:[[_articleData objectAtIndex:row-1] objectForKey:@"picURL"]];
-        
+
         // 取消选中的背景色
         oneArticleCell.selectionStyle = UITableViewCellSelectionStyleNone;
         return oneArticleCell;
@@ -354,6 +354,7 @@
     // 进入article详情页
     detailVC *detailPage = [[detailVC alloc] init];
     detailPage.articleID = [[_articleData objectAtIndex:row-1] objectForKey:@"_id"];
+    detailPage.originalLink = [[_articleData objectAtIndex:row-1] objectForKey:@"originalLink"];
     [self.navigationController pushViewController:detailPage animated:YES];
     //开启iOS7的滑动返回效果
     if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {

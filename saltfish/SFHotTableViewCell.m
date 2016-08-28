@@ -413,7 +413,8 @@
     NSLog(@"%lu", (unsigned long)sender.view.tag);
     
     NSString *articleID = [[_hotArticleData objectAtIndex:sender.view.tag - 1] objectForKey:@"articleID"];
-    [self.delegate clickHotArticle:articleID];  // 调用代理
+    NSString *originalLink = [[_hotArticleData objectAtIndex:sender.view.tag - 1] objectForKey:@"originalLink"];
+    [self.delegate clickHotArticle:articleID withOriginalLink: originalLink];  // 调用代理
     
 //    // 从 sender 的子视图中找到 label
 //    for (id item in [sender.view subviews]) {

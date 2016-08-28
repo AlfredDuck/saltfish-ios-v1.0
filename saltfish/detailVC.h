@@ -20,6 +20,7 @@
 @interface detailVC : UIViewController<UIWebViewDelegate, WBHttpRequestDelegate, UIActionSheetDelegate>
 // 文章id
 @property (nonatomic, strong) NSString *articleID;
+@property (nonatomic, strong) NSString *originalLink;
 //
 @property (nonatomic, strong) UIWebView *webview;
 @property (nonatomic) int loadCount;
