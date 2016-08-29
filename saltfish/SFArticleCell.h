@@ -43,10 +43,11 @@
 @property (nonatomic) NSInteger screenHeight;
 // 公共方法
 - (void)rewriteLinkMark:(BOOL)isShow;
-- (void)rewriteWithTopic:(NSString *)newTopic withDate:(NSString *)date;
+- (void)rewriteTopic:(NSString *)newTopic;
+- (void)rewriteDate:(NSString *)newDate;
+- (void)rewritePortrait:(NSString *)newPortrait;
 - (void)rewriteTitle:(NSString *)newTitle;
 - (void)rewritePicURL:(NSArray *)newPicArr withIndex:(unsigned long)index;
-- (void)rewritePostTime:(NSString *)newPostTime;
 //
 @property (nonatomic, assign) id <SFArticleCellDelegate> delegate;
 

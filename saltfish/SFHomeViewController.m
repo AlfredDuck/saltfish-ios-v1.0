@@ -16,6 +16,7 @@
 #import "TopicVC.h"
 #import "MJRefresh.h"
 #import "urlManager.h"
+#import "SFArticleCell.h"
 
 
 @interface SFHomeViewController ()

@@ -50,20 +50,13 @@
         // 需要SDWebImage
         [_portraitImageView sd_setImageWithURL:[NSURL URLWithString:_portraitURL] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
         [self.contentView addSubview:_portraitImageView];
-        // 点击手势
-        _portraitImageView.userInteractionEnabled = YES; // 设置view可以交互
-        UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickTopicPortrait:)];   // 设置手势
-        [_portraitImageView addGestureRecognizer:singleTap]; // 给view添加手势
+
         
         /* 话题标题 */
         _topicLabel = [[UILabel alloc] initWithFrame:CGRectMake(60, 15, 200, 20)];
         _topicLabel.text = _topic;
         _topicLabel.font = [UIFont fontWithName:@"Helvetica" size: 14.0];
         _topicLabel.textColor = [colorManager secondTextColor];
-        // 点击手势
-        _topicLabel.userInteractionEnabled = YES; // 设置view可以交互
-        UITapGestureRecognizer *singleTap2 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickTopicOfArticle:)];   // 设置手势
-        [_topicLabel addGestureRecognizer:singleTap2]; // 给view添加手势
         [self.contentView addSubview:_topicLabel];
         
         /* 日期 */
@@ -105,11 +98,23 @@
 
 #pragma mark - 重写 cell 中各个元素的数据
 
-- (void) rewriteTopics:(NSString *)newTopic withPortrait:(NSString *)newPortraitURL withDate:(NSString *)newDate
+- (void) rewriteTopic:(NSString *)newTopic
 {
     _topic = newTopic;
     _topicLabel.text = _topic;
     
+}
+
+- (void)rewriteDate:(NSString *)newDate
+{
+    _date = newDate;
+    _dateLabel.text = _date;
+}
+
+- (void)rewritePortrait:(NSString *)newPortrait
+{
+    _portraitURL = newPortrait;
+    [_portraitImageView sd_setImageWithURL:[NSURL URLWithString:_portraitURL] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
 }
 
 - (void) rewriteLinkMark:(BOOL)isShow

@@ -324,21 +324,17 @@
             oneArticleCell.delegate = self;
         }
         BOOL isShow;
-        if (nil == [[_articleData objectAtIndex:row-1] objectForKey:@"originalLink"]) {
+        if ([NSNull null] == [[_articleData objectAtIndex:row-1] objectForKey:@"originalLink"]) {
             isShow = NO;
         } else {
             isShow = YES;
         }
         [oneArticleCell rewriteLinkMark:isShow];
+        [oneArticleCell rewriteTopic:_topic];
+        [oneArticleCell rewritePortrait:_portraitURL];
+        [oneArticleCell rewriteDate:[[_articleData objectAtIndex:row-1] objectForKey:@"date"]];
         [oneArticleCell rewriteTitle:[[_articleData objectAtIndex:row-1] objectForKey:@"title"]];
         [oneArticleCell rewritePicURL:[[_articleData objectAtIndex:row-1] objectForKey:@"picURL"] withIndex:row-1];
-        
-//        [oneArticleCell rewriteTopics: _topic forIndex:row - 1];
-//        [oneArticleCell rewriteTopicImageURL:_portraitURL forIndex:row - 1];
-//        [oneArticleCell rewriteTitle:[[_articleData objectAtIndex:row-1] objectForKey:@"title"]];
-//        [oneArticleCell rewriteHotScore:[[_articleData objectAtIndex:row-1] objectForKey:@"hotScore"]];
-//        [oneArticleCell rewriteDate:[[_articleData objectAtIndex:row-1] objectForKey:@"date"]];
-//        [oneArticleCell rewritePicURL:[[_articleData objectAtIndex:row-1] objectForKey:@"picURL"]];
 
         // 取消选中的背景色
         oneArticleCell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -366,6 +362,12 @@
 {
     NSUInteger row = [indexPath row];
     if (row == 0) {
+        return;
+    }
+    
+    // 检查是否有链接
+    if ([NSNull null] == [[_articleData objectAtIndex:row-1] objectForKey:@"originalLink"]) {
+        NSLog(@"没有外链");
         return;
     }
     
@@ -729,7 +731,9 @@
     
     IDMPhotoBrowser *browser = [[IDMPhotoBrowser alloc] initWithPhotos:photos];
     [browser setInitialPageIndex:index];
-    browser.displayToolbar = NO;
+    browser.displayActionButton = NO;
+    browser.displayArrowButton = NO;
+    browser.displayCounterLabel = YES;
     [self presentViewController:browser animated:YES completion:nil];
 }
 
