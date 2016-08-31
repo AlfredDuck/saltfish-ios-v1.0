@@ -18,6 +18,7 @@
 #import "urlManager.h"
 #import "SFArticleCell.h"
 #import "IDMPhotoBrowser.h"  // 图片浏览器
+#import "YYWebImage.h"
 
 
 
@@ -61,6 +62,9 @@
     
     /* 收听广播 */
     [self waitForNewFollow];
+    
+    /*  */
+    [YYWebImageManager sharedManager].cache.memoryCache.costLimit = 10000;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -86,7 +90,13 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    [[SDImageCache sharedImageCache] clearMemory];  // 清理缓存SDWebImage
+    NSLog(@"内存报警...");
+    //[[SDImageCache sharedImageCache] clearMemory];  // 清理缓存SDWebImage
+    
+    YYImageCache *cache = [YYWebImageManager sharedManager].cache;
+    NSLog(@"YY缓存大小：%lu", (unsigned long)cache.diskCache.totalCost);  // 获取缓存大小
+    NSLog(@"YY缓存大小：%lu", (unsigned long)cache.memoryCache.totalCost);  // 获取缓存大小
+    [cache.memoryCache removeAllObjects];  // 清空缓存
 }
 
 
@@ -333,7 +343,7 @@
         return oneHotCell;
     }
     else {
-        if (YES) {  // 这里用yes，代表不使用复用池，如果要使用复用池，可以考虑改造下面的initwithstyle函数
+        if (oneArticleCell == nil) {  // 这里用yes，代表不使用复用池，如果要使用复用池，可以考虑改造下面的initwithstyle函数
             oneArticleCell = [[SFArticleCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:articleCellWithIdentifier];
             oneArticleCell.delegate = self;
         }

@@ -34,6 +34,21 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>YYCache.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>YYImage.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>YYWebImage.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>pop.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -57,12 +72,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>6FD1B0F89F6E6E9FE1EDD830B1AA33FB</key>
+		<key>8F74D9EA91F4C43190670066BAC37D44</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>8F74D9EA91F4C43190670066BAC37D44</key>
+		<key>949E340D0487C6E8DA8F7BD271AB0EDB</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -72,7 +87,22 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>A477C001649D92E60AD498D9C46BC830</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>ACAE27A34969E14A7DA9829402D7B9A0</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>B93A5D00C65BD046994072FF7F10D94C</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>D2123F5FC5759EEB14B453591714146A</key>
 		<dict>
 			<key>primary</key>
 			<true/>

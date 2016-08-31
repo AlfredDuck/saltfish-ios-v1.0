@@ -8,6 +8,7 @@
 
 #import "SFArticleCell.h"
 #import "UIImageView+WebCache.h"
+#import "YYWebImage.h"
 #import "colorManager.h"
 
 @implementation SFArticleCell
@@ -80,9 +81,9 @@
         [self.contentView addSubview:_linkMark];
         
         /* 标题 */
-        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 63, _screenWidth-30, 38)];
+        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 66, _screenWidth-30, 38)];
         _titleLabel.text = _title;
-        _titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 16.0];
+        _titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 17.0];
         _titleLabel.textColor = [colorManager mainTextColor];
         //_titleLabel.backgroundColor = [UIColor yellowColor];
         _titleLabel.numberOfLines = 2;
@@ -149,15 +150,15 @@
     // ===================设置UIlabel文本折行====================
     NSString *str = _title;
     CGSize maxSize = {_screenWidth-30, 5000};  // 设置文本区域最大宽高
-    CGSize labelSize = [str sizeWithFont:[UIFont fontWithName:@"Helvetica" size:16]
+    CGSize labelSize = [str sizeWithFont:[UIFont fontWithName:@"Helvetica" size:17.0]
                        constrainedToSize:maxSize
                            lineBreakMode:_titleLabel.lineBreakMode];   // str是要显示的字符串
-    unsigned long height = labelSize.height/16*19.0;
-    _titleLabel.frame = CGRectMake(15, 63, labelSize.width, height);  // 因为行距增加了，所以要用参数修正height
+    unsigned long height = labelSize.height/17*20.0;
+    _titleLabel.frame = CGRectMake(15, 66, labelSize.width, height);  // 因为行距增加了，所以要用参数修正height
     _titleLabel.numberOfLines = 0;  // 不可少Label属性之一
     //_postTextLabel.lineBreakMode = UILineBreakModeCharacterWrap;  // 不可少Label属性之二
     
-    _textHeight = 60 + height + 15;
+    _textHeight = 64 + height + 15;
     /* 底部分割线 */
 //    _partLine.frame = CGRectMake(0, _cellHeight-5, _screenWidth, 5);
 }
@@ -166,7 +167,7 @@
 - (void)rewritePicURL:(NSArray *)newPicArr withIndex:(unsigned long)index
 {
     if (_hasPics) {
-        return;
+        [_holdView removeFromSuperview];
     }
     
     // 如果没有图片
@@ -181,24 +182,33 @@
         return;
     }
     
+    _holdView = [[UIView alloc] initWithFrame:CGRectMake(0, _textHeight, _screenWidth, 1)];
+    [self.contentView addSubview:_holdView];
+    
     // 如果只有一张图片
     if (1 == [newPicArr count]) {
         // 根据设备宽度计算图片宽高
         int ww = ceil(_screenWidth - 30);
         int hh = ww/16.0*9;
-        UIImageView *picImageView = [[UIImageView alloc] initWithFrame:CGRectMake(15, _textHeight, ww, hh)];
-        picImageView.backgroundColor = [UIColor grayColor];
+        UIImageView *picImageView = [[UIImageView alloc] initWithFrame:CGRectMake(15, 0, ww, hh)];
+        picImageView.backgroundColor = [UIColor lightGrayColor];
         // uiimageview居中裁剪
         picImageView.contentMode = UIViewContentModeScaleAspectFill;
         picImageView.clipsToBounds  = YES;
         // 需要SDWebImage
         NSString *url = newPicArr[0];
-        [picImageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+        //[picImageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+        // 普通加载网络图片 yy库
+        picImageView.yy_imageURL = [NSURL URLWithString:url];
+        // 渐进式：边下载边显示 yy库
+        //[picImageView yy_setImageWithURL:[NSURL URLWithString:url] options:YYWebImageOptionProgressive];
+        
         // 添加手势
         picImageView.userInteractionEnabled = YES; // 设置可以交互
         UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickPic:)]; // 设置手势
         [picImageView addGestureRecognizer:singleTap]; // 添加手势
-        [self.contentView addSubview:picImageView];
+        [_holdView addSubview:picImageView];
+        _holdView.frame = CGRectMake(0, _textHeight, _screenWidth, hh);
         
         // tag的百位代表在tableview的第几位，各位代表在图片数组中的第几位（用百位是怕图片数量超过10）
         picImageView.tag = (index+1) * 100 + 0;
@@ -243,7 +253,7 @@
     for (int i=0; i<[DoubleArr count]; i++) {  // 第一层
         for (int j=0; j<[[DoubleArr objectAtIndex:i] count]; j++) {  // 第二层
             
-            UIImageView *picImageView = [[UIImageView alloc] initWithFrame:CGRectMake(15+j*(ww+4), _textHeight+i*(hh+4), ww, hh)];
+            UIImageView *picImageView = [[UIImageView alloc] initWithFrame:CGRectMake(15+j*(ww+4), i*(hh+4), ww, hh)];
             picImageView.backgroundColor = [UIColor grayColor];
             // uiimageview居中裁剪
             picImageView.contentMode = UIViewContentModeScaleAspectFill;
@@ -255,13 +265,14 @@
             picImageView.userInteractionEnabled = YES; // 设置可以交互
             UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickPic:)]; // 设置手势
             [picImageView addGestureRecognizer:singleTap]; // 添加手势
-            [self.contentView addSubview:picImageView];
+            [_holdView addSubview:picImageView];
             
             // tag的百位代表在tableview的第几位，各位代表在图片数组中的第几位（用百位是怕图片数量超过10）
             picImageView.tag = (index+1) * 100 + i*3+j;
         }
     }
     
+    _holdView.frame = CGRectMake(0, _textHeight, _screenWidth, [DoubleArr count]*(hh+4));
     /* cell 高度 */
     _cellHeight = _textHeight + [DoubleArr count]*(hh+4) + (15+15);
     /* 底部分割线 */

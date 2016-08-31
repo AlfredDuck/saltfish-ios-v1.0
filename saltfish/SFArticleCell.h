@@ -33,6 +33,7 @@
 @property (nonatomic) BOOL hasPics;  // 记录已经生成图片矩阵，避免重复生成
 @property (nonatomic, copy) NSString *picURL;
 @property (nonatomic, copy) UIImageView *picImageView;
+@property (nonatomic, copy) UIView *holdView;
 
 @property (nonatomic) unsigned long textHeight;
 @property (nonatomic) unsigned long cellHeight;  // cell高度
