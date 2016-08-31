@@ -17,6 +17,8 @@
 #import "MJRefresh.h"
 #import "urlManager.h"
 #import "SFArticleCell.h"
+#import "IDMPhotoBrowser.h"  // 图片浏览器
+
 
 
 @interface SFHomeViewController ()
@@ -313,7 +315,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *articleCellWithIdentifier = @"articleCell+";
-    SFArticleTableViewCell *oneArticleCell = [tableView dequeueReusableCellWithIdentifier:articleCellWithIdentifier];
+    SFArticleCell *oneArticleCell = [tableView dequeueReusableCellWithIdentifier:articleCellWithIdentifier];
     
     static NSString *hotCellWithIdentifier = @"hotCell+";
     SFHotTableViewCell *oneHotCell = [tableView dequeueReusableCellWithIdentifier:hotCellWithIdentifier];
@@ -331,16 +333,28 @@
         return oneHotCell;
     }
     else {
-        if (oneArticleCell == nil) {
-            oneArticleCell = [[SFArticleTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:articleCellWithIdentifier];
+        if (YES) {  // 这里用yes，代表不使用复用池，如果要使用复用池，可以考虑改造下面的initwithstyle函数
+            oneArticleCell = [[SFArticleCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:articleCellWithIdentifier];
             oneArticleCell.delegate = self;
         }
-        [oneArticleCell rewriteTitle:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"title"]];
+        BOOL isShow;
+        if ([NSNull null] == [[_followedArticlesData objectAtIndex:row-1] objectForKey:@"originalLink"]) {
+            isShow = NO;
+        } else {
+            isShow = YES;
+        }
+        [oneArticleCell rewriteLinkMark:isShow];
+        [oneArticleCell rewriteTopic:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"topic"] withIndex:row-1];
+        [oneArticleCell rewritePortrait:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"topicImageURL"] withIndex:row-1];
         [oneArticleCell rewriteDate:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"date"]];
-        [oneArticleCell rewriteHotScore:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"hotScore"]];
-        [oneArticleCell rewriteTopics:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"topic"] forIndex:row - 1];
-        [oneArticleCell rewritePicURL:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"picURL"]];
-        [oneArticleCell rewriteTopicImageURL:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"topicImageURL"] forIndex:row - 1];
+        [oneArticleCell rewriteTitle:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"title"]];
+        [oneArticleCell rewritePicURL:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"picSmall"] withIndex:row-1];
+//        [oneArticleCell rewriteTitle:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"title"]];
+//        [oneArticleCell rewriteDate:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"date"]];
+//        [oneArticleCell rewriteHotScore:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"hotScore"]];
+//        [oneArticleCell rewriteTopics:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"topic"] forIndex:row - 1];
+//        [oneArticleCell rewritePicURL:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"picURL"]];
+//        [oneArticleCell rewriteTopicImageURL:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"topicImageURL"] forIndex:row - 1];
         oneArticleCell.selectionStyle = UITableViewCellSelectionStyleNone;  // 取消选中的背景色
         return oneArticleCell;
     }
@@ -358,7 +372,8 @@
         return cell.cellHeight;
     }
     else {
-        return 145;
+        SFArticleCell *cell = (SFArticleCell *)[self tableView:tableView cellForRowAtIndexPath:indexPath];
+        return cell.cellHeight;
     }
 }
 
@@ -369,6 +384,14 @@
     NSUInteger row = [indexPath row];
     
     if (row >= 1) {
+        // 检查是否有链接
+        if ([NSNull null] == [[_followedArticlesData objectAtIndex:row-1] objectForKey:@"originalLink"]) {
+            NSLog(@"没有外链");
+            // 左右抖动一下
+            [self shake:[tableView cellForRowAtIndexPath:indexPath].contentView];
+            return;
+        }
+        
         detailVC *detailPage = [[detailVC alloc] init];
         detailPage.articleID = [[_followedArticlesData objectAtIndex:row-1] objectForKey:@"_id"];
         detailPage.originalLink = [[_followedArticlesData objectAtIndex:row-1] objectForKey:@"originalLink"];
@@ -453,6 +476,14 @@
     if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
         self.navigationController.interactivePopGestureRecognizer.delegate = nil;
     }
+}
+
+- (void)clickPicsForIndex:(unsigned long)index withView:(UIView *)view
+{
+    unsigned long indexTable = index/100 - 1;  // 取百位
+    unsigned long indexPic = index%100;  // 取个位
+    NSArray *arr = [[_followedArticlesData objectAtIndex:indexTable] objectForKey:@"picBig"];
+    [self checkBigPhotos: arr forIndex:indexPic];
 }
 
 
@@ -599,6 +630,47 @@
     }];
 }
 
+
+
+#pragma mark - 图片浏览器
+- (void)checkBigPhotos:(NSArray *)urls forIndex:(unsigned long)index
+{
+    // URLs array
+    NSMutableArray *photosURL = [NSMutableArray new];
+    for (NSString *urlStr in urls) {
+        NSURL *u = [NSURL URLWithString:urlStr];
+        [photosURL addObject:u];
+    }
+    
+    //    NSArray *photosURL = @[[NSURL URLWithString:@"http://farm4.static.flickr.com/3567/3523321514_371d9ac42f_b.jpg"],
+    //                           [NSURL URLWithString:@"http://farm4.static.flickr.com/3629/3339128908_7aecabc34b_b.jpg"],
+    //                           [NSURL URLWithString:@"http://farm4.static.flickr.com/3364/3338617424_7ff836d55f_b.jpg"],
+    //                           [NSURL URLWithString:@"http://farm4.static.flickr.com/3590/3329114220_5fbc5bc92b_b.jpg"]];
+    // photos array
+    NSArray *photos = [IDMPhoto photosWithURLs:photosURL];
+    
+    IDMPhotoBrowser *browser = [[IDMPhotoBrowser alloc] initWithPhotos:photos];
+    [browser setInitialPageIndex:index];
+    browser.displayActionButton = NO;
+    browser.displayArrowButton = NO;
+    browser.displayCounterLabel = YES;
+    [self presentViewController:browser animated:YES completion:nil];
+}
+
+
+
+#pragma mark - 左右抖动
+/**代码来自网络**/
+- (void)shake:(UIView *)senderView
+{
+    CABasicAnimation* shake = [CABasicAnimation animationWithKeyPath:@"transform.translation.x"];
+    shake.fromValue = [NSNumber numberWithFloat:-3];
+    shake.toValue = [NSNumber numberWithFloat:3];
+    shake.duration = 0.08;//执行时间
+    shake.autoreverses = YES; //是否重复
+    shake.repeatCount = 2;//次数
+    [senderView.layer addAnimation:shake forKey:@"shakeAnimation"];
+}
 
 
 

@@ -50,6 +50,10 @@
         // 需要SDWebImage
         [_portraitImageView sd_setImageWithURL:[NSURL URLWithString:_portraitURL] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
         [self.contentView addSubview:_portraitImageView];
+        // 添加手势
+        _portraitImageView.userInteractionEnabled = YES; // 设置可以交互
+        UITapGestureRecognizer *singleTapPortrait = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickPortrait:)]; // 设置手势
+        [_portraitImageView addGestureRecognizer:singleTapPortrait]; // 添加手势
 
         
         /* 话题标题 */
@@ -58,6 +62,10 @@
         _topicLabel.font = [UIFont fontWithName:@"Helvetica" size: 14.0];
         _topicLabel.textColor = [colorManager secondTextColor];
         [self.contentView addSubview:_topicLabel];
+        // 添加手势
+        _topicLabel.userInteractionEnabled = YES; // 设置可以交互
+        UITapGestureRecognizer *singleTapTopic = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickTopic:)]; // 设置手势
+        [_topicLabel addGestureRecognizer:singleTapTopic]; // 添加手势
         
         /* 日期 */
         _dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(60, 35, 200, 16)];
@@ -72,7 +80,7 @@
         [self.contentView addSubview:_linkMark];
         
         /* 标题 */
-        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 60, _screenWidth-30, 38)];
+        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 63, _screenWidth-30, 38)];
         _titleLabel.text = _title;
         _titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 16.0];
         _titleLabel.textColor = [colorManager mainTextColor];
@@ -82,7 +90,7 @@
 
         
         /* 背景、分割线 */
-        _partLine = [[UIView alloc] initWithFrame:CGRectMake(0, 20, _screenWidth, 8)];
+        _partLine = [[UIView alloc] initWithFrame:CGRectMake(0, 40, _screenWidth, 15)];
         _partLine.backgroundColor = [colorManager lightGrayBackground];
         [self.contentView addSubview:_partLine];
         self.contentView.backgroundColor = [UIColor whiteColor];
@@ -98,11 +106,11 @@
 
 #pragma mark - 重写 cell 中各个元素的数据
 
-- (void) rewriteTopic:(NSString *)newTopic
+- (void) rewriteTopic:(NSString *)newTopic withIndex:(unsigned long)index
 {
     _topic = newTopic;
     _topicLabel.text = _topic;
-    
+    _topicLabel.tag = index + 1;
 }
 
 - (void)rewriteDate:(NSString *)newDate
@@ -111,10 +119,11 @@
     _dateLabel.text = _date;
 }
 
-- (void)rewritePortrait:(NSString *)newPortrait
+- (void)rewritePortrait:(NSString *)newPortrait withIndex:(unsigned long)index
 {
     _portraitURL = newPortrait;
     [_portraitImageView sd_setImageWithURL:[NSURL URLWithString:_portraitURL] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+    _portraitImageView.tag = index + 1;
 }
 
 - (void) rewriteLinkMark:(BOOL)isShow
@@ -144,7 +153,7 @@
                        constrainedToSize:maxSize
                            lineBreakMode:_titleLabel.lineBreakMode];   // str是要显示的字符串
     unsigned long height = labelSize.height/16*19.0;
-    _titleLabel.frame = CGRectMake(15, 60, labelSize.width, height);  // 因为行距增加了，所以要用参数修正height
+    _titleLabel.frame = CGRectMake(15, 63, labelSize.width, height);  // 因为行距增加了，所以要用参数修正height
     _titleLabel.numberOfLines = 0;  // 不可少Label属性之一
     //_postTextLabel.lineBreakMode = UILineBreakModeCharacterWrap;  // 不可少Label属性之二
     
@@ -161,11 +170,13 @@
     }
     
     // 如果没有图片
+    NSLog(@"%@", [newPicArr class]);
+    NSLog(@"%@", newPicArr);
     if (0 == [newPicArr count]) {
         /* cell 高度 */
-        _cellHeight = _textHeight + (15);
+        _cellHeight = _textHeight + (22);
         /* 底部分割线 */
-        _partLine.frame = CGRectMake(0, _cellHeight-8, _screenWidth, 8);
+        _partLine.frame = CGRectMake(0, _cellHeight-15, _screenWidth, 15);
         _hasPics = YES;  // 记录是否已经创建pic矩阵
         return;
     }
@@ -173,8 +184,8 @@
     // 如果只有一张图片
     if (1 == [newPicArr count]) {
         // 根据设备宽度计算图片宽高
-        int ww = ceil((_screenWidth - 30)/3.0*2);
-        int hh = ww/4.0*3;
+        int ww = ceil(_screenWidth - 30);
+        int hh = ww/16.0*9;
         UIImageView *picImageView = [[UIImageView alloc] initWithFrame:CGRectMake(15, _textHeight, ww, hh)];
         picImageView.backgroundColor = [UIColor grayColor];
         // uiimageview居中裁剪
@@ -193,9 +204,9 @@
         picImageView.tag = (index+1) * 100 + 0;
         
         /* cell 高度 */
-        _cellHeight = _textHeight + hh + (8+15);
+        _cellHeight = _textHeight + hh + (15+20);
         /* 底部分割线 */
-        _partLine.frame = CGRectMake(0, _cellHeight-8, _screenWidth, 8);
+        _partLine.frame = CGRectMake(0, _cellHeight-15, _screenWidth, 15);
         _hasPics = YES;  // 记录是否已经创建pic矩阵
         return;
     }
@@ -252,9 +263,9 @@
     }
     
     /* cell 高度 */
-    _cellHeight = _textHeight + [DoubleArr count]*(hh+4) + (8+15);
+    _cellHeight = _textHeight + [DoubleArr count]*(hh+4) + (15+15);
     /* 底部分割线 */
-    _partLine.frame = CGRectMake(0, _cellHeight-8, _screenWidth, 8);
+    _partLine.frame = CGRectMake(0, _cellHeight-15, _screenWidth, 15);
     _hasPics = YES;  // 记录是否已经创建pic矩阵
 }
 
@@ -277,11 +288,25 @@
 
 
 #pragma mark - IBAction
+/** 点击话题 **/
+- (void)clickTopic:(UIGestureRecognizer *)sender
+{
+    NSLog(@"点第%dl个文章", sender.view.tag);
+    [self.delegate clickTopicForIndex:sender.view.tag - 1];  // 调用代理方法
+}
+
+/** 点击话题头像 **/
+- (void)clickPortrait:(UIGestureRecognizer *)sender
+{
+    NSLog(@"点第%ldl个文章", sender.view.tag);
+    [self.delegate clickTopicForIndex:sender.view.tag - 1];  // 调用代理方法
+}
+
 /** 点击图片 **/
 - (void)clickPic:(UIGestureRecognizer *)sender
 {
     NSLog(@"点第%ldl个文章", sender.view.tag);
-    [self.delegate clickPicsForIndex:sender.view.tag];  // 调用代理方法
+    [self.delegate clickPicsForIndex:sender.view.tag withView:(UIView *)sender.view];  // 调用代理方法
 }
 
 

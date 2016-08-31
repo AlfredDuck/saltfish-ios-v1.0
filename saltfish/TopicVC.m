@@ -20,7 +20,7 @@
 #import "detailVC.h"
 #import "SFLoginAndSignup.h"
 #import "SFLoginViewController.h"
-#import "IDMPhotoBrowser.h"
+#import "IDMPhotoBrowser.h"  // 图片浏览器
 
 
 @interface TopicVC ()
@@ -330,11 +330,11 @@
             isShow = YES;
         }
         [oneArticleCell rewriteLinkMark:isShow];
-        [oneArticleCell rewriteTopic:_topic];
-        [oneArticleCell rewritePortrait:_portraitURL];
+        [oneArticleCell rewriteTopic:_topic withIndex:row-1];
+        [oneArticleCell rewritePortrait:_portraitURL withIndex:row-1];
         [oneArticleCell rewriteDate:[[_articleData objectAtIndex:row-1] objectForKey:@"date"]];
         [oneArticleCell rewriteTitle:[[_articleData objectAtIndex:row-1] objectForKey:@"title"]];
-        [oneArticleCell rewritePicURL:[[_articleData objectAtIndex:row-1] objectForKey:@"picURL"] withIndex:row-1];
+        [oneArticleCell rewritePicURL:[[_articleData objectAtIndex:row-1] objectForKey:@"picSmall"] withIndex:row-1];
 
         // 取消选中的背景色
         oneArticleCell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -368,6 +368,8 @@
     // 检查是否有链接
     if ([NSNull null] == [[_articleData objectAtIndex:row-1] objectForKey:@"originalLink"]) {
         NSLog(@"没有外链");
+        // 左右抖动一下
+        [self shake:[tableView cellForRowAtIndexPath:indexPath].contentView];
         return;
     }
     
@@ -677,12 +679,18 @@
 
 
 #pragma mark - SFArticleCell 的代理
-- (void)clickPicsForIndex:(unsigned long)index
+- (void)clickTopicForIndex:(unsigned long)index
+{
+    NSLog(@"当前已在话题页面");
+}
+
+
+- (void)clickPicsForIndex:(unsigned long)index withView:(UIView *)view
 {
     unsigned long indexTable = index/100 - 1;  // 取百位
     unsigned long indexPic = index%100;  // 取个位
-    NSArray *arr = [[_articleData objectAtIndex:indexTable] objectForKey:@"picURL"];
-    [self checkPhotos: arr forIndex:indexPic];
+    NSArray *arr = [[_articleData objectAtIndex:indexTable] objectForKey:@"picBig"];
+    [self checkBigPhotos: arr forIndex:indexPic withView:view];
 
 }
 
@@ -713,7 +721,7 @@
 
 
 #pragma mark - 图片浏览器
-- (void)checkPhotos:(NSArray *)urls forIndex:(unsigned long)index
+- (void)checkBigPhotos:(NSArray *)urls forIndex:(unsigned long)index withView:(UIView *)view
 {
     // URLs array
     NSMutableArray *photosURL = [NSMutableArray new];
@@ -730,12 +738,30 @@
     NSArray *photos = [IDMPhoto photosWithURLs:photosURL];
     
     IDMPhotoBrowser *browser = [[IDMPhotoBrowser alloc] initWithPhotos:photos];
+//    IDMPhotoBrowser *browser = [[IDMPhotoBrowser alloc] initWithPhotos:photos animatedFromView:view];
     [browser setInitialPageIndex:index];
     browser.displayActionButton = NO;
     browser.displayArrowButton = NO;
     browser.displayCounterLabel = YES;
+    browser.usePopAnimation = NO;
     [self presentViewController:browser animated:YES completion:nil];
 }
+
+
+
+#pragma mark - 左右抖动
+/**代码来自网络**/
+- (void)shake:(UIView *)senderView
+{
+    CABasicAnimation* shake = [CABasicAnimation animationWithKeyPath:@"transform.translation.x"];
+    shake.fromValue = [NSNumber numberWithFloat:-3];
+    shake.toValue = [NSNumber numberWithFloat:3];
+    shake.duration = 0.08;//执行时间
+    shake.autoreverses = YES; //是否重复
+    shake.repeatCount = 2;//次数
+    [senderView.layer addAnimation:shake forKey:@"shakeAnimation"];
+}
+
 
 
 @end

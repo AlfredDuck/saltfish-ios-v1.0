@@ -9,7 +9,8 @@
 #import <UIKit/UIKit.h>
 @protocol SFArticleCellDelegate <NSObject>
 @required
-- (void)clickPicsForIndex:(unsigned long)index;
+- (void)clickTopicForIndex:(unsigned long)index;
+- (void)clickPicsForIndex:(unsigned long)index withView:(UIView *)view;
 @end
 
 @interface SFArticleCell : UITableViewCell <UIScrollViewDelegate>
@@ -43,9 +44,9 @@
 @property (nonatomic) NSInteger screenHeight;
 // 公共方法
 - (void)rewriteLinkMark:(BOOL)isShow;
-- (void)rewriteTopic:(NSString *)newTopic;
+- (void)rewriteTopic:(NSString *)newTopic withIndex:(unsigned long)index;
 - (void)rewriteDate:(NSString *)newDate;
-- (void)rewritePortrait:(NSString *)newPortrait;
+- (void)rewritePortrait:(NSString *)newPortrait withIndex:(unsigned long)index;
 - (void)rewriteTitle:(NSString *)newTitle;
 - (void)rewritePicURL:(NSArray *)newPicArr withIndex:(unsigned long)index;
 //
