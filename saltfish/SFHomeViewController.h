@@ -10,9 +10,10 @@
 #import "SFHotTableViewCell.h"
 //#import "SFArticleTableViewCell.h"
 #import "SFArticleCell.h"
+#import "SFEmptyCell.h"
 #import "SFTabBarViewController.h"
 
-@interface SFHomeViewController : SFTabBarViewController <UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate, SFHotTableViewCellDelegate, SFArticleCellDelegate>
+@interface SFHomeViewController : SFTabBarViewController <UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate, SFHotTableViewCellDelegate, SFArticleCellDelegate, SFEmptyCellDelegate>
 
 @property (nonatomic, strong) UIScrollView *basedScrollView;  // 用不到了的
 @property (nonatomic, strong) NSArray *data;  // 用不到了

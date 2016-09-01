@@ -65,6 +65,7 @@
 		BBC87F731C958BB20052E639 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBF97D641C677AB900A5D403 /* Foundation.framework */; };
 		BBC87F751C958BC80052E639 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBC87F741C958BC80052E639 /* CoreGraphics.framework */; };
 		BBCB95551C30143400011BDD /* writeCommentVC.m in Sources */ = {isa = PBXBuildFile; fileRef = BBCB95541C30143400011BDD /* writeCommentVC.m */; };
+		BBE4FA941D77BFB10015216B /* SFEmptyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BBE4FA931D77BFB10015216B /* SFEmptyCell.m */; };
 		BBE5883F1C5E1E800067D783 /* urlManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BBE5883E1C5E1E800067D783 /* urlManager.m */; };
 		BBE588441C5E57610067D783 /* saltFishLaunch.m in Sources */ = {isa = PBXBuildFile; fileRef = BBE588431C5E57610067D783 /* saltFishLaunch.m */; };
 		BBE6CCD21C1F19D400AA9525 /* detailVC.m in Sources */ = {isa = PBXBuildFile; fileRef = BBE6CCD11C1F19D400AA9525 /* detailVC.m */; };
@@ -184,6 +185,8 @@
 		BBC87F741C958BC80052E639 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		BBCB95531C30143400011BDD /* writeCommentVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = writeCommentVC.h; sourceTree = "<group>"; };
 		BBCB95541C30143400011BDD /* writeCommentVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = writeCommentVC.m; sourceTree = "<group>"; };
+		BBE4FA921D77BFB10015216B /* SFEmptyCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFEmptyCell.h; sourceTree = "<group>"; };
+		BBE4FA931D77BFB10015216B /* SFEmptyCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFEmptyCell.m; sourceTree = "<group>"; };
 		BBE5883D1C5E1E800067D783 /* urlManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = urlManager.h; sourceTree = "<group>"; };
 		BBE5883E1C5E1E800067D783 /* urlManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = urlManager.m; sourceTree = "<group>"; };
 		BBE588421C5E57610067D783 /* saltFishLaunch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = saltFishLaunch.h; sourceTree = "<group>"; };
@@ -442,6 +445,8 @@
 				BB82EF271D290F4400FFB7FD /* SFHotTableViewCell.m */,
 				BBF2B74C1D3002FE00657FA6 /* SFArticleTableViewCell.h */,
 				BBF2B74D1D3002FE00657FA6 /* SFArticleTableViewCell.m */,
+				BBE4FA921D77BFB10015216B /* SFEmptyCell.h */,
+				BBE4FA931D77BFB10015216B /* SFEmptyCell.m */,
 			);
 			name = "home cell";
 			sourceTree = "<group>";
@@ -823,6 +828,7 @@
 				BB2E970D1C1D1599001B7CAA /* main.m in Sources */,
 				BB5C0F151D39FBA600EEC34F /* SFPersonalViewController.m in Sources */,
 				BB62F0841D273C5800ACFC92 /* SFMineViewController.m in Sources */,
+				BBE4FA941D77BFB10015216B /* SFEmptyCell.m in Sources */,
 				BB65CA1D1D1E33760098A53B /* TopicCell.m in Sources */,
 				BB97FD9B1D27FC3200EBA61D /* SFClassificationTableViewCell.m in Sources */,
 				BB990D131D729BA5004B016C /* SFArticleCell.m in Sources */,

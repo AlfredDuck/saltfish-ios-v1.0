@@ -17,6 +17,7 @@
 #import "MJRefresh.h"
 #import "urlManager.h"
 #import "SFArticleCell.h"
+#import "SFEmptyCell.h"
 #import "IDMPhotoBrowser.h"  // 图片浏览器
 #import "YYWebImage.h"
 
@@ -24,6 +25,7 @@
 
 @interface SFHomeViewController ()
 @property (nonatomic, strong) UIView *notificationView;
+@property (nonatomic, strong) NSString *articleListStatus;  // 三种状态: unknown, empty, full
 @end
 
 @implementation SFHomeViewController
@@ -56,6 +58,7 @@
     /* 构建页面元素 */
     [self createUIParts];
     [super createTabBarWith:0];  // 调用父类方法，构建tabbar
+    _articleListStatus = @"unknown";
     
     /* 调用 MJRefresh 初始化数据 */
     [_oneTableView.mj_header beginRefreshing];
@@ -317,7 +320,18 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [_followedArticlesData count] + 1;
+    if ([_articleListStatus isEqualToString:@"unknown"]) {
+        return 1;
+    }
+    else if ([_articleListStatus isEqualToString:@"empty"]) {
+        return 2;
+    }
+    else if ([_articleListStatus isEqualToString:@"full"]){
+        return [_followedArticlesData count] + 1;
+    }
+    else {
+        return 1;
+    }
 }
 
 
@@ -326,9 +340,10 @@
 {
     static NSString *articleCellWithIdentifier = @"articleCell+";
     SFArticleCell *oneArticleCell = [tableView dequeueReusableCellWithIdentifier:articleCellWithIdentifier];
-    
     static NSString *hotCellWithIdentifier = @"hotCell+";
     SFHotTableViewCell *oneHotCell = [tableView dequeueReusableCellWithIdentifier:hotCellWithIdentifier];
+    static NSString *emptyCellWithIdentifier = @"emptyCell+";
+    SFEmptyCell *oneEmptyCell = [tableView dequeueReusableCellWithIdentifier:emptyCellWithIdentifier];
     
     NSUInteger row = [indexPath row];
     if (row == 0) {
@@ -343,7 +358,17 @@
         return oneHotCell;
     }
     else {
-        if (oneArticleCell == nil) {  // 这里用yes，代表不使用复用池，如果要使用复用池，可以考虑改造下面的initwithstyle函数
+        // 如果返回数据是空，则显示 emptyCell
+        if ([_articleListStatus isEqualToString:@"empty"]) {
+            NSLog(@"是空的");
+            oneEmptyCell = [[SFEmptyCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:emptyCellWithIdentifier];
+            oneEmptyCell.delegate = self;
+            oneEmptyCell.selectionStyle = UITableViewCellSelectionStyleNone;  // 取消选中的背景色
+            return oneEmptyCell;
+        }
+            
+        // 如果返回不为空，则...
+        if (oneArticleCell == nil) {  // 这里if的条件如果用yes，代表不使用复用池
             oneArticleCell = [[SFArticleCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:articleCellWithIdentifier];
             oneArticleCell.delegate = self;
         }
@@ -359,12 +384,7 @@
         [oneArticleCell rewriteDate:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"date"]];
         [oneArticleCell rewriteTitle:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"title"]];
         [oneArticleCell rewritePicURL:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"picSmall"] withIndex:row-1];
-//        [oneArticleCell rewriteTitle:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"title"]];
-//        [oneArticleCell rewriteDate:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"date"]];
-//        [oneArticleCell rewriteHotScore:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"hotScore"]];
-//        [oneArticleCell rewriteTopics:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"topic"] forIndex:row - 1];
-//        [oneArticleCell rewritePicURL:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"picURL"]];
-//        [oneArticleCell rewriteTopicImageURL:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"topicImageURL"] forIndex:row - 1];
+
         oneArticleCell.selectionStyle = UITableViewCellSelectionStyleNone;  // 取消选中的背景色
         return oneArticleCell;
     }
@@ -382,8 +402,13 @@
         return cell.cellHeight;
     }
     else {
-        SFArticleCell *cell = (SFArticleCell *)[self tableView:tableView cellForRowAtIndexPath:indexPath];
-        return cell.cellHeight;
+        // 区分 articleCell 和 emptyCell
+        if ([_articleListStatus isEqualToString:@"empty"]) {
+            return 100;
+        } else {
+            SFArticleCell *cell = (SFArticleCell *)[self tableView:tableView cellForRowAtIndexPath:indexPath];
+            return cell.cellHeight;
+        }
     }
 }
 
@@ -392,6 +417,10 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSUInteger row = [indexPath row];
+    
+    if (row == 1 && [_articleListStatus isEqualToString:@"empty"]) {
+        return;
+    }
     
     if (row >= 1) {
         // 检查是否有链接
@@ -498,6 +527,15 @@
 
 
 
+#pragma mark - EmptyCell 的代理
+- (void)clickButton
+{
+    // 点击“随便逛逛”按钮，切换到发现tab
+    self.tabBarController.selectedIndex = 1;
+}
+
+
+
 #pragma mark - 网络请求 - 热门文章&话题
 
 /* 请求热门文章(焦点图)&热门话题 */
@@ -530,8 +568,6 @@
         // 更新 hotTopicData 数据
         _hotTopicData = [[data objectForKey:@"hotTopics"] copy];
         
-        // 刷新当前 tableview 的数据
-        // [tableView reloadData];
         // 刷新特定的cell
         NSIndexPath *indexPath=[NSIndexPath indexPathForRow:0 inSection:0];
         [_oneTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
@@ -567,19 +603,30 @@
         NSLog(@"errcode：%@", errcode);
         NSLog(@"data:%@", data);
         
+        if ([errcode isEqualToString:@"err"]) {
+            [tableView.mj_header endRefreshing];  // 结束下拉刷新
+            return;
+        }
+        
         // 结束下拉刷新
         [tableView.mj_header endRefreshing];
+        
+        if ([data count]==0) {  // 如果为空
+            _articleListStatus = @"empty";
+            tableView.mj_footer = nil;
+        } else {
+            _articleListStatus = @"full";
+            // 上拉刷新 MJRefresh (等到页面有数据后再使用)
+            tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
+                [self connectForMoreFollowedArticles:_oneTableView];
+            }];
+        }
         
         // 更新 followedArticleData 数据
         _followedArticlesData = [data mutableCopy];
         
         // 刷新当前 tableview 的数据
         [tableView reloadData];
-        
-        // 上拉刷新 MJRefresh (等到页面有数据后再使用)
-        tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
-            [self connectForMoreFollowedArticles:_oneTableView];
-        }];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
