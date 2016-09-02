@@ -191,7 +191,7 @@
         int ww = ceil(_screenWidth - 30);
         int hh = ww/16.0*9;
         UIImageView *picImageView = [[UIImageView alloc] initWithFrame:CGRectMake(15, 0, ww, hh)];
-        picImageView.backgroundColor = [UIColor lightGrayColor];
+        picImageView.backgroundColor = [colorManager lightGrayBackground];
         // uiimageview居中裁剪
         picImageView.contentMode = UIViewContentModeScaleAspectFill;
         picImageView.clipsToBounds  = YES;
@@ -254,13 +254,17 @@
         for (int j=0; j<[[DoubleArr objectAtIndex:i] count]; j++) {  // 第二层
             
             UIImageView *picImageView = [[UIImageView alloc] initWithFrame:CGRectMake(15+j*(ww+4), i*(hh+4), ww, hh)];
-            picImageView.backgroundColor = [UIColor grayColor];
+            picImageView.backgroundColor = [colorManager lightGrayBackground];
             // uiimageview居中裁剪
             picImageView.contentMode = UIViewContentModeScaleAspectFill;
             picImageView.clipsToBounds  = YES;
             // 需要SDWebImage
             NSString *url = [[DoubleArr objectAtIndex:i] objectAtIndex:j];
-            [picImageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+            // [picImageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+            // 普通加载网络图片 yy库
+            picImageView.yy_imageURL = [NSURL URLWithString:url];
+            // 渐进式：边下载边显示 yy库
+            //[picImageView yy_setImageWithURL:[NSURL URLWithString:url] options:YYWebImageOptionProgressive];
             // 添加手势
             picImageView.userInteractionEnabled = YES; // 设置可以交互
             UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickPic:)]; // 设置手势

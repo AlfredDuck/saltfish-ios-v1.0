@@ -315,7 +315,7 @@
     if ([sfUserDefault dictionaryForKey:@"loginInfo"]) {
         // 当前是登录状态
         SFCustomerFeedbackViewController *customerFeedbackPage = [[SFCustomerFeedbackViewController alloc] init];
-        customerFeedbackPage.pageTitle = @"吐槽区";
+        customerFeedbackPage.pageTitle = @"收集区";
         customerFeedbackPage.delegate = self;
         [self.navigationController presentViewController:customerFeedbackPage animated:YES completion:^{
             NSLog(@"开启吐槽页面");

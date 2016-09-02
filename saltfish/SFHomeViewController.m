@@ -10,6 +10,7 @@
 #import "AFNetworking.h"
 #import "colorManager.h"
 #import "UIImageView+WebCache.h"
+#import "saltFishLaunch.h"
 #import "SFHotTableViewCell.h"
 #import "SFArticleTableViewCell.h"
 #import "detailVC.h"
@@ -42,6 +43,7 @@
     return self;
 }
 
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     _screenHeight = [UIScreen mainScreen].bounds.size.height;
@@ -60,15 +62,17 @@
     [super createTabBarWith:0];  // 调用父类方法，构建tabbar
     _articleListStatus = @"unknown";
     
+    /* 上传启动信息 */
+    saltFishLaunch *launch = [[saltFishLaunch alloc] init];
+    [launch basedUUID];  // 上传 uuid
+    
     /* 调用 MJRefresh 初始化数据 */
     [_oneTableView.mj_header beginRefreshing];
     
     /* 收听广播 */
     [self waitForNewFollow];
-    
-    /*  */
-    [YYWebImageManager sharedManager].cache.memoryCache.costLimit = 10000;
 }
+
 
 - (void)viewWillAppear:(BOOL)animated {
     // 设置状态栏颜色的强力方法

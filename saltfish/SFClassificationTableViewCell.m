@@ -68,7 +68,7 @@
         // title
         UILabel *nextTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 14, _screenWidth, 20)];
         nextTitleLabel.font = [UIFont fontWithName:@"Helvetica" size: 14.0];
-        nextTitleLabel.text = @"推荐话题";
+        nextTitleLabel.text = @"最新话题";
         nextTitleLabel.textColor = [colorManager mainTextColor];
         nextTitleLabel.textAlignment = UITextAlignmentCenter;
         [_titleForNextPart addSubview:nextTitleLabel];

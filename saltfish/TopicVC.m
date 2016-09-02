@@ -319,7 +319,7 @@
         return oneTopicCell;
     }
     else {
-        if (YES) {  // 这里用yes，代表不使用复用池，如果要使用复用池，可以考虑改造下面的initwithstyle函数
+        if (oneArticleCell == nil) {  // 这里用yes，代表不使用复用池，如果要使用复用池，可以考虑改造下面的initwithstyle函数
             oneArticleCell = [[SFArticleCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:ArticleCellWithIdentifier];
             oneArticleCell.delegate = self;
         }
