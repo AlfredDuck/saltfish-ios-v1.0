@@ -650,7 +650,7 @@
     
     // 取得当前最后一个cell的数据id
     NSString *lastID = [[_followedArticlesData lastObject] objectForKey:@"_id"];
-    NSString *postTime = [[_followedArticlesData lastObject] objectForKey:@"date"];
+    NSString *postTime = [[_followedArticlesData lastObject] objectForKey:@"postTime"];
     NSDictionary *parameters = @{@"last_id":lastID,
                                  @"type":@"loadmore",
                                  @"post_time":postTime,
