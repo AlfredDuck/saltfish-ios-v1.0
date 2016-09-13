@@ -49,7 +49,9 @@
         _portraitImageView.clipsToBounds  = YES;
         _portraitImageView.layer.cornerRadius = 18;
         // 需要SDWebImage
-        [_portraitImageView sd_setImageWithURL:[NSURL URLWithString:_portraitURL] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+//        [_portraitImageView sd_setImageWithURL:[NSURL URLWithString:_portraitURL] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+        // 普通加载网络图片 yy库
+        _portraitImageView.yy_imageURL = [NSURL URLWithString:_portraitURL];
         [self.contentView addSubview:_portraitImageView];
         // 添加手势
         _portraitImageView.userInteractionEnabled = YES; // 设置可以交互
@@ -123,7 +125,8 @@
 - (void)rewritePortrait:(NSString *)newPortrait withIndex:(unsigned long)index
 {
     _portraitURL = newPortrait;
-    [_portraitImageView sd_setImageWithURL:[NSURL URLWithString:_portraitURL] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+    // 普通加载网络图片 yy库
+    _portraitImageView.yy_imageURL = [NSURL URLWithString:_portraitURL];
     _portraitImageView.tag = index + 1;
 }
 
@@ -197,7 +200,6 @@
         picImageView.clipsToBounds  = YES;
         // 需要SDWebImage
         NSString *url = newPicArr[0];
-        //[picImageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
         // 普通加载网络图片 yy库
         picImageView.yy_imageURL = [NSURL URLWithString:url];
         // 渐进式：边下载边显示 yy库
@@ -258,9 +260,7 @@
             // uiimageview居中裁剪
             picImageView.contentMode = UIViewContentModeScaleAspectFill;
             picImageView.clipsToBounds  = YES;
-            // 需要SDWebImage
             NSString *url = [[DoubleArr objectAtIndex:i] objectAtIndex:j];
-            // [picImageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
             // 普通加载网络图片 yy库
             picImageView.yy_imageURL = [NSURL URLWithString:url];
             // 渐进式：边下载边显示 yy库

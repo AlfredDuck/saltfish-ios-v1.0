@@ -9,6 +9,7 @@
 #import "SFHotTableViewCell.h"
 #import "colorManager.h"
 #import "UIImageView+WebCache.h"
+#import "YYWebImage.h"
 
 
 @implementation SFHotTableViewCell
@@ -91,8 +92,6 @@
             // uiimageview居中裁剪
             picImageView.contentMode = UIViewContentModeScaleAspectFill;
             picImageView.clipsToBounds  = YES;
-            // 需要SDWebimage
-            //[picImageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
             [topicView addSubview:picImageView];
             
 //            // 遮黑
@@ -193,8 +192,8 @@
         // uiimageview居中裁剪
         picImageView.contentMode = UIViewContentModeScaleAspectFill;
         picImageView.clipsToBounds  = YES;
-        // 需要AFNetwork
-        [picImageView sd_setImageWithURL:[NSURL URLWithString:[[_hotArticleData objectAtIndex:kk] objectForKey:@"picURL"]]];
+        // 普通加载网络图片 yy库
+        picImageView.yy_imageURL = [NSURL URLWithString:[[_hotArticleData objectAtIndex:kk] objectForKey:@"picURL"]];
         
         // 遮黑
         UIView *halfBlack = [[UIView alloc] initWithFrame:CGRectMake(0, 0, _screenWidth, _hotArticleHeight)];
@@ -269,8 +268,8 @@
         topicLabel.text = [[newArr objectAtIndex:i] objectForKey:@"topic"];
         
         UIImageView *picImageView = [_hotTopicPicArr objectAtIndex:i];
-        // 需要AFNetwork
-        [picImageView sd_setImageWithURL:[NSURL URLWithString:[[newArr objectAtIndex:i] objectForKey:@"picURL"]]];
+        // 普通加载网络图片 yy库
+        picImageView.yy_imageURL = [NSURL URLWithString:[[newArr objectAtIndex:i] objectForKey:@"picURL"]];
     }
 }
 

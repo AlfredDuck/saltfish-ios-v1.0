@@ -9,6 +9,7 @@
 #import "myTopicTableViewCell.h"
 #import "UIImageView+WebCache.h"
 #import "colorManager.h"
+#import "YYWebImage.h"
 
 @implementation myTopicTableViewCell
 
@@ -46,8 +47,8 @@
         // uiimageview居中裁剪
         _picImageView.contentMode = UIViewContentModeScaleAspectFill;
         _picImageView.clipsToBounds  = YES;
-        // 需要AFNetwork
-        [_picImageView sd_setImageWithURL:[NSURL URLWithString:_picURL] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+        // 普通加载网络图片 yy库
+        _picImageView.yy_imageURL = [NSURL URLWithString:_picURL];
         [self.contentView addSubview:_picImageView];
         
         /* #话题# */
@@ -95,7 +96,8 @@
 - (void)rewritePic:(NSString *)newPicURL
 {
     _picURL = newPicURL;
-    [_picImageView sd_setImageWithURL:[NSURL URLWithString:_picURL] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+    // 普通加载网络图片 yy库
+    _picImageView.yy_imageURL = [NSURL URLWithString:_picURL];
 }
 
 - (void)rewriteTitle:(NSString *)newTitle

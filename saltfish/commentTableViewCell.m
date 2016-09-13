@@ -9,6 +9,7 @@
 #import "commentTableViewCell.h"
 #import "UIImageView+WebCache.h"
 #import "colorManager.h"
+#import "YYWebImage.h"
 
 @implementation commentTableViewCell
 
@@ -105,8 +106,8 @@
 - (void)rewritePortrait:(NSString *)newPortrait
 {
     _picURL = newPortrait;
-    // 需要SDWebImage
-    [_picImageView sd_setImageWithURL:[NSURL URLWithString:_picURL] placeholderImage:[UIImage imageNamed:@"portrait.png"]];
+    // 普通加载网络图片 yy库
+    _picImageView.yy_imageURL = [NSURL URLWithString:_picURL];
 }
 
 - (void)rewriteNickname:(NSString *)newNickname

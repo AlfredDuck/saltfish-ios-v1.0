@@ -10,6 +10,8 @@
 #import <AFNetworking/AFNetworking.h>
 #import <Accelerate/Accelerate.h>
 #import "UIImageView+WebCache.h"
+#import "YYWebImage.h"
+#import "GPUImage.h"
 #import "MJRefresh.h"
 #import "colorManager.h"
 #import "urlManager.h"
@@ -20,7 +22,8 @@
 #import "detailVC.h"
 #import "SFLoginAndSignup.h"
 #import "SFLoginViewController.h"
-#import "IDMPhotoBrowser.h"  // 图片浏览器
+#import "MJPhotoBrowser.h"  // MJ图片浏览器
+#import "MJPhoto.h"  // MJ图片浏览器
 
 
 @interface TopicVC ()
@@ -28,6 +31,7 @@
 @property (nonatomic) float backgroundImageHeight;
 @property (nonatomic) NSString *isFollowing;
 @property (nonatomic) NSString *isPushOn;
+@property (nonatomic) UIImage *backgroundImage;
 @end
 
 @implementation TopicVC
@@ -43,14 +47,21 @@
     return self;
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
+    // 设置状态栏颜色的强力方法
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    
     _screenHeight = [UIScreen mainScreen].bounds.size.height;
     _screenWidth = [UIScreen mainScreen].bounds.size.width;
     _backgroundImageHeight = 64+70;
 }
 
-- (void)viewWillAppear:(BOOL)animated {
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:YES];
     // 设置状态栏颜色的强力方法
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
@@ -68,10 +79,10 @@
     
     // 初始化站位数据
     _topicData = [[NSDictionary alloc] initWithObjectsAndKeys:
-                _topic, @"title",
-                @"         ", @"introduction",
-                @"no", @"isFollowing",
-                @"no", @"isPushOn",
+                  _topic, @"title",
+                  @"         ", @"introduction",
+                  @"no", @"isFollowing",
+                  @"no", @"isPushOn",
                   nil];
     _isFollowing = @"no";
     _isPushOn = @"no";
@@ -84,7 +95,9 @@
     [self connectForArticleCell:_oneTableView];
 }
 
-- (void)didReceiveMemoryWarning {
+
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
     [[SDImageCache sharedImageCache] clearMemory];  // 清理缓存
 }
@@ -104,16 +117,40 @@
     
     /* 创建背景图 */
     _backgroundView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, _screenWidth, _backgroundImageHeight)];
-    _backgroundView.backgroundColor = [UIColor brownColor];
+    _backgroundView.backgroundColor = [colorManager lightGrayBackground];
 //    _backgroundView.alpha = 0.5;
     // uiimageview居中裁剪
     _backgroundView.contentMode = UIViewContentModeScaleAspectFill;
     _backgroundView.clipsToBounds  = YES;
-    // 需要AFNetwork（异步加载）
-    [_backgroundView sd_setImageWithURL:[NSURL URLWithString:_portraitURL] placeholderImage:[UIImage imageNamed:@"placeholder.png"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-        NSLog(@"%@", imageURL);
-        UIImage *imgBlur = [self boxblurImage:image withBlurNumber:(CGFloat)0.60f];
-        [_backgroundView setImage:imgBlur];
+    
+    // 需要SDWebImage（异步加载）
+//    [_backgroundView sd_setImageWithURL:[NSURL URLWithString:_portraitURL] placeholderImage:[UIImage imageNamed:@"placeholder.png"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+//        NSLog(@"%@", imageURL);
+//        // UIImage *imgBlur = [self boxblurImage:image withBlurNumber:(CGFloat)0.60f];
+//        
+//        GPUImageGaussianBlurFilter * blurFilter = [[GPUImageGaussianBlurFilter alloc] init];
+//        blurFilter.blurRadiusInPixels = 20.0;
+//        UIImage *blurredImage = [blurFilter imageByFilteringImage:image];
+//        
+//        [_backgroundView setImage:blurredImage];
+//    }];
+    UIImageView *thum = [[UIImageView alloc] init];
+    [thum yy_setImageWithURL:[NSURL URLWithString:_portraitURL] placeholder:[UIImage imageNamed:@"placeholder.png"] options:YYWebImageOptionIgnoreAnimatedImage completion:^(UIImage * _Nullable image, NSURL * _Nonnull url, YYWebImageFromType from, YYWebImageStage stage, NSError * _Nullable error) {
+        NSLog(@"%@", url);
+        
+        // 新开线程计算，避免主线程阻塞
+        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);  //获取全局并发队列
+        dispatch_group_t group = dispatch_group_create(); //创建dispatch_group
+        dispatch_group_async(group, queue, ^{
+            NSLog(@"block 1");
+            GPUImageGaussianBlurFilter * blurFilter = [[GPUImageGaussianBlurFilter alloc] init];
+            blurFilter.blurRadiusInPixels = 12.0;  // 为达到合适的模糊，需头像尺寸在200*200上下
+            _backgroundImage = [blurFilter imageByFilteringImage:image];
+        });
+        dispatch_group_notify(group, dispatch_get_main_queue(), ^{
+            NSLog(@"计算结束");
+            [_backgroundView setImage:_backgroundImage];
+        });
     }];
     
     [self.view addSubview:_backgroundView];
@@ -125,8 +162,8 @@
     // uiimageview居中裁剪
     _portraitView.contentMode = UIViewContentModeScaleAspectFill;
     _portraitView.clipsToBounds  = YES;
-    // 需要AFNetwork（延后处理）
-    [_portraitView sd_setImageWithURL:[NSURL URLWithString:_portraitURL] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+    // 普通加载网络图片 yy库
+    _portraitView.yy_imageURL = [NSURL URLWithString:_portraitURL];
     [self.view addSubview:_portraitView];
     
     
@@ -207,7 +244,7 @@
     if (blur < 0.f || blur > 1.f) {
         blur = 0.5f;
     }
-    int boxSize = (int)(blur * 240);
+    int boxSize = (int)(blur * 300);
     boxSize = boxSize - (boxSize % 2) + 1;
     CGImageRef img = image.CGImage;
     vImage_Buffer inBuffer, outBuffer;
@@ -722,29 +759,27 @@
 
 #pragma mark - 图片浏览器
 - (void)checkBigPhotos:(NSArray *)urls forIndex:(unsigned long)index withView:(UIView *)view
-{
-    // URLs array
-    NSMutableArray *photosURL = [NSMutableArray new];
+{    
+    //1.创建图片浏览器
+    MJPhotoBrowser *brower = [[MJPhotoBrowser alloc] init];
+    
+    //2.告诉图片浏览器显示所有的图片
+    NSMutableArray *photos = [NSMutableArray new];
     for (NSString *urlStr in urls) {
-        NSURL *u = [NSURL URLWithString:urlStr];
-        [photosURL addObject:u];
+        //传递数据给浏览器
+        MJPhoto *photo = [[MJPhoto alloc] init];
+        photo.url = [NSURL URLWithString:urlStr];
+        photo.srcImageView = (UIImageView *)view;
+        [photos addObject:photo];
     }
+    brower.photos = photos;
     
-//    NSArray *photosURL = @[[NSURL URLWithString:@"http://farm4.static.flickr.com/3567/3523321514_371d9ac42f_b.jpg"],
-//                           [NSURL URLWithString:@"http://farm4.static.flickr.com/3629/3339128908_7aecabc34b_b.jpg"],
-//                           [NSURL URLWithString:@"http://farm4.static.flickr.com/3364/3338617424_7ff836d55f_b.jpg"],
-//                           [NSURL URLWithString:@"http://farm4.static.flickr.com/3590/3329114220_5fbc5bc92b_b.jpg"]];
-    // photos array
-    NSArray *photos = [IDMPhoto photosWithURLs:photosURL];
+    //3.设置默认显示的图片索引
+    brower.currentPhotoIndex = index;
+    // brower.showSaveBtn = 0;  // 0是禁用保存按钮，1是允许
     
-    IDMPhotoBrowser *browser = [[IDMPhotoBrowser alloc] initWithPhotos:photos];
-//    IDMPhotoBrowser *browser = [[IDMPhotoBrowser alloc] initWithPhotos:photos animatedFromView:view];
-    [browser setInitialPageIndex:index];
-    browser.displayActionButton = NO;
-    browser.displayArrowButton = NO;
-    browser.displayCounterLabel = YES;
-    browser.usePopAnimation = NO;
-    [self presentViewController:browser animated:YES completion:nil];
+    //4.显示浏览器
+    [brower show];
 }
 
 

@@ -10,6 +10,7 @@
 #import "AFNetworking.h"
 #import "colorManager.h"
 #import "UIImageView+WebCache.h"
+#import "YYWebImage.h"
 #import "saltFishLaunch.h"
 #import "SFHotTableViewCell.h"
 #import "SFArticleTableViewCell.h"
@@ -19,8 +20,8 @@
 #import "urlManager.h"
 #import "SFArticleCell.h"
 #import "SFEmptyCell.h"
-#import "IDMPhotoBrowser.h"  // 图片浏览器
-#import "YYWebImage.h"
+#import "MJPhotoBrowser.h"  // MJ图片浏览器
+#import "MJPhoto.h"  // MJ图片浏览器
 
 
 
@@ -240,8 +241,9 @@
         // uiimageview居中裁剪
         picImageView.contentMode = UIViewContentModeScaleAspectFill;
         picImageView.clipsToBounds  = YES;
-        // 需要AFNetwork
-        [picImageView sd_setImageWithURL:[NSURL URLWithString:[[_data objectAtIndex:i] objectForKey:@"picURL"]] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+
+        // 普通加载网络图片 yy库
+        picImageView.yy_imageURL = [NSURL URLWithString:[[_data objectAtIndex:i] objectForKey:@"picURL"]];
         
         // 遮黑
         UIView *halfBlack = [[UIView alloc] initWithFrame:CGRectMake(0, 0, _screenWidth, 170)];
@@ -526,7 +528,7 @@
     unsigned long indexTable = index/100 - 1;  // 取百位
     unsigned long indexPic = index%100;  // 取个位
     NSArray *arr = [[_followedArticlesData objectAtIndex:indexTable] objectForKey:@"picBig"];
-    [self checkBigPhotos: arr forIndex:indexPic];
+    [self checkBigPhotos: arr forIndex:indexPic withView:view];
 }
 
 
@@ -694,28 +696,28 @@
 
 
 #pragma mark - 图片浏览器
-- (void)checkBigPhotos:(NSArray *)urls forIndex:(unsigned long)index
+- (void)checkBigPhotos:(NSArray *)urls forIndex:(unsigned long)index withView:(UIView *)view
 {
-    // URLs array
-    NSMutableArray *photosURL = [NSMutableArray new];
+    //1.创建图片浏览器
+    MJPhotoBrowser *brower = [[MJPhotoBrowser alloc] init];
+    
+    //2.告诉图片浏览器显示所有的图片
+    NSMutableArray *photos = [NSMutableArray new];
     for (NSString *urlStr in urls) {
-        NSURL *u = [NSURL URLWithString:urlStr];
-        [photosURL addObject:u];
+        //传递数据给浏览器
+        MJPhoto *photo = [[MJPhoto alloc] init];
+        photo.url = [NSURL URLWithString:urlStr];
+        photo.srcImageView = (UIImageView *)view;
+        [photos addObject:photo];
     }
+    brower.photos = photos;
     
-    //    NSArray *photosURL = @[[NSURL URLWithString:@"http://farm4.static.flickr.com/3567/3523321514_371d9ac42f_b.jpg"],
-    //                           [NSURL URLWithString:@"http://farm4.static.flickr.com/3629/3339128908_7aecabc34b_b.jpg"],
-    //                           [NSURL URLWithString:@"http://farm4.static.flickr.com/3364/3338617424_7ff836d55f_b.jpg"],
-    //                           [NSURL URLWithString:@"http://farm4.static.flickr.com/3590/3329114220_5fbc5bc92b_b.jpg"]];
-    // photos array
-    NSArray *photos = [IDMPhoto photosWithURLs:photosURL];
+    //3.设置默认显示的图片索引
+    brower.currentPhotoIndex = index;
+    // brower.showSaveBtn = 0;  // 0是禁用保存按钮，1是允许
     
-    IDMPhotoBrowser *browser = [[IDMPhotoBrowser alloc] initWithPhotos:photos];
-    [browser setInitialPageIndex:index];
-    browser.displayActionButton = NO;
-    browser.displayArrowButton = NO;
-    browser.displayCounterLabel = YES;
-    [self presentViewController:browser animated:YES completion:nil];
+    //4.显示浏览器
+    [brower show];
 }
 
 

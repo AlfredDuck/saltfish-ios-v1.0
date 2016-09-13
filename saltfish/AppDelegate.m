@@ -12,6 +12,7 @@
 #import "saltCustomTools.h"
 #import "WeiboSDK.h"
 #import "WXApi.h"
+#import "YYWebImage.h"
 
 #define iOS8 [[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0 ? 1 : 0
 #define kAPPKey        @"3552509555"
@@ -37,6 +38,10 @@
     [WeiboSDK registerApp:kAPPKey];
     // weixin SDK 向微信注册
     [WXApi registerApp:WXKey];
+    // 设置YY图片缓存的最大内存上限
+    YYImageCache *cache = [YYWebImageManager sharedManager].cache;
+    cache.memoryCache.countLimit = 80 * 1024 * 1024;
+    cache.memoryCache.costLimit = 70 * 1024 * 1024;
     
     // 设置 RootViewController
     SFRootViewController *rootVC = [[SFRootViewController alloc] init];

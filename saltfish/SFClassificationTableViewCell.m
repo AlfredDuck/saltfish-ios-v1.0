@@ -8,6 +8,7 @@
 
 #import "SFClassificationTableViewCell.h"
 #import "UIImageView+WebCache.h"
+#import "YYWebImage.h"
 #import "colorManager.h"
 
 
@@ -131,9 +132,10 @@
             // uiimageview居中裁剪
             picImageView.contentMode = UIViewContentModeScaleAspectFill;
             picImageView.clipsToBounds  = YES;
-            // 需要AFNetwork
+            
             NSString *url = [[[DoubleArr objectAtIndex:i] objectAtIndex:j] objectForKey:@"picURL"];
-            [picImageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+            // 普通加载网络图片 yy库
+            picImageView.yy_imageURL = [NSURL URLWithString:url];
             
             // 遮黑
             UIView *halfBlack = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ww, hh)];

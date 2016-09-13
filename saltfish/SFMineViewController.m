@@ -8,6 +8,7 @@
 
 #import "SFMineViewController.h"
 #import "UIImageView+WebCache.h"
+#import "YYWebImage.h"
 #import "AFNetworking.h"
 #import "urlManager.h"
 #import "colorManager.h"
@@ -251,7 +252,9 @@
     portraitImage.clipsToBounds  = YES;
     // 从网络获取图片
     NSString *url = [[[NSUserDefaults standardUserDefaults] dictionaryForKey:@"loginInfo"] objectForKey:@"portrait"];
-    [portraitImage sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+    // 普通加载网络图片 yy库
+    portraitImage.yy_imageURL = [NSURL URLWithString:url];
+
     [_portraitBackground addSubview:portraitImage];
     
     // 添加手势
