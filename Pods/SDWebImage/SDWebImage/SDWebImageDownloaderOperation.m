@@ -312,7 +312,8 @@ NSString *const SDWebImageDownloadFinishNotification = @"SDWebImageDownloadFinis
                 NSString *key = [[SDWebImageManager sharedManager] cacheKeyForURL:self.request.URL];
                 UIImage *scaledImage = [self scaledImageForKey:key image:image];
                 if (self.shouldDecompressImages) {
-                    image = [UIImage decodedImageWithImage:scaledImage];
+                    /** zhaoyingzong 屏蔽了下面这句 **/
+                    // image = [UIImage decodedImageWithImage:scaledImage];
                 }
                 else {
                     image = scaledImage;
@@ -382,13 +383,21 @@ NSString *const SDWebImageDownloadFinishNotification = @"SDWebImageDownloadFinis
             completionBlock(nil, nil, nil, YES);
         } else if (self.imageData) {
             UIImage *image = [UIImage sd_imageWithData:self.imageData];
+            
+            /** zhaoyingzong 添加的 **/
+            //将等比压缩过的image在赋在转成data赋给self.imageData
+            NSData *data = UIImageJPEGRepresentation(image, 1);
+            self.imageData =  [NSMutableData dataWithData:data];
+            /****/
+            
             NSString *key = [[SDWebImageManager sharedManager] cacheKeyForURL:self.request.URL];
             image = [self scaledImageForKey:key image:image];
             
             // Do not force decoding animated GIFs
             if (!image.images) {
                 if (self.shouldDecompressImages) {
-                    image = [UIImage decodedImageWithImage:image];
+                    /** zhaoyingzong 屏蔽了下面这句 **/
+                    // image = [UIImage decodedImageWithImage:image];
                 }
             }
             if (CGSizeEqualToSize(image.size, CGSizeZero)) {

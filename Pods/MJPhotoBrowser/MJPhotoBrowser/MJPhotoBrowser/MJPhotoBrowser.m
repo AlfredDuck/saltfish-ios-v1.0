@@ -9,6 +9,7 @@
 #import "MJPhotoView.h"
 #import "MJPhotoToolbar.h"
 #import <SDWebImage/SDWebImagePrefetcher.h>
+#import "YYWebImage.h"
 
 #define kPadding 10
 #define kPhotoViewTagOffset 1000
@@ -190,17 +191,20 @@
     [_visiblePhotoViews addObject:photoView];
     [_photoScrollView addSubview:photoView];
     
-    [self loadImageNearIndex:index];
+    [self loadImageNearIndex:index withView:(UIImageView *)photoView];
 }
 
 //  加载index附近的图片
-- (void)loadImageNearIndex:(int)index
+- (void)loadImageNearIndex:(int)index withView:(UIImageView *)photoView
 {
     if (index > 0) {
         MJPhoto *photo = _photos[index - 1];
         [[SDWebImageManager sharedManager] downloadImageWithURL:photo.url options:SDWebImageRetryFailed|SDWebImageLowPriority progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
             //do nothing
         }];
+        /** zhaoyingzong **/
+        //[photoView yy_setImageWithURL:photo.url options:YYWebImageOptionIgnoreFailedURL];
+        /****/
     }
     
     if (index < _photos.count - 1) {
@@ -208,6 +212,9 @@
         [[SDWebImageManager sharedManager] downloadImageWithURL:photo.url options:SDWebImageRetryFailed|SDWebImageLowPriority progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
             //do nothing
         }];
+        /** zhaoyingzong **/
+        //[photoView yy_setImageWithURL:photo.url options:YYWebImageOptionIgnoreFailedURL];
+        /****/
     }
 }
 

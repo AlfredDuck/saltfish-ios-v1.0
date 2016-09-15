@@ -18,6 +18,7 @@
 #import "ClassificationVC.h"
 #import "MJRefresh.h"
 #import "SFLoginAndSignup.h"
+#import "YYWebImage.h"
 
 
 @interface SFDiscoveryViewController ()
@@ -37,7 +38,8 @@
     return self;
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     _screenHeight = [UIScreen mainScreen].bounds.size.height;
     _screenWidth = [UIScreen mainScreen].bounds.size.width;
@@ -57,7 +59,9 @@
     [_oneTableView.mj_header beginRefreshing];
 }
 
-- (void)viewWillAppear:(BOOL)animated {
+
+- (void)viewWillAppear:(BOOL)animated
+{
     // 设置状态栏颜色的强力方法
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
     
@@ -78,9 +82,18 @@
     }
 }
 
-- (void)didReceiveMemoryWarning {
+
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
+    NSLog(@"内存报警...");
+    // 清理SDWeb缓存
     [[SDImageCache sharedImageCache] clearMemory];  // 清理缓存SDWebImage
+    // 清理YYImage缓存
+    YYImageCache *cache = [YYWebImageManager sharedManager].cache;
+    NSLog(@"YY缓存大小：%lu", (unsigned long)cache.diskCache.totalCost);  // 获取缓存大小
+    NSLog(@"YY缓存大小：%lu", (unsigned long)cache.memoryCache.totalCost);  // 获取缓存大小
+    [cache.memoryCache removeAllObjects];  // 清空缓存
 }
 
 

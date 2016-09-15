@@ -103,6 +103,11 @@ FOUNDATION_STATIC_INLINE NSUInteger SDCacheCostForImage(UIImage *image) {
 
         // Init the memory cache
         _memCache = [[AutoPurgeCache alloc] init];
+        
+        /** zhaoyingzong **/
+        _memCache.totalCostLimit = 100*1024*1024;
+        /****/
+        
         _memCache.name = fullNamespace;
 
         // Init the disk cache
@@ -318,7 +323,8 @@ FOUNDATION_STATIC_INLINE NSUInteger SDCacheCostForImage(UIImage *image) {
         UIImage *image = [UIImage sd_imageWithData:data];
         image = [self scaledImageForKey:key image:image];
         if (self.shouldDecompressImages) {
-            image = [UIImage decodedImageWithImage:image];
+            /** zhaoyingzong 屏蔽了下面这句 **/
+            // image = [UIImage decodedImageWithImage:image];
         }
         return image;
     }

@@ -106,6 +106,20 @@
         ESWeak_(_photoLoadingView);
         ESWeak_(_imageView);
         
+//        [[YYWebImageManager sharedManager] requestImageWithURL:_photo.url options:YYWebImageOptionIgnoreFailedURL progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+//            ESStrong_(_photoLoadingView);
+//            if (receivedSize > kMinProgress) {
+//                __photoLoadingView.progress = (float)receivedSize/expectedSize;
+//            }
+//        } transform:^UIImage * _Nullable(UIImage * _Nonnull image, NSURL * _Nonnull url) {
+//            return NULL;
+//        } completion:^(UIImage * _Nullable image, NSURL * _Nonnull url, YYWebImageFromType from, YYWebImageStage stage, NSError * _Nullable error) {
+//            ESStrongSelf;
+//            ESStrong_(_imageView);
+//            __imageView.image = image;
+//            [_self photoDidFinishLoadWithImage:image];
+//        }];
+        
         [SDWebImageManager.sharedManager downloadImageWithURL:_photo.url options:SDWebImageRetryFailed| SDWebImageLowPriority| SDWebImageHandleCookies progress:^(NSInteger receivedSize, NSInteger expectedSize) {
             ESStrong_(_photoLoadingView);
             if (receivedSize > kMinProgress) {

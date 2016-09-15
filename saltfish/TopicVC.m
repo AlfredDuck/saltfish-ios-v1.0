@@ -56,6 +56,8 @@
     _screenHeight = [UIScreen mainScreen].bounds.size.height;
     _screenWidth = [UIScreen mainScreen].bounds.size.width;
     _backgroundImageHeight = 64+70;
+    // !!!!!!!!!
+    [[SDImageCache sharedImageCache] setValue:nil forKey:@"memCache"];
 }
 
 
@@ -99,7 +101,39 @@
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    [[SDImageCache sharedImageCache] clearMemory];  // 清理缓存
+    NSLog(@"内存报警...");
+    // 清理SDWeb缓存
+    [[SDImageCache sharedImageCache] clearMemory];  // 清理缓存SDWebImage
+    // 清理YYImage缓存
+    YYImageCache *cache = [YYWebImageManager sharedManager].cache;
+    NSLog(@"YY缓存大小：%lu", (unsigned long)cache.diskCache.totalCost);  // 获取缓存大小
+    NSLog(@"YY缓存大小：%lu", (unsigned long)cache.memoryCache.totalCost);  // 获取缓存大小
+    [cache.memoryCache removeAllObjects];  // 清空缓存
+}
+
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:YES];
+    // 清理SDWeb缓存
+    // [[SDImageCache sharedImageCache] clearMemory];  // 清理缓存SDWebImage
+    // [SDWebImageManager.sharedManager.imageCache clearMemory];
+    [SDImageCache sharedImageCache].maxMemoryCost = 10*1024*1024;
+    [[SDImageCache sharedImageCache] clearMemory];
+    
+    // !!!!!!!!!
+    [[SDImageCache sharedImageCache] setValue:nil forKey:@"memCache"];
+    
+//    // 清理YYImage缓存
+//    YYImageCache *cache = [YYWebImageManager sharedManager].cache;
+//    NSLog(@"YY磁盘缓存大小：%lu", (unsigned long)cache.diskCache.totalCost);  // 获取缓存大小
+//    NSLog(@"YY内存缓存大小：%lu", (unsigned long)cache.memoryCache.totalCost);  // 获取缓存大小
+//    [cache.memoryCache removeAllObjects];  // 清空缓存
+}
+
+- (void)dealloc
+{
+    self.view = nil;
 }
 
 
@@ -759,7 +793,10 @@
 
 #pragma mark - 图片浏览器
 - (void)checkBigPhotos:(NSArray *)urls forIndex:(unsigned long)index withView:(UIView *)view
-{    
+{
+    // !!!!!!!!!
+    [[SDImageCache sharedImageCache] setValue:nil forKey:@"memCache"];
+    
     //1.创建图片浏览器
     MJPhotoBrowser *brower = [[MJPhotoBrowser alloc] init];
     
@@ -769,14 +806,14 @@
         //传递数据给浏览器
         MJPhoto *photo = [[MJPhoto alloc] init];
         photo.url = [NSURL URLWithString:urlStr];
-        photo.srcImageView = (UIImageView *)view;
+        // photo.srcImageView = (UIImageView *)view;  // 显示缩略图
         [photos addObject:photo];
     }
     brower.photos = photos;
     
     //3.设置默认显示的图片索引
     brower.currentPhotoIndex = index;
-    // brower.showSaveBtn = 0;  // 0是禁用保存按钮，1是允许
+    brower.showSaveBtn = 0;  // 0是禁用保存按钮，1是允许
     
     //4.显示浏览器
     [brower show];

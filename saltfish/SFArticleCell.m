@@ -48,8 +48,6 @@
         _portraitImageView.contentMode = UIViewContentModeScaleAspectFill;
         _portraitImageView.clipsToBounds  = YES;
         _portraitImageView.layer.cornerRadius = 18;
-        // 需要SDWebImage
-//        [_portraitImageView sd_setImageWithURL:[NSURL URLWithString:_portraitURL] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
         // 普通加载网络图片 yy库
         _portraitImageView.yy_imageURL = [NSURL URLWithString:_portraitURL];
         [self.contentView addSubview:_portraitImageView];
@@ -63,7 +61,7 @@
         _topicLabel = [[UILabel alloc] initWithFrame:CGRectMake(60, 15, 200, 20)];
         _topicLabel.text = _topic;
         _topicLabel.font = [UIFont fontWithName:@"Helvetica" size: 14.0];
-        _topicLabel.textColor = [colorManager secondTextColor];
+        _topicLabel.textColor = [colorManager blueLinkColor];
         [self.contentView addSubview:_topicLabel];
         // 添加手势
         _topicLabel.userInteractionEnabled = YES; // 设置可以交互
@@ -170,7 +168,7 @@
 - (void)rewritePicURL:(NSArray *)newPicArr withIndex:(unsigned long)index
 {
     if (_hasPics) {
-        [_holdView removeFromSuperview];
+        [_holdView removeFromSuperview];  // 为了复用cell，删除原来生成的图片view
     }
     
     // 如果没有图片

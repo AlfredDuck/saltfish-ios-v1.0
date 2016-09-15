@@ -13,6 +13,7 @@
 #import "WeiboSDK.h"
 #import "WXApi.h"
 #import "YYWebImage.h"
+#import "UIImageView+WebCache.h"
 
 #define iOS8 [[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0 ? 1 : 0
 #define kAPPKey        @"3552509555"
@@ -40,8 +41,10 @@
     [WXApi registerApp:WXKey];
     // 设置YY图片缓存的最大内存上限
     YYImageCache *cache = [YYWebImageManager sharedManager].cache;
-    cache.memoryCache.countLimit = 80 * 1024 * 1024;
-    cache.memoryCache.costLimit = 70 * 1024 * 1024;
+    cache.memoryCache.costLimit = 100 * 1024 * 1024;
+    
+    //[[SDWebImageManager sharedManager].imageCache setMaxMemoryCost:1*1024*1024];
+    [SDImageCache sharedImageCache].maxMemoryCost = 10*1024*1024;
     
     // 设置 RootViewController
     SFRootViewController *rootVC = [[SFRootViewController alloc] init];

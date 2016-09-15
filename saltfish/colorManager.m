@@ -53,4 +53,14 @@
 + (UIColor *)tabTextColorBlack {
     return [UIColor colorWithRed:(67/255.0) green:(70/255.0) blue:(73/255.0) alpha:1];
 }
++ (UIColor *)blueLinkColor {
+    return [UIColor colorWithRed:(53/255.0) green:(141/255.0) blue:(185/255.0) alpha:1];
+}
+
 @end
+
+
+
+
+
+

@@ -45,7 +45,8 @@
 }
 
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     _screenHeight = [UIScreen mainScreen].bounds.size.height;
     _screenWidth = [UIScreen mainScreen].bounds.size.width;
@@ -75,7 +76,8 @@
 }
 
 
-- (void)viewWillAppear:(BOOL)animated {
+- (void)viewWillAppear:(BOOL)animated
+{
     // 设置状态栏颜色的强力方法
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
     
@@ -96,11 +98,15 @@
     }
 }
 
-- (void)didReceiveMemoryWarning {
+
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
     NSLog(@"内存报警...");
-    //[[SDImageCache sharedImageCache] clearMemory];  // 清理缓存SDWebImage
     
+    // 清理SDWeb缓存
+    [[SDImageCache sharedImageCache] clearMemory];  // 清理缓存SDWebImage
+    // 清理YYImage缓存
     YYImageCache *cache = [YYWebImageManager sharedManager].cache;
     NSLog(@"YY缓存大小：%lu", (unsigned long)cache.diskCache.totalCost);  // 获取缓存大小
     NSLog(@"YY缓存大小：%lu", (unsigned long)cache.memoryCache.totalCost);  // 获取缓存大小
@@ -707,14 +713,14 @@
         //传递数据给浏览器
         MJPhoto *photo = [[MJPhoto alloc] init];
         photo.url = [NSURL URLWithString:urlStr];
-        photo.srcImageView = (UIImageView *)view;
+        // photo.srcImageView = (UIImageView *)view;
         [photos addObject:photo];
     }
     brower.photos = photos;
     
     //3.设置默认显示的图片索引
     brower.currentPhotoIndex = index;
-    // brower.showSaveBtn = 0;  // 0是禁用保存按钮，1是允许
+    brower.showSaveBtn = 0;  // 0是禁用保存按钮，1是允许
     
     //4.显示浏览器
     [brower show];

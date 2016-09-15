@@ -10,6 +10,7 @@
 #import <YLGIFImage/YLImageView.h>
 #import <YLGIFImage/YLGIFImage.h>
 #import <SDWebImage/UIImageView+WebCache.h>
+#import "YYWebImage.h"
 #import <SVProgressHUD/SVProgressHUD.h>
 
 @interface MJPhoto : NSObject
