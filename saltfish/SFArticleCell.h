@@ -11,6 +11,9 @@
 @required
 - (void)clickTopicForIndex:(unsigned long)index;
 - (void)clickPicsForIndex:(unsigned long)index withView:(UIView *)view;
+- (void)clickShareIconForIndex:(unsigned long)index;
+- (void)clickCommentIconForIndex:(unsigned long)index;
+- (void)clickLikeIconForIndex:(unsigned long)index;
 @end
 
 @interface SFArticleCell : UITableViewCell <UIScrollViewDelegate>
@@ -33,8 +36,19 @@
 @property (nonatomic) BOOL hasPics;  // 记录已经生成图片矩阵，避免重复生成
 @property (nonatomic, copy) NSString *picURL;
 @property (nonatomic, copy) UIImageView *picImageView;
-@property (nonatomic, copy) UIView *holdView;
+@property (nonatomic, copy) UIView *holdView;  // 图片view的父view
 
+// 用户操作
+@property (nonatomic, copy) UIView *customerView;
+@property (nonatomic, copy) UIView *shareView;
+@property (nonatomic, copy) UILabel *shareLabel;
+@property (nonatomic, copy) UIView *commentView;
+@property (nonatomic, copy) UILabel *commentLabel;
+@property (nonatomic, copy) UIView *likeView;
+@property (nonatomic, copy) UILabel *likeLabel;
+@property (nonatomic, copy) UIImageView *likeIconView;
+
+//
 @property (nonatomic) unsigned long textHeight;
 @property (nonatomic) unsigned long cellHeight;  // cell高度
 @property (nonatomic, copy) UIView *partLine;  // 分割线
@@ -48,6 +62,10 @@
 - (void)rewriteTopic:(NSString *)newTopic withIndex:(unsigned long)index;
 - (void)rewriteDate:(NSString *)newDate;
 - (void)rewritePortrait:(NSString *)newPortrait withIndex:(unsigned long)index;
+- (void)rewriteShareNum:(unsigned long)newShareNum withIndex:(unsigned long)index;
+- (void)rewriteCommentNum:(unsigned long)newCommentNum withIndex:(unsigned long)index;
+- (void)rewriteLikeNum:(unsigned long)newLikeNum withIndex:(unsigned long)index;
+- (void)rewriteLikeStatus:(NSString *)newLikeStatus;
 - (void)rewriteTitle:(NSString *)newTitle;
 - (void)rewritePicURL:(NSArray *)newPicArr withIndex:(unsigned long)index;
 //

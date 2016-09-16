@@ -57,6 +57,10 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:YES];
+    // 设置状态栏颜色的强力方法
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+    
     if (_firstLoad) {
         NSLog(@"评论页的articleID：%@", _articleID);
         // 加载数据，并显示

@@ -588,6 +588,8 @@
         NSLog(@"Error: %@", error);
         [tableView.mj_header endRefreshing];
     }];
+    
+    NSLog(@"阻塞了吗？");
 }
 
 

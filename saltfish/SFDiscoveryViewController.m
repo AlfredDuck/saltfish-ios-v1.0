@@ -491,12 +491,12 @@
         }
         NSLog(@"关注状态改为%@",[data objectForKey:@"isFollowing"]);
         
-        // 刷新 followButton 的状态
+        // 1.修改内存中的数据
         NSMutableDictionary *cellData = [[_latestTopicsData objectAtIndex:index] mutableCopy];
         [cellData setValue:[data objectForKey:@"isFollowing"] forKey:@"isFollowing"];
         [_latestTopicsData replaceObjectAtIndex:index withObject:cellData];
         
-        // 刷新特定的cell
+        // 2.刷新特定的cell
         NSIndexPath *indexPath=[NSIndexPath indexPathForRow:index + 1 inSection:0];
         [_oneTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
         

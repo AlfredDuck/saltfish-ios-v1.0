@@ -11,6 +11,9 @@
 #import "YYWebImage.h"
 #import "colorManager.h"
 
+#define LIKEICON  [UIImage imageNamed:@"like_icon.png"]
+#define LIKEICONRED  [UIImage imageNamed:@"like_icon_red.png"]
+
 @implementation SFArticleCell
 
 - (void)awakeFromNib {
@@ -42,7 +45,7 @@
         
         
         /* 话题头像 */
-        _portraitImageView = [[UIImageView alloc] initWithFrame:CGRectMake(15, 15, 36, 36)];
+        _portraitImageView = [[UIImageView alloc] initWithFrame:CGRectMake(12, 15, 36, 36)];
         _portraitImageView.backgroundColor = [UIColor grayColor];
         // uiimageview居中裁剪
         _portraitImageView.contentMode = UIViewContentModeScaleAspectFill;
@@ -58,7 +61,7 @@
 
         
         /* 话题标题 */
-        _topicLabel = [[UILabel alloc] initWithFrame:CGRectMake(60, 15, 200, 20)];
+        _topicLabel = [[UILabel alloc] initWithFrame:CGRectMake(57, 15, 200, 20)];
         _topicLabel.text = _topic;
         _topicLabel.font = [UIFont fontWithName:@"Helvetica" size: 14.0];
         _topicLabel.textColor = [colorManager blueLinkColor];
@@ -69,7 +72,7 @@
         [_topicLabel addGestureRecognizer:singleTapTopic]; // 添加手势
         
         /* 日期 */
-        _dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(60, 35, 200, 16)];
+        _dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(57, 35, 200, 16)];
         _dateLabel.text = _date;
         _dateLabel.font = [UIFont fontWithName:@"Helvetica" size: 11.0];
         _dateLabel.textColor = [colorManager lightTextColor];
@@ -88,6 +91,84 @@
         //_titleLabel.backgroundColor = [UIColor yellowColor];
         _titleLabel.numberOfLines = 2;
         [self.contentView addSubview:_titleLabel];
+        
+        /* 图片未在此处定义 */
+        
+        /* ------------- 评论、喜欢、分享 -------------- */
+        _customerView = [[UIView alloc] initWithFrame:CGRectMake(0, 50, _screenWidth, 36)];  // 用户操作区域背景
+        [self.contentView addSubview: _customerView];
+        
+        unsigned long ww = ceil(_screenWidth/3.0);
+        
+        /* 分享区域 */
+        _shareView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ww, 36)];
+        // 添加点击事件
+        _shareView.userInteractionEnabled = YES;
+        UITapGestureRecognizer *singleTapShare = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickShareIcon:)]; // 设置手势
+        [_shareView addGestureRecognizer:singleTapShare]; // 添加手势
+        [_customerView addSubview: _shareView];
+        
+        // 分享icon
+        UIImage *shareIcon = [UIImage imageNamed:@"share_icon.png"];  // 32*28
+        UIImageView *shareIconView = [[UIImageView alloc] initWithImage:shareIcon]; // 把oneImage添加到oneImageView上
+        shareIconView.frame = CGRectMake((ww-65)/2.0, 11, 16, 14); // 设置图片位置和大小
+        [_shareView addSubview: shareIconView];
+        
+        // 分享title
+        _shareLabel = [[UILabel alloc] initWithFrame:CGRectMake((ww-65)/2.0+16+5, 0, 45, 36)];
+        _shareLabel.text = @"分享";
+        _shareLabel.font = [UIFont fontWithName:@"Helvetica" size: 14.0];
+        _shareLabel.textColor = [colorManager secondTextColor];
+        [_shareView addSubview: _shareLabel];
+        
+        /* 评论区域 */
+        _commentView = [[UIView alloc] initWithFrame:CGRectMake(ww, 0, ww, 36)];
+        // 添加点击事件
+        _commentView.userInteractionEnabled = YES;
+        UITapGestureRecognizer *singleTapComment = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickCommentIcon:)]; // 设置手势
+        [_commentView addGestureRecognizer:singleTapComment]; // 添加手势
+        [_customerView addSubview: _commentView];
+        
+        // 评论icon
+        UIImage *commentIcon = [UIImage imageNamed:@"comment_icon.png"];  // 34*30
+        UIImageView *commentIconView = [[UIImageView alloc] initWithImage:commentIcon]; // 把oneImage添加到oneImageView上
+        commentIconView.frame = CGRectMake((ww-65)/2.0, 10.5, 17, 15); // 设置图片位置和大小
+        [_commentView addSubview: commentIconView];
+        
+        // 评论title
+        _commentLabel = [[UILabel alloc] initWithFrame:CGRectMake((ww-65)/2.0+16+5, 0, 45, 36)];
+        _commentLabel.text = @"评论";
+        _commentLabel.font = [UIFont fontWithName:@"Helvetica" size: 14.0];
+        _commentLabel.textColor = [colorManager secondTextColor];
+        [_commentView addSubview: _commentLabel];
+        
+        /* 喜欢😍区域 */
+        _likeView = [[UIView alloc] initWithFrame:CGRectMake(2*ww, 0, ww, 36)];
+        // 添加点击事件
+        _likeView.userInteractionEnabled = YES;
+        UITapGestureRecognizer *singleTapLike = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickLikeIcon:)]; // 设置手势
+        [_likeView addGestureRecognizer:singleTapLike]; // 添加手势
+        [_customerView addSubview: _likeView];
+        
+        // 喜欢icon
+        UIImage *likeIcon = [UIImage imageNamed:@"like_icon.png"];  // 32*28
+        _likeIconView = [[UIImageView alloc] initWithImage: likeIcon]; // 把oneImage添加到oneImageView上
+        _likeIconView.frame = CGRectMake((ww-65)/2.0, 11, 16, 14); // 设置图片位置和大小
+        [_likeView addSubview: _likeIconView];
+        
+        // 喜欢title
+        _likeLabel = [[UILabel alloc] initWithFrame:CGRectMake((ww-65)/2.0+16+5, 0, 45, 36)];
+        _likeLabel.text = @"喜欢";
+        _likeLabel.font = [UIFont fontWithName:@"Helvetica" size: 14.0];
+        _likeLabel.textColor = [colorManager secondTextColor];
+        [_likeView addSubview: _likeLabel];
+        
+        /* 分割线 */
+        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 0, _screenWidth, 0.5)];  // 分割线
+        line.backgroundColor = [UIColor colorWithRed:237/255.0 green:237/255.0 blue:237/255.0 alpha:1];
+        [_customerView addSubview:line];
+        
+        /* ------------- END -------------- */
 
         
         /* 背景、分割线 */
@@ -128,6 +209,8 @@
     _portraitImageView.tag = index + 1;
 }
 
+
+/** 重写含链接标记 **/
 - (void) rewriteLinkMark:(BOOL)isShow
 {
     if (!isShow) {
@@ -137,6 +220,55 @@
     }
 }
 
+
+/** 重写分享数 **/
+- (void)rewriteShareNum:(unsigned long)newShareNum withIndex:(unsigned long)index
+{
+    if (newShareNum == 0) {
+        _shareLabel.text = @"分享";
+    } else {
+        _shareLabel.text = [NSString stringWithFormat: @"%lu", newShareNum];  // 数字转字符
+    }
+    _shareView.tag = index + 1;
+}
+
+
+/** 重写评论数 **/
+- (void)rewriteCommentNum:(unsigned long)newCommentNum withIndex:(unsigned long)index
+{
+    if (newCommentNum == 0) {
+        _commentLabel.text = @"评论";
+    } else {
+        _commentLabel.text = [NSString stringWithFormat: @"%lu", newCommentNum];  // 数字转字符
+    }
+    _commentView.tag = index + 1;
+}
+
+
+/** 重写喜欢数 **/
+- (void)rewriteLikeNum:(unsigned long)newLikeNum withIndex:(unsigned long)index
+{
+    if (newLikeNum == 0) {
+        _likeLabel.text = @"喜欢";
+    } else {
+        _likeLabel.text = [NSString stringWithFormat: @"%lu", newLikeNum];  // 数字转字符
+    }
+    _likeView.tag = index + 1;
+}
+
+
+/** 重写喜欢状态 */
+- (void)rewriteLikeStatus:(NSString *)newLikeStatus
+{
+    if ([newLikeStatus isEqualToString:@"yes"]) {
+        _likeIconView.image = LIKEICONRED;
+    } else {
+        _likeIconView.image = LIKEICON;
+    }
+}
+
+
+/** 重写标题 **/
 - (void)rewriteTitle:(NSString *)newTitle
 {
     _title = newTitle;
@@ -165,6 +297,7 @@
 }
 
 
+/** 重写图片 **/
 - (void)rewritePicURL:(NSArray *)newPicArr withIndex:(unsigned long)index
 {
     if (_hasPics) {
@@ -175,8 +308,10 @@
     NSLog(@"%@", [newPicArr class]);
     NSLog(@"%@", newPicArr);
     if (0 == [newPicArr count]) {
+        // 用户操作区域高度
+        _customerView.frame = CGRectMake(0, _textHeight, _screenWidth, 36);
         /* cell 高度 */
-        _cellHeight = _textHeight + (22);
+        _cellHeight = _textHeight + 36 + 15;
         /* 底部分割线 */
         _partLine.frame = CGRectMake(0, _cellHeight-15, _screenWidth, 15);
         _hasPics = YES;  // 记录是否已经创建pic矩阵
@@ -213,8 +348,10 @@
         // tag的百位代表在tableview的第几位，各位代表在图片数组中的第几位（用百位是怕图片数量超过10）
         picImageView.tag = (index+1) * 100 + 0;
         
+        // 用户操作区域高度
+        _customerView.frame = CGRectMake(0, _textHeight+hh+15, _screenWidth, 36);
         /* cell 高度 */
-        _cellHeight = _textHeight + hh + (15+20);
+        _cellHeight = _textHeight + hh + 15 + (15+36);
         /* 底部分割线 */
         _partLine.frame = CGRectMake(0, _cellHeight-15, _screenWidth, 15);
         _hasPics = YES;  // 记录是否已经创建pic矩阵
@@ -275,8 +412,11 @@
     }
     
     _holdView.frame = CGRectMake(0, _textHeight, _screenWidth, [DoubleArr count]*(hh+4));
+    
+    // 用户操作区域高度
+    _customerView.frame = CGRectMake(0, _textHeight + [DoubleArr count]*(hh+4) + 15-4, _screenWidth, 36);
     /* cell 高度 */
-    _cellHeight = _textHeight + [DoubleArr count]*(hh+4) + (15+15);
+    _cellHeight = _textHeight + [DoubleArr count]*(hh+4) + 15-4 + (15+36);
     /* 底部分割线 */
     _partLine.frame = CGRectMake(0, _cellHeight-15, _screenWidth, 15);
     _hasPics = YES;  // 记录是否已经创建pic矩阵
@@ -304,24 +444,42 @@
 /** 点击话题 **/
 - (void)clickTopic:(UIGestureRecognizer *)sender
 {
-    NSLog(@"点第%dl个文章", sender.view.tag);
+    NSLog(@"点第%ld个文章", sender.view.tag);
     [self.delegate clickTopicForIndex:sender.view.tag - 1];  // 调用代理方法
 }
 
 /** 点击话题头像 **/
 - (void)clickPortrait:(UIGestureRecognizer *)sender
 {
-    NSLog(@"点第%ldl个文章", sender.view.tag);
+    NSLog(@"点第%ld个文章", sender.view.tag);
     [self.delegate clickTopicForIndex:sender.view.tag - 1];  // 调用代理方法
 }
 
 /** 点击图片 **/
 - (void)clickPic:(UIGestureRecognizer *)sender
 {
-    NSLog(@"点第%ldl个文章", sender.view.tag);
+    NSLog(@"点第%ld个文章", sender.view.tag);
     [self.delegate clickPicsForIndex:sender.view.tag withView:(UIView *)sender.view];  // 调用代理方法
 }
 
+/** 点击分享icon **/
+- (void)clickShareIcon:(UIGestureRecognizer *)sender
+{
+    NSLog(@"点第%ld个文章", sender.view.tag);
+    [self.delegate clickShareIconForIndex: sender.view.tag - 1];
+}
+/** 点击评论icon **/
+- (void)clickCommentIcon:(UIGestureRecognizer *)sender
+{
+    NSLog(@"点第%ld个文章", sender.view.tag);
+    [self.delegate clickCommentIconForIndex: sender.view.tag - 1];
+}
+/** 点击喜欢icon **/
+- (void)clickLikeIcon:(UIGestureRecognizer *)sender
+{
+    NSLog(@"点第%ld个文章", sender.view.tag);
+    [self.delegate clickLikeIconForIndex: sender.view.tag - 1];
+}
 
 
 

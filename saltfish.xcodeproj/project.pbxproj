@@ -22,6 +22,12 @@
 		BB2E97131C1D1599001B7CAA /* saltfish.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = BB2E97111C1D1599001B7CAA /* saltfish.xcdatamodeld */; };
 		BB2E971B1C1D1599001B7CAA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BB2E971A1C1D1599001B7CAA /* Images.xcassets */; };
 		BB2E972A1C1D1599001B7CAA /* saltfishTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BB2E97291C1D1599001B7CAA /* saltfishTests.m */; };
+		BB498BE71D8A447100C9DEF4 /* share_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BB498BE61D8A447100C9DEF4 /* share_icon.png */; };
+		BB498BE91D8A491200C9DEF4 /* comment_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BB498BE81D8A491200C9DEF4 /* comment_icon.png */; };
+		BB498BEB1D8A49B600C9DEF4 /* like_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BB498BEA1D8A49B500C9DEF4 /* like_icon.png */; };
+		BB498BEF1D8A9C1500C9DEF4 /* SFShareManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BB498BEE1D8A9C1500C9DEF4 /* SFShareManager.m */; };
+		BB498BF11D8B81B300C9DEF4 /* like_icon_red.png in Resources */ = {isa = PBXBuildFile; fileRef = BB498BF01D8B81B300C9DEF4 /* like_icon_red.png */; };
+		BB498BF51D8BCE1700C9DEF4 /* SFMyLikesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB498BF41D8BCE1700C9DEF4 /* SFMyLikesViewController.m */; };
 		BB4B67A71D561DCA00018BEF /* SFLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB4B67A61D561DCA00018BEF /* SFLoginViewController.m */; };
 		BB5C0F0D1D39DB9400EEC34F /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = BB5C0F0C1D39DB9400EEC34F /* background.png */; };
 		BB5C0F151D39FBA600EEC34F /* SFPersonalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB5C0F141D39FBA600EEC34F /* SFPersonalViewController.m */; };
@@ -125,6 +131,14 @@
 		BB2E97231C1D1599001B7CAA /* saltfishTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = saltfishTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB2E97281C1D1599001B7CAA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BB2E97291C1D1599001B7CAA /* saltfishTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = saltfishTests.m; sourceTree = "<group>"; };
+		BB498BE61D8A447100C9DEF4 /* share_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = share_icon.png; path = "../../coding/salt-App效果图/share_icon.png"; sourceTree = "<group>"; };
+		BB498BE81D8A491200C9DEF4 /* comment_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = comment_icon.png; path = "../../coding/salt-App效果图/comment_icon.png"; sourceTree = "<group>"; };
+		BB498BEA1D8A49B500C9DEF4 /* like_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = like_icon.png; path = "../../coding/salt-App效果图/like_icon.png"; sourceTree = "<group>"; };
+		BB498BED1D8A9C1500C9DEF4 /* SFShareManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFShareManager.h; sourceTree = "<group>"; };
+		BB498BEE1D8A9C1500C9DEF4 /* SFShareManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFShareManager.m; sourceTree = "<group>"; };
+		BB498BF01D8B81B300C9DEF4 /* like_icon_red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = like_icon_red.png; path = "../../coding/salt-App效果图/like_icon_red.png"; sourceTree = "<group>"; };
+		BB498BF31D8BCE1700C9DEF4 /* SFMyLikesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFMyLikesViewController.h; sourceTree = "<group>"; };
+		BB498BF41D8BCE1700C9DEF4 /* SFMyLikesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFMyLikesViewController.m; sourceTree = "<group>"; };
 		BB4B67A51D561DCA00018BEF /* SFLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFLoginViewController.h; sourceTree = "<group>"; };
 		BB4B67A61D561DCA00018BEF /* SFLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFLoginViewController.m; sourceTree = "<group>"; };
 		BB5C0F0C1D39DB9400EEC34F /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = background.png; path = "../../coding/salt-App效果图/background.png"; sourceTree = "<group>"; };
@@ -267,6 +281,7 @@
 		BB11B3B71D3B306500366377 /* mine sub page */ = {
 			isa = PBXGroup;
 			children = (
+				BB498BF21D8BCDD200C9DEF4 /* my like article page */,
 				BB62F08C1D27795A00ACFC92 /* my follow topic page */,
 				BB11B3B81D3B308900366377 /* customer feedback */,
 				BB5C0F121D39FB7200EEC34F /* personal information */,
@@ -332,6 +347,7 @@
 				BBE5883C1C5E1E460067D783 /* url manager */,
 				BBE6CCD31C206AC600AA9525 /* color manage */,
 				BB28C47C1C5F211D00527872 /* toast */,
+				BB498BEC1D8A9BD700C9DEF4 /* share */,
 				BB8C2A8C1CB1343C004112F9 /* something more */,
 				BB261F991C1D908B0079D037 /* tableViewCells */,
 				BB11B3B31D3A569E00366377 /* login & signup */,
@@ -386,6 +402,24 @@
 				BBAD45471C1D44FF007A54F3 /* HomeVC.m */,
 			);
 			name = "old home";
+			sourceTree = "<group>";
+		};
+		BB498BEC1D8A9BD700C9DEF4 /* share */ = {
+			isa = PBXGroup;
+			children = (
+				BB498BED1D8A9C1500C9DEF4 /* SFShareManager.h */,
+				BB498BEE1D8A9C1500C9DEF4 /* SFShareManager.m */,
+			);
+			name = share;
+			sourceTree = "<group>";
+		};
+		BB498BF21D8BCDD200C9DEF4 /* my like article page */ = {
+			isa = PBXGroup;
+			children = (
+				BB498BF31D8BCE1700C9DEF4 /* SFMyLikesViewController.h */,
+				BB498BF41D8BCE1700C9DEF4 /* SFMyLikesViewController.m */,
+			);
+			name = "my like article page";
 			sourceTree = "<group>";
 		};
 		BB5C0F121D39FB7200EEC34F /* personal information */ = {
@@ -534,6 +568,10 @@
 		BBE6CCD41C206AE500AA9525 /* pics */ = {
 			isa = PBXGroup;
 			children = (
+				BB498BF01D8B81B300C9DEF4 /* like_icon_red.png */,
+				BB498BEA1D8A49B500C9DEF4 /* like_icon.png */,
+				BB498BE81D8A491200C9DEF4 /* comment_icon.png */,
+				BB498BE61D8A447100C9DEF4 /* share_icon.png */,
 				BB990D141D72C92D004B016C /* link.png */,
 				BB62F0901D279EE900ACFC92 /* notification.png */,
 				BB5C0F0C1D39DB9400EEC34F /* background.png */,
@@ -725,7 +763,9 @@
 				BB6B47E81CA6DD2F00CABA95 /* black_top3.png in Resources */,
 				BB5C0F0D1D39DB9400EEC34F /* background.png in Resources */,
 				BBF2B75A1D31D3C500657FA6 /* mine_tab.png in Resources */,
+				BB498BE91D8A491200C9DEF4 /* comment_icon.png in Resources */,
 				BB65CA231D1E802A0098A53B /* unfollow.png in Resources */,
+				BB498BEB1D8A49B600C9DEF4 /* like_icon.png in Resources */,
 				BBF2B7501D30940600657FA6 /* my_topic.png in Resources */,
 				BB62F0711D26B52B00ACFC92 /* back_black.png in Resources */,
 				BB99E7D41C9ECA1A00CDBBDD /* praise_button_red.png in Resources */,
@@ -738,7 +778,9 @@
 				BB99E7D61C9ECA2900CDBBDD /* share_button.png in Resources */,
 				BBF2B7581D31D32A00657FA6 /* discovery_tab.png in Resources */,
 				BB990D151D72C92D004B016C /* link.png in Resources */,
+				BB498BE71D8A447100C9DEF4 /* share_icon.png in Resources */,
 				BBF2B75C1D31D6AA00657FA6 /* home_tab_focus.png in Resources */,
+				BB498BF11D8B81B300C9DEF4 /* like_icon_red.png in Resources */,
 				BB62F0911D279EE900ACFC92 /* notification.png in Resources */,
 				BB65CA211D1E65270098A53B /* follow.png in Resources */,
 				BB62F0761D26BF4B00ACFC92 /* follow_small.png in Resources */,
@@ -826,6 +868,7 @@
 				BB4B67A71D561DCA00018BEF /* SFLoginViewController.m in Sources */,
 				BB62F07E1D273C2000ACFC92 /* SFHomeViewController.m in Sources */,
 				BB2E970D1C1D1599001B7CAA /* main.m in Sources */,
+				BB498BF51D8BCE1700C9DEF4 /* SFMyLikesViewController.m in Sources */,
 				BB5C0F151D39FBA600EEC34F /* SFPersonalViewController.m in Sources */,
 				BB62F0841D273C5800ACFC92 /* SFMineViewController.m in Sources */,
 				BBE4FA941D77BFB10015216B /* SFEmptyCell.m in Sources */,
@@ -838,6 +881,7 @@
 				BB11B3B61D3A56DE00366377 /* SFLoginAndSignup.m in Sources */,
 				BB8C2A8F1CB134CC004112F9 /* saltCustomTools.m in Sources */,
 				BBCB95551C30143400011BDD /* writeCommentVC.m in Sources */,
+				BB498BEF1D8A9C1500C9DEF4 /* SFShareManager.m in Sources */,
 				BB62F06F1D26AC3A00ACFC92 /* ClassificationVC.m in Sources */,
 				BB28C47F1C5F215A00527872 /* toastView.m in Sources */,
 				BB62F0811D273C4300ACFC92 /* SFDiscoveryViewController.m in Sources */,

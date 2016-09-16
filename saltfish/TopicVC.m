@@ -20,6 +20,8 @@
 #import "SFArticleCell.h"
 #import "TopicCell.h"
 #import "detailVC.h"
+#import "commentVC.h"
+#import "SFShareManager.h"
 #import "SFLoginAndSignup.h"
 #import "SFLoginViewController.h"
 #import "MJPhotoBrowser.h"  // MJ图片浏览器
@@ -32,6 +34,7 @@
 @property (nonatomic) NSString *isFollowing;
 @property (nonatomic) NSString *isPushOn;
 @property (nonatomic) UIImage *backgroundImage;
+@property (nonatomic) NSString *shareArticleID;  // 将要分享的article的id
 @end
 
 @implementation TopicVC
@@ -168,7 +171,7 @@
 //        
 //        [_backgroundView setImage:blurredImage];
 //    }];
-    UIImageView *thum = [[UIImageView alloc] init];
+    UIImageView *thum = [[UIImageView alloc] initWithFrame:CGRectMake(10.0, 10.0, 10.0, 10.0)];
     [thum yy_setImageWithURL:[NSURL URLWithString:_portraitURL] placeholder:[UIImage imageNamed:@"placeholder.png"] options:YYWebImageOptionIgnoreAnimatedImage completion:^(UIImage * _Nullable image, NSURL * _Nonnull url, YYWebImageFromType from, YYWebImageStage stage, NSError * _Nullable error) {
         NSLog(@"%@", url);
         
@@ -394,16 +397,29 @@
             oneArticleCell = [[SFArticleCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:ArticleCellWithIdentifier];
             oneArticleCell.delegate = self;
         }
+        // 判断是否含链接
         BOOL isShow;
         if ([NSNull null] == [[_articleData objectAtIndex:row-1] objectForKey:@"originalLink"]) {
             isShow = NO;
         } else {
             isShow = YES;
         }
+        // 字符串转数字
+        NSString *shareNumStr = [[_articleData objectAtIndex:row-1] objectForKey:@"shareNum"];
+        unsigned long shareNum = [shareNumStr intValue];
+        NSString *commentNumStr = [[_articleData objectAtIndex:row-1] objectForKey:@"commentNum"];
+        unsigned long commentNum = [commentNumStr intValue];
+        NSString *likeNumStr = [[_articleData objectAtIndex:row-1] objectForKey:@"likeNum"];
+        unsigned long likeNum = [likeNumStr intValue];
+        
         [oneArticleCell rewriteLinkMark:isShow];
         [oneArticleCell rewriteTopic:_topic withIndex:row-1];
         [oneArticleCell rewritePortrait:_portraitURL withIndex:row-1];
         [oneArticleCell rewriteDate:[[_articleData objectAtIndex:row-1] objectForKey:@"date"]];
+        [oneArticleCell rewriteShareNum:shareNum withIndex:row-1];
+        [oneArticleCell rewriteCommentNum:commentNum withIndex:row-1];
+        [oneArticleCell rewriteLikeNum:likeNum withIndex:row-1];
+        [oneArticleCell rewriteLikeStatus:[[_articleData objectAtIndex:row-1] objectForKey:@"likeStatus"]];
         [oneArticleCell rewriteTitle:[[_articleData objectAtIndex:row-1] objectForKey:@"title"]];
         [oneArticleCell rewritePicURL:[[_articleData objectAtIndex:row-1] objectForKey:@"picSmall"] withIndex:row-1];
 
@@ -691,8 +707,62 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
-
 }
+
+
+/** 喜欢一个article请求 **/
+- (void)connectForLikeWith:(NSString *)articleID cellIndex:(unsigned long)index
+{
+    NSLog(@"请求喜欢一个article");
+    
+    // 要添加or取消一个喜欢
+    NSString *isCancel = [[_articleData objectAtIndex:index] objectForKey:@"likeStatus"];
+    NSLog(@"%@", isCancel);
+    
+    // prepare request parameters
+    NSString *host = [urlManager urlHost];
+    NSString *urlString = [host stringByAppendingString:@"/article/like"];
+    NSDictionary *parameters = @{
+                                 @"uid": _uid,
+                                 @"article_id": articleID,
+                                 @"is_cancel": isCancel
+                                 };
+    
+    // 创建 GET 请求
+    AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];
+    connectManager.requestSerializer.timeoutInterval = 20.0;   //设置超时时间
+    [connectManager GET:urlString parameters: parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        // GET请求成功
+        NSString *errcode = [responseObject objectForKey:@"errcode"];
+        NSDictionary *data = [responseObject objectForKey:@"data"];
+        NSLog(@"errcode：%@", errcode);
+        NSLog(@"data: %@", data);
+        
+        // server错误判断
+        if ([errcode isEqualToString:@"err"]) {
+            NSLog(@"喜欢or取消一个article失败，请重试");
+            return;
+        }
+        
+        NSLog(@"喜欢or取消一个article成功");
+        // 1.修改内存中的数据
+        NSLog(@"%@", [[_articleData objectAtIndex:index] objectForKey:@"title"]);
+        NSMutableDictionary *cellData = [[_articleData objectAtIndex:index] mutableCopy];
+        [cellData setValue:[data objectForKey:@"status"] forKey:@"likeStatus"];
+        [cellData setValue:[data objectForKey:@"likeNum"] forKey:@"likeNum"];
+        [_articleData replaceObjectAtIndex:index withObject:cellData];
+        
+        // 2.刷新特定cell
+        NSIndexPath *indexPath=[NSIndexPath indexPathForRow:index + 1 inSection:0];
+        [_oneTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
+        
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+}
+
 
 
 
@@ -703,6 +773,8 @@
 {
     [self.navigationController popViewControllerAnimated:YES];
 }
+
+
 
 
 
@@ -749,6 +821,10 @@
 
 
 
+
+
+
+
 #pragma mark - SFArticleCell 的代理
 - (void)clickTopicForIndex:(unsigned long)index
 {
@@ -762,6 +838,77 @@
     unsigned long indexPic = index%100;  // 取个位
     NSArray *arr = [[_articleData objectAtIndex:indexTable] objectForKey:@"picBig"];
     [self checkBigPhotos: arr forIndex:indexPic withView:view];
+}
+
+/** 点击分享 */
+- (void)clickShareIconForIndex:(unsigned long)index
+{
+    _shareArticleID = [[_articleData objectAtIndex:index] objectForKey:@"_id"];
+    UIActionSheet *shareSheet = [[UIActionSheet alloc] initWithTitle:@"分享到" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"微信好友", @"微信朋友圈", @"新浪微博", nil];
+    shareSheet.tag = 110;
+    [shareSheet showInView:self.view];
+}
+
+/** 点击评论 */
+- (void)clickCommentIconForIndex:(unsigned long)index
+{
+    NSLog(@"点击评论icon");
+    commentVC *commentPage = [[commentVC alloc] init];
+    commentPage.articleID = [[_articleData objectAtIndex:index] objectForKey:@"_id"];
+    [self.navigationController pushViewController:commentPage animated:YES];
+    
+    //开启iOS7的滑动返回效果
+    if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
+        self.navigationController.interactivePopGestureRecognizer.delegate = nil;
+    }
+}
+
+/** 点击喜欢 */
+- (void)clickLikeIconForIndex:(unsigned long)index
+{
+    // 修改当前cell在内存中的数据，然后刷新当前 cell
+    
+    
+    // 发起喜欢的请求
+    NSString *articleID = [[_articleData objectAtIndex:index] objectForKey:@"_id"];
+    [self connectForLikeWith: articleID cellIndex:index];  // 发起like请求
+}
+
+
+
+
+
+
+
+#pragma mark - UIActionSheet 代理
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (actionSheet.tag == 110) {
+        // 分享sheet
+        SFShareManager *shareManager = [[SFShareManager alloc] init];
+        
+        if (buttonIndex == 0) {
+            NSLog(@"微信好友");
+            [shareManager connectForShareInfoWith:_shareArticleID toWhere:@"weixin"];
+        }else if (buttonIndex == 1) {
+            NSLog(@"微信朋友圈");
+            [shareManager connectForShareInfoWith:_shareArticleID toWhere:@"weixin_timeline"];
+        }else if(buttonIndex == 2) {
+            NSLog(@"新浪微博");
+            [shareManager connectForShareInfoWith:_shareArticleID toWhere:@"weibo"];
+        }
+    }
+    
+    else if (actionSheet.tag == 120) {
+        // 登录sheet
+        if (buttonIndex == 0) {
+            NSLog(@"新浪微博登录");
+            SFLoginViewController *loginPage = [[SFLoginViewController alloc] init];
+            [self.navigationController presentViewController:loginPage animated:YES completion:^{
+                return;
+            }];
+        }
+    }
 
 }
 
@@ -771,23 +918,24 @@
 - (void)chooseLoginWayWith:(NSString *)title
 {
     NSLog(@"选择登录方式");
-    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:title delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles: @"微博帐号登录",nil];
-    [sheet showInView:self.view];
+    UIActionSheet *loginSheet = [[UIActionSheet alloc] initWithTitle:title delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles: @"微博帐号登录",nil];
+    loginSheet.tag = 120;
+    [loginSheet showInView:self.view];
 }
 
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex == 0) {
-        NSLog(@"新浪微博登录");
-        SFLoginViewController *loginPage = [[SFLoginViewController alloc] init];
-        [self.navigationController presentViewController:loginPage animated:YES completion:^{
-            return;
-        }];
-//        SFLoginAndSignup *Login = [[SFLoginAndSignup alloc] init];
-//        [Login requestForWeiboAuthorize];
-//        [Login waitForWeiboAuthorizeResult];
-    }
-}
+//- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+//{
+//    if (buttonIndex == 0) {
+//        NSLog(@"新浪微博登录");
+//        SFLoginViewController *loginPage = [[SFLoginViewController alloc] init];
+//        [self.navigationController presentViewController:loginPage animated:YES completion:^{
+//            return;
+//        }];
+////        SFLoginAndSignup *Login = [[SFLoginAndSignup alloc] init];
+////        [Login requestForWeiboAuthorize];
+////        [Login waitForWeiboAuthorizeResult];
+//    }
+//}
 
 
 
@@ -822,7 +970,7 @@
 
 
 #pragma mark - 左右抖动
-/**代码来自网络**/
+/*代码来自网络*/
 - (void)shake:(UIView *)senderView
 {
     CABasicAnimation* shake = [CABasicAnimation animationWithKeyPath:@"transform.translation.x"];
