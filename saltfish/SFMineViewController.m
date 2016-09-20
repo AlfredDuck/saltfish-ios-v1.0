@@ -17,6 +17,7 @@
 #import "SFCustomerFeedbackViewController.h"
 #import "SFLoginAndSignup.h"
 #import "SFLoginViewController.h"
+#import "SFMyLikesViewController.h"
 #import "toastView.h"
 
 
@@ -86,7 +87,11 @@
 
 
 
+
+
+
 #pragma mark - 构建 UI 零件
+/** 构建UI零件 */
 - (void)createUIParts
 {
     /* 顶部图片区域 */
@@ -101,7 +106,7 @@
     [self.view addSubview:backgroundImageView];
     
     
-    /* 下方 scrollview 区域 */
+    /* scrollview 区域 */
     UIScrollView *oneScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, hh, _screenWidth, _screenHeight-44-hh)];
     oneScrollView.backgroundColor = [colorManager lightGrayBackground];
     oneScrollView.contentSize = CGSizeMake(_screenWidth, _screenHeight-hh-44+1);
@@ -130,8 +135,34 @@
     [oneScrollView addSubview: myTopicView];
     
     
+    /* 我喜欢的 */
+    UIView *myLikeView = [[UIView alloc] initWithFrame:CGRectMake(0, 15+44, _screenWidth, 44)];
+    myLikeView.backgroundColor = [UIColor whiteColor];
+    // 分割线
+    UIView *partLine3 = [[UIView alloc] initWithFrame:CGRectMake(55, 0, _screenWidth-55, 0.5)];
+    partLine3.backgroundColor = [colorManager lightGrayBackground];
+    [myLikeView addSubview:partLine3];
+    // icon图片
+    UIImageView *myLikeIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"like.png"]];
+    myLikeIcon.frame = CGRectMake(11.5, 13, 21, 18);  // 42*36
+    UIView *myLikeIconView = [[UIView alloc] initWithFrame:CGRectMake(8, 0, 44, 44)];
+    [myLikeIconView addSubview:myLikeIcon];
+    [myLikeView addSubview:myLikeIconView];
+    // label
+    UILabel *myLikeLabel = [[UILabel alloc] initWithFrame:CGRectMake(55, 0, _screenWidth-55, 44)];
+    myLikeLabel.text = @"我喜欢的";
+    myLikeLabel.font = [UIFont fontWithName:@"Helvetica" size: 15.0];
+    myLikeLabel.textColor = [colorManager mainTextColor];
+    [myLikeView addSubview:myLikeLabel];
+    
+    myLikeView.userInteractionEnabled = YES; // 设置可以交互
+    UITapGestureRecognizer *singleTap4 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickMyLikes)]; // 设置手势
+    [myLikeView addGestureRecognizer:singleTap4]; // 添加手势
+    [oneScrollView addSubview: myLikeView];
+    
+    
     /* 去 AppStore 评价 */
-    UIView *AppStoreView = [[UIView alloc] initWithFrame:CGRectMake(0, 15+44, _screenWidth, 44)];
+    UIView *AppStoreView = [[UIView alloc] initWithFrame:CGRectMake(0, 15+44*2, _screenWidth, 44)];
     AppStoreView.backgroundColor = [UIColor whiteColor];
     // 分割线
     UIView *partLine = [[UIView alloc] initWithFrame:CGRectMake(55, 0, _screenWidth-55, 0.5)];
@@ -157,7 +188,7 @@
     
     
     /* 吐槽区 */
-    UIView *customerFeedbackView = [[UIView alloc] initWithFrame:CGRectMake(0, 15+44+44, _screenWidth, 44)];
+    UIView *customerFeedbackView = [[UIView alloc] initWithFrame:CGRectMake(0, 15+44*3, _screenWidth, 44)];
     customerFeedbackView.backgroundColor = [UIColor whiteColor];
     // 分割线
     UIView *partLine2 = [[UIView alloc] initWithFrame:CGRectMake(55, 0, _screenWidth-55, 0.5)];
@@ -183,6 +214,10 @@
     
     [self createNickname:@""];
 }
+
+
+
+
 
 
 
@@ -268,6 +303,7 @@
 
 
 #pragma mark - IBAction
+
 - (void)clickLoginButton
 {
     [self chooseLoginWayWith:@"Welcome!\n请选择登录方式"];
@@ -302,6 +338,27 @@
         [self chooseLoginWayWith:@"请先登录"];
     }
 }
+
+
+- (void)clickMyLikes
+{
+    NSLog(@"click my likes");
+    NSUserDefaults *sfUserDefault = [NSUserDefaults standardUserDefaults];
+    if ([sfUserDefault dictionaryForKey:@"loginInfo"]) {
+        // 当前是登录状态
+        SFMyLikesViewController *myLikePage = [[SFMyLikesViewController alloc] init];
+        [self.navigationController pushViewController:myLikePage animated:YES];
+        //开启iOS7的滑动返回效果
+        if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
+            self.navigationController.interactivePopGestureRecognizer.delegate = nil;
+        }
+    }
+    else {
+        // 未登录状态
+        [self chooseLoginWayWith:@"请先登录"];
+    }
+}
+
 
 - (void)clickAppStore
 {

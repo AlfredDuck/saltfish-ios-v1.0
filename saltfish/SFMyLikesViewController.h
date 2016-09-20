@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SFArticleCell.h"
 
-@interface SFMyLikesViewController : UIViewController
+@interface SFMyLikesViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, SFArticleCellDelegate>
 @property (nonatomic, strong) UITableView *oneTableView;  // tableview
-@property (nonatomic, strong) NSMutableArray *tableViewData;  // tableview数据
+@property (nonatomic, strong) NSMutableArray *articleData;  // tableview数据
 @property (nonatomic, strong) NSString *uid;  // 用户登录账户
 
 @property (nonatomic, strong) UIView *loadingView;  // 页面第一次加载时显示的loading

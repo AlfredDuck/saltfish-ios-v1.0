@@ -20,6 +20,7 @@
 @interface detailVC : UIViewController<UIWebViewDelegate, WBHttpRequestDelegate, UIActionSheetDelegate>
 // 文章id
 @property (nonatomic, strong) NSString *articleID;
+@property (nonatomic, strong) NSString *uid;  // 登录账户id
 @property (nonatomic, strong) NSString *originalLink;
 //
 @property (nonatomic, strong) UIWebView *webview;
@@ -33,6 +34,11 @@
 @property (nonatomic, strong) UIImageView *praiseImageView;
 @property (nonatomic, strong) UIView *praiseButtonView;
 @property (nonatomic, strong) UILabel *praiseNumLabel;
+// like button
+@property (nonatomic, strong) UIButton *likeButton;
+@property (nonatomic, strong) UIImageView *likeImageView;
+@property (nonatomic, strong) UIView *likeButtonView;
+@property (nonatomic, strong) UILabel *likeNumLabel;
 // share button
 @property (nonatomic, strong) UIButton *shareButton;
 @property (nonatomic, strong) UIView *shareButtonView;

@@ -28,6 +28,8 @@
 		BB498BEF1D8A9C1500C9DEF4 /* SFShareManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BB498BEE1D8A9C1500C9DEF4 /* SFShareManager.m */; };
 		BB498BF11D8B81B300C9DEF4 /* like_icon_red.png in Resources */ = {isa = PBXBuildFile; fileRef = BB498BF01D8B81B300C9DEF4 /* like_icon_red.png */; };
 		BB498BF51D8BCE1700C9DEF4 /* SFMyLikesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB498BF41D8BCE1700C9DEF4 /* SFMyLikesViewController.m */; };
+		BB498BF71D8D35B600C9DEF4 /* like_button.png in Resources */ = {isa = PBXBuildFile; fileRef = BB498BF61D8D35B600C9DEF4 /* like_button.png */; };
+		BB498BF91D8D35C000C9DEF4 /* like_button_red.png in Resources */ = {isa = PBXBuildFile; fileRef = BB498BF81D8D35C000C9DEF4 /* like_button_red.png */; };
 		BB4B67A71D561DCA00018BEF /* SFLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB4B67A61D561DCA00018BEF /* SFLoginViewController.m */; };
 		BB5C0F0D1D39DB9400EEC34F /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = BB5C0F0C1D39DB9400EEC34F /* background.png */; };
 		BB5C0F151D39FBA600EEC34F /* SFPersonalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB5C0F141D39FBA600EEC34F /* SFPersonalViewController.m */; };
@@ -60,6 +62,7 @@
 		BB99E7D41C9ECA1A00CDBBDD /* praise_button_red.png in Resources */ = {isa = PBXBuildFile; fileRef = BB99E7D31C9ECA1A00CDBBDD /* praise_button_red.png */; };
 		BB99E7D61C9ECA2900CDBBDD /* share_button.png in Resources */ = {isa = PBXBuildFile; fileRef = BB99E7D51C9ECA2900CDBBDD /* share_button.png */; };
 		BB9B90AB1C9C4E1200A89A13 /* picBasedTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BB9B90AA1C9C4E1200A89A13 /* picBasedTableViewCell.m */; };
+		BBA34FE51D8ED7B5006D359D /* like.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA34FE41D8ED7B5006D359D /* like.png */; };
 		BBAD45481C1D44FF007A54F3 /* HomeVC.m in Sources */ = {isa = PBXBuildFile; fileRef = BBAD45471C1D44FF007A54F3 /* HomeVC.m */; };
 		BBC87F661C958B340052E639 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBC87F651C958B340052E639 /* QuartzCore.framework */; };
 		BBC87F681C958B530052E639 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBC87F671C958B530052E639 /* ImageIO.framework */; };
@@ -139,6 +142,8 @@
 		BB498BF01D8B81B300C9DEF4 /* like_icon_red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = like_icon_red.png; path = "../../coding/salt-App效果图/like_icon_red.png"; sourceTree = "<group>"; };
 		BB498BF31D8BCE1700C9DEF4 /* SFMyLikesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFMyLikesViewController.h; sourceTree = "<group>"; };
 		BB498BF41D8BCE1700C9DEF4 /* SFMyLikesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFMyLikesViewController.m; sourceTree = "<group>"; };
+		BB498BF61D8D35B600C9DEF4 /* like_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = like_button.png; path = "../../coding/salt-App效果图/like_button.png"; sourceTree = "<group>"; };
+		BB498BF81D8D35C000C9DEF4 /* like_button_red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = like_button_red.png; path = "../../coding/salt-App效果图/like_button_red.png"; sourceTree = "<group>"; };
 		BB4B67A51D561DCA00018BEF /* SFLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFLoginViewController.h; sourceTree = "<group>"; };
 		BB4B67A61D561DCA00018BEF /* SFLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFLoginViewController.m; sourceTree = "<group>"; };
 		BB5C0F0C1D39DB9400EEC34F /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = background.png; path = "../../coding/salt-App效果图/background.png"; sourceTree = "<group>"; };
@@ -187,6 +192,7 @@
 		BB99E7D51C9ECA2900CDBBDD /* share_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = share_button.png; path = "../../coding/salt-App效果图/share_button.png"; sourceTree = "<group>"; };
 		BB9B90A91C9C4E1200A89A13 /* picBasedTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = picBasedTableViewCell.h; sourceTree = "<group>"; };
 		BB9B90AA1C9C4E1200A89A13 /* picBasedTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = picBasedTableViewCell.m; sourceTree = "<group>"; };
+		BBA34FE41D8ED7B5006D359D /* like.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = like.png; path = "../../coding/salt-App效果图/like.png"; sourceTree = "<group>"; };
 		BBAD45461C1D44FF007A54F3 /* HomeVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeVC.h; sourceTree = "<group>"; };
 		BBAD45471C1D44FF007A54F3 /* HomeVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeVC.m; sourceTree = "<group>"; };
 		BBC87F651C958B340052E639 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -568,6 +574,9 @@
 		BBE6CCD41C206AE500AA9525 /* pics */ = {
 			isa = PBXGroup;
 			children = (
+				BBA34FE41D8ED7B5006D359D /* like.png */,
+				BB498BF81D8D35C000C9DEF4 /* like_button_red.png */,
+				BB498BF61D8D35B600C9DEF4 /* like_button.png */,
 				BB498BF01D8B81B300C9DEF4 /* like_icon_red.png */,
 				BB498BEA1D8A49B500C9DEF4 /* like_icon.png */,
 				BB498BE81D8A491200C9DEF4 /* comment_icon.png */,
@@ -772,6 +781,7 @@
 				BB99E7D01C9EC9D500CDBBDD /* comment_button.png in Resources */,
 				BBF2B7601D31D6BE00657FA6 /* discovery_tab_focus.png in Resources */,
 				BBF97D611C65752C00A5D403 /* placeholder.png in Resources */,
+				BBA34FE51D8ED7B5006D359D /* like.png in Resources */,
 				BB0F14B21C26D8FC00FDB77C /* back.png in Resources */,
 				BBF2B7521D30973B00657FA6 /* app_store.png in Resources */,
 				BB99E7D21C9ECA1300CDBBDD /* praise_button.png in Resources */,
@@ -783,7 +793,9 @@
 				BB498BF11D8B81B300C9DEF4 /* like_icon_red.png in Resources */,
 				BB62F0911D279EE900ACFC92 /* notification.png in Resources */,
 				BB65CA211D1E65270098A53B /* follow.png in Resources */,
+				BB498BF91D8D35C000C9DEF4 /* like_button_red.png in Resources */,
 				BB62F0761D26BF4B00ACFC92 /* follow_small.png in Resources */,
+				BB498BF71D8D35B600C9DEF4 /* like_button.png in Resources */,
 				BB2E971B1C1D1599001B7CAA /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

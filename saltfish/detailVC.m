@@ -20,6 +20,7 @@
 
 @interface detailVC ()
 @property (nonatomic) BOOL firstLoad;  //是否第一次加载（viewWillAppear多次调用的问题）
+@property (nonatomic) BOOL isLiked;  // 当前article是否被当前用户喜欢
 @end
 
 
@@ -51,10 +52,18 @@
     // 设置状态栏颜色的强力方法
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
     
+    // 登录账户的uid
+    NSUserDefaults *sfUserDefault = [NSUserDefaults standardUserDefaults];
+    if ([sfUserDefault objectForKey:@"loginInfo"]) {
+        _uid = [[sfUserDefault objectForKey:@"loginInfo"] objectForKey:@"uid"];
+    } else {
+        _uid = @"";
+    }
+    
     if (_firstLoad) {
         NSLog(@"详情页的articleID: %@", _articleID);
-        // 记录为已读
-        [self logAsRead];
+        // 记录为已读 (用不到了）
+        // [self logAsRead];
         // 请求webview
         [self basedWebView];
         // 请求评论数
@@ -69,7 +78,8 @@
 
 - (void)viewDidDisappear:(BOOL)animated
 {
-    [self.delegate refreshReadedStatus];
+    // 用不到了
+    // [self.delegate refreshReadedStatus];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -132,23 +142,38 @@
     [basedBottomBarBackground addSubview:_commentButtonView];
     
     
-    // praise-button (pic)
-    UIImage *praiseImage = [UIImage imageNamed:@"praise_button.png"]; // 使用ImageView通过name找到图片
-    _praiseImageView = [[UIImageView alloc] initWithImage:praiseImage]; // 把oneImage添加到oneImageView上
-    _praiseImageView.frame = CGRectMake(11.5, 11, 21, 22); // 设置图片位置和大小
+    /* praise-button (pic) */
+//    UIImage *praiseImage = [UIImage imageNamed:@"praise_button.png"]; // 使用ImageView通过name找到图片
+//    _praiseImageView = [[UIImageView alloc] initWithImage:praiseImage]; // 把oneImage添加到oneImageView上
+//    _praiseImageView.frame = CGRectMake(11.5, 11, 21, 22); // 设置图片位置和大小
+//    // [oneImageView setContentMode:UIViewContentModeCenter];
+//    _praiseButtonView = [[UIView alloc] initWithFrame:CGRectMake(_screenWidth-54*2, 0, 44, 44)];
+//    [_praiseButtonView addSubview:_praiseImageView];
+//    // 为UIView添加点击事件
+//    // 一定要先将userInteractionEnabled置为YES，这样才能响应单击事件
+//    _praiseButtonView.userInteractionEnabled = YES; // 设置图片可以交互
+//    UITapGestureRecognizer *singleTapOnPraiseButton = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickPraiseButton)]; // 设置手势
+//    [_praiseButtonView addGestureRecognizer:singleTapOnPraiseButton]; // 给图片添加手势
+//    [basedBottomBarBackground addSubview:_praiseButtonView];
+//    _praiseButtonView.tag = 10;  // no praise
+    
+    
+    /* 喜欢按钮 */
+    UIImage *likeImage = [UIImage imageNamed:@"like_button.png"]; // 使用ImageView通过name找到图片
+    _likeImageView = [[UIImageView alloc] initWithImage:likeImage]; // 把oneImage添加到oneImageView上
+    _likeImageView.frame = CGRectMake(10.5, 12, 23, 20); // 设置图片位置和大小 46*40
     // [oneImageView setContentMode:UIViewContentModeCenter];
-    _praiseButtonView = [[UIView alloc] initWithFrame:CGRectMake(_screenWidth-54*2, 0, 44, 44)];
-    [_praiseButtonView addSubview:_praiseImageView];
+    _likeButtonView = [[UIView alloc] initWithFrame:CGRectMake(_screenWidth-54*2, 0, 44, 44)];
+    [_likeButtonView addSubview:_likeImageView];
     // 为UIView添加点击事件
-    // 一定要先将userInteractionEnabled置为YES，这样才能响应单击事件
-    _praiseButtonView.userInteractionEnabled = YES; // 设置图片可以交互
-    UITapGestureRecognizer *singleTapOnPraiseButton = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickPraiseButton)]; // 设置手势
-    [_praiseButtonView addGestureRecognizer:singleTapOnPraiseButton]; // 给图片添加手势
-    [basedBottomBarBackground addSubview:_praiseButtonView];
-    _praiseButtonView.tag = 10;  // no praise
+    _likeButtonView.userInteractionEnabled = YES; // 设置图片可以交互
+    UITapGestureRecognizer *singleTapOnLikeButton = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickLikeButton)]; // 设置手势
+    [_likeButtonView addGestureRecognizer:singleTapOnLikeButton]; // 给图片添加手势
+    [basedBottomBarBackground addSubview:_likeButtonView];
+    _likeButtonView.tag = 10;  // no praise
 
     
-    // share-button (pic)
+    /* share-button (pic) */
     UIImage *shareImage = [UIImage imageNamed:@"share_button.png"]; // 使用ImageView通过name找到图片
     UIImageView *shareImageView = [[UIImageView alloc] initWithImage:shareImage]; // 把oneImage添加到oneImageView上
     shareImageView.frame = CGRectMake(12, 13, 20, 18); // 设置图片位置和大小
@@ -204,6 +229,22 @@
     [_praiseButtonView addSubview:_praiseNumLabel];
 }
 
+/* 显示喜欢的数量 */
+- (void)basedLikeNumLabelWith:(NSString *)numString
+{
+    if ([numString isEqualToString:@"0"]) {
+        return;
+    }
+    _likeNumLabel = [[UILabel alloc] init];
+    _likeNumLabel.text = numString;
+    _likeNumLabel.font = [UIFont fontWithName:@"Helvetica" size: 10];
+    _likeNumLabel.textColor = [UIColor whiteColor];
+    _likeNumLabel.frame = CGRectMake(30, 4, 5*(unsigned long)numString.length+7, 13);
+    _likeNumLabel.textAlignment = UITextAlignmentCenter;
+    _likeNumLabel.backgroundColor = [colorManager red];
+    [_likeButtonView addSubview:_likeNumLabel];
+}
+
 /* 显示点赞按钮的状态 */
 - (void)praiseButtonStatus
 {
@@ -227,130 +268,6 @@
 }
 
 // 显示分享数
-
-
-
-
-
-
-
-#pragma mark - 网络连接
-/*（请求评论、赞、分享的数量）*/
-- (void)connectForCommentNumWith:(NSString *)articleID
-{
-    // 准备请求参数
-    NSString *host = [urlManager urlHost];
-    NSString *urlString = [host stringByAppendingString:@"/article/other"];
-    NSDictionary *parameters = @{
-                                 @"article_id": articleID
-                                 };
-    
-    // 创建 GET 请求
-    AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];
-    [connectManager GET:urlString parameters: parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        
-        // GET callback
-        NSString *errcode = [responseObject objectForKey:@"errcode"];
-        if ([errcode isEqualToString:@"err"]) {
-            NSLog(@"查询出错");
-            return;
-        }
-        NSString *commentNum = (NSString *)[responseObject objectForKey:@"commentNum"];
-        NSString *praiseNum = (NSString *)[responseObject objectForKey:@"praiseNum"];
-        [self basedCommentNumLabelWith:[NSString stringWithFormat:@"%@", commentNum]];
-        [self basedPraiseNumLabelWith:[NSString stringWithFormat:@"%@", praiseNum]];
-        
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-    }];
-}
-
-
-
-/* 服务器点赞数量+1 */
-- (void)connectForAddOnePraiseWith:(NSString *)articleID
-{
-    // 准备请求参数
-    NSString *host = [urlManager urlHost];
-    NSString *urlString = [host stringByAppendingString:@"/article/praise"];
-    NSDictionary *parameters = @{@"article_id": articleID};
-    
-    // 创建 GET 请求
-    AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];
-    [connectManager GET:urlString parameters: parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        
-        // GET callback
-        NSString *errcode = [responseObject objectForKey:@"errcode"];
-        if ([errcode isEqualToString:@"err"]) {
-            NSLog(@"查询或写入出错");
-            return;
-        }
-        NSLog(@"praise + 1 , success");
-        
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-    }];
-}
-
-
-/* 拉取分享用的链接、标题、描述和图片等 */
-- (void)connectForShareInfoWith:(NSString *)articleID
-{
-    NSLog(@"拉取分享信息");
-    
-    // 准备请求参数
-    NSString *host = [urlManager urlHost];
-    NSString *urlString = [host stringByAppendingString:@"/article/share_info"];
-    NSDictionary *parameters = @{@"article_id": articleID};
-    
-    // 创建 GET 请求
-    AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];
-    connectManager.requestSerializer.timeoutInterval = 20.0;   //设置超时时间
-    [connectManager GET:urlString parameters: parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        
-        // GET callback
-        NSString *errcode = [responseObject objectForKey:@"errcode"];
-        if ([errcode isEqualToString:@"err"]) {
-            NSLog(@"查询分享信息出错");
-            return;
-        }
-        
-        // 将分享信息保存在内存
-        _shareInfo = [[NSDictionary alloc] init];
-        _shareInfo = [[responseObject objectForKey:@"data"] copy];
-        NSLog(@"shareInfo:%@", _shareInfo);
-        NSLog(@"%@", [_shareInfo objectForKey:@"title"]);
-        NSLog(@"%@", [_shareInfo objectForKey:@"description"]);
-        NSLog(@"%@", [_shareInfo objectForKey:@"link"]);
-        
-        // 下载weixin分享用的图片，并保存在内存
-        NSURL *weixinImageURL = [NSURL URLWithString:[_shareInfo objectForKey:@"pic_weixin"]];
-        [[SDWebImageManager sharedManager] downloadImageWithURL:weixinImageURL options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize) {
-            // 下载进度block
-        } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
-            // 下载完成block
-            NSLog(@"下载微信分享用的图片：完成");
-            _shareImageForWeixin = [image copy];
-            NSLog(@"%@",_shareImageForWeixin);
-        }];
-        
-        // 下载weibo分享用的图片，并保存在内存
-        NSURL *weiboImageURL = [NSURL URLWithString:[_shareInfo objectForKey:@"pic_weibo"]];
-        [[SDWebImageManager sharedManager] downloadImageWithURL:weiboImageURL options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize) {
-            // 下载进度block
-        } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
-            // 下载完成block
-            NSLog(@"下载weibo分享用的图片：完成");
-            _shareImageForWeibo = [image copy];
-            NSLog(@"%@",_shareImageForWeibo);
-        }];
-        
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-    }];
-}
-
-
 
 
 
@@ -506,15 +423,181 @@
 
 
 
+
+#pragma mark - 网络连接
+/**（请求评论、赞、分享的数量）*/
+- (void)connectForCommentNumWith:(NSString *)articleID
+{
+    // 准备请求参数
+    NSString *host = [urlManager urlHost];
+    NSString *urlString = [host stringByAppendingString:@"/article/other"];
+    NSDictionary *parameters = @{
+                                 @"article_id": articleID
+                                 };
+    
+    // 创建 GET 请求
+    AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];
+    [connectManager GET:urlString parameters: parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        // GET callback
+        NSString *errcode = [responseObject objectForKey:@"errcode"];
+        if ([errcode isEqualToString:@"err"]) {
+            NSLog(@"查询出错");
+            return;
+        }
+        NSString *commentNum = (NSString *)[responseObject objectForKey:@"commentNum"];
+        // NSString *likeNum = (NSString *)[responseObject objectForKey:@"likeNum"];
+        NSString *likeStatus = [responseObject objectForKey:@"likeStatus"];
+        
+         // 显示 喜欢&评论 数量
+        [self basedCommentNumLabelWith:[NSString stringWithFormat:@"%@", commentNum]];
+        // [self basedLikeNumLabelWith:[NSString stringWithFormat:@"%@", likeNum]];
+        // [self basedPraiseNumLabelWith:[NSString stringWithFormat:@"%@", praiseNum]];
+        
+        // 修改喜欢icon的状态
+        _isLiked = [likeStatus isEqualToString:@"yes"] ? YES : NO;
+        [self changeLikeIcon];
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+}
+
+
+
+/** 服务器点赞数量+1 */
+- (void)connectForAddOnePraiseWith:(NSString *)articleID
+{
+    // 准备请求参数
+    NSString *host = [urlManager urlHost];
+    NSString *urlString = [host stringByAppendingString:@"/article/praise"];
+    NSDictionary *parameters = @{@"article_id": articleID};
+    
+    // 创建 GET 请求
+    AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];
+    [connectManager GET:urlString parameters: parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        // GET callback
+        NSString *errcode = [responseObject objectForKey:@"errcode"];
+        if ([errcode isEqualToString:@"err"]) {
+            NSLog(@"查询或写入出错");
+            return;
+        }
+        NSLog(@"praise + 1 , success");
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+}
+
+
+/** 拉取分享用的链接、标题、描述和图片等 */
+- (void)connectForShareInfoWith:(NSString *)articleID
+{
+    NSLog(@"拉取分享信息");
+    
+    // 准备请求参数
+    NSString *host = [urlManager urlHost];
+    NSString *urlString = [host stringByAppendingString:@"/article/share_info"];
+    NSDictionary *parameters = @{@"article_id": articleID};
+    
+    // 创建 GET 请求
+    AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];
+    connectManager.requestSerializer.timeoutInterval = 20.0;   //设置超时时间
+    [connectManager GET:urlString parameters: parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        // GET callback
+        NSString *errcode = [responseObject objectForKey:@"errcode"];
+        if ([errcode isEqualToString:@"err"]) {
+            NSLog(@"查询分享信息出错");
+            return;
+        }
+        
+        // 将分享信息保存在内存
+        _shareInfo = [[NSDictionary alloc] init];
+        _shareInfo = [[responseObject objectForKey:@"data"] copy];
+        NSLog(@"shareInfo:%@", _shareInfo);
+        NSLog(@"%@", [_shareInfo objectForKey:@"title"]);
+        NSLog(@"%@", [_shareInfo objectForKey:@"description"]);
+        NSLog(@"%@", [_shareInfo objectForKey:@"link"]);
+        
+        // 下载weixin分享用的图片，并保存在内存
+        NSURL *weixinImageURL = [NSURL URLWithString:[_shareInfo objectForKey:@"pic_weixin"]];
+        [[SDWebImageManager sharedManager] downloadImageWithURL:weixinImageURL options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+            // 下载进度block
+        } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+            // 下载完成block
+            NSLog(@"下载微信分享用的图片：完成");
+            _shareImageForWeixin = [image copy];
+            NSLog(@"%@",_shareImageForWeixin);
+        }];
+        
+        // 下载weibo分享用的图片，并保存在内存
+        NSURL *weiboImageURL = [NSURL URLWithString:[_shareInfo objectForKey:@"pic_weibo"]];
+        [[SDWebImageManager sharedManager] downloadImageWithURL:weiboImageURL options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+            // 下载进度block
+        } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+            // 下载完成block
+            NSLog(@"下载weibo分享用的图片：完成");
+            _shareImageForWeibo = [image copy];
+            NSLog(@"%@",_shareImageForWeibo);
+        }];
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+}
+
+
+/** 请求喜欢一个article */
+- (void)connectForLike
+{
+    NSLog(@"请求喜欢一个article");
+    
+    // 准备请求参数
+    NSString *host = [urlManager urlHost];
+    NSString *urlString = [host stringByAppendingString:@"/article/like"];
+    NSDictionary *parameters = @{
+                                 @"uid": _uid,
+                                 @"article_id": _articleID,
+                                 @"is_cancel": _isLiked ? @"yes" : @"no"  // 如果被喜欢，就是取消喜欢操作
+                                 };
+    // 创建 GET 请求
+    AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];
+    connectManager.requestSerializer.timeoutInterval = 20.0;   //设置超时时间
+    [connectManager GET:urlString parameters: parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        // GET callback
+        NSString *errcode = [responseObject objectForKey:@"errcode"];
+        if ([errcode isEqualToString:@"err"]) {
+            NSLog(@"喜欢一个article出错");
+            return;
+        }
+        
+        NSString *likeStatus = [[responseObject objectForKey:@"data"] objectForKey:@"status"];
+        _isLiked = [likeStatus isEqualToString:@"yes"] ? YES : NO;
+        [self changeLikeIcon];
+        
+
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+}
+
+
+
+
+
+
+
+
 #pragma mark - IBAction
 - (void)clickBackButton {
     NSLog(@"返回");
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-
-
-
+/** 点击评论按钮 */
 - (void)clickCommentButton {
     NSLog(@"进入评论页面");
     commentVC *commentPage = [[commentVC alloc] init];
@@ -524,6 +607,29 @@
     //开启iOS7的滑动返回效果
     if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
         self.navigationController.interactivePopGestureRecognizer.delegate = nil;
+    }
+}
+
+/** 点击喜欢按钮 */
+- (void)clickLikeButton
+{
+    NSLog(@"点击喜欢按钮");
+    // 检查是否已登录
+    if (!_uid || [_uid isEqualToString:@""]) {
+        NSLog(@"请先登录");
+        return;
+    }
+    // 发起like请求
+    [self connectForLike];
+}
+
+/** 修改喜欢icon的状态 */
+- (void)changeLikeIcon
+{
+    if (_isLiked) {
+        _likeImageView.image = [UIImage imageNamed:@"like_button_red.png"];
+    } else {
+        _likeImageView.image = [UIImage imageNamed:@"like_button.png"];
     }
 }
 

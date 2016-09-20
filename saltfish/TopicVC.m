@@ -151,7 +151,6 @@
     // 创建 TableView
     [self createTableView];
 
-    
     /* 创建背景图 */
     _backgroundView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, _screenWidth, _backgroundImageHeight)];
     _backgroundView.backgroundColor = [colorManager lightGrayBackground];
@@ -325,6 +324,7 @@
 #pragma mark - 创建 TableView
 - (void)createTableView
 {
+    NSLog(@"创建tableview");
     /* 创建tableView */
     static NSString *CellWithIdentifier = @"cell";
     _oneTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, _screenWidth, _screenHeight-64)];
@@ -346,6 +346,7 @@
 //        // [tableView.mj_footer endRefreshingWithNoMoreData];
 //        [self connectForMoreArticleCell:_oneTableView];
 //    }];
+    // 6214830155114712
 }
 
 
@@ -368,12 +369,9 @@
     static NSString *TopicCellWithIdentifier = @"topicCell+";
     TopicCell *oneTopicCell = [tableView dequeueReusableCellWithIdentifier:TopicCellWithIdentifier];
     
-//    static NSString *ArticleCellWithIdentifier = @"articleCell+";
-//    SFArticleTableViewCell *oneArticleCell = [tableView dequeueReusableCellWithIdentifier:ArticleCellWithIdentifier];
     static NSString *ArticleCellWithIdentifier = @"articleCell+";
     SFArticleCell *oneArticleCell = [tableView dequeueReusableCellWithIdentifier:ArticleCellWithIdentifier];
 
-    
     NSUInteger row = [indexPath row];
     
     if (row == 0) {
@@ -757,7 +755,6 @@
         NSIndexPath *indexPath=[NSIndexPath indexPathForRow:index + 1 inSection:0];
         [_oneTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
         
-        
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
@@ -826,12 +823,13 @@
 
 
 #pragma mark - SFArticleCell 的代理
+/** 点击topics */
 - (void)clickTopicForIndex:(unsigned long)index
 {
     NSLog(@"当前已在话题页面");
 }
 
-
+/** 点击配图 */
 - (void)clickPicsForIndex:(unsigned long)index withView:(UIView *)view
 {
     unsigned long indexTable = index/100 - 1;  // 取百位
@@ -866,8 +864,11 @@
 /** 点击喜欢 */
 - (void)clickLikeIconForIndex:(unsigned long)index
 {
-    // 修改当前cell在内存中的数据，然后刷新当前 cell
-    
+    // 检查是否登录
+    if (!_uid || [_uid isEqualToString:@""]) {
+        [self chooseLoginWayWith:@"需要先登录哦"];
+        return;
+    }
     
     // 发起喜欢的请求
     NSString *articleID = [[_articleData objectAtIndex:index] objectForKey:@"_id"];
@@ -915,6 +916,7 @@
 
 
 #pragma mark - 选择登录方式 UIActionSheet
+/** 选择登录方式 */
 - (void)chooseLoginWayWith:(NSString *)title
 {
     NSLog(@"选择登录方式");
