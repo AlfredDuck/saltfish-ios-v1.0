@@ -15,7 +15,7 @@
 #import "urlManager.h"
 #import "toastView.h"
 #import "SFLoginAndSignup.h"
-#import "SFLoginViewController.h"
+#import "SFThirdLoginViewController.h"
 
 @interface commentVC ()
 @property (nonatomic) BOOL firstLoad;  //是否第一次加载（viewWillAppear多次调用的问题）
@@ -568,7 +568,7 @@
     if (buttonIndex == 0) {
         NSLog(@"新浪微博登录");
         
-        SFLoginViewController *loginPage = [[SFLoginViewController alloc] init];
+        SFThirdLoginViewController *loginPage = [[SFThirdLoginViewController alloc] init];
         loginPage.delegate = self;
         [self.navigationController presentViewController:loginPage animated:YES completion:^{
             NSLog(@"");

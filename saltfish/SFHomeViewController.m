@@ -861,7 +861,7 @@
         // 登录sheet
         if (buttonIndex == 0) {
             NSLog(@"新浪微博登录");
-            SFLoginViewController *loginPage = [[SFLoginViewController alloc] init];
+            SFThirdLoginViewController *loginPage = [[SFThirdLoginViewController alloc] init];
             [self.navigationController presentViewController:loginPage animated:YES completion:^{
                 return;
             }];

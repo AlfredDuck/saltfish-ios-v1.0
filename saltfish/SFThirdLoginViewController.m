@@ -6,17 +6,17 @@
 //  Copyright © 2016年 Alfred. All rights reserved.
 //
 
-#import "SFLoginViewController.h"
+#import "SFThirdLoginViewController.h"
 #import "colorManager.h"
 #import "WeiboSDK.h"
 #import "AFNetworking.h"
 #import "urlManager.h"
 
-@interface SFLoginViewController ()
+@interface SFThirdLoginViewController ()
 
 @end
 
-@implementation SFLoginViewController
+@implementation SFThirdLoginViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {

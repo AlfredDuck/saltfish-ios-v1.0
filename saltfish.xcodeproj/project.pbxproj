@@ -30,7 +30,6 @@
 		BB498BF51D8BCE1700C9DEF4 /* SFMyLikesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB498BF41D8BCE1700C9DEF4 /* SFMyLikesViewController.m */; };
 		BB498BF71D8D35B600C9DEF4 /* like_button.png in Resources */ = {isa = PBXBuildFile; fileRef = BB498BF61D8D35B600C9DEF4 /* like_button.png */; };
 		BB498BF91D8D35C000C9DEF4 /* like_button_red.png in Resources */ = {isa = PBXBuildFile; fileRef = BB498BF81D8D35C000C9DEF4 /* like_button_red.png */; };
-		BB4B67A71D561DCA00018BEF /* SFLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB4B67A61D561DCA00018BEF /* SFLoginViewController.m */; };
 		BB5C0F0D1D39DB9400EEC34F /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = BB5C0F0C1D39DB9400EEC34F /* background.png */; };
 		BB5C0F151D39FBA600EEC34F /* SFPersonalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB5C0F141D39FBA600EEC34F /* SFPersonalViewController.m */; };
 		BB62F06F1D26AC3A00ACFC92 /* ClassificationVC.m in Sources */ = {isa = PBXBuildFile; fileRef = BB62F06E1D26AC3A00ACFC92 /* ClassificationVC.m */; };
@@ -91,6 +90,8 @@
 		BBF2B75C1D31D6AA00657FA6 /* home_tab_focus.png in Resources */ = {isa = PBXBuildFile; fileRef = BBF2B75B1D31D6AA00657FA6 /* home_tab_focus.png */; };
 		BBF2B75E1D31D6B300657FA6 /* mine_tab_focus.png in Resources */ = {isa = PBXBuildFile; fileRef = BBF2B75D1D31D6B300657FA6 /* mine_tab_focus.png */; };
 		BBF2B7601D31D6BE00657FA6 /* discovery_tab_focus.png in Resources */ = {isa = PBXBuildFile; fileRef = BBF2B75F1D31D6BE00657FA6 /* discovery_tab_focus.png */; };
+		BBF4AD561D918FC60051E264 /* SFThirdLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBF4AD551D918FC60051E264 /* SFThirdLoginViewController.m */; };
+		BBF4AD591D91924D0051E264 /* SFLoginAndSignupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBF4AD581D91924D0051E264 /* SFLoginAndSignupViewController.m */; };
 		BBF97D611C65752C00A5D403 /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = BBF97D601C65752C00A5D403 /* placeholder.png */; };
 		BBFF6F6C1D167FE20089099F /* TopicVC.m in Sources */ = {isa = PBXBuildFile; fileRef = BBFF6F6B1D167FE20089099F /* TopicVC.m */; };
 		BF4178EC067BE3396A47881C /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84D65C4BEB822ACA8811C5E7 /* libPods.a */; };
@@ -144,8 +145,6 @@
 		BB498BF41D8BCE1700C9DEF4 /* SFMyLikesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFMyLikesViewController.m; sourceTree = "<group>"; };
 		BB498BF61D8D35B600C9DEF4 /* like_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = like_button.png; path = "../../coding/salt-App效果图/like_button.png"; sourceTree = "<group>"; };
 		BB498BF81D8D35C000C9DEF4 /* like_button_red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = like_button_red.png; path = "../../coding/salt-App效果图/like_button_red.png"; sourceTree = "<group>"; };
-		BB4B67A51D561DCA00018BEF /* SFLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFLoginViewController.h; sourceTree = "<group>"; };
-		BB4B67A61D561DCA00018BEF /* SFLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFLoginViewController.m; sourceTree = "<group>"; };
 		BB5C0F0C1D39DB9400EEC34F /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = background.png; path = "../../coding/salt-App效果图/background.png"; sourceTree = "<group>"; };
 		BB5C0F131D39FBA600EEC34F /* SFPersonalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFPersonalViewController.h; sourceTree = "<group>"; };
 		BB5C0F141D39FBA600EEC34F /* SFPersonalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFPersonalViewController.m; sourceTree = "<group>"; };
@@ -230,6 +229,10 @@
 		BBF2B75B1D31D6AA00657FA6 /* home_tab_focus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = home_tab_focus.png; path = "../../coding/salt-App效果图/home_tab_focus.png"; sourceTree = "<group>"; };
 		BBF2B75D1D31D6B300657FA6 /* mine_tab_focus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = mine_tab_focus.png; path = "../../coding/salt-App效果图/mine_tab_focus.png"; sourceTree = "<group>"; };
 		BBF2B75F1D31D6BE00657FA6 /* discovery_tab_focus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = discovery_tab_focus.png; path = "../../coding/salt-App效果图/discovery_tab_focus.png"; sourceTree = "<group>"; };
+		BBF4AD541D918FC60051E264 /* SFThirdLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFThirdLoginViewController.h; sourceTree = "<group>"; };
+		BBF4AD551D918FC60051E264 /* SFThirdLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFThirdLoginViewController.m; sourceTree = "<group>"; };
+		BBF4AD571D91924D0051E264 /* SFLoginAndSignupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFLoginAndSignupViewController.h; sourceTree = "<group>"; };
+		BBF4AD581D91924D0051E264 /* SFLoginAndSignupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFLoginAndSignupViewController.m; sourceTree = "<group>"; };
 		BBF97D601C65752C00A5D403 /* placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = placeholder.png; sourceTree = "<group>"; };
 		BBF97D641C677AB900A5D403 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		BBFF6F6A1D167FE20089099F /* TopicVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopicVC.h; sourceTree = "<group>"; };
@@ -276,10 +279,12 @@
 		BB11B3B31D3A569E00366377 /* login & signup */ = {
 			isa = PBXGroup;
 			children = (
+				BBF4AD541D918FC60051E264 /* SFThirdLoginViewController.h */,
+				BBF4AD551D918FC60051E264 /* SFThirdLoginViewController.m */,
 				BB11B3B41D3A56DE00366377 /* SFLoginAndSignup.h */,
 				BB11B3B51D3A56DE00366377 /* SFLoginAndSignup.m */,
-				BB4B67A51D561DCA00018BEF /* SFLoginViewController.h */,
-				BB4B67A61D561DCA00018BEF /* SFLoginViewController.m */,
+				BBF4AD571D91924D0051E264 /* SFLoginAndSignupViewController.h */,
+				BBF4AD581D91924D0051E264 /* SFLoginAndSignupViewController.m */,
 			);
 			name = "login & signup";
 			sourceTree = "<group>";
@@ -862,6 +867,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BBF4AD561D918FC60051E264 /* SFThirdLoginViewController.m in Sources */,
 				BB9B90AB1C9C4E1200A89A13 /* picBasedTableViewCell.m in Sources */,
 				BB62F0941D279F2400ACFC92 /* myTopicTableViewCell.m in Sources */,
 				BB11B3BB1D3B30E900366377 /* SFCustomerFeedbackViewController.m in Sources */,
@@ -877,7 +883,6 @@
 				BBEAA0AF1C21A9ED00279011 /* commentVC.m in Sources */,
 				BBF2B74E1D3002FE00657FA6 /* SFArticleTableViewCell.m in Sources */,
 				BB62F08F1D27799B00ACFC92 /* SFMyFollowTopicViewController.m in Sources */,
-				BB4B67A71D561DCA00018BEF /* SFLoginViewController.m in Sources */,
 				BB62F07E1D273C2000ACFC92 /* SFHomeViewController.m in Sources */,
 				BB2E970D1C1D1599001B7CAA /* main.m in Sources */,
 				BB498BF51D8BCE1700C9DEF4 /* SFMyLikesViewController.m in Sources */,
@@ -893,6 +898,7 @@
 				BB11B3B61D3A56DE00366377 /* SFLoginAndSignup.m in Sources */,
 				BB8C2A8F1CB134CC004112F9 /* saltCustomTools.m in Sources */,
 				BBCB95551C30143400011BDD /* writeCommentVC.m in Sources */,
+				BBF4AD591D91924D0051E264 /* SFLoginAndSignupViewController.m in Sources */,
 				BB498BEF1D8A9C1500C9DEF4 /* SFShareManager.m in Sources */,
 				BB62F06F1D26AC3A00ACFC92 /* ClassificationVC.m in Sources */,
 				BB28C47F1C5F215A00527872 /* toastView.m in Sources */,

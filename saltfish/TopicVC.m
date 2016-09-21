@@ -23,7 +23,7 @@
 #import "commentVC.h"
 #import "SFShareManager.h"
 #import "SFLoginAndSignup.h"
-#import "SFLoginViewController.h"
+#import "SFThirdLoginViewController.h"
 #import "MJPhotoBrowser.h"  // MJ图片浏览器
 #import "MJPhoto.h"  // MJ图片浏览器
 
@@ -904,7 +904,7 @@
         // 登录sheet
         if (buttonIndex == 0) {
             NSLog(@"新浪微博登录");
-            SFLoginViewController *loginPage = [[SFLoginViewController alloc] init];
+            SFThirdLoginViewController *loginPage = [[SFThirdLoginViewController alloc] init];
             [self.navigationController presentViewController:loginPage animated:YES completion:^{
                 return;
             }];

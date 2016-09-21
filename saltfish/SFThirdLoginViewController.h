@@ -8,16 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol SFLoginViewControllerDelegate <NSObject>
+@protocol SFThirdLoginViewControllerDelegate <NSObject>
 @required
 - (void)weiboLoginSuccess;
 @end
 
-@interface SFLoginViewController : UIViewController
+@interface SFThirdLoginViewController : UIViewController
 @property (nonatomic) NSInteger screenWidth;
 @property (nonatomic) NSInteger screenHeight;
 - (void)requestForWeiboAuthorize;  // 新浪微博授权请求
 - (void)waitForWeiboAuthorizeResult;  // 注册观察者
-@property (nonatomic,assign) id <SFLoginViewControllerDelegate> delegate;
+@property (nonatomic,assign) id <SFThirdLoginViewControllerDelegate> delegate;
 @end
 

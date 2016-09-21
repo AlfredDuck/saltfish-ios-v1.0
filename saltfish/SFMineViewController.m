@@ -16,7 +16,7 @@
 #import "SFPersonalViewController.h"
 #import "SFCustomerFeedbackViewController.h"
 #import "SFLoginAndSignup.h"
-#import "SFLoginViewController.h"
+#import "SFThirdLoginViewController.h"
 #import "SFMyLikesViewController.h"
 #import "toastView.h"
 
@@ -404,7 +404,7 @@
     if (buttonIndex == 0) {
         NSLog(@"新浪微博登录");
         // 开启登录中间页
-        SFLoginViewController *loginPage = [[SFLoginViewController alloc] init];
+        SFThirdLoginViewController *loginPage = [[SFThirdLoginViewController alloc] init];
         [self.navigationController presentViewController:loginPage animated:YES completion:^{
             NSLog(@"开启登录页面");
         }];

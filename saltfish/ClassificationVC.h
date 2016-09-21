@@ -8,9 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "TopicTableViewCell.h"
-#import "SFLoginViewController.h"
+#import "SFThirdLoginViewController.h"
 
-@interface ClassificationVC : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, TopicTableViewCellDelegate, SFLoginViewControllerDelegate>
+@interface ClassificationVC : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, TopicTableViewCellDelegate, SFThirdLoginViewControllerDelegate>
 @property (nonatomic, strong) NSString *pageTitle;  // 页面标题
 @property (nonatomic, strong) UILabel *titleLabel;  //
 @property (nonatomic, strong) UITableView *oneTableView;  // tableview

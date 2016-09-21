@@ -11,7 +11,7 @@
 #import "SFTabBarViewController.h"
 #import "TopicTableViewCell.h"
 #import "SFLoginAndSignup.h"
-#import "SFLoginViewController.h"
+#import "SFThirdLoginViewController.h"
 
 @interface SFDiscoveryViewController : SFTabBarViewController <UIActionSheetDelegate, UITableViewDelegate, UITableViewDataSource, SFClassificationTableViewCellDelegate, TopicTableViewCellDelegate, SFLoginAndSignupDelegate>
 @property (nonatomic, strong) UITableView *oneTableView;  // tableview
