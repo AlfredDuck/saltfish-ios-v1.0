@@ -16,13 +16,13 @@
 #import "SFPersonalViewController.h"
 #import "SFCustomerFeedbackViewController.h"
 #import "SFLoginAndSignup.h"
+#import "SFLoginAndSignupViewController.h"
 #import "SFThirdLoginViewController.h"
 #import "SFMyLikesViewController.h"
 #import "toastView.h"
 
 
 @interface SFMineViewController ()
-
 @end
 
 @implementation SFMineViewController
@@ -395,7 +395,7 @@
 - (void)chooseLoginWayWith:(NSString *)title
 {
     NSLog(@"选择登录方式");
-    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:title delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles: @"微博帐号登录", nil];
+    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:title delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles: @"微博帐号登录", @"邮箱登录/注册", nil];
     [sheet showInView:self.view];
 }
 
@@ -403,7 +403,7 @@
 {
     if (buttonIndex == 0) {
         NSLog(@"新浪微博登录");
-        // 开启登录中间页
+        // 开启weibo登录中间页
         SFThirdLoginViewController *loginPage = [[SFThirdLoginViewController alloc] init];
         [self.navigationController presentViewController:loginPage animated:YES completion:^{
             NSLog(@"开启登录页面");
@@ -412,6 +412,13 @@
 //        [login requestForWeiboAuthorize];
 //        [login waitForWeiboAuthorizeResult];
 //        login.delegate = self;
+    }
+    else if (buttonIndex == 1){
+        // 登录注册页面
+        SFLoginAndSignupViewController *loginPage = [[SFLoginAndSignupViewController alloc] init];
+        [self.navigationController presentViewController:loginPage animated:YES completion:^{
+            NSLog(@"打开登录注册页面");
+        }];
     }
 }
 

@@ -56,6 +56,9 @@
 + (UIColor *)blueLinkColor {
     return [UIColor colorWithRed:(53/255.0) green:(141/255.0) blue:(185/255.0) alpha:1];
 }
++ (UIColor *)blueButtonColor {
+    return [UIColor colorWithRed:47/255.0 green:175/255.0 blue:239/255.0 alpha:1];
+}
 
 @end
 

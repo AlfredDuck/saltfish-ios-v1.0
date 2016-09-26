@@ -41,8 +41,10 @@
     NSUserDefaults *sfUserDefault = [NSUserDefaults standardUserDefaults];
     if ([sfUserDefault objectForKey:@"loginInfo"]) {
         _uid = [[sfUserDefault objectForKey:@"loginInfo"] objectForKey:@"uid"];
+        _userType = [[sfUserDefault objectForKey:@"loginInfo"] objectForKey:@"userType"];
     } else {
         _uid = @"";
+        _userType = @"";
     }
     
     [self createUIParts];  // 创建ui
@@ -246,7 +248,9 @@
     NSString *host = [urlManager urlHost];
     NSString *urlString = [host stringByAppendingString:@"/user/my_topics"];
     
-    NSDictionary *parameters = @{@"uid": _uid};
+    NSDictionary *parameters = @{@"uid": _uid,
+                                 @"user_type": _userType
+                                 };
     
     // 创建 GET 请求
     AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];
@@ -296,6 +300,7 @@
     NSString *urlString = [host stringByAppendingString:@"/user/my_topics"];
     
     NSDictionary *parameters = @{@"uid": _uid,
+                                 @"user_type": _userType,
                                  @"last_id": [[_tableViewData lastObject] objectForKey:@"_id"],
                                  @"type": @"loadmore"
                                  };

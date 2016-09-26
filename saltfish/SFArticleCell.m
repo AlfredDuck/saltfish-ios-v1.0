@@ -39,14 +39,14 @@
         
         // 一些初始化的值
         _title = @"曾经沧海难为水，除却巫山不是风雨云。怎么你还不来啊";
-        _topic = @"煎蛋妹子图";
+        _topic = @"阿拉丁";
         _date = @"2017-09-08";
         _portraitURL = @"http://i10.topitme.com/l007/100079161401a5c7b0.jpg";
         
         
         /* 话题头像 */
         _portraitImageView = [[UIImageView alloc] initWithFrame:CGRectMake(12, 15, 36, 36)];
-        _portraitImageView.backgroundColor = [UIColor grayColor];
+        _portraitImageView.backgroundColor = [colorManager lightGrayBackground];
         // uiimageview居中裁剪
         _portraitImageView.contentMode = UIViewContentModeScaleAspectFill;
         _portraitImageView.clipsToBounds  = YES;

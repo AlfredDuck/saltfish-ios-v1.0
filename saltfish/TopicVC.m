@@ -23,9 +23,13 @@
 #import "commentVC.h"
 #import "SFShareManager.h"
 #import "SFLoginAndSignup.h"
+#import "SFLoginAndSignupViewController.h"
 #import "SFThirdLoginViewController.h"
 #import "MJPhotoBrowser.h"  // MJ图片浏览器
 #import "MJPhoto.h"  // MJ图片浏览器
+// 获取当前设备可用内存及所占内存的头文件
+#import <sys/sysctl.h>
+#import <mach/mach.h>
 
 
 @interface TopicVC ()
@@ -60,7 +64,10 @@
     _screenWidth = [UIScreen mainScreen].bounds.size.width;
     _backgroundImageHeight = 64+70;
     // !!!!!!!!!
-    [[SDImageCache sharedImageCache] setValue:nil forKey:@"memCache"];
+    // [[SDImageCache sharedImageCache] setValue:nil forKey:@"memCache"];
+    
+    // 当前占用的内存量
+    NSLog(@"内存占用:%f", (double)[self usedMemory]);
 }
 
 
@@ -74,8 +81,10 @@
     NSUserDefaults *sf = [NSUserDefaults standardUserDefaults];
     if ([sf objectForKey:@"loginInfo"]) {
         _uid = [[sf objectForKey:@"loginInfo"] objectForKey:@"uid"];
+        _userType = [[sf objectForKey:@"loginInfo"] objectForKey:@"userType"];
     } else {
         _uid = @"";
+        _userType = @"";
     }
     
     if (_articleData) {
@@ -159,19 +168,15 @@
     _backgroundView.contentMode = UIViewContentModeScaleAspectFill;
     _backgroundView.clipsToBounds  = YES;
     
-    // 需要SDWebImage（异步加载）
+//    // 需要SDWebImage（异步加载）
 //    [_backgroundView sd_setImageWithURL:[NSURL URLWithString:_portraitURL] placeholderImage:[UIImage imageNamed:@"placeholder.png"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
 //        NSLog(@"%@", imageURL);
-//        // UIImage *imgBlur = [self boxblurImage:image withBlurNumber:(CGFloat)0.60f];
-//        
-//        GPUImageGaussianBlurFilter * blurFilter = [[GPUImageGaussianBlurFilter alloc] init];
-//        blurFilter.blurRadiusInPixels = 20.0;
-//        UIImage *blurredImage = [blurFilter imageByFilteringImage:image];
-//        
-//        [_backgroundView setImage:blurredImage];
 //    }];
+    
+    // YYWebImage
     UIImageView *thum = [[UIImageView alloc] initWithFrame:CGRectMake(10.0, 10.0, 10.0, 10.0)];
     [thum yy_setImageWithURL:[NSURL URLWithString:_portraitURL] placeholder:[UIImage imageNamed:@"placeholder.png"] options:YYWebImageOptionIgnoreAnimatedImage completion:^(UIImage * _Nullable image, NSURL * _Nonnull url, YYWebImageFromType from, YYWebImageStage stage, NSError * _Nullable error) {
+        NSLog(@"%@", error);
         NSLog(@"%@", url);
         
         // 新开线程计算，避免主线程阻塞
@@ -180,8 +185,11 @@
         dispatch_group_async(group, queue, ^{
             NSLog(@"block 1");
             GPUImageGaussianBlurFilter * blurFilter = [[GPUImageGaussianBlurFilter alloc] init];
+            NSLog(@"block 2");
             blurFilter.blurRadiusInPixels = 12.0;  // 为达到合适的模糊，需头像尺寸在200*200上下
-            _backgroundImage = [blurFilter imageByFilteringImage:image];
+            NSLog(@"block 3");
+            _backgroundImage = [blurFilter imageByFilteringImage:image];  // （再报错就是YY缓存设置的不够大的原因）
+            NSLog(@"block 4");
         });
         dispatch_group_notify(group, dispatch_get_main_queue(), ^{
             NSLog(@"计算结束");
@@ -194,7 +202,7 @@
     
     /* 创建头像图片 */
     _portraitView = [[UIImageView alloc] initWithFrame:CGRectMake(_screenWidth/2.0-42, 92, 84, 84)];
-    _portraitView.backgroundColor = [UIColor brownColor];
+    _portraitView.backgroundColor = [UIColor lightGrayColor];
     // uiimageview居中裁剪
     _portraitView.contentMode = UIViewContentModeScaleAspectFill;
     _portraitView.clipsToBounds  = YES;
@@ -482,8 +490,8 @@
     NSString *host = [urlManager urlHost];
     NSString *urlString = [host stringByAppendingString:@"/topic/topic_info"];
     
-    NSDictionary *parameters = @{
-                                 @"uid": _uid,
+    NSDictionary *parameters = @{@"uid": _uid,
+                                 @"user_type": _userType,
                                  @"title": _topic
                                  };
     
@@ -525,7 +533,8 @@
     NSString *host = [urlManager urlHost];
     NSString *urlString = [host stringByAppendingString:@"/topic/articles"];
     
-    NSDictionary *parameters = @{
+    NSDictionary *parameters = @{@"uid": _uid,
+                                 @"user_type": _userType,
                                  @"topic":_topic
                                  };
     
@@ -573,11 +582,12 @@
     // 取得当前最后一个cell的数据id
     NSString *lastID = [[_articleData lastObject] objectForKey:@"_id"];
     NSString *postTime = [[_articleData lastObject] objectForKey:@"postTime"];
-    NSDictionary *parameters = @{
-                                 @"type":@"loadmore",
+    NSDictionary *parameters = @{@"type":@"loadmore",
                                  @"last_id":lastID,
                                  @"post_time":postTime,
-                                 @"topic": _topic
+                                 @"topic": _topic,
+                                 @"uid": _uid,
+                                 @"user_type": _userType
                                  };
     
     // 创建 GET 请求
@@ -624,8 +634,8 @@
         urlString = [host stringByAppendingString:@"/topic/unfollow"];
     }
     
-    NSDictionary *parameters = @{
-                                 @"uid": _uid,
+    NSDictionary *parameters = @{@"uid": _uid,
+                                 @"user_type": _userType,
                                  @"topic": _topic,
                                  @"portrait": _portraitURL,
                                  @"introduction": _introduction,
@@ -678,8 +688,8 @@
     // prepare request parameters
     NSString *host = [urlManager urlHost];
     NSString *urlString = [host stringByAppendingString:@"/topic/push"];
-    NSDictionary *parameters = @{
-                                 @"uid": _uid,
+    NSDictionary *parameters = @{@"uid": _uid,
+                                 @"user_type": _userType,
                                  @"topic": _topic,
                                  @"portrait": _portraitURL,
                                  @"introduction": _introduction,
@@ -720,8 +730,8 @@
     // prepare request parameters
     NSString *host = [urlManager urlHost];
     NSString *urlString = [host stringByAppendingString:@"/article/like"];
-    NSDictionary *parameters = @{
-                                 @"uid": _uid,
+    NSDictionary *parameters = @{@"uid": _uid,
+                                 @"user_type": _userType,
                                  @"article_id": articleID,
                                  @"is_cancel": isCancel
                                  };
@@ -909,9 +919,18 @@
                 return;
             }];
         }
+        else if (buttonIndex == 1) {
+            SFLoginAndSignupViewController *loginPage = [[SFLoginAndSignupViewController alloc] init];
+            [self.navigationController presentViewController:loginPage animated:YES completion:^{
+                NSLog(@"");
+            }];
+        }
     }
 
 }
+
+
+
 
 
 
@@ -920,7 +939,7 @@
 - (void)chooseLoginWayWith:(NSString *)title
 {
     NSLog(@"选择登录方式");
-    UIActionSheet *loginSheet = [[UIActionSheet alloc] initWithTitle:title delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles: @"微博帐号登录",nil];
+    UIActionSheet *loginSheet = [[UIActionSheet alloc] initWithTitle:title delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles: @"微博帐号登录", @"邮箱登录/注册", nil];
     loginSheet.tag = 120;
     [loginSheet showInView:self.view];
 }
@@ -982,6 +1001,28 @@
     shake.autoreverses = YES; //是否重复
     shake.repeatCount = 2;//次数
     [senderView.layer addAnimation:shake forKey:@"shakeAnimation"];
+}
+
+
+
+
+
+// 获取当前任务所占用的内存（单位：MB）
+- (double)usedMemory
+{
+    task_basic_info_data_t taskInfo;
+    mach_msg_type_number_t infoCount = TASK_BASIC_INFO_COUNT;
+    kern_return_t kernReturn = task_info(mach_task_self(),
+                                         TASK_BASIC_INFO,
+                                         (task_info_t)&taskInfo,
+                                         &infoCount);
+    
+    if (kernReturn != KERN_SUCCESS
+        ) {
+        return NSNotFound;
+    }
+    
+    return taskInfo.resident_size / 1024.0 / 1024.0;
 }
 
 

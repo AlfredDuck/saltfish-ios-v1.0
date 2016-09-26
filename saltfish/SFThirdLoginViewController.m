@@ -13,7 +13,6 @@
 #import "urlManager.h"
 
 @interface SFThirdLoginViewController ()
-
 @end
 
 @implementation SFThirdLoginViewController
@@ -220,7 +219,7 @@
     //    NSLog(@"全部keys：%@", allkey);
     
     // 调用代理方法，通知登录成功
-    [self.delegate weiboLoginSuccess];
+    // [self.delegate weiboLoginSuccess];
     
     // 显示登录结果
     [self showLoginResult];

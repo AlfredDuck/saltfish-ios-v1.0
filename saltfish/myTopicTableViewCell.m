@@ -43,7 +43,7 @@
         
         /* 图片(尺寸固定) */
         _picImageView = [[UIImageView alloc] initWithFrame:CGRectMake(11, 12, 58, 58)];
-        _picImageView.backgroundColor = [UIColor grayColor];
+        _picImageView.backgroundColor = [colorManager lightGrayBackground];
         // uiimageview居中裁剪
         _picImageView.contentMode = UIViewContentModeScaleAspectFill;
         _picImageView.clipsToBounds  = YES;

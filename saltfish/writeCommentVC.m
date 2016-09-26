@@ -261,7 +261,7 @@
     
     NSUserDefaults *sf = [NSUserDefaults standardUserDefaults];
     NSString *uuid = @"";
-    NSString *nickname, *portrait, *oneUID;
+    NSString *nickname, *portrait, *oneUID, *userType;
     
     if ([sf objectForKey:@"uuid"]) {  // 获取uuid
         uuid = [sf objectForKey:@"uuid"];
@@ -271,6 +271,7 @@
         nickname = [[sf objectForKey:@"loginInfo"] objectForKey:@"nickname"];
         portrait = [[sf objectForKey:@"loginInfo"] objectForKey:@"portrait"];
         oneUID = [[sf objectForKey:@"loginInfo"] objectForKey:@"uid"];
+        userType = [[sf objectForKey:@"loginInfo"] objectForKey:@"userType"];
     } else {
         return;
     }

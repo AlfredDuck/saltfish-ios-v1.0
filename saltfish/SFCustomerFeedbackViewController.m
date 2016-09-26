@@ -229,7 +229,7 @@
     NSString *host = [urlManager urlHost];
     NSString *urlString = [host stringByAppendingString:@"/user/customer_feedback"];
     
-    // 读取本地的uuid
+    // 读取设备的uuid
     NSString *uuid = @"";
     NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
     if ([userDefault objectForKey:@"uuid"]) {

@@ -58,8 +58,10 @@
     NSUserDefaults *sfUserDefault = [NSUserDefaults standardUserDefaults];
     if ([sfUserDefault objectForKey:@"loginInfo"]) {
         _uid = [[sfUserDefault objectForKey:@"loginInfo"] objectForKey:@"uid"];
+        _userType = [[sfUserDefault objectForKey:@"loginInfo"] objectForKey:@"userType"];
     } else {
         _uid = @"";
+        _userType = @"";
     }
     
     /* 构建页面元素 */
@@ -86,16 +88,18 @@
     
     // 检查登录状态是否有变化
     NSUserDefaults *sfUserDefault = [NSUserDefaults standardUserDefaults];
-    if ([sfUserDefault objectForKey:@"loginInfo"]) {  // 如果存在登录id
-        if (![_uid isEqualToString:[[sfUserDefault objectForKey:@"loginInfo"] objectForKey:@"uid"]]) {  // 当前uid是否是登录id
+    if ([sfUserDefault objectForKey:@"loginInfo"]) {  // 如果存在用户id
+        if (![_uid isEqualToString:[[sfUserDefault objectForKey:@"loginInfo"] objectForKey:@"uid"]]) {  // 当前uid是否是用户id
             NSLog(@"登录状态发生了变化001");
             _uid = [[sfUserDefault objectForKey:@"loginInfo"] objectForKey:@"uid"];
+            _userType = [[sfUserDefault objectForKey:@"loginInfo"] objectForKey:@"userType"];
             [_oneTableView.mj_header beginRefreshing];  // 重新拉取一下
         }
     } else {  // 如果不存在登录id
         if (![_uid isEqualToString: @""]) {  // 当前uid是否存在
             NSLog(@"登录状态发生了变化002");
             _uid = @"";
+            _userType = @"";
             [_oneTableView.mj_header beginRefreshing];  // 重新拉取一下
         }
     }
@@ -680,7 +684,9 @@
     // prepare request parameters
     NSString *host = [urlManager urlHost];
     NSString *urlString = [host stringByAppendingString:@"/index/followed_articles"];
-    NSDictionary *parameters = @{@"uid": _uid};
+    NSDictionary *parameters = @{@"uid": _uid,
+                                 @"user_type": _userType
+                                 };
     
     // 创建 GET 请求
     AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];
@@ -741,7 +747,9 @@
     NSDictionary *parameters = @{@"last_id":lastID,
                                  @"type":@"loadmore",
                                  @"post_time":postTime,
-                                 @"uid": _uid};
+                                 @"uid": _uid,
+                                 @"user_type": _userType
+                                 };
 
     // 创建 GET 请求
     AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];
@@ -794,6 +802,7 @@
     NSString *urlString = [host stringByAppendingString:@"/article/like"];
     NSDictionary *parameters = @{
                                  @"uid": _uid,
+                                 @"user_type": _userType,
                                  @"article_id": articleID,
                                  @"is_cancel": isCancel
                                  };

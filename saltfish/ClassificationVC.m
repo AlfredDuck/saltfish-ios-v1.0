@@ -15,6 +15,7 @@
 #import "TopicTableViewCell.h"
 #import "TopicVC.h"
 #import "SFLoginAndSignup.h"
+#import "SFLoginAndSignupViewController.h"
 #import "SFThirdLoginViewController.h"
 
 @interface ClassificationVC ()
@@ -59,8 +60,10 @@
     NSUserDefaults *sfUserDefault = [NSUserDefaults standardUserDefaults];
     if ([sfUserDefault objectForKey:@"loginInfo"]) {
         _uid = [[sfUserDefault objectForKey:@"loginInfo"] objectForKey:@"uid"];
+        _userType = [[sfUserDefault objectForKey:@"loginInfo"] objectForKey:@"userType"];
     } else {
         _uid = @"";
+        _userType = @"";
     }
     
     if (_oneTableView) {
@@ -272,9 +275,9 @@
     
     NSDictionary *parameters = @{
                                  @"uid": _uid,
+                                 @"user_type": _userType,
                                  @"classification": _pageTitle
                                  };
-    
     // 创建 GET 请求
     AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];
     connectManager.requestSerializer.timeoutInterval = 20.0;   //设置超时时间
@@ -316,6 +319,7 @@
     NSString *lastID = [[_tableViewData lastObject] objectForKey:@"_id"];
     NSDictionary *parameters = @{
                                  @"uid": _uid,
+                                 @"user_type": _userType,
                                  @"type":@"loadmore",
                                  @"last_id":lastID,
                                  @"classification": _pageTitle
@@ -369,6 +373,7 @@
     
     NSDictionary *parameters = @{
                                  @"uid": uid,
+                                 @"user_type": _userType,
                                  @"topic": [topic objectForKey:@"title"],
                                  @"portrait": [topic objectForKey:@"portrait"],
                                  @"introduction": [topic objectForKey:@"introduction"],
@@ -429,7 +434,7 @@
 - (void)chooseLoginWayWith:(NSString *)title
 {
     NSLog(@"选择登录方式");
-    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:title delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles: @"微博帐号登录",nil];
+    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:title delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles: @"微博帐号登录", @"邮箱登录/注册", nil];
     [sheet showInView:self.view];
 }
 
@@ -443,10 +448,12 @@
         [self.navigationController presentViewController:loginPage animated:YES completion:^{
             NSLog(@"");
         }];
-        
-//        SFLoginAndSignup *Login = [[SFLoginAndSignup alloc] init];
-//        [Login requestForWeiboAuthorize];
-//        [Login waitForWeiboAuthorizeResult];
+    }
+    else if (buttonIndex == 1) {
+        SFLoginAndSignupViewController *loginPage = [[SFLoginAndSignupViewController alloc] init];
+        [self.navigationController presentViewController:loginPage animated:YES completion:^{
+            NSLog(@"");
+        }];
     }
 }
 

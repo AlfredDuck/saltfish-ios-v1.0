@@ -16,6 +16,7 @@
 @property (nonatomic, strong) UITableView *oneTableView;  // tableview
 @property (nonatomic, strong) NSMutableArray *tableViewData;  // tableview数据
 @property (nonatomic, strong) NSString *uid;  // 登录账户id
+@property (nonatomic, strong) NSString *userType;  // 账户类型
 
 @property (nonatomic, strong) UIView *loadingView;  // 页面第一次加载时显示的loading
 @property (nonatomic, strong) UIActivityIndicatorView *loadingFlower;  // 小菊花

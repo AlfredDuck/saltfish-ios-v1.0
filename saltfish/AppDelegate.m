@@ -41,7 +41,7 @@
     [WXApi registerApp:WXKey];
     // 设置YY图片缓存的最大内存上限
     YYImageCache *cache = [YYWebImageManager sharedManager].cache;
-    cache.memoryCache.costLimit = 100 * 1024 * 1024;
+    cache.memoryCache.costLimit = 200 * 1024 * 1024;
     
     //[[SDWebImageManager sharedManager].imageCache setMaxMemoryCost:1*1024*1024];
     [SDImageCache sharedImageCache].maxMemoryCost = 10*1024*1024;

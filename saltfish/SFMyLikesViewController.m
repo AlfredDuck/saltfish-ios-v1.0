@@ -17,6 +17,7 @@
 #import "SFArticleCell.h"
 #import "TopicVC.h"
 #import "commentVC.h"
+#import "detailVC.h"
 
 
 @interface SFMyLikesViewController ()
@@ -48,8 +49,10 @@
     NSUserDefaults *sfUserDefault = [NSUserDefaults standardUserDefaults];
     if ([sfUserDefault objectForKey:@"loginInfo"]) {
         _uid = [[sfUserDefault objectForKey:@"loginInfo"] objectForKey:@"uid"];
+        _userType = [[sfUserDefault objectForKey:@"loginInfo"] objectForKey:@"userType"];
     } else {
         _uid = @"";
+        _userType = @"";
     }
     
     [self createUIParts];  // 创建ui
@@ -110,7 +113,7 @@
     
     /** 为空提示语 **/
     _emptyLabel = [[UILabel alloc] initWithFrame:CGRectMake((_screenWidth-200)/2, 84, 200, 30)];
-    _emptyLabel.text = @"- 你还没有关注任何话题 -";
+    _emptyLabel.text = @"- 没有你喜欢过的内容 -";
     _emptyLabel.textColor = [colorManager secondTextColor];
     _emptyLabel.font = [UIFont fontWithName:@"Helvetica" size: 12];
     _emptyLabel.textAlignment = UITextAlignmentCenter;
@@ -225,7 +228,7 @@
     
     [oneArticleCell rewriteLinkMark:isShow];
     [oneArticleCell rewriteTopic:[[_articleData objectAtIndex:row] objectForKey:@"topic"] withIndex:row];
-    [oneArticleCell rewritePortrait:@"" withIndex:row];
+    [oneArticleCell rewritePortrait:[[_articleData objectAtIndex:row] objectForKey:@"topicImageURL"] withIndex:row];
     [oneArticleCell rewriteDate:[[_articleData objectAtIndex:row] objectForKey:@"date"]];
     [oneArticleCell rewriteShareNum:shareNum withIndex:row];
     [oneArticleCell rewriteCommentNum:commentNum withIndex:row];
@@ -251,11 +254,18 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSUInteger row = [indexPath row];
-//    
-//    TopicVC *topicPV = [[TopicVC alloc] init];
-//    topicPV.topic = [[_tableViewData objectAtIndex:row] objectForKey:@"title"];
-//    topicPV.portraitURL = [[_tableViewData objectAtIndex:row] objectForKey:@"portrait"];
-//    [self.navigationController pushViewController:topicPV animated:YES];
+    // 检查是否有链接
+    if ([NSNull null] == [[_articleData objectAtIndex:row] objectForKey:@"originalLink"]) {
+        NSLog(@"没有外链");
+        // 左右抖动一下
+        [self shake:[tableView cellForRowAtIndexPath:indexPath].contentView];
+        return;
+    }
+    
+    detailVC *detailPage = [[detailVC alloc] init];
+    detailPage.articleID = [[_articleData objectAtIndex:row] objectForKey:@"_id"];
+    detailPage.originalLink = [[_articleData objectAtIndex:row] objectForKey:@"originalLink"];
+    [self.navigationController pushViewController:detailPage animated:YES];
     //开启iOS7的滑动返回效果
     if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
         self.navigationController.interactivePopGestureRecognizer.delegate = nil;
@@ -357,7 +367,9 @@
     NSString *host = [urlManager urlHost];
     NSString *urlString = [host stringByAppendingString:@"/user/my_likes"];
     
-    NSDictionary *parameters = @{@"uid": _uid};
+    NSDictionary *parameters = @{@"uid": _uid,
+                                 @"user_type": _userType
+                                 };
     
     // 创建 GET 请求
     AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];
@@ -413,6 +425,7 @@
     NSString *urlString = [host stringByAppendingString:@"/article/like"];
     NSDictionary *parameters = @{
                                  @"uid": _uid,
+                                 @"user_type": _userType,
                                  @"article_id": articleID,
                                  @"is_cancel": isCancel
                                  };
@@ -532,6 +545,24 @@
     
     //4.显示浏览器
     [brower show];
+}
+
+
+
+
+
+
+#pragma mark - 左右抖动
+/**代码来自网络**/
+- (void)shake:(UIView *)senderView
+{
+    CABasicAnimation* shake = [CABasicAnimation animationWithKeyPath:@"transform.translation.x"];
+    shake.fromValue = [NSNumber numberWithFloat:-3];
+    shake.toValue = [NSNumber numberWithFloat:3];
+    shake.duration = 0.08;//执行时间
+    shake.autoreverses = YES; //是否重复
+    shake.repeatCount = 2;//次数
+    [senderView.layer addAnimation:shake forKey:@"shakeAnimation"];
 }
 
 

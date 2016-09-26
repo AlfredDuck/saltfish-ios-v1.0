@@ -26,6 +26,7 @@
 @property (nonatomic, strong) UIImageView *portraitView;
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) NSString *uid;  // 登录账号id
+@property (nonatomic, strong) NSString *userType;  // 账户类型
 
 // 全局变量 屏幕长宽
 @property (nonatomic) NSInteger screenWidth;

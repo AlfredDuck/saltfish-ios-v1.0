@@ -48,8 +48,10 @@
     NSUserDefaults *sfUserDefault = [NSUserDefaults standardUserDefaults];
     if ([sfUserDefault objectForKey:@"loginInfo"]) {
         _uid = [[sfUserDefault objectForKey:@"loginInfo"] objectForKey:@"uid"];
+        _userType = [[sfUserDefault objectForKey:@"loginInfo"] objectForKey:@"userType"];
     } else {
         _uid = @"";
+        _userType = @"";
     }
     
     [self createUIParts];
@@ -71,12 +73,14 @@
         if (![_uid isEqualToString:[[sfUserDefault objectForKey:@"loginInfo"] objectForKey:@"uid"]]) {  // 当前uid是否是登录id
             NSLog(@"登录状态发生了变化003");
             _uid = [[sfUserDefault objectForKey:@"loginInfo"] objectForKey:@"uid"];
+            _userType = [[sfUserDefault objectForKey:@"loginInfo"] objectForKey:@"userType"];
             [_oneTableView.mj_header beginRefreshing];  // 重新拉取一下
         }
     } else {  // 如果不存在登录id
         if (![_uid isEqualToString: @""]) {  // 当前uid是否存在
             NSLog(@"登录状态发生了变化004");
             _uid = @"";
+            _userType = @"";
             [_oneTableView.mj_header beginRefreshing];  // 重新拉取一下
         }
     }
@@ -369,7 +373,9 @@
     // 准备请求参数
     NSString *host = [urlManager urlHost];
     NSString *urlString = [host stringByAppendingString:@"/discover/latest_topics"];
-    NSDictionary *parameters = @{@"uid": _uid};
+    NSDictionary *parameters = @{@"uid": _uid,
+                                 @"user_type": _userType
+                                 };
     
     // 创建 GET 请求
     AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];
@@ -415,7 +421,8 @@
     NSString *lastID = [[_latestTopicsData lastObject] objectForKey:@"_id"];
     NSDictionary *parameters = @{@"type":@"loadmore",
                                  @"last_id":lastID,
-                                 @"uid": _uid
+                                 @"uid": _uid,
+                                 @"user_type": _userType
                                  };
     // 创建 GET 请求
     AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];
@@ -466,8 +473,8 @@
         urlString = [host stringByAppendingString:@"/topic/unfollow"];
     }
     
-    NSDictionary *parameters = @{
-                                 @"uid": uid,
+    NSDictionary *parameters = @{@"uid": uid,
+                                 @"user_type": _userType,
                                  @"topic": [topic objectForKey:@"title"],
                                  @"portrait": [topic objectForKey:@"portrait"],
                                  @"introduction": [topic objectForKey:@"introduction"],
@@ -527,7 +534,7 @@
 - (void)chooseLoginWayWith:(NSString *)title
 {
     NSLog(@"选择登录方式");
-    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:title delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles: @"微博帐号登录",nil];
+    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:title delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles: @"微博帐号登录", @"邮箱登录/注册", nil];
     [sheet showInView:self.view];
 }
 
@@ -535,17 +542,18 @@
 {
     if (buttonIndex == 0) {
         NSLog(@"新浪微博登录");
-        
         SFThirdLoginViewController *loginPage = [[SFThirdLoginViewController alloc] init];
         [self.navigationController presentViewController:loginPage animated:YES completion:^{
             NSLog(@"");
         }];
-        
-//        SFLoginAndSignup *Login = [[SFLoginAndSignup alloc] init];
-//        // Login.delegate  = self;
-//        [Login requestForWeiboAuthorize];
-//        [Login waitForWeiboAuthorizeResult];
     }
+    else if (buttonIndex == 1){
+        SFLoginAndSignupViewController *loginPage = [[SFLoginAndSignupViewController alloc] init];
+        [self.navigationController presentViewController:loginPage animated:YES completion:^{
+            NSLog(@"");
+        }];
+    }
+        
 }
 
 
