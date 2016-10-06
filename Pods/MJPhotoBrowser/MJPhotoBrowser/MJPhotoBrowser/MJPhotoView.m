@@ -106,20 +106,22 @@
         ESWeak_(_photoLoadingView);
         ESWeak_(_imageView);
         
-//        [[YYWebImageManager sharedManager] requestImageWithURL:_photo.url options:YYWebImageOptionIgnoreFailedURL progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+        /**zhaoyingzong**/
+//        [[YYWebImageManager sharedManager] requestImageWithURL:_photo.url options:YYWebImageFromDiskCache| YYWebImageOptionHandleCookies progress:^(NSInteger receivedSize, NSInteger expectedSize) {
 //            ESStrong_(_photoLoadingView);
 //            if (receivedSize > kMinProgress) {
 //                __photoLoadingView.progress = (float)receivedSize/expectedSize;
 //            }
-//        } transform:^UIImage * _Nullable(UIImage * _Nonnull image, NSURL * _Nonnull url) {
-//            return NULL;
+//        } transform:^UIImage *(UIImage *image, NSURL *url) {
+//            return image;
 //        } completion:^(UIImage * _Nullable image, NSURL * _Nonnull url, YYWebImageFromType from, YYWebImageStage stage, NSError * _Nullable error) {
 //            ESStrongSelf;
 //            ESStrong_(_imageView);
 //            __imageView.image = image;
 //            [_self photoDidFinishLoadWithImage:image];
 //        }];
-        
+        /****/
+   
         [SDWebImageManager.sharedManager downloadImageWithURL:_photo.url options:SDWebImageRetryFailed| SDWebImageLowPriority| SDWebImageHandleCookies progress:^(NSInteger receivedSize, NSInteger expectedSize) {
             ESStrong_(_photoLoadingView);
             if (receivedSize > kMinProgress) {
@@ -214,7 +216,7 @@
 - (void)handleSingleTap:(UITapGestureRecognizer *)tap {
     // 移除进度条
     [_photoLoadingView removeFromSuperview];
-    
+
     // 通知代理
     if ([self.photoViewDelegate respondsToSelector:@selector(photoViewSingleTap:)]) {
         [self.photoViewDelegate photoViewSingleTap:self];
@@ -225,8 +227,10 @@
     _zoomByDoubleTap = YES;
 
 	if (self.zoomScale == self.maximumZoomScale) {
+        NSLog(@"情况1");
 		[self setZoomScale:self.minimumZoomScale animated:YES];
 	} else {
+        NSLog(@"情况2");
         CGPoint touchPoint = [tap locationInView:self];
         CGFloat scale = self.maximumZoomScale/ self.zoomScale;
         CGRect rectTozoom=CGRectMake(touchPoint.x * scale, touchPoint.y * scale, 1, 1);

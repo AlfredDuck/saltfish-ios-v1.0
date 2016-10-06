@@ -114,6 +114,8 @@
 {
     [super didReceiveMemoryWarning];
     NSLog(@"内存报警...");
+    // 据说这才是有效的清理图片内存缓存的办法
+    [[SDImageCache sharedImageCache] setValue:nil forKey:@"memCache"];
     // 清理SDWeb缓存
     [[SDImageCache sharedImageCache] clearMemory];  // 清理缓存SDWebImage
     // 清理YYImage缓存
@@ -130,17 +132,28 @@
     // 清理SDWeb缓存
     // [[SDImageCache sharedImageCache] clearMemory];  // 清理缓存SDWebImage
     // [SDWebImageManager.sharedManager.imageCache clearMemory];
-    [SDImageCache sharedImageCache].maxMemoryCost = 10*1024*1024;
-    [[SDImageCache sharedImageCache] clearMemory];
+//    [SDImageCache sharedImageCache].maxMemoryCost = 10*1024*1024;
+//    [[SDImageCache sharedImageCache] clearMemory];
     
     // !!!!!!!!!
-    [[SDImageCache sharedImageCache] setValue:nil forKey:@"memCache"];
+//    [[SDImageCache sharedImageCache] setValue:nil forKey:@"memCache"];
+    //
+//    NSCache *cache1 = [[NSCache alloc] init];
+//    [cache1 removeAllObjects];
+//    [cache1 removeObjectForKey:@"memCache"];
+//    NSLog(@"清理缓存");
     
-//    // 清理YYImage缓存
-//    YYImageCache *cache = [YYWebImageManager sharedManager].cache;
-//    NSLog(@"YY磁盘缓存大小：%lu", (unsigned long)cache.diskCache.totalCost);  // 获取缓存大小
-//    NSLog(@"YY内存缓存大小：%lu", (unsigned long)cache.memoryCache.totalCost);  // 获取缓存大小
-//    [cache.memoryCache removeAllObjects];  // 清空缓存
+    // 清理YYImage缓存
+    YYImageCache *cache = [YYWebImageManager sharedManager].cache;
+    NSLog(@"YY缓存大小：%lu", (unsigned long)cache.diskCache.totalCost/1024/1024);  // 获取缓存大小
+    NSLog(@"YY缓存大小：%lu", (unsigned long)cache.memoryCache.totalCost/1024/1024);  // 获取缓存大小
+    if ((unsigned long)cache.memoryCache.totalCost/1024/1024 >= 300) {
+        [cache.memoryCache removeAllObjects];  // 清空缓存
+        NSLog(@"YY占用内存太多，进行清理");
+    }
+    NSLog(@"YY缓存大小：%lu", (unsigned long)cache.diskCache.totalCost/1024/1024);  // 获取缓存大小
+    NSLog(@"YY缓存大小：%lu", (unsigned long)cache.memoryCache.totalCost/1024/1024);  // 获取缓存大小
+    
 }
 
 - (void)dealloc
@@ -168,34 +181,41 @@
     _backgroundView.contentMode = UIViewContentModeScaleAspectFill;
     _backgroundView.clipsToBounds  = YES;
     
-//    // 需要SDWebImage（异步加载）
-//    [_backgroundView sd_setImageWithURL:[NSURL URLWithString:_portraitURL] placeholderImage:[UIImage imageNamed:@"placeholder.png"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-//        NSLog(@"%@", imageURL);
-//    }];
-    
-    // YYWebImage
-    UIImageView *thum = [[UIImageView alloc] initWithFrame:CGRectMake(10.0, 10.0, 10.0, 10.0)];
-    [thum yy_setImageWithURL:[NSURL URLWithString:_portraitURL] placeholder:[UIImage imageNamed:@"placeholder.png"] options:YYWebImageOptionIgnoreAnimatedImage completion:^(UIImage * _Nullable image, NSURL * _Nonnull url, YYWebImageFromType from, YYWebImageStage stage, NSError * _Nullable error) {
-        NSLog(@"%@", error);
-        NSLog(@"%@", url);
-        
-        // 新开线程计算，避免主线程阻塞
-        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);  //获取全局并发队列
-        dispatch_group_t group = dispatch_group_create(); //创建dispatch_group
-        dispatch_group_async(group, queue, ^{
-            NSLog(@"block 1");
-            GPUImageGaussianBlurFilter * blurFilter = [[GPUImageGaussianBlurFilter alloc] init];
-            NSLog(@"block 2");
-            blurFilter.blurRadiusInPixels = 12.0;  // 为达到合适的模糊，需头像尺寸在200*200上下
-            NSLog(@"block 3");
-            _backgroundImage = [blurFilter imageByFilteringImage:image];  // （再报错就是YY缓存设置的不够大的原因）
-            NSLog(@"block 4");
-        });
-        dispatch_group_notify(group, dispatch_get_main_queue(), ^{
-            NSLog(@"计算结束");
+    // 需要SDWebImage（异步加载）
+    [_backgroundView sd_setImageWithURL:[NSURL URLWithString:_portraitURL] placeholderImage:[UIImage imageNamed:@"placeholder.png"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        NSLog(@"%@", imageURL);
+        NSLog(@"%@", image);
+        if(!image) {
+            NSLog(@"图片未能获取");
+        } else {
+            _backgroundImage = [self boxblurImage:image withBlurNumber:0.9];
             [_backgroundView setImage:_backgroundImage];
-        });
+        }
     }];
+    
+//    // YYWebImage
+//    UIImageView *thum = [[UIImageView alloc] initWithFrame:CGRectMake(10.0, 10.0, 10.0, 10.0)];
+//    [thum yy_setImageWithURL:[NSURL URLWithString:_portraitURL] placeholder:[UIImage imageNamed:@"placeholder.png"] options:YYWebImageOptionIgnoreAnimatedImage completion:^(UIImage * _Nullable image, NSURL * _Nonnull url, YYWebImageFromType from, YYWebImageStage stage, NSError * _Nullable error) {
+//        NSLog(@"%@", error);
+//        NSLog(@"%@", url);
+//        
+//        // 新开线程计算，避免主线程阻塞
+//        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);  //获取全局并发队列
+//        dispatch_group_t group = dispatch_group_create(); //创建dispatch_group
+//        dispatch_group_async(group, queue, ^{
+//            NSLog(@"block 1");
+//            GPUImageGaussianBlurFilter * blurFilter = [[GPUImageGaussianBlurFilter alloc] init];
+//            NSLog(@"block 2");
+//            blurFilter.blurRadiusInPixels = 12.0;  // 为达到合适的模糊，需头像尺寸在200*200上下
+//            NSLog(@"block 3");
+//            _backgroundImage = [blurFilter imageByFilteringImage:image];  // （再报错就是YY缓存设置的不够大的原因）
+//            NSLog(@"block 4");
+//        });
+//        dispatch_group_notify(group, dispatch_get_main_queue(), ^{
+//            NSLog(@"计算结束");
+//            [_backgroundView setImage:_backgroundImage];
+//        });
+//    }];
     
     [self.view addSubview:_backgroundView];
     
@@ -288,7 +308,7 @@
     if (blur < 0.f || blur > 1.f) {
         blur = 0.5f;
     }
-    int boxSize = (int)(blur * 300);
+    int boxSize = (int)(blur * 200);
     boxSize = boxSize - (boxSize % 2) + 1;
     CGImageRef img = image.CGImage;
     vImage_Buffer inBuffer, outBuffer;
@@ -432,6 +452,7 @@
         // 取消选中的背景色
         oneArticleCell.selectionStyle = UITableViewCellSelectionStyleNone;
         return oneArticleCell;
+        oneArticleCell = nil;
     }
 }
 
@@ -963,8 +984,22 @@
 #pragma mark - 图片浏览器
 - (void)checkBigPhotos:(NSArray *)urls forIndex:(unsigned long)index withView:(UIView *)view
 {
-    // !!!!!!!!!
+    // 据说这才是有效的清理图片内存缓存的办法
     [[SDImageCache sharedImageCache] setValue:nil forKey:@"memCache"];
+    
+    [[SDImageCache sharedImageCache] clearMemory];
+    [[SDImageCache sharedImageCache] clearDisk];
+    
+    // 清理YYImage缓存
+    YYImageCache *cache = [YYWebImageManager sharedManager].cache;
+    NSLog(@"YY缓存大小：%lu", (unsigned long)cache.diskCache.totalCost/1024/1024);  // 获取缓存大小
+    NSLog(@"YY缓存大小：%lu", (unsigned long)cache.memoryCache.totalCost/1024/1024);  // 获取缓存大小
+    if ((unsigned long)cache.memoryCache.totalCost/1024/1024 >= 300) {
+        [cache.memoryCache removeAllObjects];  // 清空缓存
+        NSLog(@"YY占用内存太多，进行清理");
+    }
+    NSLog(@"YY缓存大小：%lu", (unsigned long)cache.diskCache.totalCost/1024/1024);  // 获取缓存大小
+    NSLog(@"YY缓存大小：%lu", (unsigned long)cache.memoryCache.totalCost/1024/1024);  // 获取缓存大小
     
     //1.创建图片浏览器
     MJPhotoBrowser *brower = [[MJPhotoBrowser alloc] init];

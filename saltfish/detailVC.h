@@ -21,6 +21,7 @@
 // 文章id
 @property (nonatomic, strong) NSString *articleID;
 @property (nonatomic, strong) NSString *uid;  // 登录账户id
+@property (nonatomic, strong) NSString *userType;  // 账号类型
 @property (nonatomic, strong) NSString *originalLink;
 //
 @property (nonatomic, strong) UIWebView *webview;

@@ -203,7 +203,11 @@
             //do nothing
         }];
         /** zhaoyingzong **/
-        //[photoView yy_setImageWithURL:photo.url options:YYWebImageOptionIgnoreFailedURL];
+//        [[YYWebImageManager sharedManager] requestImageWithURL:photo.url options:YYWebImageFromDiskCache| YYWebImageOptionHandleCookies progress:nil transform:^UIImage *(UIImage *image, NSURL *url) {
+//            return image;
+//        } completion:^(UIImage * _Nullable image, NSURL * _Nonnull url, YYWebImageFromType from, YYWebImageStage stage, NSError * _Nullable error) {
+//            // do nothing
+//        }];
         /****/
     }
     
@@ -213,7 +217,15 @@
             //do nothing
         }];
         /** zhaoyingzong **/
-        //[photoView yy_setImageWithURL:photo.url options:YYWebImageOptionIgnoreFailedURL];
+//        [[YYWebImageManager sharedManager] requestImageWithURL:photo.url options:YYWebImageFromDiskCache| YYWebImageOptionHandleCookies progress:nil transform:^UIImage *(UIImage *image, NSURL *url) {
+//            // 调整图片大小
+////            unsigned long ww = image.size.width;
+////            unsigned long hh = image.size.height;
+////            image = [image yy_imageByResizeToSize:CGSizeMake(ww*2.0, hh*2.0) contentMode:UIViewContentModeCenter];
+//            return image;
+//        } completion:^(UIImage * _Nullable image, NSURL * _Nonnull url, YYWebImageFromType from, YYWebImageStage stage, NSError * _Nullable error) {
+//            // do nothing
+//        }];
         /****/
     }
 }

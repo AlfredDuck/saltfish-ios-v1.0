@@ -88,7 +88,7 @@
             UIView *topicView = [[UIView alloc] initWithFrame:CGRectMake(16+i*(ww+16), 52+_hotArticleHeight, ww, hh)];
             
             UIImageView *picImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, ww, hh)];
-            picImageView.backgroundColor = [UIColor whiteColor];
+            picImageView.backgroundColor = [colorManager lightGrayBackground];
             // uiimageview居中裁剪
             picImageView.contentMode = UIViewContentModeScaleAspectFill;
             picImageView.clipsToBounds  = YES;

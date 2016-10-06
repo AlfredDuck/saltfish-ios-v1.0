@@ -56,8 +56,10 @@
     NSUserDefaults *sfUserDefault = [NSUserDefaults standardUserDefaults];
     if ([sfUserDefault objectForKey:@"loginInfo"]) {
         _uid = [[sfUserDefault objectForKey:@"loginInfo"] objectForKey:@"uid"];
+        _userType = [[sfUserDefault objectForKey:@"loginInfo"] objectForKey:@"userType"];
     } else {
         _uid = @"";
+        _userType = @"";
     }
     
     if (_firstLoad) {
@@ -431,7 +433,8 @@
     // 准备请求参数
     NSString *host = [urlManager urlHost];
     NSString *urlString = [host stringByAppendingString:@"/article/other"];
-    NSDictionary *parameters = @{
+    NSDictionary *parameters = @{@"uid": _uid,
+                                 @"user_type": _userType,
                                  @"article_id": articleID
                                  };
     
@@ -559,6 +562,7 @@
     NSString *urlString = [host stringByAppendingString:@"/article/like"];
     NSDictionary *parameters = @{
                                  @"uid": _uid,
+                                 @"user_type": _userType,
                                  @"article_id": _articleID,
                                  @"is_cancel": _isLiked ? @"yes" : @"no"  // 如果被喜欢，就是取消喜欢操作
                                  };
