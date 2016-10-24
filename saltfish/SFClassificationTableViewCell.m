@@ -50,7 +50,7 @@
         /* cell标题 */
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake((_screenWidth-200)/2.0, 12+15, 200, 20)];
         _titleLabel.text = _title;
-        _titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 14.0];
+        _titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 15.5];
         _titleLabel.textColor = [colorManager mainTextColor];
         _titleLabel.textAlignment = UITextAlignmentCenter;
         [self.contentView addSubview:_titleLabel];
@@ -68,7 +68,7 @@
         [self.contentView addSubview: _titleForNextPart];
         // title
         UILabel *nextTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 14, _screenWidth, 20)];
-        nextTitleLabel.font = [UIFont fontWithName:@"Helvetica" size: 14.0];
+        nextTitleLabel.font = [UIFont fontWithName:@"Helvetica" size: 15.5];
         nextTitleLabel.text = @"最新话题";
         nextTitleLabel.textColor = [colorManager mainTextColor];
         nextTitleLabel.textAlignment = UITextAlignmentCenter;

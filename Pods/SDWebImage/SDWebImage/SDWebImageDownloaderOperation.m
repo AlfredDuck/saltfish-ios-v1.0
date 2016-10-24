@@ -345,7 +345,7 @@ didReceiveResponse:(NSURLResponse *)response
                 UIImage *scaledImage = [self scaledImageForKey:key image:image];
                 if (self.shouldDecompressImages) {
                     /**zhaoyingzong**/
-                    // image = [UIImage decodedImageWithImage:scaledImage];
+                     image = [UIImage decodedImageWithImage:scaledImage];
                 }
                 else {
                     image = scaledImage;
@@ -416,15 +416,20 @@ didReceiveResponse:(NSURLResponse *)response
                 completionBlock(nil, nil, nil, YES);
             } else if (self.imageData) {
                 UIImage *image = [UIImage sd_imageWithData:self.imageData];
+                /**zhaoyingzong**/
+                //将等比压缩过的image在赋在转成data赋给self.imageData
+                NSData *data = UIImageJPEGRepresentation(image, 1);
+                self.imageData = [NSMutableData dataWithData:data];
+                /****/
                 NSString *key = [[SDWebImageManager sharedManager] cacheKeyForURL:self.request.URL];
                 image = [self scaledImageForKey:key image:image];
                 
                 // Do not force decoding animated GIFs
                 if (!image.images) {
                     /**zhaoyingzong**/
-//                    if (self.shouldDecompressImages) {
-//                        image = [UIImage decodedImageWithImage:image];
-//                    }
+                    if (self.shouldDecompressImages) {
+                        image = [UIImage decodedImageWithImage:image];
+                    }
                 }
                 if (CGSizeEqualToSize(image.size, CGSizeZero)) {
                     completionBlock(nil, nil, [NSError errorWithDomain:SDWebImageErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey : @"Downloaded image has 0 pixels"}], YES);

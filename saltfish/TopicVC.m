@@ -60,6 +60,9 @@
     // 设置状态栏颜色的强力方法
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
+    // 禁用sdimage的内存缓存
+    [SDImageCache sharedImageCache].shouldCacheImagesInMemory = NO;
+    
     _screenHeight = [UIScreen mainScreen].bounds.size.height;
     _screenWidth = [UIScreen mainScreen].bounds.size.width;
     _backgroundImageHeight = 64+70;
@@ -365,6 +368,7 @@
     _oneTableView.contentInset = UIEdgeInsetsMake(-20+90, 0, 0, 0); // 设置距离顶部的一段偏移，继承自scrollview
     // 响应点击状态栏的事件
     _oneTableView.scrollsToTop = YES;
+    
     [self.view addSubview:_oneTableView];
     
     // 上拉刷新 MJRefresh
@@ -446,7 +450,7 @@
         [oneArticleCell rewriteCommentNum:commentNum withIndex:row-1];
         [oneArticleCell rewriteLikeNum:likeNum withIndex:row-1];
         [oneArticleCell rewriteLikeStatus:[[_articleData objectAtIndex:row-1] objectForKey:@"likeStatus"]];
-        [oneArticleCell rewriteTitle:[[_articleData objectAtIndex:row-1] objectForKey:@"title"]];
+        [oneArticleCell rewriteTitle:[[_articleData objectAtIndex:row-1] objectForKey:@"title"] withLink:isShow];
         [oneArticleCell rewritePicURL:[[_articleData objectAtIndex:row-1] objectForKey:@"picSmall"] withIndex:row-1];
 
         // 取消选中的背景色
@@ -984,22 +988,30 @@
 #pragma mark - 图片浏览器
 - (void)checkBigPhotos:(NSArray *)urls forIndex:(unsigned long)index withView:(UIView *)view
 {
+//    [self strongClearMemory];
     // 据说这才是有效的清理图片内存缓存的办法
     [[SDImageCache sharedImageCache] setValue:nil forKey:@"memCache"];
-    
-    [[SDImageCache sharedImageCache] clearMemory];
-    [[SDImageCache sharedImageCache] clearDisk];
+//    [[SDImageCache sharedImageCache] clearMemory];
+    [[SDWebImageManager sharedManager].imageCache clearMemory];
+    [[SDWebImageManager sharedManager].imageCache getSize];
     
     // 清理YYImage缓存
     YYImageCache *cache = [YYWebImageManager sharedManager].cache;
     NSLog(@"YY缓存大小：%lu", (unsigned long)cache.diskCache.totalCost/1024/1024);  // 获取缓存大小
     NSLog(@"YY缓存大小：%lu", (unsigned long)cache.memoryCache.totalCost/1024/1024);  // 获取缓存大小
-    if ((unsigned long)cache.memoryCache.totalCost/1024/1024 >= 300) {
+    if ((unsigned long)cache.memoryCache.totalCost/1024/1024 >= 50) {
         [cache.memoryCache removeAllObjects];  // 清空缓存
         NSLog(@"YY占用内存太多，进行清理");
     }
     NSLog(@"YY缓存大小：%lu", (unsigned long)cache.diskCache.totalCost/1024/1024);  // 获取缓存大小
     NSLog(@"YY缓存大小：%lu", (unsigned long)cache.memoryCache.totalCost/1024/1024);  // 获取缓存大小
+    
+    // 禁用YY的解码
+    cache.decodeForDisplay = NO;
+    
+    //
+    NSLog(@"使用内存：%f", [self usedMemory]);
+    
     
     //1.创建图片浏览器
     MJPhotoBrowser *brower = [[MJPhotoBrowser alloc] init];
@@ -1009,6 +1021,8 @@
     for (NSString *urlStr in urls) {
         //传递数据给浏览器
         MJPhoto *photo = [[MJPhoto alloc] init];
+        NSLog(@"大图");
+        NSLog(@"%@",urlStr);
         photo.url = [NSURL URLWithString:urlStr];
         // photo.srcImageView = (UIImageView *)view;  // 显示缩略图
         [photos addObject:photo];
@@ -1041,7 +1055,7 @@
 
 
 
-
+#pragma mark - 查看内存
 // 获取当前任务所占用的内存（单位：MB）
 - (double)usedMemory
 {
@@ -1059,6 +1073,34 @@
     
     return taskInfo.resident_size / 1024.0 / 1024.0;
 }
+
+
+
+
+
+#pragma mark - 强制清理图片内存缓存
+- (void)strongClearMemory
+{
+    // 获取当前view的所有大图链接
+    NSMutableArray *arr = [NSMutableArray new];
+    for (int i=0; i<[_articleData count]; i++) {
+        [arr addObject: [[[_articleData objectAtIndex:i] objectForKey:@"picBig"] objectAtIndex:0]];
+    }
+    
+    for (int i=0; i<[arr count]; i++) {
+        NSURL *url = [NSURL URLWithString:[arr objectAtIndex:i]];
+        NSString *key = [[SDWebImageManager sharedManager] cacheKeyForURL:url];
+        if ([[SDImageCache sharedImageCache] imageFromMemoryCacheForKey:key]) {
+            [[SDImageCache sharedImageCache] setValue:nil forKey:key];
+            NSLog(@"清理了缓存啦");
+        }
+        else {
+            NSLog(@"没有这个缓存");
+        }
+    }
+}
+
+
 
 
 

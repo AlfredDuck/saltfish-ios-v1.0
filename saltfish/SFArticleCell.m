@@ -10,6 +10,7 @@
 #import "UIImageView+WebCache.h"
 #import "YYWebImage.h"
 #import "colorManager.h"
+#import "YYText.h"
 
 #define LIKEICON  [UIImage imageNamed:@"like_icon.png"]
 #define LIKEICONRED  [UIImage imageNamed:@"like_icon_red.png"]
@@ -88,20 +89,19 @@
         _titleLabel.text = _title;
         _titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 17.0];
         _titleLabel.textColor = [colorManager mainTextColor];
-        //_titleLabel.backgroundColor = [UIColor yellowColor];
         _titleLabel.numberOfLines = 2;
         [self.contentView addSubview:_titleLabel];
         
         /* 图片未在此处定义 */
         
         /* ------------- 评论、喜欢、分享 -------------- */
-        _customerView = [[UIView alloc] initWithFrame:CGRectMake(0, 50, _screenWidth, 36)];  // 用户操作区域背景
+        _customerView = [[UIView alloc] initWithFrame:CGRectMake(0, 50, _screenWidth, 40)];  // 用户操作区域背景
         [self.contentView addSubview: _customerView];
         
         unsigned long ww = ceil(_screenWidth/3.0);
         
         /* 分享区域 */
-        _shareView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ww, 36)];
+        _shareView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ww, 40)];
         // 添加点击事件
         _shareView.userInteractionEnabled = YES;
         UITapGestureRecognizer *singleTapShare = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickShareIcon:)]; // 设置手势
@@ -122,7 +122,7 @@
         [_shareView addSubview: _shareLabel];
         
         /* 评论区域 */
-        _commentView = [[UIView alloc] initWithFrame:CGRectMake(ww, 0, ww, 36)];
+        _commentView = [[UIView alloc] initWithFrame:CGRectMake(ww, 0, ww, 40)];
         // 添加点击事件
         _commentView.userInteractionEnabled = YES;
         UITapGestureRecognizer *singleTapComment = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickCommentIcon:)]; // 设置手势
@@ -143,7 +143,7 @@
         [_commentView addSubview: _commentLabel];
         
         /* 喜欢😍区域 */
-        _likeView = [[UIView alloc] initWithFrame:CGRectMake(2*ww, 0, ww, 36)];
+        _likeView = [[UIView alloc] initWithFrame:CGRectMake(2*ww, 0, ww, 40)];
         // 添加点击事件
         _likeView.userInteractionEnabled = YES;
         UITapGestureRecognizer *singleTapLike = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickLikeIcon:)]; // 设置手势
@@ -164,7 +164,7 @@
         [_likeView addSubview: _likeLabel];
         
         /* 分割线 */
-        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 0, _screenWidth, 0.5)];  // 分割线
+        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(15, 0, _screenWidth-30, 0.5)];  // 分割线
         line.backgroundColor = [UIColor colorWithRed:237/255.0 green:237/255.0 blue:237/255.0 alpha:1];
         [_customerView addSubview:line];
         
@@ -218,6 +218,7 @@
     } else {
         _linkMark.hidden = NO;
     }
+    _linkMark.hidden = YES;
 }
 
 
@@ -269,16 +270,24 @@
 
 
 /** 重写标题 **/
-- (void)rewriteTitle:(NSString *)newTitle
+- (void)rewriteTitle:(NSString *)newTitle withLink:(BOOL)isShow
 {
-    _title = newTitle;
+    if (!isShow) {
+        _title = newTitle;
+    } else {
+        _title = [newTitle stringByAppendingString:@"【网页链接】"];
+    }
     
     NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:_title];
-    //设置行距
-    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-    style.lineSpacing = 3;//行距
-    [text addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0, text.length)];
+    text.yy_lineSpacing = 3; // 行距
+    NSRange range = [_title rangeOfString:@"【网页链接】"];
+    [text yy_setTextHighlightRange:range color:[colorManager blueLinkColor] backgroundColor:nil tapAction:^(UIView * _Nonnull containerView, NSAttributedString * _Nonnull text, NSRange range, CGRect rect) {
+        // 点击事件
+        NSLog(@"被点击了");
+    }];
+    
     _titleLabel.attributedText = text;
+    
     
     // ===================设置UIlabel文本折行====================
     NSString *str = _title;
@@ -396,10 +405,20 @@
             picImageView.contentMode = UIViewContentModeScaleAspectFill;
             picImageView.clipsToBounds  = YES;
             NSString *url = [[DoubleArr objectAtIndex:i] objectAtIndex:j];
+            
             // 普通加载网络图片 yy库
-            picImageView.yy_imageURL = [NSURL URLWithString:url];
-            // 渐进式：边下载边显示 yy库
-            //[picImageView yy_setImageWithURL:[NSURL URLWithString:url] options:YYWebImageOptionProgressive];
+            picImageView.image.yy_isDecodedForDisplay = NO;
+            [picImageView yy_setImageWithURL:[NSURL URLWithString:url] placeholder:nil options:YYWebImageOptionProgressive progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+                //progress = (float)receivedSize / expectedSize;
+            } transform:^UIImage * _Nullable(UIImage * _Nonnull image, NSURL * _Nonnull url) {
+                NSLog(@"lol");
+                unsigned long ww = image.size.width;
+                unsigned long hh = image.size.height;
+                float xx = (hh>1000 || ww>1000) ? 0.25 : 1.0;
+                UIImage *kk = [image yy_imageByResizeToSize:CGSizeMake(ww*xx, hh*xx) contentMode:UIViewContentModeScaleAspectFill];
+                return kk;
+            } completion:nil];
+            
             // 添加手势
             picImageView.userInteractionEnabled = YES; // 设置可以交互
             UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickPic:)]; // 设置手势

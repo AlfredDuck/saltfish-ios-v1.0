@@ -70,14 +70,15 @@
         /* cell标题 */
         UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake((_screenWidth-200)/2.0, _hotArticleHeight+16, 200, 20)];
         titleLabel.text = @"热门话题";
-        titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 14.0];
+        titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 15.5];
         titleLabel.textColor = [colorManager mainTextColor];
         titleLabel.textAlignment = UITextAlignmentCenter;
         [self.contentView addSubview:titleLabel];
         
         // 根据设备宽度计算图片宽高
-        int ww = ceil((_screenWidth - 16*2 - 16*2)/3.0);
-        int hh = ceil(ww/107.0*89);
+        int ww = ceil((_screenWidth - 20*2 - 20*2)/3.0);
+        // int hh = ceil(ww/107.0*89);
+        int hh = ww;
         
         _hotTopicPicArr = [[NSMutableArray alloc] init];
         _hotTopicLabelArr = [[NSMutableArray alloc] init];
@@ -85,13 +86,14 @@
         for (int i=0; i<3; i++) {
             
             // 52px的上边距, xxpx的焦点图
-            UIView *topicView = [[UIView alloc] initWithFrame:CGRectMake(16+i*(ww+16), 52+_hotArticleHeight, ww, hh)];
+            UIView *topicView = [[UIView alloc] initWithFrame:CGRectMake(20+i*(ww+20), 52+_hotArticleHeight, ww, hh)];
             
             UIImageView *picImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, ww, hh)];
             picImageView.backgroundColor = [colorManager lightGrayBackground];
             // uiimageview居中裁剪
             picImageView.contentMode = UIViewContentModeScaleAspectFill;
             picImageView.clipsToBounds  = YES;
+            picImageView.layer.cornerRadius = 6;
             [topicView addSubview:picImageView];
             
 //            // 遮黑
@@ -101,7 +103,7 @@
 //            [picImageView addSubview:halfBlack];
             
             // 文本（在图下面，用UItextview有奇效）
-            UITextView *topicLabel = [[UITextView alloc] initWithFrame:CGRectMake(0, hh, ww, 35)];
+            UITextView *topicLabel = [[UITextView alloc] initWithFrame:CGRectMake(0, hh, ww, 37)];
             topicLabel.textColor = [colorManager mainTextColor];
             topicLabel.font = [UIFont fontWithName:@"Helvetica" size: 12.5f];
             topicLabel.userInteractionEnabled = NO;

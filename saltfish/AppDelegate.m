@@ -41,14 +41,14 @@
     [WXApi registerApp:WXKey];
     // 设置YY图片缓存的最大内存上限
     YYImageCache *YYcache = [YYWebImageManager sharedManager].cache;
-    YYcache.memoryCache.costLimit = 500 * 1024 * 1024;
-    YYcache.diskCache.costLimit = 200 * 1024 * 1024;
+    YYcache.memoryCache.costLimit = 100 * 1024 * 1024;
+    YYcache.diskCache.costLimit = 500 * 1024 * 1024;
     
     // 禁用sdimage的内存缓存
     [SDImageCache sharedImageCache].shouldCacheImagesInMemory = NO;
     // sdimage 最大上限
-//    [SDImageCache sharedImageCache].maxCacheSize = 200 * 1024 * 1024;
-//    [SDImageCache sharedImageCache].maxMemoryCost = 10 * 1024 * 1024;
+    [SDImageCache sharedImageCache].maxCacheSize = 200 * 1024 * 1024;
+    [SDImageCache sharedImageCache].maxMemoryCost = 200 * 1024 * 1024;
     
     // 设置 RootViewController
     SFRootViewController *rootVC = [[SFRootViewController alloc] init];

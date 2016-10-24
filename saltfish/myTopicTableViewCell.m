@@ -47,6 +47,7 @@
         // uiimageview居中裁剪
         _picImageView.contentMode = UIViewContentModeScaleAspectFill;
         _picImageView.clipsToBounds  = YES;
+        _picImageView.layer.cornerRadius = 5;
         // 普通加载网络图片 yy库
         _picImageView.yy_imageURL = [NSURL URLWithString:_picURL];
         [self.contentView addSubview:_picImageView];

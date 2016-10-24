@@ -414,7 +414,7 @@
         [oneArticleCell rewriteCommentNum:commentNum withIndex:row-1];
         [oneArticleCell rewriteLikeNum:likeNum withIndex:row-1];
         [oneArticleCell rewriteLikeStatus:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"likeStatus"]];
-        [oneArticleCell rewriteTitle:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"title"]];
+        [oneArticleCell rewriteTitle:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"title"] withLink:isShow];
         [oneArticleCell rewritePicURL:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"picSmall"] withIndex:row-1];
 
         oneArticleCell.selectionStyle = UITableViewCellSelectionStyleNone;  // 取消选中的背景色

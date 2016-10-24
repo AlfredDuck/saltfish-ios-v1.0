@@ -9,7 +9,6 @@
 #import "MJPhotoView.h"
 #import "MJPhotoToolbar.h"
 #import <SDWebImage/SDWebImagePrefetcher.h>
-#import "YYWebImage.h"
 
 #define kPadding 10
 #define kPhotoViewTagOffset 1000
@@ -191,24 +190,17 @@
     [_visiblePhotoViews addObject:photoView];
     [_photoScrollView addSubview:photoView];
     
-    [self loadImageNearIndex:index withView:(UIImageView *)photoView];
+    [self loadImageNearIndex:index];
 }
 
 //  加载index附近的图片
-- (void)loadImageNearIndex:(int)index withView:(UIImageView *)photoView
+- (void)loadImageNearIndex:(int)index
 {
     if (index > 0) {
         MJPhoto *photo = _photos[index - 1];
         [[SDWebImageManager sharedManager] downloadImageWithURL:photo.url options:SDWebImageRetryFailed|SDWebImageLowPriority progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
             //do nothing
         }];
-        /** zhaoyingzong **/
-//        [[YYWebImageManager sharedManager] requestImageWithURL:photo.url options:YYWebImageFromDiskCache| YYWebImageOptionHandleCookies progress:nil transform:^UIImage *(UIImage *image, NSURL *url) {
-//            return image;
-//        } completion:^(UIImage * _Nullable image, NSURL * _Nonnull url, YYWebImageFromType from, YYWebImageStage stage, NSError * _Nullable error) {
-//            // do nothing
-//        }];
-        /****/
     }
     
     if (index < _photos.count - 1) {
@@ -216,17 +208,6 @@
         [[SDWebImageManager sharedManager] downloadImageWithURL:photo.url options:SDWebImageRetryFailed|SDWebImageLowPriority progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
             //do nothing
         }];
-        /** zhaoyingzong **/
-//        [[YYWebImageManager sharedManager] requestImageWithURL:photo.url options:YYWebImageFromDiskCache| YYWebImageOptionHandleCookies progress:nil transform:^UIImage *(UIImage *image, NSURL *url) {
-//            // 调整图片大小
-////            unsigned long ww = image.size.width;
-////            unsigned long hh = image.size.height;
-////            image = [image yy_imageByResizeToSize:CGSizeMake(ww*2.0, hh*2.0) contentMode:UIViewContentModeCenter];
-//            return image;
-//        } completion:^(UIImage * _Nullable image, NSURL * _Nonnull url, YYWebImageFromType from, YYWebImageStage stage, NSError * _Nullable error) {
-//            // do nothing
-//        }];
-        /****/
     }
 }
 

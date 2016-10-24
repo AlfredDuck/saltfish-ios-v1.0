@@ -66,7 +66,7 @@
 - (void)rewriteCommentNum:(unsigned long)newCommentNum withIndex:(unsigned long)index;
 - (void)rewriteLikeNum:(unsigned long)newLikeNum withIndex:(unsigned long)index;
 - (void)rewriteLikeStatus:(NSString *)newLikeStatus;
-- (void)rewriteTitle:(NSString *)newTitle;
+- (void)rewriteTitle:(NSString *)newTitle withLink:(BOOL)isShow;
 - (void)rewritePicURL:(NSArray *)newPicArr withIndex:(unsigned long)index;
 //
 @property (nonatomic, assign) id <SFArticleCellDelegate> delegate;
