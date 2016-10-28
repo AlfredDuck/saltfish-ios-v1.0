@@ -370,7 +370,7 @@
             oneHotCell = [[SFHotTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:hotCellWithIdentifier];
             oneHotCell.delegate = self;
         }
-        [oneHotCell rewriteHotArticles:_hotArticleData];
+        // [oneHotCell rewriteHotArticles:_hotArticleData];
         [oneHotCell rewriteHotTopics:_hotTopicData];
         [oneHotCell rewriteCellHeight];
         oneHotCell.selectionStyle = UITableViewCellSelectionStyleNone;  // 取消选中的背景色

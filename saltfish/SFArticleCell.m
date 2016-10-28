@@ -114,11 +114,11 @@
         // 分享icon
         UIImage *shareIcon = [UIImage imageNamed:@"share_icon.png"];  // 32*28
         UIImageView *shareIconView = [[UIImageView alloc] initWithImage:shareIcon]; // 把oneImage添加到oneImageView上
-        shareIconView.frame = CGRectMake(0, 11, 16, 14); // 设置图片位置和大小
+        shareIconView.frame = CGRectMake(5, 11, 16, 14); // 设置图片位置和大小
         [_shareView addSubview: shareIconView];
         
         // 分享title
-        _shareLabel = [[UILabel alloc] initWithFrame:CGRectMake(16+5, 0, 45, 36)];
+        _shareLabel = [[UILabel alloc] initWithFrame:CGRectMake(16+10, 0, 45, 36)];
         _shareLabel.text = @"";
         _shareLabel.font = [UIFont fontWithName:@"Helvetica" size: 14.0];
         _shareLabel.textColor = [colorManager secondTextColor];
@@ -135,11 +135,11 @@
         // 评论icon
         UIImage *commentIcon = [UIImage imageNamed:@"comment_icon.png"];  // 34*30
         UIImageView *commentIconView = [[UIImageView alloc] initWithImage:commentIcon]; // 把oneImage添加到oneImageView上
-        commentIconView.frame = CGRectMake(0, 10.5, 17, 15); // 设置图片位置和大小
+        commentIconView.frame = CGRectMake(5, 10.5, 17, 15); // 设置图片位置和大小
         [_commentView addSubview: commentIconView];
         
         // 评论title
-        _commentLabel = [[UILabel alloc] initWithFrame:CGRectMake(16+5, 0, 45, 36)];
+        _commentLabel = [[UILabel alloc] initWithFrame:CGRectMake(16+10, 0, 45, 36)];
         _commentLabel.text = @"";
         _commentLabel.font = [UIFont fontWithName:@"Helvetica" size: 14.0];
         _commentLabel.textColor = [colorManager secondTextColor];
@@ -156,11 +156,11 @@
         // 喜欢icon
         UIImage *likeIcon = [UIImage imageNamed:@"like_icon.png"];  // 32*28
         _likeIconView = [[UIImageView alloc] initWithImage: likeIcon]; // 把oneImage添加到oneImageView上
-        _likeIconView.frame = CGRectMake(0, 11, 16, 14); // 设置图片位置和大小
+        _likeIconView.frame = CGRectMake(5, 11, 16, 14); // 设置图片位置和大小
         [_likeView addSubview: _likeIconView];
         
         // 喜欢title
-        _likeLabel = [[UILabel alloc] initWithFrame:CGRectMake(16+5, 0, 45, 36)];
+        _likeLabel = [[UILabel alloc] initWithFrame:CGRectMake(16+10, 0, 45, 36)];
         _likeLabel.text = @"";
         _likeLabel.font = [UIFont fontWithName:@"Helvetica" size: 14.0];
         _likeLabel.textColor = [colorManager secondTextColor];
@@ -336,7 +336,7 @@
     // 如果只有一张图片
     if (1 == [newPicArr count]) {
         // 根据设备宽度计算图片宽高
-        int ww = ceil(_screenWidth - 57-75);
+        int ww = ceil(_screenWidth - 57-105);
         int hh = ww;
         UIImageView *picImageView = [[UIImageView alloc] initWithFrame:CGRectMake(57, 0, ww, hh)];
         picImageView.backgroundColor = [colorManager lightGrayBackground];

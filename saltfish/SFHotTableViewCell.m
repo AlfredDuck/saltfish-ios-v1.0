@@ -37,32 +37,32 @@
         _screenWidth = [UIScreen mainScreen].bounds.size.width;
         
         // 焦点图高度根据屏幕宽度计算
-        _hotArticleHeight = ceil(_screenWidth/375.0*170.0);
-        
-        /* ============= 焦点图 ScrollView ============== */
-        
-        _basedScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, _screenWidth, _hotArticleHeight)];
-        _basedScrollView.backgroundColor = [UIColor whiteColor];
-        _basedScrollView.delegate = self;
-        
-        //这个属性很重要，它可以决定是横向还是纵向滚动，一般来说也是其中的 View 的总宽度，和总的高度
-        //这里同时考虑到每个 View 间的空隙，所以宽度是 200x3＋5＋10＋10＋5＝630
-        //高度上与 ScrollView 相同，只在横向扩展，所以只要在横向上滚动
-        _basedScrollView.contentSize = CGSizeMake(_screenWidth*3, _hotArticleHeight);
-        //用它指定 ScrollView 中内容的当前位置，即相对于 ScrollView 的左上顶点的偏移
-        _basedScrollView.contentOffset = CGPointMake(0, 0);
-        //按页滚动，总是一次一个宽度，或一个高度单位的滚动
-        _basedScrollView.pagingEnabled = YES;
-        //隐藏滚动条
-        _basedScrollView.showsVerticalScrollIndicator = FALSE;
-        _basedScrollView.showsHorizontalScrollIndicator = FALSE;
-        // 是否边缘反弹
-        _basedScrollView.bounces = YES;
-        // 不响应点击状态栏的事件（留给uitableview用）
-        _basedScrollView.scrollsToTop = NO;
-        
-        [self.contentView addSubview:_basedScrollView];
-        
+//        _hotArticleHeight = ceil(_screenWidth/375.0*170.0);
+//        
+//        /* ============= 焦点图 ScrollView ============== */
+//        
+//        _basedScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, _screenWidth, _hotArticleHeight)];
+//        _basedScrollView.backgroundColor = [UIColor whiteColor];
+//        _basedScrollView.delegate = self;
+//        
+//        //这个属性很重要，它可以决定是横向还是纵向滚动，一般来说也是其中的 View 的总宽度，和总的高度
+//        //这里同时考虑到每个 View 间的空隙，所以宽度是 200x3＋5＋10＋10＋5＝630
+//        //高度上与 ScrollView 相同，只在横向扩展，所以只要在横向上滚动
+//        _basedScrollView.contentSize = CGSizeMake(_screenWidth*3, _hotArticleHeight);
+//        //用它指定 ScrollView 中内容的当前位置，即相对于 ScrollView 的左上顶点的偏移
+//        _basedScrollView.contentOffset = CGPointMake(0, 0);
+//        //按页滚动，总是一次一个宽度，或一个高度单位的滚动
+//        _basedScrollView.pagingEnabled = YES;
+//        //隐藏滚动条
+//        _basedScrollView.showsVerticalScrollIndicator = FALSE;
+//        _basedScrollView.showsHorizontalScrollIndicator = FALSE;
+//        // 是否边缘反弹
+//        _basedScrollView.bounces = YES;
+//        // 不响应点击状态栏的事件（留给uitableview用）
+//        _basedScrollView.scrollsToTop = NO;
+//        
+//        [self.contentView addSubview:_basedScrollView];
+        _hotArticleHeight = 0;
         
         
         /* ================ 热门话题 ================= */
@@ -255,7 +255,7 @@
     
     
     // 定时器 循环
-    _timer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(scrollTimer) userInfo:nil repeats:YES];
+    // _timer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(scrollTimer) userInfo:nil repeats:YES];
 
 }
 

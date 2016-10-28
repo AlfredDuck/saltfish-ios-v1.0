@@ -119,7 +119,7 @@
 
     // 根据设备宽度计算图片宽高
     int ww = ceil((_screenWidth - 11*2 - 16*2)/3.0);
-    int hh = ceil(ww/107.0*89);
+    int hh = ceil(ww/107.0*72);
     
     // 循环创建 imageView
     for (int i=0; i<[DoubleArr count]; i++) {  // 第一层
@@ -132,6 +132,7 @@
             // uiimageview居中裁剪
             picImageView.contentMode = UIViewContentModeScaleAspectFill;
             picImageView.clipsToBounds  = YES;
+            picImageView.layer.cornerRadius = 6;
             
             NSString *url = [[[DoubleArr objectAtIndex:i] objectAtIndex:j] objectForKey:@"picURL"];
             // 普通加载网络图片 yy库
