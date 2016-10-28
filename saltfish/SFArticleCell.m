@@ -46,12 +46,14 @@
         
         
         /* 话题头像 */
-        _portraitImageView = [[UIImageView alloc] initWithFrame:CGRectMake(12, 15, 36, 36)];
+        _portraitImageView = [[UIImageView alloc] initWithFrame:CGRectMake(12, 15, 32, 32)]; // 原来36
         _portraitImageView.backgroundColor = [colorManager lightGrayBackground];
         // uiimageview居中裁剪
         _portraitImageView.contentMode = UIViewContentModeScaleAspectFill;
         _portraitImageView.clipsToBounds  = YES;
-        _portraitImageView.layer.cornerRadius = 18;
+        _portraitImageView.layer.cornerRadius = 16;
+        _portraitImageView.layer.borderWidth = 1.0;
+        _portraitImageView.layer.borderColor = (__bridge CGColorRef _Nullable)([colorManager lightTextColor]);
         // 普通加载网络图片 yy库
         _portraitImageView.yy_imageURL = [NSURL URLWithString:_portraitURL];
         [self.contentView addSubview:_portraitImageView];
@@ -64,8 +66,8 @@
         /* 话题标题 */
         _topicLabel = [[UILabel alloc] initWithFrame:CGRectMake(57, 15, 200, 20)];
         _topicLabel.text = _topic;
-        _topicLabel.font = [UIFont fontWithName:@"Helvetica" size: 14.0];
-        _topicLabel.textColor = [colorManager blueLinkColor];
+        _topicLabel.font = [UIFont fontWithName:@"Helvetica Bold" size: 15.0];
+        _topicLabel.textColor = [colorManager mainTextColor];
         [self.contentView addSubview:_topicLabel];
         // 添加手势
         _topicLabel.userInteractionEnabled = YES; // 设置可以交互
@@ -73,10 +75,11 @@
         [_topicLabel addGestureRecognizer:singleTapTopic]; // 添加手势
         
         /* 日期 */
-        _dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(57, 35, 200, 16)];
+        _dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(_screenWidth-15-100, 15, 100, 20)];
         _dateLabel.text = _date;
         _dateLabel.font = [UIFont fontWithName:@"Helvetica" size: 11.0];
         _dateLabel.textColor = [colorManager lightTextColor];
+        _dateLabel.textAlignment = UITextAlignmentRight;
         [self.contentView addSubview:_dateLabel];
         
         /* 外链标志 */
@@ -85,7 +88,7 @@
         [self.contentView addSubview:_linkMark];
         
         /* 标题 */
-        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 66, _screenWidth-30, 38)];
+        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(57, 32+15, _screenWidth-15-57, 38)];
         _titleLabel.text = _title;
         _titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 17.0];
         _titleLabel.textColor = [colorManager mainTextColor];
@@ -95,10 +98,10 @@
         /* 图片未在此处定义 */
         
         /* ------------- 评论、喜欢、分享 -------------- */
-        _customerView = [[UIView alloc] initWithFrame:CGRectMake(0, 50, _screenWidth, 40)];  // 用户操作区域背景
+        _customerView = [[UIView alloc] initWithFrame:CGRectMake(57, 50, _screenWidth, 40)];  // 用户操作区域背景
         [self.contentView addSubview: _customerView];
         
-        unsigned long ww = ceil(_screenWidth/3.0);
+        unsigned long ww = 62;
         
         /* 分享区域 */
         _shareView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ww, 40)];
@@ -111,12 +114,12 @@
         // 分享icon
         UIImage *shareIcon = [UIImage imageNamed:@"share_icon.png"];  // 32*28
         UIImageView *shareIconView = [[UIImageView alloc] initWithImage:shareIcon]; // 把oneImage添加到oneImageView上
-        shareIconView.frame = CGRectMake((ww-65)/2.0, 11, 16, 14); // 设置图片位置和大小
+        shareIconView.frame = CGRectMake(0, 11, 16, 14); // 设置图片位置和大小
         [_shareView addSubview: shareIconView];
         
         // 分享title
-        _shareLabel = [[UILabel alloc] initWithFrame:CGRectMake((ww-65)/2.0+16+5, 0, 45, 36)];
-        _shareLabel.text = @"分享";
+        _shareLabel = [[UILabel alloc] initWithFrame:CGRectMake(16+5, 0, 45, 36)];
+        _shareLabel.text = @"";
         _shareLabel.font = [UIFont fontWithName:@"Helvetica" size: 14.0];
         _shareLabel.textColor = [colorManager secondTextColor];
         [_shareView addSubview: _shareLabel];
@@ -132,12 +135,12 @@
         // 评论icon
         UIImage *commentIcon = [UIImage imageNamed:@"comment_icon.png"];  // 34*30
         UIImageView *commentIconView = [[UIImageView alloc] initWithImage:commentIcon]; // 把oneImage添加到oneImageView上
-        commentIconView.frame = CGRectMake((ww-65)/2.0, 10.5, 17, 15); // 设置图片位置和大小
+        commentIconView.frame = CGRectMake(0, 10.5, 17, 15); // 设置图片位置和大小
         [_commentView addSubview: commentIconView];
         
         // 评论title
-        _commentLabel = [[UILabel alloc] initWithFrame:CGRectMake((ww-65)/2.0+16+5, 0, 45, 36)];
-        _commentLabel.text = @"评论";
+        _commentLabel = [[UILabel alloc] initWithFrame:CGRectMake(16+5, 0, 45, 36)];
+        _commentLabel.text = @"";
         _commentLabel.font = [UIFont fontWithName:@"Helvetica" size: 14.0];
         _commentLabel.textColor = [colorManager secondTextColor];
         [_commentView addSubview: _commentLabel];
@@ -153,18 +156,18 @@
         // 喜欢icon
         UIImage *likeIcon = [UIImage imageNamed:@"like_icon.png"];  // 32*28
         _likeIconView = [[UIImageView alloc] initWithImage: likeIcon]; // 把oneImage添加到oneImageView上
-        _likeIconView.frame = CGRectMake((ww-65)/2.0, 11, 16, 14); // 设置图片位置和大小
+        _likeIconView.frame = CGRectMake(0, 11, 16, 14); // 设置图片位置和大小
         [_likeView addSubview: _likeIconView];
         
         // 喜欢title
-        _likeLabel = [[UILabel alloc] initWithFrame:CGRectMake((ww-65)/2.0+16+5, 0, 45, 36)];
-        _likeLabel.text = @"喜欢";
+        _likeLabel = [[UILabel alloc] initWithFrame:CGRectMake(16+5, 0, 45, 36)];
+        _likeLabel.text = @"";
         _likeLabel.font = [UIFont fontWithName:@"Helvetica" size: 14.0];
         _likeLabel.textColor = [colorManager secondTextColor];
         [_likeView addSubview: _likeLabel];
         
         /* 分割线 */
-        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(15, 0, _screenWidth-30, 0.5)];  // 分割线
+        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 0, _screenWidth-57-15, 0.5)];  // 分割线
         line.backgroundColor = [UIColor colorWithRed:237/255.0 green:237/255.0 blue:237/255.0 alpha:1];
         [_customerView addSubview:line];
         
@@ -172,7 +175,7 @@
 
         
         /* 背景、分割线 */
-        _partLine = [[UIView alloc] initWithFrame:CGRectMake(0, 40, _screenWidth, 15)];
+        _partLine = [[UIView alloc] initWithFrame:CGRectMake(0, 40, _screenWidth, 8)];
         _partLine.backgroundColor = [colorManager lightGrayBackground];
         [self.contentView addSubview:_partLine];
         self.contentView.backgroundColor = [UIColor whiteColor];
@@ -226,7 +229,7 @@
 - (void)rewriteShareNum:(unsigned long)newShareNum withIndex:(unsigned long)index
 {
     if (newShareNum == 0) {
-        _shareLabel.text = @"分享";
+        _shareLabel.text = @"";
     } else {
         _shareLabel.text = [NSString stringWithFormat: @"%lu", newShareNum];  // 数字转字符
     }
@@ -238,7 +241,7 @@
 - (void)rewriteCommentNum:(unsigned long)newCommentNum withIndex:(unsigned long)index
 {
     if (newCommentNum == 0) {
-        _commentLabel.text = @"评论";
+        _commentLabel.text = @"";
     } else {
         _commentLabel.text = [NSString stringWithFormat: @"%lu", newCommentNum];  // 数字转字符
     }
@@ -250,7 +253,7 @@
 - (void)rewriteLikeNum:(unsigned long)newLikeNum withIndex:(unsigned long)index
 {
     if (newLikeNum == 0) {
-        _likeLabel.text = @"喜欢";
+        _likeLabel.text = @"";
     } else {
         _likeLabel.text = [NSString stringWithFormat: @"%lu", newLikeNum];  // 数字转字符
     }
@@ -291,16 +294,16 @@
     
     // ===================设置UIlabel文本折行====================
     NSString *str = _title;
-    CGSize maxSize = {_screenWidth-30, 5000};  // 设置文本区域最大宽高
+    CGSize maxSize = {_screenWidth-15-57, 5000};  // 设置文本区域最大宽高
     CGSize labelSize = [str sizeWithFont:[UIFont fontWithName:@"Helvetica" size:17.0]
                        constrainedToSize:maxSize
                            lineBreakMode:_titleLabel.lineBreakMode];   // str是要显示的字符串
     unsigned long height = labelSize.height/17*20.0;
-    _titleLabel.frame = CGRectMake(15, 66, labelSize.width, height);  // 因为行距增加了，所以要用参数修正height
+    _titleLabel.frame = CGRectMake(57, 32+15, labelSize.width, height);  // 因为行距增加了，所以要用参数修正height
     _titleLabel.numberOfLines = 0;  // 不可少Label属性之一
     //_postTextLabel.lineBreakMode = UILineBreakModeCharacterWrap;  // 不可少Label属性之二
     
-    _textHeight = 64 + height + 15;
+    _textHeight = 32+15 + height + 15;
     /* 底部分割线 */
 //    _partLine.frame = CGRectMake(0, _cellHeight-5, _screenWidth, 5);
 }
@@ -318,11 +321,11 @@
     NSLog(@"%@", newPicArr);
     if (0 == [newPicArr count]) {
         // 用户操作区域高度
-        _customerView.frame = CGRectMake(0, _textHeight, _screenWidth, 36);
+        _customerView.frame = CGRectMake(57, _textHeight, _screenWidth, 36);
         /* cell 高度 */
         _cellHeight = _textHeight + 36 + 15;
         /* 底部分割线 */
-        _partLine.frame = CGRectMake(0, _cellHeight-15, _screenWidth, 15);
+        _partLine.frame = CGRectMake(0, _cellHeight-8, _screenWidth, 8);
         _hasPics = YES;  // 记录是否已经创建pic矩阵
         return;
     }
@@ -333,9 +336,9 @@
     // 如果只有一张图片
     if (1 == [newPicArr count]) {
         // 根据设备宽度计算图片宽高
-        int ww = ceil(_screenWidth - 30);
-        int hh = ww/16.0*9;
-        UIImageView *picImageView = [[UIImageView alloc] initWithFrame:CGRectMake(15, 0, ww, hh)];
+        int ww = ceil(_screenWidth - 57-75);
+        int hh = ww;
+        UIImageView *picImageView = [[UIImageView alloc] initWithFrame:CGRectMake(57, 0, ww, hh)];
         picImageView.backgroundColor = [colorManager lightGrayBackground];
         // uiimageview居中裁剪
         picImageView.contentMode = UIViewContentModeScaleAspectFill;
@@ -358,11 +361,11 @@
         picImageView.tag = (index+1) * 100 + 0;
         
         // 用户操作区域高度
-        _customerView.frame = CGRectMake(0, _textHeight+hh+15, _screenWidth, 36);
+        _customerView.frame = CGRectMake(57, _textHeight+hh+15, _screenWidth, 36);
         /* cell 高度 */
         _cellHeight = _textHeight + hh + 15 + (15+36);
         /* 底部分割线 */
-        _partLine.frame = CGRectMake(0, _cellHeight-15, _screenWidth, 15);
+        _partLine.frame = CGRectMake(0, _cellHeight-8, _screenWidth, 8);
         _hasPics = YES;  // 记录是否已经创建pic矩阵
         return;
     }
@@ -392,14 +395,14 @@
     
     
     // 根据设备宽度计算图片宽高
-    int ww = ceil((_screenWidth - 4*2 - 15*2)/3.0);
+    int ww = ceil((_screenWidth - 4*2 - 57-75)/3.0);
     int hh = ww;
     
     // 循环创建 imageView
     for (int i=0; i<[DoubleArr count]; i++) {  // 第一层
         for (int j=0; j<[[DoubleArr objectAtIndex:i] count]; j++) {  // 第二层
             
-            UIImageView *picImageView = [[UIImageView alloc] initWithFrame:CGRectMake(15+j*(ww+4), i*(hh+4), ww, hh)];
+            UIImageView *picImageView = [[UIImageView alloc] initWithFrame:CGRectMake(57+j*(ww+4), i*(hh+4), ww, hh)];
             picImageView.backgroundColor = [colorManager lightGrayBackground];
             // uiimageview居中裁剪
             picImageView.contentMode = UIViewContentModeScaleAspectFill;
@@ -433,11 +436,11 @@
     _holdView.frame = CGRectMake(0, _textHeight, _screenWidth, [DoubleArr count]*(hh+4));
     
     // 用户操作区域高度
-    _customerView.frame = CGRectMake(0, _textHeight + [DoubleArr count]*(hh+4) + 15-4, _screenWidth, 36);
+    _customerView.frame = CGRectMake(57, _textHeight + [DoubleArr count]*(hh+4) + 15-4, _screenWidth, 36);
     /* cell 高度 */
     _cellHeight = _textHeight + [DoubleArr count]*(hh+4) + 15-4 + (15+36);
     /* 底部分割线 */
-    _partLine.frame = CGRectMake(0, _cellHeight-15, _screenWidth, 15);
+    _partLine.frame = CGRectMake(0, _cellHeight-8, _screenWidth, 8);
     _hasPics = YES;  // 记录是否已经创建pic矩阵
 }
 
