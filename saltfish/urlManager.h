@@ -10,4 +10,5 @@
 
 @interface urlManager : NSObject
 + (NSString *)urlHost;
++ (BOOL)adFeedback;  // 广告反馈开关，不在市场包里开启
 @end

@@ -14,6 +14,7 @@
 - (void)clickShareIconForIndex:(unsigned long)index;
 - (void)clickCommentIconForIndex:(unsigned long)index;
 - (void)clickLikeIconForIndex:(unsigned long)index;
+- (void)clickAdIconForIndex:(unsigned long)index;
 @end
 
 @interface SFArticleCell : UITableViewCell <UIScrollViewDelegate>
@@ -47,6 +48,8 @@
 @property (nonatomic, copy) UIView *likeView;
 @property (nonatomic, copy) UILabel *likeLabel;
 @property (nonatomic, copy) UIImageView *likeIconView;
+@property (nonatomic, copy) UIView *adView;
+@property (nonatomic, copy) UILabel *adLabel;
 
 //
 @property (nonatomic) unsigned long textHeight;
@@ -66,6 +69,7 @@
 - (void)rewriteCommentNum:(unsigned long)newCommentNum withIndex:(unsigned long)index;
 - (void)rewriteLikeNum:(unsigned long)newLikeNum withIndex:(unsigned long)index;
 - (void)rewriteLikeStatus:(NSString *)newLikeStatus;
+- (void)rewriteAdWithIndex:(unsigned long)index;
 - (void)rewriteTitle:(NSString *)newTitle withLink:(BOOL)isShow;
 - (void)rewritePicURL:(NSArray *)newPicArr withIndex:(unsigned long)index;
 //

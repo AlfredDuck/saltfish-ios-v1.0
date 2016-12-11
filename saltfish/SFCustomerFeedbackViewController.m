@@ -128,7 +128,7 @@
     
     // 自定义 UITextView 的 placeholder
     _placeholder = [[UILabel alloc] initWithFrame:CGRectMake(13,1,_screenWidth-20,40)];
-    _placeholder.text = @"希望轻闻添加哪些话题？或有什么建议？";
+    _placeholder.text = @"希望添加哪些话题？或有什么建议？";
     _placeholder.textColor = [UIColor lightGrayColor];
     _placeholder.font = [UIFont fontWithName:@"Helvetica" size: 14];
     [commentBackground addSubview:_placeholder];

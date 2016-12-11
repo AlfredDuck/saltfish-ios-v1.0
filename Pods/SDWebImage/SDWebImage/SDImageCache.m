@@ -117,10 +117,10 @@ FOUNDATION_STATIC_INLINE NSUInteger SDCacheCostForImage(UIImage *image) {
         _shouldDecompressImages = YES;
 
         // memory cache enabled
-        _shouldCacheImagesInMemory = NO;
+        _shouldCacheImagesInMemory = YES;
 
         // Disable iCloud
-        _shouldDisableiCloud = NO;
+        _shouldDisableiCloud = YES;
 
         dispatch_sync(_ioQueue, ^{
             _fileManager = [NSFileManager new];
@@ -371,7 +371,6 @@ FOUNDATION_STATIC_INLINE NSUInteger SDCacheCostForImage(UIImage *image) {
     if (data) {
         UIImage *image = [UIImage sd_imageWithData:data];
         image = [self scaledImageForKey:key image:image];
-        /**zhaoyingzong**/
         if (self.shouldDecompressImages) {
             image = [UIImage decodedImageWithImage:image];
         }

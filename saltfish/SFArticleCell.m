@@ -11,6 +11,7 @@
 #import "YYWebImage.h"
 #import "colorManager.h"
 #import "YYText.h"
+#import "urlManager.h"
 
 #define LIKEICON  [UIImage imageNamed:@"like_icon.png"]
 #define LIKEICONRED  [UIImage imageNamed:@"like_icon_red.png"]
@@ -166,6 +167,27 @@
         _likeLabel.textColor = [colorManager secondTextColor];
         [_likeView addSubview: _likeLabel];
         
+        /*********************************************/
+         /* 广告投诉区域 */
+        _adView = [[UIView alloc] initWithFrame:CGRectMake(3*ww, 0, ww, 40)];
+        // 添加点击事件
+        _adView.userInteractionEnabled = YES;
+        UITapGestureRecognizer *singleTapAd = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickAdIcon:)]; // 设置手势
+        [_adView addGestureRecognizer:singleTapAd]; // 添加手势
+        [_customerView addSubview: _adView];
+        
+        // 广告投诉icon
+        UIImage *adIcon = [UIImage imageNamed:@"like_icon.png"];  // 32*28
+        UIImageView *adIconView = [[UIImageView alloc] initWithImage: adIcon]; // 把oneImage添加到oneImageView上
+        adIconView.frame = CGRectMake(5, 11, 16, 14); // 设置图片位置和大小
+        [_adView addSubview: adIconView];
+        
+        // 如果关闭了广告开关，则隐藏这个按钮
+        if (![urlManager adFeedback]) {
+            _adView.hidden = YES;
+        }
+         /********************************************/
+        
         /* 分割线 */
         UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 0, _screenWidth-57-15, 0.5)];  // 分割线
         line.backgroundColor = [UIColor colorWithRed:237/255.0 green:237/255.0 blue:237/255.0 alpha:1];
@@ -269,6 +291,12 @@
     } else {
         _likeIconView.image = LIKEICON;
     }
+}
+
+/** 重写广告 */
+- (void)rewriteAdWithIndex:(unsigned long)index
+{
+    _adView.tag = index + 1;
 }
 
 
@@ -502,7 +530,12 @@
     NSLog(@"点第%ld个文章", sender.view.tag);
     [self.delegate clickLikeIconForIndex: sender.view.tag - 1];
 }
-
+/** 点击广告投诉icon **/
+- (void)clickAdIcon:(UIGestureRecognizer *)sender
+{
+    NSLog(@"点第%ld个文章", sender.view.tag);
+    [self.delegate clickAdIconForIndex: sender.view.tag - 1];
+}
 
 
 @end

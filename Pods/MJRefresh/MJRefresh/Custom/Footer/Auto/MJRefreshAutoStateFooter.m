@@ -32,9 +32,6 @@
     if (!_stateLabel) {
         [self addSubview:_stateLabel = [UILabel label]];
     }
-    // 修改文字样式 by AlfredDuck
-    _stateLabel.textColor = [UIColor lightGrayColor];
-    _stateLabel.font = [UIFont fontWithName:@"Helvetica" size:12];
     return _stateLabel;
 }
 

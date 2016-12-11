@@ -94,7 +94,7 @@
 		BBF4AD591D91924D0051E264 /* SFLoginAndSignupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBF4AD581D91924D0051E264 /* SFLoginAndSignupViewController.m */; };
 		BBF97D611C65752C00A5D403 /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = BBF97D601C65752C00A5D403 /* placeholder.png */; };
 		BBFF6F6C1D167FE20089099F /* TopicVC.m in Sources */ = {isa = PBXBuildFile; fileRef = BBFF6F6B1D167FE20089099F /* TopicVC.m */; };
-		BF4178EC067BE3396A47881C /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84D65C4BEB822ACA8811C5E7 /* libPods.a */; };
+		C720E40B73152007A416F0B2 /* libPods-saltfish.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 37AC33E8F8AD95E177D2B78D /* libPods-saltfish.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -108,9 +108,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		13BF285CA35A2C9244619A82 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
-		84D65C4BEB822ACA8811C5E7 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		A9DB55F0396D17EF158B60BB /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		0E31029F59028F31BA7BCBC9 /* Pods-saltfish.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-saltfish.debug.xcconfig"; path = "Pods/Target Support Files/Pods-saltfish/Pods-saltfish.debug.xcconfig"; sourceTree = "<group>"; };
+		37AC33E8F8AD95E177D2B78D /* libPods-saltfish.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-saltfish.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		65FF56B95C2A966EA13210D4 /* Pods-saltfish.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-saltfish.release.xcconfig"; path = "Pods/Target Support Files/Pods-saltfish/Pods-saltfish.release.xcconfig"; sourceTree = "<group>"; };
 		BB0661F61D322D5C00FB79FE /* SFTabBarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFTabBarViewController.h; sourceTree = "<group>"; };
 		BB0661F71D322D5C00FB79FE /* SFTabBarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFTabBarViewController.m; sourceTree = "<group>"; };
 		BB0F14B11C26D8FC00FDB77C /* back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = back.png; sourceTree = "<group>"; };
@@ -253,7 +253,7 @@
 				BBC87F6A1C958B690052E639 /* SystemConfiguration.framework in Frameworks */,
 				BBC87F681C958B530052E639 /* ImageIO.framework in Frameworks */,
 				BBC87F661C958B340052E639 /* QuartzCore.framework in Frameworks */,
-				BF4178EC067BE3396A47881C /* libPods.a in Frameworks */,
+				C720E40B73152007A416F0B2 /* libPods-saltfish.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -337,8 +337,8 @@
 				BB2E97091C1D1599001B7CAA /* saltfish */,
 				BB2E97261C1D1599001B7CAA /* saltfishTests */,
 				BB2E97081C1D1599001B7CAA /* Products */,
-				EEC9DE456A7586106FEAF899 /* Pods */,
 				E8EFD65369355762439FBA9C /* Frameworks */,
+				BDEBA9109B8A6CB65CC34ADC /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -656,6 +656,15 @@
 			name = "topic page";
 			sourceTree = "<group>";
 		};
+		BDEBA9109B8A6CB65CC34ADC /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				0E31029F59028F31BA7BCBC9 /* Pods-saltfish.debug.xcconfig */,
+				65FF56B95C2A966EA13210D4 /* Pods-saltfish.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		E8EFD65369355762439FBA9C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -668,18 +677,9 @@
 				BBC87F671C958B530052E639 /* ImageIO.framework */,
 				BBC87F651C958B340052E639 /* QuartzCore.framework */,
 				BBF97D641C677AB900A5D403 /* Foundation.framework */,
-				84D65C4BEB822ACA8811C5E7 /* libPods.a */,
+				37AC33E8F8AD95E177D2B78D /* libPods-saltfish.a */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		EEC9DE456A7586106FEAF899 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				A9DB55F0396D17EF158B60BB /* Pods.debug.xcconfig */,
-				13BF285CA35A2C9244619A82 /* Pods.release.xcconfig */,
-			);
-			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -689,12 +689,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BB2E972D1C1D1599001B7CAA /* Build configuration list for PBXNativeTarget "saltfish" */;
 			buildPhases = (
-				5871040CC3278713F7B9AC6B /* Check Pods Manifest.lock */,
+				17E740700FF9FBF7A59C6560 /* [CP] Check Pods Manifest.lock */,
 				BB2E97031C1D1599001B7CAA /* Sources */,
 				BB2E97041C1D1599001B7CAA /* Frameworks */,
 				BB2E97051C1D1599001B7CAA /* Resources */,
-				89372F78CF48950FC67DD75E /* Embed Pods Frameworks */,
-				B9D0E793F164774C6EEF7B73 /* Copy Pods Resources */,
+				3A9A803E0EA7A93BBA8689AE /* [CP] Embed Pods Frameworks */,
+				9E251D757F212CD10C0DCD59 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -815,49 +815,49 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		5871040CC3278713F7B9AC6B /* Check Pods Manifest.lock */ = {
+		17E740700FF9FBF7A59C6560 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		89372F78CF48950FC67DD75E /* Embed Pods Frameworks */ = {
+		3A9A803E0EA7A93BBA8689AE /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-saltfish/Pods-saltfish-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		B9D0E793F164774C6EEF7B73 /* Copy Pods Resources */ = {
+		9E251D757F212CD10C0DCD59 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-saltfish/Pods-saltfish-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1010,12 +1010,13 @@
 		};
 		BB2E972E1C1D1599001B7CAA /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A9DB55F0396D17EF158B60BB /* Pods.debug.xcconfig */;
+			baseConfigurationReference = 0E31029F59028F31BA7BCBC9 /* Pods-saltfish.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = Launchimg;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Eric Zhao (3HCQXUYMF8)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				"FRAMEWORK_SEARCH_PATHS[arch=*]" = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = saltfish/Info.plist;
@@ -1065,12 +1066,13 @@
 		};
 		BB2E972F1C1D1599001B7CAA /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 13BF285CA35A2C9244619A82 /* Pods.release.xcconfig */;
+			baseConfigurationReference = 65FF56B95C2A966EA13210D4 /* Pods-saltfish.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = Launchimg;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Eric Zhao (3HCQXUYMF8)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				"FRAMEWORK_SEARCH_PATHS[arch=*]" = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = saltfish/Info.plist;

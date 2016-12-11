@@ -82,6 +82,7 @@
 {
     // 用不到了
     // [self.delegate refreshReadedStatus];
+    NSLog(@"我退出了");
 }
 
 - (void)didReceiveMemoryWarning {
@@ -294,7 +295,9 @@
 
     
     // 发起请求
-    NSURLRequest *request =[NSURLRequest requestWithURL:[NSURL URLWithString:finalURL]];
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:finalURL]
+                     cachePolicy:NSURLRequestReloadIgnoringCacheData
+                 timeoutInterval: 20.0];
     [self.view addSubview: _webview];
     _webview.delegate = self;
     [_webview loadRequest:request];

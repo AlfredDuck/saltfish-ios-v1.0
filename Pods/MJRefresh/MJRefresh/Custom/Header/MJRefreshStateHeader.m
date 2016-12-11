@@ -34,10 +34,6 @@
     if (!_stateLabel) {
         [self addSubview:_stateLabel = [UILabel label]];
     }
-    // 重写字体和颜色 by AlfredDuck
-    _stateLabel.font = [UIFont fontWithName:@"Helvetica" size:13];
-    //_lastUpdatedTimeLabel.textColor = [UIColor lightGrayColor];
-    //_stateLabel.backgroundColor = [UIColor greenColor];
     return _stateLabel;
 }
 
@@ -46,10 +42,6 @@
     if (!_lastUpdatedTimeLabel) {
         [self addSubview:_lastUpdatedTimeLabel = [UILabel label]];
     }
-    // 重写字体和颜色 by AlfredDuck
-    _lastUpdatedTimeLabel.font = [UIFont fontWithName:@"Helvetica" size:12];
-    _lastUpdatedTimeLabel.textColor = [UIColor lightGrayColor];
-    //_lastUpdatedTimeLabel.backgroundColor = [UIColor yellowColor];
     return _lastUpdatedTimeLabel;
 }
 

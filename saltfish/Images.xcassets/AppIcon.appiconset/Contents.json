@@ -23,13 +23,13 @@
     {
       "size" : "60x60",
       "idiom" : "iphone",
-      "filename" : "lightnews120.png",
+      "filename" : "qishui120.png",
       "scale" : "2x"
     },
     {
       "size" : "60x60",
       "idiom" : "iphone",
-      "filename" : "lightnews180.png",
+      "filename" : "qishui180.png",
       "scale" : "3x"
     }
   ],

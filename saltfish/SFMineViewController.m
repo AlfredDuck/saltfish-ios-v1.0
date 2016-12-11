@@ -202,7 +202,7 @@
     [customerFeedbackView addSubview:commentIconView];
     // label
     UILabel *commentLabel = [[UILabel alloc] initWithFrame:CGRectMake(55, 0, _screenWidth-55, 44)];
-    commentLabel.text = @"吐槽能量收集区";
+    commentLabel.text = @"吐槽区";
     commentLabel.font = [UIFont fontWithName:@"Helvetica" size: 15.0];
     commentLabel.textColor = [colorManager mainTextColor];
     [customerFeedbackView addSubview:commentLabel];
@@ -375,7 +375,7 @@
     if ([sfUserDefault dictionaryForKey:@"loginInfo"]) {
         // 当前是登录状态
         SFCustomerFeedbackViewController *customerFeedbackPage = [[SFCustomerFeedbackViewController alloc] init];
-        customerFeedbackPage.pageTitle = @"收集区";
+        customerFeedbackPage.pageTitle = @"吐槽区 ";
         customerFeedbackPage.delegate = self;
         [self.navigationController presentViewController:customerFeedbackPage animated:YES completion:^{
             NSLog(@"开启吐槽页面");

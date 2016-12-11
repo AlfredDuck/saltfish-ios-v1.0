@@ -21,6 +21,7 @@ PODS:
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
   - GPUImage (0.1.7)
+  - GrowingIO (0.9.41)
   - MJPhotoBrowser (1.0.2):
     - SDWebImage
     - SVProgressHUD
@@ -45,6 +46,7 @@ PODS:
 DEPENDENCIES:
   - AFNetworking (~> 2.1)
   - GPUImage (~> 0.1.7)
+  - GrowingIO (~> 0.9.39)
   - MJPhotoBrowser (~> 1.0.2)
   - MJRefresh (~> 3.0.7)
   - SDWebImage (~> 3.8.2)
@@ -56,9 +58,10 @@ DEPENDENCIES:
 SPEC CHECKSUMS:
   AFNetworking: cb8d14a848e831097108418f5d49217339d4eb60
   GPUImage: 733a5f0fab92df9de1c37ba9df520a833ccb406d
+  GrowingIO: b73f7957b0a16214697362d4ab8576f62683d0d4
   MJPhotoBrowser: b98b04d0e3b6a999feb44df68adec413af446809
   MJRefresh: f3e1228ec3d38c7ba5208d58032631a52f39f495
-  SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
+  SDWebImage: '098e97e6176540799c27e804c96653ee0833d13c'
   SVProgressHUD: b0830714205bea1317ea1a2ebc71e5633af334d4
   WeiboSDK: acb067053668102cf07d01aa7604350162c2e466
   WXSDKCoreKit: f8238a00ff3ccb1b857122cdd71f64affa83faf5
@@ -68,4 +71,6 @@ SPEC CHECKSUMS:
   YYText: 5c461d709e24d55a182d1441c41dc639a18a4849
   YYWebImage: 0431ed108e104527669b86f75efd58958425cca2
 
-COCOAPODS: 0.39.0
+PODFILE CHECKSUM: 5d8d771f77f48aa3bb21ae1ebc9264d307f826e7
+
+COCOAPODS: 1.1.1

@@ -14,6 +14,7 @@
 #import "WXApi.h"
 #import "YYWebImage.h"
 #import "UIImageView+WebCache.h"
+#import "Growing.h"
 
 #define iOS8 [[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0 ? 1 : 0
 #define kAPPKey        @"3552509555"
@@ -43,6 +44,8 @@
     YYImageCache *YYcache = [YYWebImageManager sharedManager].cache;
     YYcache.memoryCache.costLimit = 100 * 1024 * 1024;
     YYcache.diskCache.costLimit = 500 * 1024 * 1024;
+    // 启动GrowingIO
+    [Growing startWithAccountId:@"9491a71dbf459795"];
     
     // 禁用sdimage的内存缓存
     [SDImageCache sharedImageCache].shouldCacheImagesInMemory = NO;
@@ -81,6 +84,9 @@
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
+    // 调用growingio
+    [Growing handleUrl:url];
+    
     // 通过判断url的前缀，决定用哪个
     NSString *string =[url absoluteString];
     NSLog(@"回调url的前缀：%@", string);

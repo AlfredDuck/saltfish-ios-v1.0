@@ -20,6 +20,7 @@
 #import "TopicVC.h"
 #import "MJRefresh.h"
 #import "urlManager.h"
+#import "toastView.h"
 #import "SFArticleCell.h"
 #import "SFEmptyCell.h"
 #import "MJPhotoBrowser.h"  // MJ图片浏览器
@@ -139,7 +140,7 @@
     
     /* title */
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake((_screenWidth-200)/2, 20, 200, 44)];
-    titleLabel.text = @"轻闻";
+    titleLabel.text = @"贩卖机";
     titleLabel.textColor = [colorManager mainTextColor];
     titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 17.5];
     titleLabel.textAlignment = UITextAlignmentCenter;
@@ -413,6 +414,7 @@
         [oneArticleCell rewriteShareNum:shareNum withIndex:row-1];
         [oneArticleCell rewriteCommentNum:commentNum withIndex:row-1];
         [oneArticleCell rewriteLikeNum:likeNum withIndex:row-1];
+        [oneArticleCell rewriteAdWithIndex:row-1];
         [oneArticleCell rewriteLikeStatus:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"likeStatus"]];
         [oneArticleCell rewriteTitle:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"title"] withLink:isShow];
         [oneArticleCell rewritePicURL:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"picSmall"] withIndex:row-1];
@@ -601,7 +603,26 @@
 }
 
 
+/** 点击广告投诉 */
+- (void)clickAdIconForIndex:(unsigned long)index
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"隐藏此文章？" message:@"小主三思啊" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定隐藏", nil];
+    alert.tag = index + 1;
+    [alert show];
+}
 
+- (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    unsigned long index = (unsigned long)alertView.tag - 1;
+
+    if (buttonIndex == 1) {
+        NSLog(@"隐藏第%ld个", index);
+        // 发起隐藏某文章的请求
+        NSString *articleID = [[_followedArticlesData objectAtIndex:index] objectForKey:@"_id"];
+        NSLog(@"%@", articleID);
+        [self connectForHideWith:articleID];
+    }
+}
 
 
 
@@ -837,6 +858,42 @@
         NSIndexPath *indexPath=[NSIndexPath indexPathForRow:index + 1 inSection:0];
         [_oneTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
         
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+}
+
+
+/** 隐藏一个article的请求 */
+- (void)connectForHideWith:(NSString *)articleID
+{
+    NSLog(@"请求隐藏一个article");
+    
+    // prepare request parameters
+    NSString *host = [urlManager urlHost];
+    NSString *urlString = [host stringByAppendingString:@"/article/hide"];
+    NSDictionary *parameters = @{@"article_id": articleID};
+    
+    // 创建 GET 请求
+    AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];
+    connectManager.requestSerializer.timeoutInterval = 20.0;   //设置超时时间
+    [connectManager GET:urlString parameters: parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        // GET请求成功
+        NSString *errcode = [responseObject objectForKey:@"errcode"];
+        NSDictionary *data = [responseObject objectForKey:@"data"];
+        NSLog(@"errcode：%@", errcode);
+        NSLog(@"data: %@", data);
+        
+        // server错误判断
+        if ([errcode isEqualToString:@"err"]) {
+            NSLog(@"隐藏一个article失败，请重试");
+            return;
+        }
+        
+        NSLog(@"隐藏一个article成功");
+        [toastView showToastWith:@"隐藏成功" isErr:YES duration:2.0 superView:self.view];
+
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];

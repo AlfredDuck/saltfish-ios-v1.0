@@ -450,6 +450,7 @@
         [oneArticleCell rewriteCommentNum:commentNum withIndex:row-1];
         [oneArticleCell rewriteLikeNum:likeNum withIndex:row-1];
         [oneArticleCell rewriteLikeStatus:[[_articleData objectAtIndex:row-1] objectForKey:@"likeStatus"]];
+        [oneArticleCell rewriteAdWithIndex:row-1];
         [oneArticleCell rewriteTitle:[[_articleData objectAtIndex:row-1] objectForKey:@"title"] withLink:isShow];
         [oneArticleCell rewritePicURL:[[_articleData objectAtIndex:row-1] objectForKey:@"picSmall"] withIndex:row-1];
 
@@ -796,6 +797,42 @@
 }
 
 
+/** 隐藏一个article的请求 */
+- (void)connectForHideWith:(NSString *)articleID
+{
+    NSLog(@"请求隐藏一个article");
+    
+    // prepare request parameters
+    NSString *host = [urlManager urlHost];
+    NSString *urlString = [host stringByAppendingString:@"/article/hide"];
+    NSDictionary *parameters = @{@"article_id": articleID};
+    
+    // 创建 GET 请求
+    AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];
+    connectManager.requestSerializer.timeoutInterval = 20.0;   //设置超时时间
+    [connectManager GET:urlString parameters: parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        // GET请求成功
+        NSString *errcode = [responseObject objectForKey:@"errcode"];
+        NSDictionary *data = [responseObject objectForKey:@"data"];
+        NSLog(@"errcode：%@", errcode);
+        NSLog(@"data: %@", data);
+        
+        // server错误判断
+        if ([errcode isEqualToString:@"err"]) {
+            NSLog(@"隐藏一个article失败，请重试");
+            return;
+        }
+        
+        NSLog(@"隐藏一个article成功");
+        [toastView showToastWith:@"隐藏成功" isErr:YES duration:2.0 superView:self.view];
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+}
+
+
 
 
 
@@ -908,6 +945,27 @@
     // 发起喜欢的请求
     NSString *articleID = [[_articleData objectAtIndex:index] objectForKey:@"_id"];
     [self connectForLikeWith: articleID cellIndex:index];  // 发起like请求
+}
+
+/** 点击广告投诉 */
+- (void)clickAdIconForIndex:(unsigned long)index
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"隐藏此文章？" message:@"小主三思啊" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定隐藏", nil];
+    alert.tag = index + 1;
+    [alert show];
+}
+
+- (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    unsigned long index = (unsigned long)alertView.tag - 1;
+    
+    if (buttonIndex == 1) {
+        NSLog(@"隐藏第%ld个", index);
+        // 发起隐藏某文章的请求
+        NSString *articleID = [[_articleData objectAtIndex:index] objectForKey:@"_id"];
+        NSLog(@"%@", articleID);
+        [self connectForHideWith:articleID];
+    }
 }
 
 
