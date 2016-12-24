@@ -174,12 +174,12 @@
     //    }];
     
     // 上拉刷新 MJRefresh
-    //    _oneTableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
-    //        // 结束加载更多
-    //        // [tableView.mj_footer endRefreshing];
-    //        // [tableView.mj_footer endRefreshingWithNoMoreData];
-    //        [self connectForMore];
-    //    }];
+    _oneTableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
+        // 结束加载更多
+        // [tableView.mj_footer endRefreshing];
+        // [tableView.mj_footer endRefreshingWithNoMoreData];
+        [self connectForMore];
+    }];
 }
 
 
@@ -395,7 +395,7 @@
         
         // 创建 tableview
         [self createTableView];
-        
+
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
@@ -407,6 +407,52 @@
 - (void)connectForMore
 {
     NSLog(@"开始请求 more articles");
+    
+    // prepare request parameters
+    NSString *host = [urlManager urlHost];
+    NSString *urlString = [host stringByAppendingString:@"/user/my_likes"];
+    
+    // 取得当前最后一个cell的id
+    NSString *lastID = [[_articleData lastObject] objectForKey:@"likeID"];
+    
+    NSDictionary *parameters = @{@"uid": _uid,
+                                 @"user_type": _userType,
+                                 @"last_id": lastID,
+                                 @"type": @"loadmore"
+                                 };
+    
+    // 创建 GET 请求
+    AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];
+    connectManager.requestSerializer.timeoutInterval = 20.0;   //设置超时时间
+    [connectManager GET:urlString parameters: parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        // GET请求成功
+        NSArray *data = [responseObject objectForKey:@"data"];
+        NSString *errcode = [responseObject objectForKey:@"errcode"];
+        NSLog(@"errcode：%@", errcode);
+        
+        if ([errcode isEqualToString:@"err"]) {
+            [_oneTableView.mj_footer endRefreshing];
+            return;
+        }
+        if ([data count] == 0) {
+            [_oneTableView.mj_footer endRefreshingWithNoMoreData];
+            return;
+        }
+        
+        // 更新 followedArticleData 数据
+        [_articleData addObjectsFromArray:data];
+        data = nil;
+        
+        // 刷新当前 tableview 的数据
+        [_oneTableView reloadData];
+        
+        [_oneTableView.mj_footer endRefreshing];  // 结束上拉加载更多
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+        [_oneTableView.mj_footer endRefreshing];  // 结束上拉加载更多
+    }];
 }
 
 
@@ -557,8 +603,8 @@
 - (void)shake:(UIView *)senderView
 {
     CABasicAnimation* shake = [CABasicAnimation animationWithKeyPath:@"transform.translation.x"];
-    shake.fromValue = [NSNumber numberWithFloat:-3];
-    shake.toValue = [NSNumber numberWithFloat:3];
+    shake.fromValue = [NSNumber numberWithFloat:-5];
+    shake.toValue = [NSNumber numberWithFloat:5];
     shake.duration = 0.08;//执行时间
     shake.autoreverses = YES; //是否重复
     shake.repeatCount = 2;//次数

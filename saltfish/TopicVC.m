@@ -1102,8 +1102,8 @@
 - (void)shake:(UIView *)senderView
 {
     CABasicAnimation* shake = [CABasicAnimation animationWithKeyPath:@"transform.translation.x"];
-    shake.fromValue = [NSNumber numberWithFloat:-3];
-    shake.toValue = [NSNumber numberWithFloat:3];
+    shake.fromValue = [NSNumber numberWithFloat:-5];
+    shake.toValue = [NSNumber numberWithFloat:5];
     shake.duration = 0.08;//执行时间
     shake.autoreverses = YES; //是否重复
     shake.repeatCount = 2;//次数

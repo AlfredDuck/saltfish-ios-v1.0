@@ -138,7 +138,7 @@
         
         
         /* 分割线 + 下一段标题 */
-        _partLine = [[UIView alloc] initWithFrame:CGRectMake(0, 360-20, _screenWidth, 20)];
+        _partLine = [[UIView alloc] initWithFrame:CGRectMake(0, 360-15, _screenWidth, 15)];
         _partLine.backgroundColor = [colorManager lightGrayBackground];
         [self.contentView addSubview: _partLine];
         
@@ -284,7 +284,7 @@
     _cellHeight = _hotArticleHeight + 52 + hh + 27 + 18 + 20;
     
     // 修改分割线位置
-    _partLine.frame = CGRectMake(0, _cellHeight-20, _screenWidth, 20);
+    _partLine.frame = CGRectMake(0, _cellHeight-15, _screenWidth, 15);
 }
 
 

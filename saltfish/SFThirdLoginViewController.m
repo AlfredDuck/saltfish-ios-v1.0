@@ -124,7 +124,8 @@
         NSLog(@"%@", note.object);
         
         [self requestForUserInfoWithToken:[note.object objectForKey:@"token"] uid:[note.object objectForKey:@"uid"]];
-        
+        // 打印授权信息
+        [self printAuthWith:note.object];
     }];
     
     // 新浪微博授权失败
@@ -252,6 +253,19 @@
     
     [oneView addSubview:oneLabel];
     [self.view addSubview:oneView];
+}
+
+
+
+#pragma mark - 打印授权信息：token
+- (void)printAuthWith:(NSDictionary *)info
+{
+    if ([urlManager printToken]) {
+        // 打印开关开启
+        NSString *oneToken = [info objectForKey:@"token"];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"打印token" message:oneToken delegate:self cancelButtonTitle:@"取消" otherButtonTitles:nil, nil];
+        [alert show];
+    }
 }
 
 

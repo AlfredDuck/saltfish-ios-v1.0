@@ -21,4 +21,10 @@
     return YES;  // 开启广告反馈
 //    return NO;  // 关闭广告反馈
 }
+
++ (BOOL)printToken
+{
+    return YES;
+//    return NO;
+}
 @end

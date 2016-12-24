@@ -23,8 +23,9 @@
 #import "toastView.h"
 #import "SFArticleCell.h"
 #import "SFEmptyCell.h"
-#import "MJPhotoBrowser.h"  // MJ图片浏览器
+#import "MJPhotoBrowser.h"  // MJ图片浏览器，使用sdwebimage
 #import "MJPhoto.h"  // MJ图片浏览器
+//#import "YYPhotoBrowseView.h"  // YY图片浏览器，使用yywebimage
 
 
 
@@ -566,6 +567,8 @@
     unsigned long indexPic = index%100;  // 取个位
     NSArray *arr = [[_followedArticlesData objectAtIndex:indexTable] objectForKey:@"picBig"];
     [self checkBigPhotos: arr forIndex:indexPic withView:view];
+//    [self bigImageBrowser:arr  withView:view];
+
 }
 
 
@@ -944,7 +947,7 @@
 
 
 
-#pragma mark - 图片浏览器
+#pragma mark - 图片浏览器 基于SDWebImage
 - (void)checkBigPhotos:(NSArray *)urls forIndex:(unsigned long)index withView:(UIView *)view
 {
     //1.创建图片浏览器
@@ -971,13 +974,40 @@
 
 
 
+
+#pragma mark - 图片浏览器 基于YYWebImage
+//- (void)bigImageBrowser:(NSArray *)urls withView:(UIView *)view
+//{
+//    NSMutableArray *items = [NSMutableArray array];
+//    UIView *fromView = nil; //点击的imageview
+//    for (int i =0; i < urls.count; i++) {
+//        YYPhotoGroupItem *item = [YYPhotoGroupItem new];
+//        //设置item中原来的缩略图的imagView
+//        item.thumbView = nil;
+//        //每个缩略图的imagView的高清图的地址
+//        NSURL *url = [NSURL URLWithString:urls[i]];
+//        item.largeImageURL = url;
+//        [items addObject:item];
+//        fromView = view;
+////        if (i == selectIndex) {
+////            //所点击的缩略图的imageView
+////            fromView =  self.imageViews[i];
+////        }
+//    }
+//    YYPhotoBrowseView *groupView = [[YYPhotoBrowseView alloc]initWithGroupItems:items];
+//    [groupView presentFromImageView:fromView toContainer:self.navigationController.view animated:YES completion:nil];
+//}
+
+
+
+
 #pragma mark - 左右抖动
 /**代码来自网络**/
 - (void)shake:(UIView *)senderView
 {
     CABasicAnimation* shake = [CABasicAnimation animationWithKeyPath:@"transform.translation.x"];
-    shake.fromValue = [NSNumber numberWithFloat:-3];
-    shake.toValue = [NSNumber numberWithFloat:3];
+    shake.fromValue = [NSNumber numberWithFloat:-5];
+    shake.toValue = [NSNumber numberWithFloat:5];
     shake.duration = 0.08;//执行时间
     shake.autoreverses = YES; //是否重复
     shake.repeatCount = 2;//次数

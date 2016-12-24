@@ -11,4 +11,5 @@
 @interface urlManager : NSObject
 + (NSString *)urlHost;
 + (BOOL)adFeedback;  // 广告反馈开关，不在市场包里开启
++ (BOOL)printToken;  // 微博登录时打印token，方便获取新的token
 @end
