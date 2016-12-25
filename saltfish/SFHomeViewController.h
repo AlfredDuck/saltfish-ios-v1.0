@@ -12,8 +12,9 @@
 #import "SFArticleCell.h"
 #import "SFEmptyCell.h"
 #import "SFTabBarViewController.h"
+#import "ESPictureBrowser.h"
 
-@interface SFHomeViewController : SFTabBarViewController <UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, UIAlertViewDelegate, SFHotTableViewCellDelegate, SFArticleCellDelegate, SFEmptyCellDelegate>
+@interface SFHomeViewController : SFTabBarViewController <UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, UIAlertViewDelegate, SFHotTableViewCellDelegate, SFArticleCellDelegate, SFEmptyCellDelegate, ESPictureBrowserDelegate>
 
 @property (nonatomic, strong) UIScrollView *basedScrollView;  // 用不到了的
 @property (nonatomic, strong) NSArray *data;  // 用不到了

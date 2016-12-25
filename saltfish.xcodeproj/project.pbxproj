@@ -1017,10 +1017,14 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Eric Zhao (3HCQXUYMF8)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/YYPhotoBrowseView/YYWebImage/Vendor",
+				);
 				"FRAMEWORK_SEARCH_PATHS[arch=*]" = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = saltfish/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1041,7 +1045,8 @@
 					"-framework",
 					"\"Security\"",
 					"-framework",
-					"\"SystemConfiguration\"\n$(inherited)",
+					"\"SystemConfiguration\"",
+					"$(inherited)",
 					"-ObjC",
 					"-l\"AFNetworking\"",
 					"-l\"MJRefresh\"",
@@ -1055,7 +1060,7 @@
 					"-framework",
 					"\"Security\"",
 					"-framework",
-					"\"SystemConfiguration\"\n",
+					"\"SystemConfiguration\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.Alfred.saltfish;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1073,10 +1078,14 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Eric Zhao (3HCQXUYMF8)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/YYPhotoBrowseView/YYWebImage/Vendor",
+				);
 				"FRAMEWORK_SEARCH_PATHS[arch=*]" = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = saltfish/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1097,7 +1106,8 @@
 					"-framework",
 					"\"Security\"",
 					"-framework",
-					"\"SystemConfiguration\"\n$(inherited)",
+					"\"SystemConfiguration\"",
+					"$(inherited)",
 					"-ObjC",
 					"-l\"AFNetworking\"",
 					"-l\"MJRefresh\"",
@@ -1111,7 +1121,7 @@
 					"-framework",
 					"\"Security\"",
 					"-framework",
-					"\"SystemConfiguration\"\n",
+					"\"SystemConfiguration\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.Alfred.saltfish;
 				PRODUCT_NAME = "$(TARGET_NAME)";

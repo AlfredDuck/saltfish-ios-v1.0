@@ -10,7 +10,7 @@
 @protocol SFArticleCellDelegate <NSObject>
 @required
 - (void)clickTopicForIndex:(unsigned long)index;
-- (void)clickPicsForIndex:(unsigned long)index withView:(UIView *)view;
+- (void)clickPicsForIndex:(unsigned long)index withCurrentView:(UIView *)currentView withFatherView:(UIView *)fatherView;
 - (void)clickShareIconForIndex:(unsigned long)index;
 - (void)clickCommentIconForIndex:(unsigned long)index;
 - (void)clickLikeIconForIndex:(unsigned long)index;

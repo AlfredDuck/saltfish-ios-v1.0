@@ -509,7 +509,7 @@
 - (void)clickPic:(UIGestureRecognizer *)sender
 {
     NSLog(@"点第%ld个文章", sender.view.tag);
-    [self.delegate clickPicsForIndex:sender.view.tag withView:(UIView *)sender.view];  // 调用代理方法
+    [self.delegate clickPicsForIndex:sender.view.tag withCurrentView:(UIView *)sender.view withFatherView:_holdView];  // 调用代理方法
 }
 
 /** 点击分享icon **/

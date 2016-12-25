@@ -26,6 +26,7 @@
 #import "MJPhotoBrowser.h"  // MJ图片浏览器，使用sdwebimage
 #import "MJPhoto.h"  // MJ图片浏览器
 //#import "YYPhotoBrowseView.h"  // YY图片浏览器，使用yywebimage
+#import "ESPictureBrowser.h"  // ES图片浏览器，使用yywebimage
 
 
 
@@ -33,6 +34,9 @@
 @property (nonatomic, strong) UIView *notificationView;
 @property (nonatomic, strong) NSString *articleListStatus;  // 三种状态: unknown, empty, full
 @property (nonatomic) NSString *shareArticleID;  // 将要分享的article的id
+/**以下用于图片浏览器*/
+@property (nonatomic, strong) UIView *currentPicFatherView;  // 当前点击图片的父试图
+@property (nonatomic) unsigned long cellIndex;  // 当前点击图片所在的cell
 @end
 
 @implementation SFHomeViewController
@@ -561,14 +565,21 @@
 
 
 /** 点击配图 */
-- (void)clickPicsForIndex:(unsigned long)index withView:(UIView *)view
+- (void)clickPicsForIndex:(unsigned long)index withCurrentView:(UIView *)view withFatherView:(UIView *)fatherView
 {
     unsigned long indexTable = index/100 - 1;  // 取百位
     unsigned long indexPic = index%100;  // 取个位
     NSArray *arr = [[_followedArticlesData objectAtIndex:indexTable] objectForKey:@"picBig"];
-    [self checkBigPhotos: arr forIndex:indexPic withView:view];
-//    [self bigImageBrowser:arr  withView:view];
-
+    
+    // 原图片浏览器
+    // [self checkBigPhotos: arr forIndex:indexPic withView:view];
+    
+    _cellIndex = indexTable;
+    _currentPicFatherView = fatherView;
+    // 新图片浏览器
+    ESPictureBrowser *espb = [[ESPictureBrowser alloc] init];
+    espb.delegate = self;
+    [espb showFromView:view picturesCount:arr.count currentPictureIndex:indexPic];
 }
 
 
@@ -974,29 +985,19 @@
 
 
 
-
 #pragma mark - 图片浏览器 基于YYWebImage
-//- (void)bigImageBrowser:(NSArray *)urls withView:(UIView *)view
-//{
-//    NSMutableArray *items = [NSMutableArray array];
-//    UIView *fromView = nil; //点击的imageview
-//    for (int i =0; i < urls.count; i++) {
-//        YYPhotoGroupItem *item = [YYPhotoGroupItem new];
-//        //设置item中原来的缩略图的imagView
-//        item.thumbView = nil;
-//        //每个缩略图的imagView的高清图的地址
-//        NSURL *url = [NSURL URLWithString:urls[i]];
-//        item.largeImageURL = url;
-//        [items addObject:item];
-//        fromView = view;
-////        if (i == selectIndex) {
-////            //所点击的缩略图的imageView
-////            fromView =  self.imageViews[i];
-////        }
-//    }
-//    YYPhotoBrowseView *groupView = [[YYPhotoBrowseView alloc]initWithGroupItems:items];
-//    [groupView presentFromImageView:fromView toContainer:self.navigationController.view animated:YES completion:nil];
-//}
+/** ESPictureBrowser 代理 */
+- (UIView *)pictureView:(ESPictureBrowser *)pictureBrowser viewForIndex:(NSInteger)index
+{
+    return _currentPicFatherView.subviews[index];
+}
+
+- (NSString *)pictureView:(ESPictureBrowser *)pictureBrowser highQualityUrlStringForIndex:(NSInteger)index
+{
+    return _followedArticlesData[_cellIndex][@"picBig"][index];
+}
+
+
 
 
 

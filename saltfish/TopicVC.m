@@ -39,6 +39,9 @@
 @property (nonatomic) NSString *isPushOn;
 @property (nonatomic) UIImage *backgroundImage;
 @property (nonatomic) NSString *shareArticleID;  // 将要分享的article的id
+/**以下用于图片浏览器*/
+@property (nonatomic, strong) UIView *currentPicFatherView;  // 当前点击图片的父试图
+@property (nonatomic) unsigned long cellIndex;  // 当前点击图片所在的cell
 @end
 
 @implementation TopicVC
@@ -902,12 +905,21 @@
 }
 
 /** 点击配图 */
-- (void)clickPicsForIndex:(unsigned long)index withView:(UIView *)view
+- (void)clickPicsForIndex:(unsigned long)index withCurrentView:(UIView *)view withFatherView:(UIView *)fatherView
 {
     unsigned long indexTable = index/100 - 1;  // 取百位
     unsigned long indexPic = index%100;  // 取个位
     NSArray *arr = [[_articleData objectAtIndex:indexTable] objectForKey:@"picBig"];
-    [self checkBigPhotos: arr forIndex:indexPic withView:view];
+    
+    // 原来图片浏览器
+    // [self checkBigPhotos: arr forIndex:indexPic withView:view];
+    
+    _cellIndex = indexTable;
+    _currentPicFatherView = fatherView;
+    // 新图片浏览器
+    ESPictureBrowser *espb = [[ESPictureBrowser alloc] init];
+    espb.delegate = self;
+    [espb showFromView:view picturesCount:arr.count currentPictureIndex:indexPic];
 }
 
 /** 点击分享 */
@@ -1094,6 +1106,23 @@
     //4.显示浏览器
     [brower show];
 }
+
+
+
+#pragma mark - 图片浏览器 基于YYWebImage
+/** ESPictureBrowser 代理 */
+- (UIView *)pictureView:(ESPictureBrowser *)pictureBrowser viewForIndex:(NSInteger)index
+{
+    return _currentPicFatherView.subviews[index];
+}
+
+- (NSString *)pictureView:(ESPictureBrowser *)pictureBrowser highQualityUrlStringForIndex:(NSInteger)index
+{
+    return _articleData[_cellIndex][@"picBig"][index];
+}
+
+
+
 
 
 

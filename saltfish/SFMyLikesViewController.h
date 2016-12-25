@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "SFArticleCell.h"
+#import "ESPictureBrowser.h"
 
-@interface SFMyLikesViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, SFArticleCellDelegate>
+@interface SFMyLikesViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, SFArticleCellDelegate, ESPictureBrowserDelegate>
 @property (nonatomic, strong) UITableView *oneTableView;  // tableview
 @property (nonatomic, strong) NSMutableArray *articleData;  // tableview数据
 @property (nonatomic, strong) NSString *uid;  // 用户登录账户
