@@ -35,7 +35,7 @@
 @interface TopicVC ()
 // 私有变量
 @property (nonatomic) float backgroundImageHeight;
-@property (nonatomic) NSString *isFollowing;
+@property (nonatomic) NSString *isFollowing;  // @"yes" or @"no
 @property (nonatomic) NSString *isPushOn;
 @property (nonatomic) UIImage *backgroundImage;
 @property (nonatomic) NSString *shareArticleID;  // 将要分享的article的id
@@ -254,7 +254,7 @@
     [backView addGestureRecognizer:singleTap]; // 给图片添加手势
     [self.view addSubview:backView];
     
-    // title
+    /* title */
     _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake((_screenWidth-200)/2, 20, 200, 44)];
     _titleLabel.text = _topic;
     _titleLabel.textColor = [UIColor whiteColor];
@@ -420,6 +420,7 @@
         _topic = [_topicData objectForKey:@"title"];
         [oneTopicCell rewriteTopic:_topic];
         [oneTopicCell rewriteIntroduction:_introduction followStatus:_isFollowing pushStatus:_isPushOn];
+        [oneTopicCell rewriteRecommendWith: _recommendData followStatus:_isFollowing];
         
         // 取消选中的背景色
         oneTopicCell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -512,7 +513,7 @@
 
 #pragma mark - 网络请求
 
-/** 请求第一个cell的数据 **/
+/** 请求当前topic的数据 **/
 - (void)connectForTopicCell:(UITableView *)tableView
 {
     // prepare request parameters
@@ -538,13 +539,18 @@
             return;
         }
         
-        // 更新第一个cell的数据
+        // 更新topic的数据
         _topicData = data;
         data = nil;
-        
+
         // 更新isFollowing状态
         _isFollowing = [_topicData objectForKey:@"isFollowing"];
         _isPushOn = [_topicData objectForKey:@"isPushOn"];
+        
+        // 更新相关推荐的数据
+        NSArray *data_ = _topicData[@"relatedTopics"];
+        _recommendData = [data_ mutableCopy];
+        data_ = nil;
         
         // 刷新tableview
         [tableView reloadData];
@@ -555,7 +561,7 @@
 }
 
 
-/* 请求文章cell数据 */
+/* 请求article数据 */
 - (void)connectForArticleCell:(UITableView *)tableView
 {
     // prepare request parameters
@@ -709,6 +715,49 @@
 }
 
 
+/** follow 相关推荐的请求 */
+- (void)connectForFollowRecommendWith:(NSString *)topic introdution:(NSString *)introduction portrait:(NSString *)portrait index:(unsigned long)index
+{
+    NSLog(@"请求 follow recommend 开始");
+    
+    // prepare request parameters
+    NSString *host = [urlManager urlHost];
+    NSString *urlString = [host stringByAppendingString:@"/topic/follow"];
+    
+    NSDictionary *parameters = @{@"uid": _uid,
+                                 @"user_type": _userType,
+                                 @"topic": topic,
+                                 @"portrait": portrait,
+                                 @"introduction": introduction,
+                                 @"is_push_on": _isPushOn
+                                 };
+    
+    // 创建 GET 请求
+    AFHTTPRequestOperationManager *connectManager = [AFHTTPRequestOperationManager manager];
+    connectManager.requestSerializer.timeoutInterval = 20.0;   //设置超时时间
+    [connectManager GET:urlString parameters: parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        // GET请求成功
+        NSDictionary *data = [responseObject objectForKey:@"data"];
+        NSString *errcode = [responseObject objectForKey:@"errcode"];
+        NSLog(@"errcode：%@", errcode);
+        // NSLog(@"data: %@", data);
+        
+        if ([errcode isEqualToString:@"err"]) {
+            [toastView showToastWith:@"操作失败，服务器错误" isErr:NO duration:2.0 superView:self.view];  // toast提示
+            return;
+        }
+        
+        // toast提示
+        [toastView showToastWith:@"关注成功 bingo！" isErr:YES duration:2.0 superView:self.view];
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+        [toastView showToastWith:@"操作失败，请检查网络" isErr:NO duration:2.0 superView:self.view];  // toast提示
+    }];
+}
+
+
 /** push开关 请求 **/
 - (void)connectForPushSwitch
 {
@@ -734,7 +783,7 @@
         NSDictionary *data = [responseObject objectForKey:@"data"];
         NSString *errcode = [responseObject objectForKey:@"errcode"];
         NSLog(@"errcode：%@", errcode);
-        NSLog(@"data: %@", data);
+        // NSLog(@"data: %@", data);
         
         if ([errcode isEqualToString:@"err"]) {
             NSLog(@"操作失败，请重试");
@@ -774,7 +823,7 @@
         NSString *errcode = [responseObject objectForKey:@"errcode"];
         NSDictionary *data = [responseObject objectForKey:@"data"];
         NSLog(@"errcode：%@", errcode);
-        NSLog(@"data: %@", data);
+        // NSLog(@"data: %@", data);
         
         // server错误判断
         if ([errcode isEqualToString:@"err"]) {
@@ -819,7 +868,7 @@
         NSString *errcode = [responseObject objectForKey:@"errcode"];
         NSDictionary *data = [responseObject objectForKey:@"data"];
         NSLog(@"errcode：%@", errcode);
-        NSLog(@"data: %@", data);
+        // NSLog(@"data: %@", data);
         
         // server错误判断
         if ([errcode isEqualToString:@"err"]) {
@@ -903,6 +952,46 @@
 {
     NSLog(@"当前已在话题页面");
 }
+
+/** 点击相关推荐话题 */
+ - (void)clickRecommendTopicWith:(unsigned long)index
+{
+    NSLog(@"%@", _recommendData[index][@"title"]);
+    // 跳转页面
+    // 通过index获得话题内容
+    NSString *topic = _recommendData[index][@"title"];
+    NSString *portrait = _recommendData[index][@"portrait"];
+    
+    // 跳转话题页面
+    TopicVC *topicPage = [[TopicVC alloc] init];
+    topicPage.topic = topic;
+    topicPage.portraitURL = portrait;
+    [self.navigationController pushViewController:topicPage animated:YES];
+    //开启iOS7的滑动返回效果
+    if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
+        self.navigationController.interactivePopGestureRecognizer.delegate = nil;
+    }
+}
+
+/** 点击相关推荐的follow按钮 */
+- (void)clickRecommendFollowWith:(unsigned long)index
+{
+    NSLog(@"%@", _recommendData[index][@"title"]);
+    
+    // 发起follow请求
+    NSString *topic = _recommendData[index][@"title"];
+    NSString *portrait = _recommendData[index][@"portrait"];
+    NSString *introduction = _recommendData[index][@"introduction"];
+    NSLog(@"oppo%@", topic);
+    [self connectForFollowRecommendWith:topic introdution:introduction portrait:portrait index:index];
+    
+    // 消除当前一个话题（注意，这时还没得到follow请求成功的通知）
+    [_recommendData removeObjectAtIndex:index];
+    // 刷新特定的cell
+    NSIndexPath *indexPath=[NSIndexPath indexPathForRow:0 inSection:0];
+    [_oneTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
+}
+
 
 /** 点击配图 */
 - (void)clickPicsForIndex:(unsigned long)index withCurrentView:(UIView *)view withFatherView:(UIView *)fatherView

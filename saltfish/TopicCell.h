@@ -13,6 +13,8 @@
 @required
 - (void)clickFollowButton;  // 点击关注按钮
 - (void)changePushSwitch;   // 点击push开关
+- (void)clickRecommendTopicWith:(unsigned long)index;  // 点击相关推荐话题
+- (void)clickRecommendFollowWith:(unsigned long)index;  // 点击相关推荐follow按钮
 @end
 
 @interface TopicCell : UITableViewCell
@@ -24,8 +26,10 @@
 @property (nonatomic, copy) UILabel *introductionLabel;
 
 @property (nonatomic, copy) UIImageView *followButton;  // 关注按钮
-@property (nonatomic, copy) UIView *pushSettingView;
+@property (nonatomic, copy) UIView *pushSettingView;  // 推送开关
 @property (nonatomic, copy) UISwitch *pushSwitch;
+
+@property (nonatomic, copy) UIView *recommendView;  // 相关推荐
 
 @property (nonatomic, copy) UIView *partLine;  // 分割线
 @property (nonatomic) unsigned long cellHeight;  // cell高度
@@ -35,6 +39,7 @@
 
 - (void)rewriteTopic:(NSString *)newTopic;
 - (void)rewriteIntroduction:(NSString *)newIntroduction followStatus:(NSString *)isFollowing pushStatus:(NSString *)isPushOn;
+- (void)rewriteRecommendWith:(NSMutableArray *)RecommendArray followStatus:(NSString *)isFollowing;
 
 @property (nonatomic, assign) id <TopicCellDelegate> delegate;  // 定义代理
 

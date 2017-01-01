@@ -20,8 +20,9 @@
 
 // tableview
 @property (nonatomic, strong) UITableView *oneTableView;  // tableview
-@property (nonatomic, strong) NSDictionary *topicData;  // tableview第一个cell数据
-@property (nonatomic, strong) NSMutableArray *articleData;  // tableview 其他cell数据
+@property (nonatomic, strong) NSDictionary *topicData;  // 当前Topic数据
+@property (nonatomic, strong) NSMutableArray *recommendData;  // 相关推荐数据
+@property (nonatomic, strong) NSMutableArray *articleData;  // article数据
 
 @property (nonatomic, strong) UIImageView *backgroundView;
 @property (nonatomic, strong) UIImageView *portraitView;
