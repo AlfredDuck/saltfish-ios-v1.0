@@ -139,19 +139,19 @@
     // ==================设置行距===================
     NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:_introduction];
     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-    style.lineSpacing = 3;//行距
+    style.lineSpacing = 3;  //行距
+    style.alignment = NSTextAlignmentCenter;  //居中
     [text addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0, text.length)];
     _introductionLabel.attributedText = text;
-    _introductionLabel.textAlignment = UITextAlignmentCenter;
     
     // ===================设置uilabel文本折行====================
     NSString *str = _introduction;
-    CGSize maxSize = {_screenWidth-50*2, 5000};  // 设置文本区域最大宽高(两边各留15px)
+    CGSize maxSize = {_screenWidth-50*2, 5000};  // 设置文本区域最大宽高(两边各留px)
     CGSize labelSize = [str sizeWithFont:[UIFont fontWithName:@"Helvetica" size:13]
                        constrainedToSize:maxSize
                            lineBreakMode:_introductionLabel.lineBreakMode];   // str是要显示的字符串
     CGFloat newHeight = labelSize.height*16/13.0;
-    _introductionLabel.frame = CGRectMake(50, 73, labelSize.width, newHeight);  // 动态修改label高度,且需要根据行距作调整
+    _introductionLabel.frame = CGRectMake(50, 73, _screenWidth-50*2, newHeight);  // 动态修改label高度,且需要根据行距作调整
     _introductionLabel.numberOfLines = 0;  // 不可少Label属性之一
     //_postTextLabel.lineBreakMode = UILineBreakModeCharacterWrap;  // 不可少Label属性之二
     
