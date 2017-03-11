@@ -211,7 +211,7 @@
     _commentNumLabel.font = [UIFont fontWithName:@"Helvetica" size: 10];
     _commentNumLabel.textColor = [UIColor whiteColor];
     _commentNumLabel.frame = CGRectMake(30, 4, 5*(unsigned long)numString.length+7, 13);
-    _commentNumLabel.textAlignment = UITextAlignmentCenter;
+    _commentNumLabel.textAlignment = NSTextAlignmentCenter;
     _commentNumLabel.backgroundColor = [colorManager red];
     [_commentButtonView addSubview:_commentNumLabel];
 }
@@ -227,7 +227,7 @@
     _praiseNumLabel.font = [UIFont fontWithName:@"Helvetica" size: 10];
     _praiseNumLabel.textColor = [UIColor whiteColor];
     _praiseNumLabel.frame = CGRectMake(30, 4, 5*(unsigned long)numString.length+7, 13);
-    _praiseNumLabel.textAlignment = UITextAlignmentCenter;
+    _praiseNumLabel.textAlignment = NSTextAlignmentCenter;
     _praiseNumLabel.backgroundColor = [colorManager red];
     [_praiseButtonView addSubview:_praiseNumLabel];
 }
@@ -243,7 +243,7 @@
     _likeNumLabel.font = [UIFont fontWithName:@"Helvetica" size: 10];
     _likeNumLabel.textColor = [UIColor whiteColor];
     _likeNumLabel.frame = CGRectMake(30, 4, 5*(unsigned long)numString.length+7, 13);
-    _likeNumLabel.textAlignment = UITextAlignmentCenter;
+    _likeNumLabel.textAlignment = NSTextAlignmentCenter;
     _likeNumLabel.backgroundColor = [colorManager red];
     [_likeButtonView addSubview:_likeNumLabel];
 }

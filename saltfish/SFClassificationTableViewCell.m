@@ -52,7 +52,7 @@
         _titleLabel.text = _title;
         _titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 15.5];
         _titleLabel.textColor = [colorManager mainTextColor];
-        _titleLabel.textAlignment = UITextAlignmentCenter;
+        _titleLabel.textAlignment = NSTextAlignmentCenter;
         [self.contentView addSubview:_titleLabel];
         
         
@@ -71,7 +71,7 @@
         nextTitleLabel.font = [UIFont fontWithName:@"Helvetica" size: 15.5];
         nextTitleLabel.text = @"最新话题";
         nextTitleLabel.textColor = [colorManager mainTextColor];
-        nextTitleLabel.textAlignment = UITextAlignmentCenter;
+        nextTitleLabel.textAlignment = NSTextAlignmentCenter;
         [_titleForNextPart addSubview:nextTitleLabel];
         
         
@@ -114,7 +114,7 @@
             [DoubleArr addObject: singleArr];
         }
     }
-    NSLog(@"二维数组：%@", DoubleArr);
+    // NSLog(@"二维数组：%@", DoubleArr);
     
 
     // 根据设备宽度计算图片宽高
@@ -150,7 +150,7 @@
             classificationLable.textColor  = [UIColor whiteColor];
             classificationLable.font = [UIFont fontWithName:@"Helvetica" size: 15.0f];
             classificationLable.numberOfLines = 3;
-            classificationLable.textAlignment = UITextAlignmentCenter;
+            classificationLable.textAlignment = NSTextAlignmentCenter;
             // 文字阴影
             classificationLable.layer.shadowOpacity = 0.9;
             classificationLable.layer.shadowColor = [UIColor blackColor].CGColor;

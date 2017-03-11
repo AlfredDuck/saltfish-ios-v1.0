@@ -72,7 +72,7 @@
         tabLabel.text = [tabText objectAtIndex:i];
         tabLabel.font = [UIFont fontWithName:@"Helvetica" size:10.0];
         tabLabel.textColor = [colorManager tabTextColorGray];
-        tabLabel.textAlignment = UITextAlignmentCenter;
+        tabLabel.textAlignment = NSTextAlignmentCenter;
         [tabView addSubview:tabLabel];
         
         // 设置手势
@@ -120,7 +120,7 @@
         tabLabel.text = [tabText objectAtIndex:i];
         tabLabel.font = [UIFont fontWithName:@"Helvetica" size:10.0];
         tabLabel.textColor = [colorManager tabTextColorBlack];
-        tabLabel.textAlignment = UITextAlignmentCenter;
+        tabLabel.textAlignment = NSTextAlignmentCenter;
         [tabView addSubview:tabLabel];
         
         [_tabBarBackgroundView addSubview:tabView];

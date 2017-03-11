@@ -259,7 +259,7 @@
     _titleLabel.text = _topic;
     _titleLabel.textColor = [UIColor whiteColor];
     _titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 16.0];
-    _titleLabel.textAlignment = UITextAlignmentCenter;
+    _titleLabel.textAlignment = NSTextAlignmentCenter;
     _titleLabel.hidden = YES;
     [self.view addSubview:_titleLabel];
 }

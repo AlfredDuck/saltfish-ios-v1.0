@@ -117,7 +117,7 @@
     titleLabel.text = @"全部评论";
     titleLabel.textColor = [colorManager mainTextColor];
     titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 16];
-    titleLabel.textAlignment = UITextAlignmentCenter;
+    titleLabel.textAlignment = NSTextAlignmentCenter;
     [titleBarBackground addSubview:titleLabel];
     
     // back button pic
@@ -175,7 +175,7 @@
 {
     UILabel *noComment = [[UILabel alloc] initWithFrame:CGRectMake(_contentFatherView.frame.size.width/2.0 - 150, 25, 300, 20)];
     noComment.font = [UIFont fontWithName:@"Helvetica" size: 13];
-    noComment.textAlignment = UITextAlignmentCenter;
+    noComment.textAlignment = NSTextAlignmentCenter;
     noComment.textColor = [colorManager lightTextColor];
     noComment.text = @"~你是第一个评论的哦~";
     [_contentFatherView addSubview:noComment];
@@ -355,7 +355,7 @@
     // 加载中...
     _loadingTextLabel = [[UILabel alloc] initWithFrame:CGRectMake(boardView.frame.size.width/2.0 - 100, boardView.frame.size.height/2+ 18, 200, 20)];
     _loadingTextLabel.font = [UIFont fontWithName:@"Helvetica" size: 13];
-    _loadingTextLabel.textAlignment = UITextAlignmentCenter;
+    _loadingTextLabel.textAlignment = NSTextAlignmentCenter;
     _loadingTextLabel.textColor = [colorManager lightTextColor];
     _loadingTextLabel.text = @"奴婢正在加载...";
     [boardView addSubview:_loadingTextLabel];

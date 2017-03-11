@@ -419,7 +419,7 @@
             [DoubleArr addObject: singleArr];
         }
     }
-    NSLog(@"二维数组：%@", DoubleArr);
+    // NSLog(@"二维数组：%@", DoubleArr);
     
     
     // 根据设备宽度计算图片宽高

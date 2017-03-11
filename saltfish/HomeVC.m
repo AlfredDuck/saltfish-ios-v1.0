@@ -197,7 +197,7 @@
     for (int i=0; i<[_channels count]; i++) {
         NSString *channelText = [_channels objectAtIndex:i];
         UILabel *channelLabel = [[UILabel alloc] init];
-        channelLabel.textAlignment = UITextAlignmentCenter;
+        channelLabel.textAlignment = NSTextAlignmentCenter;
         channelLabel.text = channelText;
         channelLabel.tag = i+1;
         
@@ -289,7 +289,7 @@
 //        // 定位用的，上线注掉
 //        UILabel *t = [[UILabel alloc] initWithFrame:CGRectMake(_screenWidth/2.0 - 100, 400, 200, 100)];
 //        t.font = [UIFont fontWithName:@"Helvetica Bold" size: 14];
-//        t.textAlignment = UITextAlignmentCenter;
+//        t.textAlignment = NSTextAlignmentCenter;
 //        t.textColor = [UIColor whiteColor];
 //        t.text = [_channels objectAtIndex:i];
 //        t.backgroundColor = [UIColor blackColor];
@@ -441,7 +441,7 @@
     // 加载中...
     _loadingTextLabel = [[UILabel alloc] initWithFrame:CGRectMake(_screenWidth/2.0 - 100, _screenHeight/2+ 18, 200, 20)];
     _loadingTextLabel.font = [UIFont fontWithName:@"Helvetica" size: 13];
-    _loadingTextLabel.textAlignment = UITextAlignmentCenter;
+    _loadingTextLabel.textAlignment = NSTextAlignmentCenter;
     _loadingTextLabel.textColor = [colorManager lightTextColor];
     _loadingTextLabel.text = @"奴婢正在加载...";
     [boardView addSubview:_loadingTextLabel];
@@ -756,7 +756,7 @@
 //            
 //            UILabel *noMoreLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, _screenWidth, 45)];
 //            noMoreLabel.font = [UIFont fontWithName:@"Helvetica" size: 13.5];
-//            noMoreLabel.textAlignment = UITextAlignmentCenter;
+//            noMoreLabel.textAlignment = NSTextAlignmentCenter;
 //            noMoreLabel.textColor = [colorManager lightTextColor];
 //            noMoreLabel.text = @"~ la fin ~";
 //            tableView.tableFooterView = noMoreLabel;

@@ -37,7 +37,7 @@
         txtLabel.text = @"还没有关注任何话题哦";
         txtLabel.font = [UIFont fontWithName:@"Helvetica" size:14.0];
         txtLabel.textColor = [colorManager secondTextColor];
-        txtLabel.textAlignment = UITextAlignmentCenter;
+        txtLabel.textAlignment = NSTextAlignmentCenter;
         [self.contentView addSubview: txtLabel];
         
         /* 按钮 */
@@ -50,7 +50,7 @@
         buttonLabel.text = @"随便逛逛";
         buttonLabel.font = [UIFont fontWithName:@"Helvetica" size:12.0];
         buttonLabel.textColor = [UIColor whiteColor];
-        buttonLabel.textAlignment = UITextAlignmentCenter;
+        buttonLabel.textAlignment = NSTextAlignmentCenter;
         [buttonView addSubview: buttonLabel];
         // 点击手势
         buttonView.userInteractionEnabled = YES; // 设置view可以交互

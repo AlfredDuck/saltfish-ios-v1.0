@@ -98,7 +98,7 @@
     _titleLabel.text = @"";
     _titleLabel.textColor = [colorManager mainTextColor];
     _titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 16];
-    _titleLabel.textAlignment = UITextAlignmentCenter;
+    _titleLabel.textAlignment = NSTextAlignmentCenter;
     [titleBarBackground addSubview:_titleLabel];
     
     /* back button pic */
@@ -129,7 +129,7 @@
     loadingLabel.text = @"正在加载...";
     loadingLabel.textColor = [colorManager secondTextColor];
     loadingLabel.font = [UIFont fontWithName:@"Helvetica" size:12];
-    loadingLabel.textAlignment = UITextAlignmentCenter;
+    loadingLabel.textAlignment = NSTextAlignmentCenter;
     
     [_loadingView addSubview:loadingLabel];
     [_loadingView addSubview:_loadingFlower];

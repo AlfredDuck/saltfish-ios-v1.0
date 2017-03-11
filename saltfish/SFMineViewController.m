@@ -240,7 +240,7 @@
     title.textColor = [colorManager mainTextColor];
     title.text = @"登录";
     title.font = [UIFont fontWithName:@"Helvetica" size: 14.0];
-    title.textAlignment = UITextAlignmentCenter;
+    title.textAlignment = NSTextAlignmentCenter;
     [_loginButtonBackground addSubview:title];
     
     // 添加手势
@@ -258,7 +258,7 @@
     _nickname.textColor = [UIColor whiteColor];
     _nickname.text = text;
     _nickname.font = [UIFont fontWithName:@"Helvetica" size: 13.5];
-    _nickname.textAlignment = UITextAlignmentCenter;
+    _nickname.textAlignment = NSTextAlignmentCenter;
     [self.view addSubview:_nickname];
 }
 

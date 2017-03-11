@@ -144,7 +144,7 @@
     _loginLabel.font = [UIFont fontWithName:@"Helvetica" size:16.0];
     _loginLabel.text = @"登录";
     _loginLabel.textColor = [UIColor whiteColor];
-    _loginLabel.textAlignment = UITextAlignmentCenter;
+    _loginLabel.textAlignment = NSTextAlignmentCenter;
     [_loginButton addSubview: _loginLabel];
     // 为UIView添加点击事件
     _loginButton.userInteractionEnabled = YES; // 设置图片可以交互
@@ -164,7 +164,7 @@
     _signupLabel.font = [UIFont fontWithName:@"Helvetica" size:16.0];
     _signupLabel.text = @"注册";
     _signupLabel.textColor = [UIColor whiteColor];
-    _signupLabel.textAlignment = UITextAlignmentCenter;
+    _signupLabel.textAlignment = NSTextAlignmentCenter;
     [_signupButton addSubview: _signupLabel];
     // 为UIView添加点击事件
     _signupButton.userInteractionEnabled = YES; // 设置图片可以交互

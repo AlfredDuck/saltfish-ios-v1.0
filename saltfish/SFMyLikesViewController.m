@@ -95,7 +95,7 @@
     titleLabel.text = @"我喜欢的";
     titleLabel.textColor = [colorManager mainTextColor];
     titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 16];
-    titleLabel.textAlignment = UITextAlignmentCenter;
+    titleLabel.textAlignment = NSTextAlignmentCenter;
     [titleBarBackground addSubview:titleLabel];
     
     /* back button pic */
@@ -119,7 +119,7 @@
     _emptyLabel.text = @"- 没有你喜欢过的内容 -";
     _emptyLabel.textColor = [colorManager secondTextColor];
     _emptyLabel.font = [UIFont fontWithName:@"Helvetica" size: 12];
-    _emptyLabel.textAlignment = UITextAlignmentCenter;
+    _emptyLabel.textAlignment = NSTextAlignmentCenter;
     _emptyLabel.hidden = YES;
     [titleBarBackground addSubview:_emptyLabel];
     
@@ -135,7 +135,7 @@
     loadingLabel.text = @"正在加载...";
     loadingLabel.textColor = [colorManager secondTextColor];
     loadingLabel.font = [UIFont fontWithName:@"Helvetica" size:12];
-    loadingLabel.textAlignment = UITextAlignmentCenter;
+    loadingLabel.textAlignment = NSTextAlignmentCenter;
     
     [_loadingView addSubview:loadingLabel];
     [_loadingView addSubview:_loadingFlower];

@@ -85,7 +85,7 @@
     loadingLabel.text = @"正在登录...";
     loadingLabel.textColor = [colorManager secondTextColor];
     loadingLabel.font = [UIFont fontWithName:@"Helvetica" size:12];
-    loadingLabel.textAlignment = UITextAlignmentCenter;
+    loadingLabel.textAlignment = NSTextAlignmentCenter;
     
     [loadingView addSubview:loadingLabel];
     [loadingView addSubview:loadingFlower];
@@ -249,7 +249,7 @@
     oneLabel.textColor = [UIColor whiteColor];
     oneLabel.font = [UIFont fontWithName:@"Helvetica" size:15];
     oneLabel.numberOfLines = 2;
-    oneLabel.textAlignment = UITextAlignmentCenter;
+    oneLabel.textAlignment = NSTextAlignmentCenter;
     
     [oneView addSubview:oneLabel];
     [self.view addSubview:oneView];

@@ -32,9 +32,9 @@
 
 @interface SFHomeViewController ()
 @property (nonatomic, strong) UIView *notificationView;
-@property (nonatomic, strong) NSString *articleListStatus;  // 三种状态: unknown, empty, full
+@property (nonatomic, strong) NSString *articleListStatus;  // 页面三种状态: unknown, empty, full
 @property (nonatomic) NSString *shareArticleID;  // 将要分享的article的id
-/**以下用于图片浏览器*/
+/** 以下用于图片浏览器 */
 @property (nonatomic, strong) UIView *currentPicFatherView;  // 当前点击图片的父试图
 @property (nonatomic) unsigned long cellIndex;  // 当前点击图片所在的cell
 @end
@@ -148,7 +148,7 @@
     titleLabel.text = @"贩卖机";
     titleLabel.textColor = [colorManager mainTextColor];
     titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 17.5];
-    titleLabel.textAlignment = UITextAlignmentCenter;
+    titleLabel.textAlignment = NSTextAlignmentCenter;
     [titleBarBackground addSubview:titleLabel];
     
     // loading 菊花
@@ -218,75 +218,10 @@
     titleLabel.text = @"关注了新话题，请刷新查看";
     titleLabel.textColor = [UIColor whiteColor];
     titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 14];
-    titleLabel.textAlignment = UITextAlignmentCenter;
+    titleLabel.textAlignment = NSTextAlignmentCenter;
     [_notificationView addSubview:titleLabel];
 }
 
-
-#pragma mark - 创建焦点图(热门文章）(在cell中实现了，这里的代码用不到了，但是不要删除）
-- (void)createHotArticles
-{
-    /* ============= 焦点图 ScrollView ============== */
-    
-    _basedScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 64, _screenWidth, 170)];
-    _basedScrollView.backgroundColor = [UIColor grayColor];
-    _basedScrollView.delegate = self;
-    
-    //这个属性很重要，它可以决定是横向还是纵向滚动，一般来说也是其中的 View 的总宽度，和总的高度
-    //这里同时考虑到每个 View 间的空隙，所以宽度是 200x3＋5＋10＋10＋5＝630
-    //高度上与 ScrollView 相同，只在横向扩展，所以只要在横向上滚动
-    _basedScrollView.contentSize = CGSizeMake(_screenWidth*3, 170);
-    //用它指定 ScrollView 中内容的当前位置，即相对于 ScrollView 的左上顶点的偏移
-    _basedScrollView.contentOffset = CGPointMake(0, 0);
-    //按页滚动，总是一次一个宽度，或一个高度单位的滚动
-    _basedScrollView.pagingEnabled = YES;
-    //隐藏滚动条
-    _basedScrollView.showsVerticalScrollIndicator = FALSE;
-    _basedScrollView.showsHorizontalScrollIndicator = FALSE;
-    // 是否边缘反弹
-    _basedScrollView.bounces = YES;
-    // 不响应点击状态栏的事件（留给uitableview用）
-    _basedScrollView.scrollsToTop = NO;
-    
-    [self.view addSubview:_basedScrollView];
-    
-    
-    /* 循环创建轮播的图片 */
-    for (int i=0; i<3; i++) {
-        
-        UIImageView *picImageView = [[UIImageView alloc] initWithFrame:CGRectMake(_screenWidth*i, 0, _screenWidth, 170)];
-        picImageView.backgroundColor = [UIColor grayColor];
-        
-        // uiimageview居中裁剪
-        picImageView.contentMode = UIViewContentModeScaleAspectFill;
-        picImageView.clipsToBounds  = YES;
-
-        // 普通加载网络图片 yy库
-        picImageView.yy_imageURL = [NSURL URLWithString:[[_data objectAtIndex:i] objectForKey:@"picURL"]];
-        
-        // 遮黑
-        UIView *halfBlack = [[UIView alloc] initWithFrame:CGRectMake(0, 0, _screenWidth, 170)];
-        halfBlack.backgroundColor  = [UIColor blackColor];
-        halfBlack.alpha = 0.22;
-        [picImageView addSubview:halfBlack];
-        
-        // 文本
-        UILabel *picLabel = [[UILabel alloc] initWithFrame:CGRectMake(54, 0, _screenWidth-54*2, 170)];
-        picLabel.text = [[_data objectAtIndex:i] objectForKey:@"title"];
-        picLabel.textColor  = [UIColor whiteColor];
-        picLabel.font = [UIFont fontWithName:@"Helvetica" size: 18.0f];
-        picLabel.numberOfLines = 2;
-        picLabel.textAlignment = UITextAlignmentCenter;
-        // 文字阴影
-        picLabel.layer.shadowOpacity = 0.8;
-        picLabel.layer.shadowColor = [UIColor blackColor].CGColor;
-        picLabel.layer.shadowOffset = CGSizeMake(1.0, 1.0);
-        picLabel.layer.shadowRadius = 1.0;
-        [picImageView addSubview:picLabel];
-        
-        [_basedScrollView addSubview:picImageView];
-    }
-}
 
 
 
@@ -304,7 +239,7 @@
     [_oneTableView registerClass:[SFHotTableViewCell class] forCellReuseIdentifier:CellWithIdentifier];
     _oneTableView.backgroundColor = [colorManager lightGrayBackground];
     _oneTableView.separatorStyle = UITableViewCellSeparatorStyleNone; // 去掉分割线
-    // _oneTableView.contentInset = UIEdgeInsetsMake(100, 0, 0, 0); // 设置距离顶部的一段偏移，继承自scrollview
+    _oneTableView.contentInset = UIEdgeInsetsMake(8, 0, 0, 0); // 设置距离顶部的一段偏移，继承自scrollview
     // 响应点击状态栏的事件
     _oneTableView.scrollsToTop = YES;
     [self.view addSubview:_oneTableView];
@@ -317,8 +252,8 @@
 //            [_oneTableView.mj_header endRefreshing];
 //            NSLog(@"下拉刷新成功，结束刷新");
 //        });
-        [self connectForHot:_oneTableView];
-        [self connectForFollowedArticles:_oneTableView];
+        [self connectForHot:_oneTableView withRefresh:YES];
+//        [self connectForFollowedArticles:_oneTableView];
     }];
     
     // 上拉刷新 MJRefresh (等到页面有数据后再使用)
@@ -327,7 +262,7 @@
 //    }];
     
     // 这个碉堡了，要珍藏！！
-    // _oneTableView.mj_header.ignoredScrollViewContentInsetTop = 100.0;
+    _oneTableView.mj_header.ignoredScrollViewContentInsetTop = 8;
     
     // 禁用 mjRefresh
     // contentTableView.mj_footer = nil;
@@ -346,16 +281,16 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if ([_articleListStatus isEqualToString:@"unknown"]) {
-        return 1;
+        return 0;
     }
     else if ([_articleListStatus isEqualToString:@"empty"]) {
-        return 2;
+        return 1;
     }
     else if ([_articleListStatus isEqualToString:@"full"]){
-        return [_followedArticlesData count] + 1;
+        return [_followedArticlesData count];
     }
     else {
-        return 1;
+        return 0;
     }
 }
 
@@ -371,61 +306,61 @@
     SFEmptyCell *oneEmptyCell = [tableView dequeueReusableCellWithIdentifier:emptyCellWithIdentifier];
     
     NSUInteger row = [indexPath row];
-    if (row == 0) {
-        if (oneHotCell == nil) {
-            oneHotCell = [[SFHotTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:hotCellWithIdentifier];
-            oneHotCell.delegate = self;
-        }
-        // [oneHotCell rewriteHotArticles:_hotArticleData];
-        [oneHotCell rewriteHotTopics:_hotTopicData];
-        [oneHotCell rewriteCellHeight];
-        oneHotCell.selectionStyle = UITableViewCellSelectionStyleNone;  // 取消选中的背景色
-        return oneHotCell;
+
+    // 如果返回数据是空，则显示 emptyCell
+    if ([_articleListStatus isEqualToString:@"empty"]) {
+        NSLog(@"是空的");
+        oneEmptyCell = [[SFEmptyCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:emptyCellWithIdentifier];
+        oneEmptyCell.delegate = self;
+        oneEmptyCell.selectionStyle = UITableViewCellSelectionStyleNone;  // 取消选中的背景色
+        return oneEmptyCell;
     }
-    else {
-        // 如果返回数据是空，则显示 emptyCell
-        if ([_articleListStatus isEqualToString:@"empty"]) {
-            NSLog(@"是空的");
-            oneEmptyCell = [[SFEmptyCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:emptyCellWithIdentifier];
-            oneEmptyCell.delegate = self;
-            oneEmptyCell.selectionStyle = UITableViewCellSelectionStyleNone;  // 取消选中的背景色
-            return oneEmptyCell;
-        }
-            
-        // 如果返回不为空，则...
+        
+    // 如果返回不为空，则...
+    // 根据数据类型，选择渲染哪种cell
+    if ([_followedArticlesData[row][@"data_type"] isEqualToString:@"article"]) {
         if (oneArticleCell == nil) {  // 这里if的条件如果用yes，代表不使用复用池
             oneArticleCell = [[SFArticleCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:articleCellWithIdentifier];
             oneArticleCell.delegate = self;
         }
         // 判断是否含链接
         BOOL isShow;
-        if ([NSNull null] == [[_followedArticlesData objectAtIndex:row-1] objectForKey:@"originalLink"]) {
+        if ([NSNull null] == [[_followedArticlesData objectAtIndex:row] objectForKey:@"originalLink"]) {
             isShow = NO;
         } else {
             isShow = YES;
         }
         // 字符串转数字
-        NSString *shareNumStr = [[_followedArticlesData objectAtIndex:row-1] objectForKey:@"shareNum"];
+        NSString *shareNumStr = _followedArticlesData[row][@"shareNum"];
         unsigned long shareNum = [shareNumStr intValue];
-        NSString *commentNumStr = [[_followedArticlesData objectAtIndex:row-1] objectForKey:@"commentNum"];
+        NSString *commentNumStr = _followedArticlesData[row][@"commentNum"];
         unsigned long commentNum = [commentNumStr intValue];
-        NSString *likeNumStr = [[_followedArticlesData objectAtIndex:row-1] objectForKey:@"likeNum"];
+        NSString *likeNumStr = _followedArticlesData[row][@"likeNum"];
         unsigned long likeNum = [likeNumStr intValue];
         
         [oneArticleCell rewriteLinkMark:isShow];
-        [oneArticleCell rewriteTopic:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"topic"] withIndex:row-1];
-        [oneArticleCell rewritePortrait:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"topicImageURL"] withIndex:row-1];
-        [oneArticleCell rewriteDate:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"date"]];
-        [oneArticleCell rewriteShareNum:shareNum withIndex:row-1];
-        [oneArticleCell rewriteCommentNum:commentNum withIndex:row-1];
-        [oneArticleCell rewriteLikeNum:likeNum withIndex:row-1];
-        [oneArticleCell rewriteAdWithIndex:row-1];
-        [oneArticleCell rewriteLikeStatus:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"likeStatus"]];
-        [oneArticleCell rewriteTitle:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"title"] withLink:isShow];
-        [oneArticleCell rewritePicURL:[[_followedArticlesData objectAtIndex:row-1] objectForKey:@"picSmall"] withIndex:row-1];
-
+        [oneArticleCell rewriteTopic:_followedArticlesData[row][@"topic"] withIndex:row];
+        [oneArticleCell rewritePortrait:_followedArticlesData[row][@"topicImageURL"] withIndex:row];
+        [oneArticleCell rewriteDate:_followedArticlesData[row][@"date"]];
+        [oneArticleCell rewriteShareNum:shareNum withIndex:row];
+        [oneArticleCell rewriteCommentNum:commentNum withIndex:row];
+        [oneArticleCell rewriteLikeNum:likeNum withIndex:row];
+        [oneArticleCell rewriteAdWithIndex:row];
+        [oneArticleCell rewriteLikeStatus:_followedArticlesData[row][@"likeStatus"]];
+        [oneArticleCell rewriteTitle:_followedArticlesData[row][@"title"] withLink:isShow];
+        [oneArticleCell rewritePicURL:_followedArticlesData[row][@"picSmall"] withIndex:row];
+        
         oneArticleCell.selectionStyle = UITableViewCellSelectionStyleNone;  // 取消选中的背景色
         return oneArticleCell;
+    } else {
+        if (oneHotCell == nil) {
+            oneHotCell = [[SFHotTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:hotCellWithIdentifier];
+            oneHotCell.delegate = self;
+        }
+        [oneHotCell rewriteHotTopics:_followedArticlesData[row][@"data"]];
+        [oneHotCell rewriteCellHeight];
+        oneHotCell.selectionStyle = UITableViewCellSelectionStyleNone;  // 取消选中的背景色
+        return oneHotCell;
     }
     // 直接往cell addsubView的方法会在每次划出屏幕再划回来时 再加载一次subview，因此会重复加载很多subview
 }
@@ -436,18 +371,15 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSUInteger row = [indexPath row];
-    if (row == 0) {
+    // 区分 articleCell 和 emptyCell
+    if ([_articleListStatus isEqualToString:@"empty"]) {
+        return 100;
+    } else if ([_followedArticlesData[row][@"data_type"] isEqualToString:@"article"]) {
+        SFArticleCell *cell = (SFArticleCell *)[self tableView:tableView cellForRowAtIndexPath:indexPath];
+        return cell.cellHeight;
+    } else {
         SFHotTableViewCell *cell = (SFHotTableViewCell *)[self tableView:tableView cellForRowAtIndexPath:indexPath];
         return cell.cellHeight;
-    }
-    else {
-        // 区分 articleCell 和 emptyCell
-        if ([_articleListStatus isEqualToString:@"empty"]) {
-            return 100;
-        } else {
-            SFArticleCell *cell = (SFArticleCell *)[self tableView:tableView cellForRowAtIndexPath:indexPath];
-            return cell.cellHeight;
-        }
     }
 }
 
@@ -457,13 +389,12 @@
 {
     NSUInteger row = [indexPath row];
     
-    if (row == 1 && [_articleListStatus isEqualToString:@"empty"]) {
+    if ([_articleListStatus isEqualToString:@"empty"] ||
+        [_followedArticlesData[row][@"data_type"] isEqualToString:@"topic"]) {
         return;
-    }
-    
-    if (row >= 1) {
+    } else {
         // 检查是否有链接
-        if ([NSNull null] == [[_followedArticlesData objectAtIndex:row-1] objectForKey:@"originalLink"]) {
+        if ([NSNull null] == [[_followedArticlesData objectAtIndex:row] objectForKey:@"originalLink"]) {
             NSLog(@"没有外链");
             // 左右抖动一下
             [self shake:[tableView cellForRowAtIndexPath:indexPath].contentView];
@@ -471,8 +402,8 @@
         }
         
         detailVC *detailPage = [[detailVC alloc] init];
-        detailPage.articleID = [[_followedArticlesData objectAtIndex:row-1] objectForKey:@"_id"];
-        detailPage.originalLink = [[_followedArticlesData objectAtIndex:row-1] objectForKey:@"originalLink"];
+        detailPage.articleID = _followedArticlesData[row][@"_id"];
+        detailPage.originalLink = _followedArticlesData[row][@"originalLink"];
         [self.navigationController pushViewController:detailPage animated:YES];
         //开启iOS7的滑动返回效果
         if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
@@ -487,17 +418,37 @@
 
 
 
-#pragma mark - ScrollView 代理
 
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+#pragma mark - 混合数据
+/*
+ * 将 文章cell 和 推荐话题cell 混合显示前，需要将数据做混合
+ *
+ */
+- (NSArray *)combineDataWithArticles:(NSArray *)articles
 {
-    if ([scrollView isEqual:_basedScrollView]) {
-        NSLog(@"少时诵诗书");
-        NSLog(@"ScrollView 减速停止");
-        NSLog(@"ScrollView偏移：%f", scrollView.contentOffset.x);
+    NSMutableArray *partArr = [NSMutableArray new];
+    
+    for (int i=0; i<articles.count; i++) {
+        NSMutableDictionary *articleDic = [articles[i] mutableCopy];
+        [articleDic setObject:@"article" forKey:@"data_type"];
+        [partArr addObject: articleDic];
+        
+        if (i==4 || i==14) {  // 在每页的第5和15位置插入
+            NSMutableDictionary *topicDic = [NSMutableDictionary new];
+            [topicDic setObject:@"topic" forKey:@"data_type"];
+            if (i==4) {  // 第一个位置取前三个数据
+                NSArray *sub = [_hotTopicData subarrayWithRange:NSMakeRange(0,3)];
+                [topicDic setObject:sub forKey:@"data"];
+            } else if (i==14) {  // 第二个位置取后三个数据
+                NSArray *sub = [_hotTopicData subarrayWithRange:NSMakeRange(3,3)];
+                [topicDic setObject:sub forKey:@"data"];
+            }
+            [partArr addObject: topicDic];
+        }
     }
-    NSLog(@"ggg");
+    return partArr;
 }
+
 
 
 
@@ -661,7 +612,7 @@
 
 #pragma mark - 网络请求 - 热门文章&话题
 /* 请求热门文章(焦点图)&热门话题 */
-- (void)connectForHot:(UITableView *)tableView
+- (void)connectForHot:(UITableView *)tableView withRefresh:(BOOL)isRefresh
 {
     NSLog(@"请求焦点图开始");
     
@@ -690,9 +641,17 @@
         // 更新 hotTopicData 数据
         _hotTopicData = [[data objectForKey:@"hotTopics"] copy];
         
+        
+        //
+        if (isRefresh) {
+            [self connectForFollowedArticles:_oneTableView];
+        } else {
+            [self connectForMoreFollowedArticles:_oneTableView];
+        }
+        
         // 刷新特定的cell
-        NSIndexPath *indexPath=[NSIndexPath indexPathForRow:0 inSection:0];
-        [_oneTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
+//        NSIndexPath *indexPath=[NSIndexPath indexPathForRow:0 inSection:0];
+//        [_oneTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
@@ -701,9 +660,6 @@
     
     NSLog(@"阻塞了吗？");
 }
-
-
-
 
 
 
@@ -750,12 +706,14 @@
             _articleListStatus = @"full";
             // 上拉刷新 MJRefresh (等到页面有数据后再使用)
             tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
-                [self connectForMoreFollowedArticles:_oneTableView];
+                [self connectForHot:_oneTableView withRefresh:NO];
+//                [self connectForMoreFollowedArticles:_oneTableView];
             }];
         }
         
         // 更新 followedArticleData 数据
-        _followedArticlesData = [data mutableCopy];
+        NSArray *d = [self combineDataWithArticles:data];
+        _followedArticlesData = [d mutableCopy];
         
         // 刷新当前 tableview 的数据
         [tableView reloadData];
@@ -808,7 +766,8 @@
         }
         
         // 更新 followedArticleData 数据
-        [_followedArticlesData addObjectsFromArray:data];
+        NSArray *d = [self combineDataWithArticles:data];
+        [_followedArticlesData addObjectsFromArray:d];
         data = nil;
         
         // 刷新当前 tableview 的数据
@@ -869,7 +828,7 @@
         [_followedArticlesData replaceObjectAtIndex:index withObject:cellData];
         
         // 2.刷新特定cell
-        NSIndexPath *indexPath=[NSIndexPath indexPathForRow:index + 1 inSection:0];
+        NSIndexPath *indexPath=[NSIndexPath indexPathForRow:index inSection:0];
         [_oneTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {

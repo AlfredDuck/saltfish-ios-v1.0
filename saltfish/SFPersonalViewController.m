@@ -62,7 +62,7 @@
     titleLabel.text = @"个人信息";
     titleLabel.textColor = [colorManager mainTextColor];
     titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 16];
-    titleLabel.textAlignment = UITextAlignmentCenter;
+    titleLabel.textAlignment = NSTextAlignmentCenter;
     [titleBarBackground addSubview:titleLabel];
     
     /* back button pic */
@@ -99,7 +99,7 @@
     labels.text = @"退出登录 ( ^_^ )/";
     labels.textColor = [UIColor colorWithRed:231/255.0 green:114/255.0 blue:114/255.0 alpha:1.0];
     labels.font = [UIFont fontWithName:@"Helvetica" size: 15.0];
-    labels.textAlignment = UITextAlignmentCenter;
+    labels.textAlignment = NSTextAlignmentCenter;
     [signoutBackground addSubview:labels];
     
     signoutBackground.userInteractionEnabled = YES; // 设置可以交互

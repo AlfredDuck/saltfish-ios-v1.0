@@ -44,7 +44,7 @@
         _titleLabel.text = _title;
         _titleLabel.font = [UIFont fontWithName:@"Helvetica Bold" size: 17.0];
         _titleLabel.textColor = [colorManager mainTextColor];
-        _titleLabel.textAlignment = UITextAlignmentCenter;
+        _titleLabel.textAlignment = NSTextAlignmentCenter;
         _titleLabel.numberOfLines = 2;
         [self.contentView addSubview:_titleLabel];
         
@@ -53,7 +53,7 @@
         _introductionLabel.text = _introduction;
         _introductionLabel.font = [UIFont fontWithName:@"Helvetica" size: 13.0f];
         _introductionLabel.textColor = [colorManager secondTextColor];
-        _introductionLabel.textAlignment = UITextAlignmentCenter;
+        _introductionLabel.textAlignment = NSTextAlignmentCenter;
         [self.contentView addSubview:_introductionLabel];
         
         

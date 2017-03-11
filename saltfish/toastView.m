@@ -16,7 +16,7 @@
 
     UILabel *toast = [[UILabel alloc] initWithFrame:CGRectMake(0, superView.frame.size.height, superView.frame.size.width, 60)];
     toast.font = [UIFont fontWithName:@"Helvetica" size:16.0f];
-    toast.textAlignment = UITextAlignmentCenter;
+    toast.textAlignment = NSTextAlignmentCenter;
     toast.textColor = [UIColor whiteColor];
     toast.alpha = 0.92;
     toast.text = text;

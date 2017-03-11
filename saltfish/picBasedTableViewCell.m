@@ -67,7 +67,7 @@
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, (imgHeight-60)/2, _screenWidth-30, 60)];
         _titleLabel.text = _title;
         _titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 16];
-        _titleLabel.textAlignment = UITextAlignmentCenter;
+        _titleLabel.textAlignment = NSTextAlignmentCenter;
         _titleLabel.numberOfLines = 2;
         // 文字阴影
         _titleLabel.shadowColor = [UIColor blackColor];
@@ -79,7 +79,7 @@
         _dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, imgHeight-32, _screenWidth-30, 32)];
         _dateLabel.text = _date;
         _dateLabel.font = [UIFont fontWithName:@"Helvetica" size: 11];
-        _dateLabel.textAlignment = UITextAlignmentCenter;
+        _dateLabel.textAlignment = NSTextAlignmentCenter;
         _dateLabel.numberOfLines = 2;
         // 文字阴影
         _dateLabel.shadowColor = [UIColor blackColor];
