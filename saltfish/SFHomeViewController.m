@@ -158,44 +158,8 @@
     //[_loadingFlower stopAnimating];
     [titleBarBackground addSubview:_loadingFlower];
     
-    
-    // 焦点图数据（临时）
-    NSDictionary *d1 = [[NSDictionary alloc] initWithObjectsAndKeys:
-                        @"",@"title",
-                        @"", @"picURL",
-                        nil];
-    NSDictionary *d2 = [[NSDictionary alloc] initWithObjectsAndKeys:
-                        @"",@"title",
-                        @"", @"picURL",
-                        nil];
-    NSDictionary *d3 = [[NSDictionary alloc] initWithObjectsAndKeys:
-                        @"",@"title",
-                        @"", @"picURL",
-                        nil];
-    
-    NSDictionary *t1 = [[NSDictionary alloc] initWithObjectsAndKeys:
-                        @"##",@"title",
-                        @"", @"picURL",
-                        nil];
-    NSDictionary *t2 = [[NSDictionary alloc] initWithObjectsAndKeys:
-                        @"##",@"title",
-                        @"", @"picURL",
-                        nil];
-    NSDictionary *t3 = [[NSDictionary alloc] initWithObjectsAndKeys:
-                        @"##",@"title",
-                        @"", @"picURL",
-                        nil];
-    
-    _hotArticleData = @[d1,d2,d3];
-    _hotTopicData = @[t1,t2,t3];
-    NSArray *dd = @[];
-    _followedArticlesData = [dd mutableCopy];
-    
     /* 创建 TableView */
     [self createBasedTableView];
-    /* 创建焦点图 */
-    // [self createHotArticles];
-
 }
 
 
@@ -635,9 +599,7 @@
         
         // 结束下啦刷新
         [tableView.mj_header endRefreshing];
-        
-        // 更新 hotArticleData 数据
-        _hotArticleData = [[data objectForKey:@"hotArticles"] copy];
+
         // 更新 hotTopicData 数据
         _hotTopicData = [[data objectForKey:@"hotTopics"] copy];
         

@@ -442,7 +442,6 @@
             [picImageView yy_setImageWithURL:[NSURL URLWithString:url] placeholder:nil options:YYWebImageOptionProgressive progress:^(NSInteger receivedSize, NSInteger expectedSize) {
                 //progress = (float)receivedSize / expectedSize;
             } transform:^UIImage * _Nullable(UIImage * _Nonnull image, NSURL * _Nonnull url) {
-                NSLog(@"lol");
                 unsigned long ww = image.size.width;
                 unsigned long hh = image.size.height;
                 float xx = (hh>1000 || ww>1000) ? 0.25 : 1.0;
